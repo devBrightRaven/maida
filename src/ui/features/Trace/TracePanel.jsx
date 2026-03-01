@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { t } from '../../../i18n';
 import { debugStore } from '../../../core/debugStore';
+import bridge from '../../../services/bridge';
 import { useGameInput } from '../../../hooks/useGameInput';
 import './TracePanel.css';
 
@@ -93,7 +94,6 @@ export default function TracePanel({ game, temperature, decayRate, silentMode, s
                             <button onClick={() => onSimulation('simReset')} style={{ color: '#ff4444', borderColor: '#ff4444' }}>Reset</button>
                             <button onClick={async () => {
                                 if (confirm('Clear all data and restart setup?')) {
-                                    const { default: bridge } = await import('../../../services/bridge');
                                     await bridge.resetGamesData();
                                     window.location.reload();
                                 }
@@ -237,13 +237,25 @@ export default function TracePanel({ game, temperature, decayRate, silentMode, s
                     </div>
                 </div>
 
-                <button className="debug-copy" onClick={() => {
-                    const fullTrace = JSON.stringify({ trace, logs }, null, 2);
-                    navigator.clipboard.writeText(fullTrace);
-                    alert('Trace copied to clipboard');
-                }}>
-                    Copy Full Trace
-                </button>
+                <div className="debug-bottom-actions">
+                    <button className="debug-copy" onClick={() => {
+                        const fullTrace = JSON.stringify({ trace, logs }, null, 2);
+                        navigator.clipboard.writeText(fullTrace);
+                        alert('Trace copied to clipboard');
+                    }}>
+                        Copy Full Trace
+                    </button>
+                    <button className="debug-copy" onClick={async () => {
+                        const result = await bridge.exportSessionLog();
+                        if (result?.success) {
+                            alert(`Session log exported to:\n${result.path}`);
+                        } else if (!result?.canceled) {
+                            alert('Export failed: ' + (result?.error || 'unknown error'));
+                        }
+                    }}>
+                        Export Session Log
+                    </button>
+                </div>
             </div>
         </div>
     );

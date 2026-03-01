@@ -10,6 +10,9 @@ contextBridge.exposeInMainWorld('maidaAPI', {
     closeWindow: () => ipcRenderer.invoke('close-window'),
     checkSteamAvailable: () => ipcRenderer.invoke('check-steam-available'),
     resetGamesData: () => ipcRenderer.invoke('reset-games-data'),
+    // Session Log
+    appendSessionLog: (entry) => ipcRenderer.invoke('append-session-log', entry),
+    exportSessionLog: () => ipcRenderer.invoke('export-session-log'),
     // Update API
     checkForUpdates: () => ipcRenderer.invoke('check-for-updates'),
     openReleasePage: (url) => ipcRenderer.invoke('open-release-page', url),

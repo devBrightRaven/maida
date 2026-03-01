@@ -175,14 +175,19 @@
     flex: 1;
 }
 
+.debug-bottom-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 1rem;
+}
+
 .debug-copy {
-    width: 100%;
+    flex: 1;
     padding: 1rem;
     background: #1a1a1a;
     border: 1px solid #333;
     color: #ddd;
     cursor: pointer;
-    margin-top: 1rem;
     font-family: inherit;
     transition: all 0.2s;
 }

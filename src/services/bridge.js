@@ -60,6 +60,21 @@ const bridge = {
         return { success: false };
     },
 
+    // Session log
+    appendSessionLog: async (entry) => {
+        if (window.maidaAPI?.appendSessionLog) {
+            return await window.maidaAPI.appendSessionLog(entry);
+        }
+        return { success: false };
+    },
+
+    exportSessionLog: async () => {
+        if (window.maidaAPI?.exportSessionLog) {
+            return await window.maidaAPI.exportSessionLog();
+        }
+        return { success: false };
+    },
+
     // Update checker
     checkForUpdates: async (options) => {
         if (window.maidaAPI?.checkForUpdates) {

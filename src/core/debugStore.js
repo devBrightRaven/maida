@@ -1,7 +1,10 @@
 /**
  * Maida Behavioral Debug Store (In-Memory)
  * Stores recent events and sampling traces for developer visibility.
+ * Also persists entries to session log file via bridge (append-only JSONL).
  */
+
+import bridge from '../services/bridge.js';
 
 let logs = [];
 let lastTrace = null;
@@ -19,6 +22,10 @@ export const debugStore = {
 
         // Also log to console for dev convenience
         console.log(`[Maida DBG] ${event}`, details);
+
+        // Persist to session log file (fire-and-forget)
+        const { id, timestamp, ...persistEntry } = entry;
+        bridge.appendSessionLog({ event, ...persistEntry });
     },
 
     setTrace: (trace) => {

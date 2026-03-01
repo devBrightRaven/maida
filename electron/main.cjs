@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, shell } = require('electron');
+const { app, BrowserWindow, ipcMain, shell, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const { execSync } = require('child_process');
@@ -590,9 +590,62 @@ ipcMain.handle('get-app-version', () => {
     return app.getVersion();
 });
 
+// ---------------------------------------------------------
+// Session Log (User Testing Data Collection)
+// ---------------------------------------------------------
+const SESSION_LOG_PATH = path.join(userDataPath, 'session-log.jsonl');
+const SESSION_LOG_MAX_AGE_DAYS = 30;
 
+function pruneSessionLog() {
+    if (!fs.existsSync(SESSION_LOG_PATH)) return;
+    try {
+        const cutoff = Date.now() - SESSION_LOG_MAX_AGE_DAYS * 24 * 60 * 60 * 1000;
+        const lines = fs.readFileSync(SESSION_LOG_PATH, 'utf8').split('\n').filter(Boolean);
+        const kept = lines.filter(line => {
+            try {
+                const entry = JSON.parse(line);
+                return new Date(entry.ts).getTime() > cutoff;
+            } catch { return false; }
+        });
+        fs.writeFileSync(SESSION_LOG_PATH, kept.join('\n') + (kept.length ? '\n' : ''));
+        console.log(`[Maida] Session log pruned: ${lines.length} -> ${kept.length} entries`);
+    } catch (e) {
+        console.error('[Maida] Session log prune failed:', e.message);
+    }
+}
+
+ipcMain.handle('append-session-log', (event, entry) => {
+    try {
+        const line = JSON.stringify({ ts: new Date().toISOString(), ...entry }) + '\n';
+        fs.appendFileSync(SESSION_LOG_PATH, line);
+        return { success: true };
+    } catch (e) {
+        console.error('[Maida] Session log append failed:', e.message);
+        return { success: false, error: e.message };
+    }
+});
+
+ipcMain.handle('export-session-log', async () => {
+    if (!fs.existsSync(SESSION_LOG_PATH)) {
+        return { success: false, error: 'No session log found' };
+    }
+    const today = new Date().toISOString().slice(0, 10);
+    const result = await dialog.showSaveDialog(mainWindow, {
+        title: 'Export Session Log',
+        defaultPath: `maida-session-log-${today}.jsonl`,
+        filters: [{ name: 'JSONL', extensions: ['jsonl'] }],
+    });
+    if (result.canceled) return { success: false, canceled: true };
+    try {
+        fs.copyFileSync(SESSION_LOG_PATH, result.filePath);
+        return { success: true, path: result.filePath };
+    } catch (e) {
+        return { success: false, error: e.message };
+    }
+});
 
 app.on('ready', () => {
+    pruneSessionLog();
     ensureDataFile(GAMES_PATH, 'games');
     ensureDataFile(PRESCRIPTIONS_PATH, 'prescriptions');
     createWindow();
