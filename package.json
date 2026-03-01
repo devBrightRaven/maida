@@ -33,7 +33,7 @@
     "@types/react-dom": "^18.2.22",
     "@vitejs/plugin-react": "^4.2.1",
     "@vitest/coverage-v8": "^4.0.18",
-    "agentation": "^2.2.0",
+    "agentation": "^2.2.1",
     "concurrently": "^9.2.1",
     "cross-env": "^10.1.0",
     "electron": "^39.2.7",
