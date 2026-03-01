@@ -1,0 +1,281 @@
+/* MVPView.css - Layout and Component Container only */
+
+.mvp-container {
+    height: 100%;
+    width: 100%;
+    background: #000;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4rem 2rem;
+    box-sizing: border-box;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.5s ease;
+}
+
+.mvp-container.debug-mode {
+    box-shadow: inset 0 0 100px rgba(255, 170, 0, 0.05);
+}
+
+/* Header & Idle */
+.mvp-header {
+    z-index: 10;
+    opacity: 1;
+    /* High visibility */
+    transition: all 0.3s ease;
+    cursor: pointer;
+    color: #fff;
+}
+
+.mvp-header:hover {
+    color: #ffaa00;
+    /* Distinct Gold highlight */
+    text-shadow: 0 0 15px rgba(255, 170, 0, 0.6);
+    transform: scale(1.05);
+    /* Subtle scale for tactile feel */
+}
+
+/* MVPView.css */
+/* Correcting game label size */
+.game-label {
+    font-size: 18px;
+    /* Requested 18px */
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    font-weight: 200;
+}
+
+.idle-debug-trigger {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
+}
+
+/* Footer & Actions */
+.mvp-footer {
+    z-index: 10;
+    width: 100%;
+    position: relative;
+    padding-bottom: 2rem;
+}
+
+.action-row {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+    width: 100%;
+    /* Ensure full width for the grid/flex to work */
+}
+
+.primary-actions {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    gap: 2rem;
+}
+
+/* Buttons */
+.mvp-btn {
+    font-size: 24px;
+    /* Requested 24px for all buttons */
+    letter-spacing: 0.1rem;
+    padding: 0 2rem;
+    min-height: 88px;
+    /* Doubled height (was 44px) */
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    background: transparent;
+    cursor: pointer;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: none;
+}
+
+/* 1. Visit - Primary Action */
+.mvp-btn.visit {
+    width: 50%;
+    /* 1 part */
+    color: #fff;
+    border: 2px solid #fff;
+    font-weight: 700;
+    /* Bold for PLAY/TRY */
+    opacity: 1;
+}
+
+.mvp-btn.visit:hover {
+    background: #fff;
+    color: #000;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+.visit-btn-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* Vertical Center */
+    height: 100%;
+    line-height: 1.2;
+}
+
+.visit-btn-title {
+    font-size: 24px;
+    font-weight: 700;
+    /* Color inherits from button (White in default, Black in hover/focus) */
+}
+
+.visit-btn-subtitle {
+    font-size: 16px;
+    font-weight: 300;
+    color: #767676;
+    letter-spacing: 0.05em;
+    margin-top: 4px;
+}
+
+.mvp-btn.visit:focus-visible,
+.mvp-btn.visit:focus,
+.mvp-btn.visit.is-focused {
+    outline: none;
+    background: #fff;
+    color: #000;
+    box-shadow: 0 0 0 4px #000, 0 0 0 8px #fff, 0 0 30px rgba(255, 255, 255, 0.5);
+}
+
+/* 2. Not Today - Secondary Action */
+.primary-actions .mvp-btn.not-today {
+    width: 50%;
+}
+
+.mvp-btn.not-today {
+    color: #fff;
+    /* High contrast: Solid White */
+    border: 1px solid #fff;
+    font-weight: 400;
+    /* Regular weight for Not Now / Clear */
+    /* High contrast: Solid White */
+}
+
+.mvp-btn.not-today:hover {
+    background: transparent;
+    box-shadow: inset 0 0 0 4px #fff;
+    /* Thick inner border */
+    text-decoration: line-through;
+    /* Semantic "Cancel" */
+    color: #fff;
+    border-color: transparent;
+    /* Hide original border */
+}
+
+.mvp-btn.not-today:focus-visible,
+.mvp-btn.not-today:focus,
+.mvp-btn.not-today.is-focused {
+    background: transparent;
+    color: #fff;
+    outline: none;
+    box-shadow: inset 0 0 0 4px #fff, 0 0 30px rgba(255, 255, 255, 0.2);
+    text-decoration: line-through;
+    border-color: transparent;
+}
+
+/* 3. Back - Tertiary/Escape */
+.back-link {
+    background: transparent;
+    border: 1px solid #fff;
+    /* High contrast */
+    border-radius: 999px;
+    color: #fff;
+    /* High contrast */
+    font-size: 0.75rem;
+    text-decoration: none;
+    min-height: 44px;
+    padding: 0 2rem;
+    margin-top: 1.5rem;
+    width: 30%;
+    /* Reduced width */
+    font-weight: 300;
+    /* Reduced prominence */
+    opacity: 0.7;
+    /* Reduced visual weight, still WCAG AA on black (approx 9:1 contrast) */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transition: all 0.2s ease;
+}
+
+.back-link.is-hidden {
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.back-link:hover {
+    background: #fff;
+    color: #000;
+}
+
+.back-link:focus-visible,
+.back-link:focus,
+.back-link.is-focused {
+    outline: none;
+    color: #fff;
+    border-color: #fff;
+    box-shadow: 0 0 0 4px #000, 0 0 0 6px #fff;
+    /* Distinct focus ring */
+    background: transparent;
+}
+
+/* Debug Controls (top-right, relative to container) */
+.debug-controls {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    display: flex;
+    gap: 0.5rem;
+    z-index: 100;
+}
+
+.debug-trace-btn {
+    background: rgba(255, 170, 0, 0.1);
+    border: 1px solid rgba(255, 170, 0, 0.3);
+    color: #ffaa00;
+    font-family: 'Courier New', monospace;
+    font-size: 0.65rem;
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transition: all 0.2s;
+}
+
+.debug-trace-btn:hover {
+    background: #ffaa00;
+    color: #000;
+    box-shadow: 0 0 10px rgba(255, 170, 0, 0.4);
+}
+
+/* Decoration */
+.bg-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 80vh;
+    height: 80vh;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.03) 0%, rgba(0, 0, 0, 0) 70%);
+    pointer-events: none;
+    z-index: 1;
+}

@@ -1,0 +1,228 @@
+/* --- GAME DISPLAY content --- */
+
+.mvp-content {
+    z-index: 10;
+    max-width: 500px;
+    width: 100%;
+}
+
+.permission-wrapper .permission-text {
+    font-family: 'Inter', sans-serif;
+    /* Accessible sans-serif */
+    font-size: 1.8rem;
+    line-height: 1.4;
+    font-weight: 300;
+    color: #e0e0e0;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    transition: color 0.3s ease;
+}
+
+.permission-text.debug-text {
+    color: #ffd480;
+}
+
+/* --- DEBUG HOVER INSPECTOR --- */
+.debug-inspector {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    position: relative;
+    cursor: help;
+}
+
+.risk-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #666;
+}
+
+.risk-dot.safe {
+    background: #00ff88;
+}
+
+.risk-dot.drift {
+    background: #ffaa00;
+}
+
+.risk-dot.violation {
+    background: #ff4444;
+}
+
+
+.inspector-panel {
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #0a0a0a;
+    border: 1px solid #333;
+    padding: 1.5rem;
+    width: 280px;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.2s ease;
+    text-align: left;
+    z-index: 1000;
+}
+
+.debug-inspector:hover .inspector-panel {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(-10px);
+}
+
+.inspector-header {
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #222;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+}
+
+.inspector-title {
+    color: #ffaa00;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.inspector-id {
+    color: #666;
+    font-family: monospace;
+}
+
+.inspector-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.4rem;
+    font-size: 0.75rem;
+    font-family: 'Consolas', monospace;
+}
+
+.inspector-row label {
+    color: #666;
+    text-transform: uppercase;
+    font-size: 0.6rem;
+}
+
+.inspector-row .value {
+    color: #fff;
+}
+
+.inspector-row .highlight-effect {
+    color: #00ff88;
+}
+
+.risk-text.safe {
+    color: #00ff88;
+}
+
+.risk-text.drift {
+    color: #ffaa00;
+}
+
+.risk-text.violation {
+    color: #ff4444;
+}
+
+.inspector-notes {
+    margin-top: 1rem;
+    padding-top: 0.8rem;
+    border-top: 1px solid #1a1a1a;
+    color: #888;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    font-style: italic;
+}
+
+/* --- EXPANDED DIAGNOSTIC HUD --- */
+.debug-expanded-details {
+    position: fixed;
+    top: 5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 400px;
+    max-height: 60vh;
+    overflow-y: auto;
+    background: rgba(10, 10, 10, 0.95);
+    border: 1px solid #ffaa0033;
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.9), inset 0 0 20px rgba(255, 170, 0, 0.05);
+    z-index: 2000;
+    text-align: left;
+    backdrop-filter: blur(10px);
+    animation: hudEnter 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.expanded-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid rgba(255, 170, 0, 0.2);
+    padding-bottom: 0.8rem;
+}
+
+.expanded-title {
+    color: #ffaa00;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    font-weight: bold;
+    letter-spacing: 0.2em;
+}
+
+.expanded-id {
+    color: #666;
+    font-family: monospace;
+    font-size: 0.7rem;
+}
+
+.detail-group {
+    margin-bottom: 1.5rem;
+}
+
+.detail-group label {
+    display: block;
+    color: #666;
+    text-transform: uppercase;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+}
+
+.kernel-code {
+    display: block;
+    background: #000;
+    padding: 1rem;
+    border-radius: 4px;
+    border-left: 2px solid #ffaa00;
+    color: #ffd480;
+    font-size: 0.8rem;
+    line-height: 1.4;
+}
+
+.interface-preview {
+    font-family: serif;
+    font-size: 1.2rem;
+    color: #e0e0e0;
+    line-height: 1.5;
+    margin: 0;
+}
+
+@keyframes hudEnter {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-10px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(-50%) scale(1);
+    }
+}

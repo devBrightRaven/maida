@@ -1,0 +1,106 @@
+.interface-container {
+    background-color: var(--i-bg);
+    color: var(--i-text);
+    height: 100%;
+    width: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.breathing-circle {
+    position: absolute;
+    width: 60vh;
+    height: 60vh;
+    background: radial-gradient(circle, rgba(212, 163, 115, 0.1) 0%, rgba(253, 251, 247, 0) 70%);
+    border-radius: 50%;
+    animation: breathe 8s infinite ease-in-out;
+    pointer-events: none;
+}
+
+@keyframes breathe {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.5;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+}
+
+.interface-content {
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+    width: 100%;
+    max-width: 400px;
+}
+
+/* Game Presence Styling for Interface */
+.interface-container .game-title {
+    font-family: serif;
+    /* Elegant font for Interface */
+    font-size: 3rem;
+    font-weight: 400;
+    color: var(--i-text);
+    margin: 0;
+}
+
+.interface-container .game-dev {
+    font-size: 0.9rem;
+    color: var(--i-dim);
+    font-style: italic;
+    margin-top: 0.2rem;
+    display: block;
+}
+
+.interface-container .game-meta {
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    color: var(--i-dim);
+    opacity: 0.7;
+}
+
+.warm-greeting {
+    font-family: serif;
+    color: var(--i-dim);
+    font-size: 1.1rem;
+}
+
+.interface-actions {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.soft-btn {
+    padding: 0.8rem 2rem;
+    border-radius: 2rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.soft-btn.primary {
+    background: var(--i-text);
+    color: var(--i-bg);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.soft-btn.secondary {
+    background: transparent;
+    color: var(--i-dim);
+}
+
+.soft-btn:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}

@@ -1,0 +1,932 @@
+{
+    "schemaVersion": "0.4.1",
+    "mode": "mvp",
+    "philosophy": {
+        "upstream": "Ma (間)",
+        "note": "Maida is a minimal behavioral application. Text serves as a permission slip, not a motivational quote."
+    },
+    "prescriptions": {
+        "default": [
+            {
+                "id": "entry-permitted",
+                "tier": 0,
+                "kernel": "Decision not required.",
+                "interface": "You may begin without knowing if this is the right choice.",
+                "momentum": "unlock",
+                "audit": {
+                    "permission_effect": "lower_obligation",
+                    "risk": "safe",
+                    "notes": "Explicitly removes the burden of correctness."
+                }
+            },
+            {
+                "id": "no-optimization",
+                "tier": 0,
+                "kernel": "Optimal use is not required.",
+                "interface": "This session does not need to justify itself.",
+                "momentum": "stabilize",
+                "audit": {
+                    "permission_effect": "lower_obligation",
+                    "risk": "safe",
+                    "notes": "Negates the need for productivity or meaning."
+                }
+            },
+            {
+                "id": "safe-exit",
+                "tier": 0,
+                "kernel": "Exit is always valid.",
+                "interface": "Stopping early does not invalidate starting.",
+                "momentum": "release",
+                "audit": {
+                    "permission_effect": "lower_obligation",
+                    "risk": "safe",
+                    "notes": "Removes the fear of sunk cost or commitment."
+                }
+            },
+            {
+                "id": "partial-validity",
+                "tier": 0,
+                "kernel": "Fragmentation accepted.",
+                "interface": "A partial session is still a complete action.",
+                "momentum": "stabilize",
+                "audit": {
+                    "permission_effect": "lower_obligation",
+                    "risk": "safe",
+                    "notes": "Validates short or incomplete play sessions."
+                }
+            },
+            {
+                "id": "no-debt",
+                "tier": 0,
+                "kernel": "History is irrelevant.",
+                "interface": "Past inactivity creates no debt today.",
+                "momentum": "unlock",
+                "audit": {
+                    "permission_effect": "lower_obligation",
+                    "risk": "safe",
+                    "notes": "Clears the psychological backlog guilt."
+                }
+            },
+            {
+                "id": "observation-mode",
+                "tier": 0,
+                "kernel": "Passive entry.",
+                "interface": "Looking without playing is a valid form of participation.",
+                "momentum": "stabilize",
+                "audit": {
+                    "permission_effect": "lower_obligation",
+                    "risk": "safe",
+                    "notes": "Lowers the threshold of what counts as 'using' the game."
+                }
+            },
+            {
+                "id": "low-input",
+                "tier": 0,
+                "kernel": "Minimum energy.",
+                "interface": "You do not need to bring your full energy here.",
+                "momentum": "unlock",
+                "audit": {
+                    "permission_effect": "lower_obligation",
+                    "risk": "safe",
+                    "notes": "Permits engagement during low-energy states."
+                }
+            },
+            {
+                "id": "objective-optional",
+                "tier": 0,
+                "kernel": "Aimlessness permitted.",
+                "interface": "You do not need an objective to enter.",
+                "momentum": "unlock",
+                "audit": {
+                    "permission_effect": "lower_obligation",
+                    "risk": "safe",
+                    "notes": "Removes goal-oriented pressure."
+                }
+            },
+            {
+                "id": "latency-allowed",
+                "tier": 0,
+                "kernel": "Hesitation is structural.",
+                "interface": "Hesitation is not an error; take your time.",
+                "momentum": "stabilize",
+                "audit": {
+                    "permission_effect": "lower_obligation",
+                    "risk": "safe",
+                    "notes": "Validates the pause before action."
+                }
+            },
+            {
+                "id": "silence-valid",
+                "tier": 0,
+                "kernel": "Quiet interface.",
+                "interface": "Silence before action is part of the experience.",
+                "momentum": "stabilize",
+                "audit": {
+                    "permission_effect": "lower_obligation",
+                    "risk": "safe",
+                    "notes": "Reframes non-action as part of the UX."
+                }
+            }
+        ],
+        "idle_state": [
+            {
+                "id": "zero-loss",
+                "tier": 0,
+                "kernel": "State integrity preserved.",
+                "interface": "Nothing is lost by waiting.",
+                "momentum": "release",
+                "audit": {
+                    "permission_effect": "lower_obligation",
+                    "risk": "safe",
+                    "notes": "Validates the Idle state without creating urgency."
+                }
+            },
+            {
+                "id": "no-obligation",
+                "tier": 0,
+                "kernel": "Asset possession is neutral.",
+                "interface": "Ownership does not create obligation.",
+                "momentum": "release",
+                "audit": {
+                    "permission_effect": "lower_obligation",
+                    "risk": "safe",
+                    "notes": "Directly counters the psychological debt of the backlog."
+                }
+            },
+            {
+                "id": "intent-only",
+                "tier": 0,
+                "kernel": "Input requires no execution.",
+                "interface": "Intent is sufficient.",
+                "momentum": "stabilize",
+                "audit": {
+                    "permission_effect": "lower_obligation",
+                    "risk": "safe",
+                    "notes": "Decouples the desire to play from the execution of play."
+                }
+            },
+            {
+                "id": "constant-access",
+                "tier": 0,
+                "kernel": "Resource decay is zero.",
+                "interface": "Availability does not diminish with time.",
+                "momentum": "stabilize",
+                "audit": {
+                    "permission_effect": "lower_obligation",
+                    "risk": "safe",
+                    "notes": "Removes FOMO (Fear Of Missing Out) and time pressure."
+                }
+            },
+            {
+                "id": "time-suspension",
+                "tier": 0,
+                "kernel": "Clock ignored.",
+                "interface": "System time is suspended.",
+                "momentum": "stabilize",
+                "audit": {
+                    "permission_effect": "lower_obligation",
+                    "risk": "safe",
+                    "notes": "Administrative statement that urgency is artificial."
+                }
+            },
+            {
+                "id": "static-state",
+                "tier": 0,
+                "kernel": "No selection required.",
+                "interface": "Non-selection is a stable state.",
+                "momentum": "stabilize",
+                "audit": {
+                    "permission_effect": "lower_obligation",
+                    "risk": "safe",
+                    "notes": "Validates doing nothing as a feature, not a bug."
+                }
+            },
+            {
+                "id": "inventory-neutral",
+                "tier": 0,
+                "kernel": "Database is passive.",
+                "interface": "Library size implies no demand.",
+                "momentum": "release",
+                "audit": {
+                    "permission_effect": "lower_obligation",
+                    "risk": "safe",
+                    "notes": "Neutralizes the 'pile of shame' effect."
+                }
+            },
+            {
+                "id": "wait-cost-zero",
+                "tier": 0,
+                "kernel": "Cost is null.",
+                "interface": "The cost of waiting is zero.",
+                "momentum": "release",
+                "audit": {
+                    "permission_effect": "lower_obligation",
+                    "risk": "safe",
+                    "notes": "Financial/Administrative framing of time."
+                }
+            },
+            {
+                "id": "availability-persistent",
+                "tier": 0,
+                "kernel": "Access is static.",
+                "interface": "Access remains constant without interaction.",
+                "momentum": "stabilize",
+                "audit": {
+                    "permission_effect": "lower_obligation",
+                    "risk": "safe",
+                    "notes": "Reassures that the game isn't going anywhere."
+                }
+            },
+            {
+                "id": "pause-validity",
+                "tier": 0,
+                "kernel": "Suspension active.",
+                "interface": "Readiness requires no signal.",
+                "momentum": "stabilize",
+                "audit": {
+                    "permission_effect": "lower_obligation",
+                    "risk": "safe",
+                    "notes": "Removes the need to 'prove' readiness to play."
+                }
+            }
+        ],
+        "catalog": {
+            "sekiro-shadows-die-twice": [
+                {
+                    "id": "muscle-memory",
+                    "tier": 2,
+                    "kernel": "Reflexes engage automatically.",
+                    "interface": "Your hands remember what to do; thinking is optional.",
+                    "momentum": "unlock",
+                    "audit": {
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Validates relying on muscle memory to lower cognitive load."
+                    }
+                },
+                {
+                    "id": "death-loop",
+                    "tier": 2,
+                    "kernel": "Failure is a system state.",
+                    "interface": "Defeat is just a loop, not a verdict on your skill.",
+                    "momentum": "stabilize",
+                    "audit": {
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Removes the ego-cost of failure."
+                    }
+                }
+            ],
+            "the-first-berserker-khazan": [
+                {
+                    "id": "combat-flow",
+                    "tier": 2,
+                    "kernel": "Aggression is rhythmic.",
+                    "interface": "Surrender to the rhythm of combat. Hesitation is the only friction.",
+                    "momentum": "unlock",
+                    "audit": {
+                        "permission_effect": "increase_interest",
+                        "risk": "drift",
+                        "notes": "Imperative command ('Surrender') and negative framing of hesitation ('friction')."
+                    }
+                }
+            ],
+            "lords-of-the-fallen": [
+                {
+                    "id": "dark-fantasy-step",
+                    "tier": 2,
+                    "kernel": "Progress is incremental.",
+                    "interface": "One checkpoint reached is a complete victory for today.",
+                    "momentum": "stabilize",
+                    "audit": {
+                        "permission_effect": "increase_interest",
+                        "risk": "drift",
+                        "notes": "Value elevation ('complete victory'). Maida should not measure success."
+                    }
+                }
+            ],
+            "eastern-exorcist": [
+                {
+                    "id": "2d-combat",
+                    "tier": 2,
+                    "kernel": "Plane is linear.",
+                    "interface": "Left or right. The path is simple, just clear what is in front of you.",
+                    "momentum": "unlock",
+                    "audit": {
+                        "permission_effect": "increase_interest",
+                        "risk": "drift",
+                        "notes": "Encouragement ('just clear') and subjective framing of difficulty ('simple')."
+                    }
+                }
+            ],
+            "eldest-souls": [
+                {
+                    "id": "boss-rush",
+                    "tier": 2,
+                    "kernel": "Focus is singular.",
+                    "interface": "There is only one target. Nothing else demands your attention.",
+                    "momentum": "unlock",
+                    "audit": {
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Focuses on reducing the scope of responsibility."
+                    }
+                }
+            ],
+            "factorio": [
+                {
+                    "id": "factory-wait",
+                    "tier": 2,
+                    "kernel": "The system persists.",
+                    "interface": "The factory waits for you; you do not need to fix it all today.",
+                    "momentum": "stabilize",
+                    "audit": {
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Acknowledges the system without imposing immediate duty."
+                    }
+                },
+                {
+                    "id": "one-belt",
+                    "tier": 2,
+                    "kernel": "Incremental input accepted.",
+                    "interface": "Placing a single belt counts as a complete session.",
+                    "momentum": "release",
+                    "audit": {
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Redefines 'complete' to a minimal atomic unit."
+                    }
+                }
+            ],
+            "death-stranding": [
+                {
+                    "id": "locomotion",
+                    "tier": 2,
+                    "kernel": "Traversal is sufficient.",
+                    "interface": "Moving forward is the only requirement. No combat needed.",
+                    "momentum": "unlock",
+                    "audit": {
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Explicitly removes a specific stressor (combat)."
+                    }
+                },
+                {
+                    "id": "connection",
+                    "tier": 2,
+                    "kernel": "Isolation is shared.",
+                    "interface": "You are alone here, but not disconnected.",
+                    "momentum": "stabilize",
+                    "audit": {
+                        "permission_effect": "increase_interest",
+                        "risk": "drift",
+                        "notes": "Emotional reassurance/comfort ('not disconnected'). Drifts into therapeutic tone."
+                    }
+                }
+            ],
+            "frostpunk": [
+                {
+                    "id": "survival-state",
+                    "tier": 2,
+                    "kernel": "Crisis is simulated.",
+                    "interface": "The cold is in the screen, not in the room. You are safe.",
+                    "momentum": "stabilize",
+                    "audit": {
+                        "permission_effect": "ambiguous",
+                        "risk": "drift",
+                        "notes": "Emotional comfort ('You are safe'). Shifts from permission to soothing."
+                    }
+                },
+                {
+                    "id": "leadership-pause",
+                    "tier": 2,
+                    "kernel": "Responsibility is suspended.",
+                    "interface": "You can pause the city's needs at any moment.",
+                    "momentum": "release",
+                    "audit": {
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Reinforces user agency and the ability to stop."
+                    }
+                }
+            ],
+            "disco-elysium": [
+                {
+                    "id": "internal-voice",
+                    "tier": 2,
+                    "kernel": "Chaos is readable.",
+                    "interface": "You don't need to be sober or smart here. Just read.",
+                    "momentum": "unlock",
+                    "audit": {
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Lowers the barrier to entry (sobriety/intelligence requirements)."
+                    }
+                },
+                {
+                    "id": "failure-path",
+                    "tier": 2,
+                    "kernel": "Errors are content.",
+                    "interface": "Saying the wrong thing is just another way to play.",
+                    "momentum": "stabilize",
+                    "audit": {
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Validates failure/error as a legitimate state."
+                    }
+                }
+            ],
+            "minds-beneath-us": [
+                {
+                    "id": "dialogue-choice",
+                    "tier": 2,
+                    "kernel": "Narrative is fluid.",
+                    "interface": "Watch the story unfold. Your input guides, but does not burden.",
+                    "momentum": "stabilize",
+                    "audit": {
+                        "permission_effect": "increase_interest",
+                        "risk": "drift",
+                        "notes": "Recommendation tone ('Watch the story unfold')."
+                    }
+                }
+            ],
+            "norco": [
+                {
+                    "id": "southern-gothic",
+                    "tier": 2,
+                    "kernel": "Atmosphere is primary.",
+                    "interface": "Soak in the pixel art. Analysis is not required.",
+                    "momentum": "unlock",
+                    "audit": {
+                        "permission_effect": "increase_interest",
+                        "risk": "drift",
+                        "notes": "Directive to appreciate aesthetics ('Soak in')."
+                    }
+                }
+            ],
+            "the-vale": [
+                {
+                    "id": "audio-focus",
+                    "tier": 2,
+                    "kernel": "Vision is suspended.",
+                    "interface": "Close your eyes. Listen. The world is built by sound.",
+                    "momentum": "unlock",
+                    "audit": {
+                        "permission_effect": "increase_interest",
+                        "risk": "violation",
+                        "notes": "Direct instructions ('Close your eyes'). Immersive coaching."
+                    }
+                }
+            ],
+            "ghost-of-tsushima-directors-cut": [
+                {
+                    "id": "breeze",
+                    "tier": 2,
+                    "kernel": "Guidance is wind.",
+                    "interface": "Follow the wind or don't. The map does not demand completion.",
+                    "momentum": "unlock",
+                    "audit": {
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Validates non-action ('or don't')."
+                    }
+                }
+            ],
+            "final-fantasy-xvi": [
+                {
+                    "id": "spectacle",
+                    "tier": 2,
+                    "kernel": "Spectacle awaits.",
+                    "interface": "Let the screen handle the scale. You just handle the buttons.",
+                    "momentum": "unlock",
+                    "audit": {
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Reduces the user's role to mechanical input."
+                    }
+                }
+            ],
+            "god-of-war": [
+                {
+                    "id": "journey",
+                    "tier": 2,
+                    "kernel": "Path is linear.",
+                    "interface": "The way forward is clear. You cannot get lost.",
+                    "momentum": "stabilize",
+                    "audit": {
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Removes the anxiety of navigation failure."
+                    }
+                }
+            ],
+            "lies-of-p": [
+                {
+                    "id": "puppet-strings",
+                    "tier": 2,
+                    "kernel": "Precision is patient.",
+                    "interface": "The timing will come back to you.",
+                    "momentum": "unlock",
+                    "audit": {
+                        "permission_effect": "ambiguous",
+                        "risk": "drift",
+                        "notes": "Predictive reassurance. Maida should not predict user state/recovery."
+                    }
+                }
+            ],
+            "action-taimanin": [
+                {
+                    "id": "auto-battle",
+                    "tier": 2,
+                    "kernel": "Action is immediate.",
+                    "interface": "High speed, low friction. Just flow.",
+                    "momentum": "unlock",
+                    "audit": {
+                        "permission_effect": "increase_interest",
+                        "risk": "violation",
+                        "notes": "Marketing language ('High speed') and directive instruction ('Just flow')."
+                    }
+                }
+            ],
+            "detention": [
+                {
+                    "id": "memory-archive",
+                    "tier": 2,
+                    "kernel": "Atmosphere is static.",
+                    "interface": "The horror waits for your input. It cannot hurt you.",
+                    "momentum": "stabilize",
+                    "audit": {
+                        "permission_effect": "ambiguous",
+                        "risk": "drift",
+                        "notes": "Emotional reassurance ('It cannot hurt you')."
+                    }
+                }
+            ],
+            "soma": [
+                {
+                    "id": "deep-ocean",
+                    "tier": 2,
+                    "kernel": "Existential mode.",
+                    "interface": "You are observing a philosophy problem, not solving it.",
+                    "momentum": "stabilize",
+                    "audit": {
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Reframes the user's role from solver to observer."
+                    }
+                }
+            ],
+            "stardew-valley": [
+                {
+                    "id": "crop-cycle",
+                    "tier": 2,
+                    "kernel": "Growth is automated.",
+                    "interface": "The crops will be fine. A short day is enough.",
+                    "momentum": "release",
+                    "audit": {
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Validates short sessions and removes consequence anxiety."
+                    }
+                }
+            ],
+            "timberborn": [
+                {
+                    "id": "dam-control",
+                    "tier": 2,
+                    "kernel": "Flow is managed.",
+                    "interface": "The water flows at your command. No rush.",
+                    "momentum": "stabilize",
+                    "audit": {
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Administrative confirmation of control."
+                    }
+                }
+            ],
+            "this-war-of-mine": [
+                {
+                    "id": "survival-day",
+                    "tier": 2,
+                    "kernel": "Endurance mode.",
+                    "interface": "Just survive one day. That is victory.",
+                    "momentum": "release",
+                    "audit": {
+                        "permission_effect": "increase_interest",
+                        "risk": "drift",
+                        "notes": "Value elevation ('victory'). Prescribes what counts as success."
+                    }
+                }
+            ],
+            "returnal": [
+                {
+                    "id": "cycle-restart",
+                    "tier": 2,
+                    "kernel": "The cycle expects you.",
+                    "interface": "Dying is part of the progress, not a setback.",
+                    "momentum": "unlock",
+                    "audit": {
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Reframes failure as a valid system state."
+                    }
+                }
+            ],
+            "dave-the-diver": [
+                {
+                    "id": "deep-dive",
+                    "tier": 2,
+                    "kernel": "Depth is adjustable.",
+                    "interface": "One dive is a complete experience.",
+                    "momentum": "release",
+                    "audit": {
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Defines a small unit of play as sufficient."
+                    }
+                }
+            ],
+            "balatro": [
+                {
+                    "id": "hands-played",
+                    "tier": 2,
+                    "kernel": "Probability is play.",
+                    "interface": "Just play one hand. The math handles itself.",
+                    "momentum": "unlock",
+                    "audit": {
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Offloads cognitive burden ('math handles itself')."
+                    }
+                }
+            ],
+            "slay-the-spire": [
+                {
+                    "id": "floor-climb",
+                    "tier": 2,
+                    "kernel": "Turn-based safety.",
+                    "interface": "The enemy waits for your turn forever.",
+                    "momentum": "stabilize",
+                    "audit": {
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Emphasizes the lack of time pressure."
+                    }
+                }
+            ],
+            "va-11-hall-a": [
+                {
+                    "id": "mix-drinks",
+                    "tier": 2,
+                    "kernel": "Service is passive.",
+                    "interface": "Listen to the music, mix a drink. No heroics needed.",
+                    "momentum": "unlock",
+                    "audit": {
+                        "permission_effect": "increase_interest",
+                        "risk": "drift",
+                        "notes": "Directive ('Listen', 'mix'). 'No heroics needed' is safe, but the first half instructs behavior."
+                    }
+                }
+            ],
+            "metro-2033-redux": [
+                {
+                    "id": "tunnel-vision",
+                    "tier": 2,
+                    "kernel": "Immersion is heavy.",
+                    "interface": "Step into the dark. The mask protects you.",
+                    "momentum": "unlock",
+                    "audit": {
+                        "permission_effect": "increase_interest",
+                        "risk": "drift",
+                        "notes": "Immersive / Dramatic language ('Step into the dark')."
+                    }
+                }
+            ],
+            "no-mans-sky": [
+                {
+                    "id": "infinite-space",
+                    "tier": 2,
+                    "kernel": "Destination optional.",
+                    "interface": "You can just drift. The universe is too big to complete.",
+                    "momentum": "release",
+                    "audit": {
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Validates aimlessness ('just drift') and negates completionism."
+                    }
+                }
+            ],
+            "gris": [
+                {
+                    "id": "color-flow",
+                    "tier": 2,
+                    "kernel": "State is fluid.",
+                    "interface": "There is no fail state here. Just move.",
+                    "momentum": "unlock",
+                    "audit": {
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "States a system fact ('no fail state'). 'Just move' is borderline but functional."
+                    }
+                }
+            ],
+            "far-lone-sails": [
+                {
+                    "id": "vehicle-maintain",
+                    "tier": 2,
+                    "kernel": "Momentum is mechanical.",
+                    "interface": "Keep the engine running. The view moves itself.",
+                    "momentum": "stabilize",
+                    "audit": {
+                        "permission_effect": "ambiguous",
+                        "risk": "drift",
+                        "notes": "Directive ('Keep the engine running')."
+                    }
+                }
+            ],
+            "the-last-campfire": [
+                {
+                    "id": "gentle-puzzle",
+                    "tier": 2,
+                    "kernel": "Logic is soft.",
+                    "interface": "There is no time limit. The puzzle will wait.",
+                    "momentum": "stabilize",
+                    "audit": {
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Removes time pressure."
+                    }
+                }
+            ],
+            "abzu": [
+                {
+                    "id": "ocean-drift",
+                    "tier": 2,
+                    "kernel": "Buoyancy holds you.",
+                    "interface": "You cannot drown. Just swim.",
+                    "momentum": "stabilize",
+                    "audit": {
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "States a system safety fact."
+                    }
+                }
+            ],
+            "dwarf-fortress": [
+                {
+                    "id": "history-gen",
+                    "tier": 2,
+                    "kernel": "Losing is fun.",
+                    "interface": "Disaster is just a story generation engine.",
+                    "momentum": "unlock",
+                    "audit": {
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Reframes 'disaster' as neutral output."
+                    }
+                }
+            ],
+            "rain-world": [
+                {
+                    "id": "ecosystem",
+                    "tier": 2,
+                    "kernel": "Predation is natural.",
+                    "interface": "You are small, and that is okay. Just hide.",
+                    "momentum": "stabilize",
+                    "audit": {
+                        "permission_effect": "ambiguous",
+                        "risk": "drift",
+                        "notes": "Emotional validation ('that is okay'). 'Just hide' is a survival instruction."
+                    }
+                }
+            ],
+            "bionic-bay": [
+                {
+                    "id": "physics-puzzle",
+                    "tier": 2,
+                    "kernel": "Physics are predictable.",
+                    "interface": "Test the mechanism. Failure is just data.",
+                    "momentum": "unlock",
+                    "audit": {
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Neutralizes failure."
+                    }
+                }
+            ],
+            "alans-automaton-workshop": [
+                {
+                    "id": "logic-build",
+                    "tier": 2,
+                    "kernel": "Code is static.",
+                    "interface": "The nodes do not move until you tell them to.",
+                    "momentum": "stabilize",
+                    "audit": {
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Affirms the user's control over time."
+                    }
+                }
+            ],
+            "20-minutes-till-dawn": [
+                {
+                    "id": "short-burst",
+                    "tier": 2,
+                    "kernel": "Time is capped.",
+                    "interface": "10 minutes or 20 minutes. The end is guaranteed.",
+                    "momentum": "release",
+                    "audit": {
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Defines a fixed endpoint, reducing uncertainty."
+                    }
+                }
+            ],
+            "metal-bringer": [
+                {
+                    "id": "horde-clear",
+                    "tier": 2,
+                    "kernel": "Crowd control.",
+                    "interface": "Clear the screen. The feedback loop is instant.",
+                    "momentum": "unlock",
+                    "audit": {
+                        "permission_effect": "increase_interest",
+                        "risk": "drift",
+                        "notes": "Directive ('Clear the screen') + Engagement optimization ('feedback loop is instant')."
+                    }
+                }
+            ],
+            "city-lights-love-bites-season-0": [
+                {
+                    "id": "visual-read",
+                    "tier": 2,
+                    "kernel": "Story is linear.",
+                    "interface": "Click to proceed. The narrative carries you.",
+                    "momentum": "stabilize",
+                    "audit": {
+                        "permission_effect": "increase_interest",
+                        "risk": "violation",
+                        "notes": "Explicit UI instruction ('Click to proceed') + promising an experience."
+                    }
+                }
+            ],
+            "viscera-cleanup-detail": [
+                {
+                    "id": "cleanup",
+                    "tier": 2,
+                    "kernel": "Order from chaos.",
+                    "interface": "Cleaning one spot is permanent progress.",
+                    "momentum": "release",
+                    "audit": {
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Validates minimal effort."
+                    }
+                }
+            ],
+            "clair-obscur-expedition-33": [
+                {
+                    "id": "new-world",
+                    "tier": 2,
+                    "kernel": "Exploration mode.",
+                    "interface": "Step into the unknown. No history required.",
+                    "momentum": "unlock",
+                    "audit": {
+                        "permission_effect": "increase_interest",
+                        "risk": "drift",
+                        "notes": "Dramatic/Marketing language ('Step into the unknown')."
+                    }
+                }
+            ],
+            "default_action": [
+                {
+                    "id": "generic-action",
+                    "tier": 1,
+                    "kernel": "Input accepted.",
+                    "interface": "Action is the antidote to thought.",
+                    "momentum": "unlock",
+                    "audit": {
+                        "permission_effect": "increase_interest",
+                        "risk": "drift",
+                        "notes": "Aphorism/Philosophy. Drifts into 'wise' advice rather than administrative permission."
+                    }
+                }
+            ],
+            "default_narrative": [
+                {
+                    "id": "generic-story",
+                    "tier": 1,
+                    "kernel": "Story waits.",
+                    "interface": "The next page does not turn until you are ready.",
+                    "momentum": "stabilize",
+                    "audit": {
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Confirms user control over pacing."
+                    }
+                }
+            ]
+        }
+    }
+}

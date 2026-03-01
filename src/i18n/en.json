@@ -1,0 +1,36 @@
+{
+    "ui": {
+        "button": {
+            "visit": "Visit",
+            "not_today": "Not Today",
+            "back": "Undo (One Time Only)",
+            "acknowledge": "Acknowledge",
+            "sync": "Let Maida look for you",
+            "restart_selection": "Restart Selection"
+        },
+        "status": {
+            "loading": "Scanning your library.\nNo data leaves your device.",
+            "frozen": "Go play.\nMaida will be here when you're done.",
+            "scanning": "Listening...",
+            "error": "Error"
+        },
+        "debug": {
+            "badge": "DBG",
+            "inspector_title": "Audit Diagnostics",
+            "trace_btn": "TRACE",
+            "clear_games_btn": "Clear All Games"
+        }
+    },
+    "voice": {
+        "onboarding": {
+            "permission_intro": "Maida can quietly look at what games you have, whenever you're ready.",
+            "permission_hint": "– nothing will be launched."
+        },
+        "error": {
+            "steam_not_found": "Steam not detected. You can try again later."
+        },
+        "idle": {
+            "no_games": "No games found. Maida is waiting."
+        }
+    }
+}

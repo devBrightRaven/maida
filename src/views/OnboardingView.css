@@ -1,0 +1,130 @@
+.onboarding-container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #050505;
+    color: #f0f0f0;
+    font-family: 'Outfit', sans-serif;
+    position: relative;
+    overflow: hidden;
+}
+
+.onboarding-content {
+    max-width: 600px;
+    text-align: center;
+    z-index: 10;
+    padding: 2rem;
+}
+
+.onboarding-voice {
+    font-size: 1.5rem;
+    font-weight: 300;
+    line-height: 1.6;
+    margin-bottom: 3rem;
+    color: rgba(240, 240, 240, 0.9);
+}
+
+.onboarding-link {
+    background: none;
+    border: 1px solid transparent;
+    color: rgba(240, 240, 240, 0.35);
+    font-size: 1rem;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 12px 24px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.onboarding-link:hover {
+    color: rgba(240, 240, 240, 0.7);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Focus state - works with ALL focus methods (tab, d-pad, programmatic) */
+.onboarding-link:focus,
+.onboarding-link.is-focused {
+    outline: none;
+    color: rgba(240, 240, 240, 1);
+    text-decoration: none;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 16px rgba(255, 255, 255, 0.15);
+}
+
+/* Subtle hint text - offset to the right, soft aside */
+.onboarding-hint {
+    margin-top: 1.5rem;
+    margin-left: calc(3rem + 64px);
+    font-size: 0.85rem;
+    color: rgba(240, 240, 240, 0.55);
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.listening-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.listening-indicator .dot {
+    width: 8px;
+    height: 8px;
+    background-color: #fff;
+    border-radius: 50%;
+    animation: breathe 3s infinite ease-in-out;
+}
+
+.listening-indicator .voice-text {
+    font-size: 0.9rem;
+    color: rgba(240, 240, 240, 0.5);
+    letter-spacing: 0.1em;
+}
+
+@keyframes breathe {
+
+    0%,
+    100% {
+        opacity: 0.2;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.5);
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    }
+}
+
+.bg-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-30%, -30%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(64, 64, 64, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
+    border-radius: 50%;
+    filter: blur(80px);
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Version display */
+.app-version-tag {
+    position: absolute;
+    bottom: 12px;
+    right: 16px;
+    color: rgba(240, 240, 240, 0.3);
+    font-family: 'Outfit', sans-serif;
+    font-size: 11px;
+    opacity: 0.5;
+    pointer-events: none;
+    letter-spacing: 0.05em;
+    -webkit-user-select: none;
+    user-select: none;
+    z-index: 100;
+}

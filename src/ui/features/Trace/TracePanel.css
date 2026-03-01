@@ -1,0 +1,247 @@
+/* --- TRACE PANEL (Overlay & Diagnostics) --- */
+.debug-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: none;
+    /* Removed blocking background */
+    pointer-events: none;
+    /* Allow clicks to pass through */
+    display: flex;
+    justify-content: flex-end;
+    z-index: 9999;
+}
+
+.debug-panel {
+    width: 480px;
+    height: 100%;
+    background: rgba(10, 10, 10, 0.95);
+    /* Slightly transparent for aesthetics */
+    border-left: 1px solid #333;
+    padding: 2.5rem;
+    overflow-y: auto;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 0.85rem;
+    color: #888;
+    box-shadow: -20px 0 50px rgba(0, 0, 0, 0.5);
+    text-align: left;
+    pointer-events: auto;
+    /* Re-enable clicks for the panel itself */
+    backdrop-filter: blur(10px);
+}
+
+.debug-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    color: #fff;
+    border-bottom: 1px solid #222;
+    padding-bottom: 1rem;
+}
+
+.debug-close {
+    background: none;
+    border: none;
+    color: #555;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.debug-close:hover {
+    color: #fff;
+}
+
+.debug-section {
+    margin-bottom: 2.5rem;
+}
+
+.debug-section h4 {
+    color: #ffaa00;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    margin-bottom: 1rem;
+    letter-spacing: 0.15em;
+    opacity: 0.6;
+}
+
+.debug-stats {
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.9rem;
+    color: #00ff88;
+}
+
+.debug-grid {
+    background: #000;
+    padding: 1.2rem;
+    border-radius: 6px;
+    border: 1px solid #1a1a1a;
+    line-height: 1.6;
+}
+
+.highlight {
+    color: #00ff88;
+    font-weight: bold;
+}
+
+.trace-scroll-container {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #1a1a1a;
+    background: #000;
+}
+
+.trace-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.75rem;
+}
+
+
+.trace-table th,
+.trace-table td {
+    text-align: left;
+    padding: 0.7rem;
+    border-bottom: 1px solid #111;
+}
+
+.trace-table th {
+    color: #444;
+    text-transform: uppercase;
+    font-size: 0.65rem;
+}
+
+.trace-table tr.active {
+    background: rgba(0, 255, 136, 0.05);
+    color: #fff;
+}
+
+.rank-col {
+    color: #666;
+    font-family: monospace;
+    width: 30px;
+    text-align: center;
+}
+
+.trace-table tr.active .rank-col {
+    color: #00ff88;
+    font-weight: bold;
+}
+
+.debug-logs {
+    background: #111;
+    padding: 1rem;
+    max-height: 250px;
+    overflow-y: auto;
+    border-radius: 6px;
+    border: 1px solid #222;
+}
+
+.log-entry {
+    margin-bottom: 0.4rem;
+    font-size: 0.7rem;
+    display: flex;
+    gap: 0.8rem;
+    border-bottom: 1px solid #1a1a1a;
+    padding-bottom: 0.4rem;
+}
+
+.log-time {
+    color: #666;
+    font-family: monospace;
+}
+
+.log-event {
+    color: #ffaa00;
+    font-weight: bold;
+    width: 90px;
+}
+
+.log-event[data-event="TRY"]            { color: #00ff88; }
+.log-event[data-event="PLAY"]           { color: #00ff88; }
+.log-event[data-event="NOT_NOW"]        { color: #ff4444; }
+.log-event[data-event="UNDO"]           { color: #888888; }
+.log-event[data-event="ANCHOR"]         { color: #ffcc00; }
+.log-event[data-event="CLEAR"]          { color: #888888; }
+.log-event[data-event="PENALTY_UPDATE"] { color: #ff8800; }
+
+.log-details {
+    color: #aaa;
+    flex: 1;
+}
+
+.debug-copy {
+    width: 100%;
+    padding: 1rem;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    color: #ddd;
+    cursor: pointer;
+    margin-top: 1rem;
+    font-family: inherit;
+    transition: all 0.2s;
+}
+
+.debug-copy:hover {
+    background: #fff;
+    color: #000;
+}
+
+/* Simulation Controls */
+.simulation-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 2rem;
+}
+
+.sim-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.8rem;
+    color: #ccc;
+}
+
+.sim-row input[type="range"] {
+    flex: 1;
+    accent-color: var(--amber);
+    /* Note: var might be undefined if not in root, keeping for safety */
+}
+
+.sim-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.sim-actions button {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #333;
+    color: #eee;
+    padding: 6px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.sim-actions button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: #ffaa00;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}

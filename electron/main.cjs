@@ -1,0 +1,611 @@
+const { app, BrowserWindow, ipcMain, shell } = require('electron');
+const path = require('path');
+const fs = require('fs');
+const { execSync } = require('child_process');
+
+// ---------------------------------------------------------
+// Update Checker (GitHub Releases - Manual Download)
+// 可替換：這段邏輯是獨立的，未來可以換成其他更新機制
+// ---------------------------------------------------------
+const UPDATE_CONFIG = {
+    owner: 'bright-raven',
+    repo: 'maida',
+};
+
+// Update check cache (in-memory, 24h TTL)
+let updateCache = { result: null, checkedAt: 0 };
+const UPDATE_CACHE_TTL = 24 * 60 * 60 * 1000;
+
+async function checkForUpdates() {
+    if (!app.isPackaged) return null; // 開發模式不檢查
+
+    try {
+        const https = require('https');
+        const currentVersion = app.getVersion();
+
+        const url = `https://api.github.com/repos/${UPDATE_CONFIG.owner}/${UPDATE_CONFIG.repo}/releases/latest`;
+
+        const data = await new Promise((resolve, reject) => {
+            https.get(url, { headers: { 'User-Agent': 'Maida-App' } }, (res) => {
+                let body = '';
+                res.on('data', chunk => body += chunk);
+                res.on('end', () => {
+                    if (res.statusCode === 200) {
+                        resolve(JSON.parse(body));
+                    } else {
+                        reject(new Error(`GitHub API returned ${res.statusCode}`));
+                    }
+                });
+            }).on('error', reject);
+        });
+
+        const latestVersion = data.tag_name?.replace(/^v/, '') || '';
+        const hasUpdate = latestVersion && compareVersions(latestVersion, currentVersion) > 0;
+
+        console.log(`[Maida] Update check: current=${currentVersion}, latest=${latestVersion}, hasUpdate=${hasUpdate}`);
+
+        return hasUpdate ? {
+            currentVersion,
+            latestVersion,
+            releaseUrl: data.html_url,
+            releaseNotes: data.body?.substring(0, 500) || '',
+        } : null;
+    } catch (err) {
+        console.log('[Maida] Update check failed (non-blocking):', err.message);
+        return null;
+    }
+}
+
+function compareVersions(a, b) {
+    const pa = a.split('.').map(Number);
+    const pb = b.split('.').map(Number);
+    for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
+        const na = pa[i] || 0;
+        const nb = pb[i] || 0;
+        if (na > nb) return 1;
+        if (na < nb) return -1;
+    }
+    return 0;
+}
+
+let mainWindow;
+
+// Prevent multiple instances to avoid data corruption
+const gotTheLock = app.requestSingleInstanceLock();
+if (!gotTheLock) {
+    app.quit();
+} else {
+    app.on('second-instance', () => {
+        if (mainWindow) {
+            if (mainWindow.isMinimized()) mainWindow.restore();
+            mainWindow.focus();
+        }
+    });
+}
+
+function createWindow() {
+    // Icon path - works in both dev and production
+    const iconPath = app.isPackaged
+        ? path.join(process.resourcesPath, 'icon.ico')
+        : path.join(__dirname, '../build/icon.ico');
+
+    mainWindow = new BrowserWindow({
+        width: 1200,
+        height: 800,
+        icon: iconPath,
+        webPreferences: {
+            preload: path.join(__dirname, 'preload.cjs'),
+            contextIsolation: true,
+            nodeIntegration: false
+        },
+        autoHideMenuBar: true,
+        backgroundColor: '#050505'
+    });
+
+    // Handle external links (e.g. steam://) properly
+    mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+        require('electron').shell.openExternal(url);
+        return { action: 'deny' };
+    });
+
+    if (process.env.NODE_ENV === 'development') {
+        mainWindow.loadURL('http://localhost:5173');
+        // mainWindow.webContents.openDevTools();
+    } else {
+
+        mainWindow.loadFile(path.join(__dirname, '../dist/index.html'));
+    }
+
+    mainWindow.on('closed', () => {
+        mainWindow = null;
+        app.quit(); // Ensure concurrently sees the exit
+    });
+}
+
+
+// Persistence Management
+const userDataPath = app.getPath('userData');
+const GAMES_PATH = path.join(userDataPath, 'games.json');
+const PRESCRIPTIONS_PATH = path.join(userDataPath, 'prescriptions.json');
+const ANCHOR_PATH = path.join(userDataPath, 'anchor.json');
+const RETURN_PENALTIES_PATH = path.join(userDataPath, 'returnPenalties.json');
+const CONSTRAINTS_PATH = path.join(userDataPath, 'constraints.json');
+
+// Template paths: In production, extraResources are at process.resourcesPath/data/
+// In development, they're at ../src/data/
+const isPackaged = app.isPackaged;
+const SEED_GAMES = isPackaged
+    ? path.join(process.resourcesPath, 'data', 'games.json')
+    : path.join(__dirname, '../src/data/games.json');
+const SEED_PRESCRIPTIONS = isPackaged
+    ? path.join(process.resourcesPath, 'data', 'prescriptions.json')
+    : path.join(__dirname, '../src/data/prescriptions.json');
+
+const SCHEMA_VERSION = '0.2.2';
+
+function ensureDataFile(filePath, type) {
+    // 1. Force Sync for Prescriptions (Template -> UserData)
+    // This ensures updates to the static source file always propagate to the user.
+    if (type === 'prescriptions' && fs.existsSync(SEED_PRESCRIPTIONS)) {
+        try {
+            fs.copyFileSync(SEED_PRESCRIPTIONS, filePath);
+            console.log('[Main] Synced prescriptions from template.');
+        } catch (err) {
+            console.error('[Main] Failed to sync prescriptions:', err);
+        }
+        return;
+    }
+
+    // 2. Initialize Games if missing
+    if (!fs.existsSync(filePath)) {
+        const defaultData = type === 'games'
+            ? { schemaVersion: SCHEMA_VERSION, source: 'uninitialized', games: [] }
+            : { prescriptions: { default: [], catalog: {} } }; // Fallback only if template missing
+        fs.writeFileSync(filePath, JSON.stringify(defaultData, null, 4));
+    }
+}
+
+
+function writeFileAtomic(filePath, data) {
+    const tmpPath = filePath + '.tmp';
+    try {
+        fs.writeFileSync(tmpPath, JSON.stringify(data, null, 4));
+        fs.renameSync(tmpPath, filePath);
+        return { success: true };
+    } catch (e) {
+        console.error('[Maida] Write failed:', e.message);
+        // Cleanup orphaned temp file
+        try { fs.unlinkSync(tmpPath); } catch {}
+        return { success: false, error: e.message };
+    }
+}
+
+
+// Ported Scanner Logic (Capability-Based)
+const isWSL = fs.existsSync('/proc/version') && 
+    fs.readFileSync('/proc/version', 'utf8').toLowerCase().includes('microsoft');
+
+// Capability: Can we launch games from this environment?
+const canLaunchGames = !isWSL; // WSL is read-only observer
+
+function getSteamPath() {
+    // 1. Environment override (highest priority - for dev/testing)
+    const envOverride = process.env.MAIDA_WINDOWS_STEAM_ROOT;
+    if (envOverride) {
+        console.log('[Maida] Using MAIDA_WINDOWS_STEAM_ROOT:', envOverride);
+        if (fs.existsSync(envOverride)) return envOverride;
+        console.warn('[Maida] Override path does not exist:', envOverride);
+    }
+
+    const candidates = [
+        "C:/Program Files (x86)/Steam",
+        "C:/Steam",
+        "D:/Steam",
+        "E:/Steam"
+    ];
+
+    // 2. Evidence-first: Check for Steam installation evidence
+    for (let c of candidates) {
+        let p = c;
+        if (isWSL) {
+            // Convert C:/... to /mnt/c/...
+            const drive = c.charAt(0).toLowerCase();
+            p = `/mnt/${drive}${c.substring(2)}`;
+        }
+        
+        // Evidence check: steamapps/libraryfolders.vdf exists
+        const evidencePath = path.join(p, 'steamapps/libraryfolders.vdf');
+        if (fs.existsSync(evidencePath)) {
+            console.log('[Maida] Steam evidence found:', p);
+            return p;
+        }
+    }
+
+    // 3. Registry hint (optional, non-blocking)
+    try {
+        const cmd = isWSL ? 'powershell.exe' : 'powershell';
+        const result = execSync(`${cmd} -Command "(Get-ItemProperty \\"HKCU:\\Software\\Valve\\Steam\\").SteamPath"`, 
+            { timeout: 3000 }).toString().trim();
+        let p = result.replace(/\\/g, '/');
+        if (isWSL && p.match(/^[A-Z]:/i)) {
+            const drive = p.charAt(0).toLowerCase();
+            p = `/mnt/${drive}${p.substring(2)}`;
+        }
+        // Verify evidence before trusting registry
+        const evidencePath = path.join(p, 'steamapps/libraryfolders.vdf');
+        if (fs.existsSync(evidencePath)) {
+            console.log('[Maida] Steam evidence found via registry:', p);
+            return p;
+        }
+    } catch (e) {
+        // Registry read failed - not fatal in evidence-first approach
+        console.log('[Maida] Registry hint unavailable (non-blocking):', e.message);
+    }
+
+    console.warn('[Maida] No Steam evidence found in known locations');
+    return null;
+}
+
+function scanSteamLibrary() {
+    const steamPath = getSteamPath();
+    if (!steamPath) return { error: "Steam not found" };
+
+    // Path adapter: Convert Windows paths to WSL format if needed
+    const adaptPath = (winPath) => {
+        if (!isWSL) return winPath;
+        // Convert D:\SteamLibrary to /mnt/d/SteamLibrary
+        if (winPath.match(/^[A-Z]:/i)) {
+            const drive = winPath.charAt(0).toLowerCase();
+            return `/mnt/${drive}${winPath.substring(2).replace(/\\/g, '/')}`;
+        }
+        return winPath.replace(/\\/g, '/');
+    };
+
+    const vdfPath = path.join(steamPath, 'steamapps/libraryfolders.vdf');
+    if (!fs.existsSync(vdfPath)) return { error: "Library config not found" };
+
+    let vdfContent;
+    try {
+        vdfContent = fs.readFileSync(vdfPath, 'utf8');
+    } catch (e) {
+        console.error('[Maida] Failed to read VDF:', e.message);
+        return { error: "Cannot read Steam library config" };
+    }
+
+    const libraries = new Set();
+    libraries.add(steamPath);
+
+    // Parse additional library paths and adapt them
+    const matches = vdfContent.matchAll(/"path"\s+"([^"]+)"/g);
+    for (const match of matches) {
+        const adaptedPath = adaptPath(match[1]);
+        libraries.add(adaptedPath);
+    }
+
+    const games = [];
+    const seenAppIds = new Set();
+
+    // Type-based filter: patterns that indicate non-game apps
+    const NON_GAME_PATTERNS = [
+        /redistributable/i,
+        /\bruntime\b/i,
+        /\bsdk\b/i,
+        /\bproton\b/i,
+        /\bsteamworks\b/i,
+        /\bdedicated server\b/i
+    ];
+
+    // Minimal hardcoded exclusions (only for edge cases that slip through pattern filter)
+    const ALWAYS_EXCLUDE_APPIDS = new Set([
+        '228980'  // Steamworks Common Redistributables (most common offender)
+    ]);
+
+    libraries.forEach(lib => {
+        const appsDir = path.join(lib, 'steamapps');
+        if (!fs.existsSync(appsDir)) {
+            console.log(`[Maida] Library path not accessible: ${lib}`);
+            return;
+        }
+
+        const files = fs.readdirSync(appsDir);
+        files.forEach(file => {
+            if (file.startsWith('appmanifest_') && file.endsWith('.acf')) {
+                try {
+                    const content = fs.readFileSync(path.join(appsDir, file), 'utf8');
+                    const nameMatch = content.match(/"name"\s+"([^"]+)"/);
+                    const appidMatch = content.match(/"appid"\s+"([^"]+)"/);
+
+                    if (nameMatch && appidMatch) {
+                        const appid = appidMatch[1];
+                        const name = nameMatch[1];
+
+                        // Dedup first to avoid repeated filter logs across library folders
+                        if (seenAppIds.has(appid)) return;
+                        seenAppIds.add(appid);
+
+                        // Filter: skip non-games
+                        if (ALWAYS_EXCLUDE_APPIDS.has(appid)) {
+                            console.log(`[Maida] Filtered by appid: ${appid} "${name}"`);
+                            return;
+                        }
+                        if (NON_GAME_PATTERNS.some(p => p.test(name))) {
+                            console.log(`[Maida] Filtered by pattern: ${appid} "${name}"`);
+                            return;
+                        }
+
+                        const gameData = {
+                            id: nameMatch[1].toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+                            title: nameMatch[1],
+                            installed: true,
+                            steamAppId: appid,
+                            importedAt: new Date().toISOString()
+                        };
+
+                        // Capability adapter: only emit launch URL if we can launch games
+                        if (canLaunchGames) {
+                            gameData.steamUrl = `steam://rungameid/${appid}`;
+                        }
+
+                        games.push(gameData);
+                    }
+                } catch (err) {
+                    console.error(`[Maida] Failed to read ${file}:`, err);
+                }
+            }
+        });
+    });
+
+    console.log(`[Maida] Scan complete: ${games.length} games found (canLaunch: ${canLaunchGames})`);
+    return { games };
+}
+
+
+// ---------------------------------------------------------
+// IPC Handlers
+// ---------------------------------------------------------
+
+ipcMain.handle('get-data', (event, type) => {
+    let filePath;
+    if (type === 'games') filePath = GAMES_PATH;
+    else if (type === 'prescriptions') filePath = PRESCRIPTIONS_PATH;
+    else if (type === 'anchor') filePath = ANCHOR_PATH; // NEW
+    else if (type === 'returnPenalties') filePath = RETURN_PENALTIES_PATH;
+    else if (type === 'constraints') filePath = CONSTRAINTS_PATH;
+    else return null;
+
+    // ensureDataFile(filePath, type); // Skip ensure for anchor, it can be missing
+    if (!fs.existsSync(filePath)) return null;
+    try {
+        const content = fs.readFileSync(filePath, 'utf8');
+        let data = JSON.parse(content);
+
+        // Daily Decay for games
+        if (type === 'games' && data.games) {
+            const now = new Date();
+            const lastDecay = data.lastDecayAt ? new Date(data.lastDecayAt) : null;
+
+            // If it's a new day, apply decay
+            if (!lastDecay || now.toDateString() !== lastDecay.toDateString()) {
+                // 20% daily decay (×0.8) — aligns with spec §5 and Debug Panel default.
+                // Applies to both positive and negative scores (entropy, not intervention).
+                // Recovery: score -2.0 → meaningful probability (~-0.5) in ~7 days.
+                // Fixed from: Math.max(0, score * 0.9) which had two bugs:
+                //   1. Math.max(0) clamped negatives to 0 overnight (spec: gradual decay)
+                //   2. 0.9 (10%) didn't match spec/Debug default of 0.8 (20%)
+                // See: docs/05-qa/2026-02-09_OPEN_daily-decay-negative-score-clamping.md
+                console.log('[Maida] New day detected, applying score decay...');
+                data.games = data.games.map(game => ({
+                    ...game,
+                    score: (game.score || 0) * 0.8
+                }));
+                data.lastDecayAt = now.toISOString();
+                writeFileAtomic(GAMES_PATH, data);
+            }
+        }
+        return data;
+    } catch (e) {
+        return null;
+    }
+});
+
+ipcMain.handle('save-data', (event, type, data) => {
+    let filePath;
+    if (type === 'games') filePath = GAMES_PATH;
+    else if (type === 'prescriptions') filePath = PRESCRIPTIONS_PATH;
+    else if (type === 'anchor') filePath = ANCHOR_PATH;
+    else if (type === 'returnPenalties') filePath = RETURN_PENALTIES_PATH;
+    else if (type === 'constraints') filePath = CONSTRAINTS_PATH;
+    else return { success: false, error: 'Unknown type' };
+
+    return writeFileAtomic(filePath, data);
+});
+
+ipcMain.handle('check-steam-available', () => {
+    const steamPath = getSteamPath();
+    return { available: !!steamPath };
+});
+
+ipcMain.handle('reset-games-data', () => {
+    try {
+        if (fs.existsSync(GAMES_PATH)) {
+            const resetData = { schemaVersion: SCHEMA_VERSION, source: 'uninitialized', games: [] };
+            writeFileAtomic(GAMES_PATH, resetData);
+
+            // Also clear returnPenalties and anchor state
+            if (fs.existsSync(RETURN_PENALTIES_PATH)) {
+                fs.unlinkSync(RETURN_PENALTIES_PATH);
+                console.log('[Maida] Return penalties cleared.');
+            }
+            if (fs.existsSync(ANCHOR_PATH)) {
+                fs.unlinkSync(ANCHOR_PATH);
+                console.log('[Maida] Anchor state cleared.');
+            }
+
+            console.log('[Maida] Games data reset via Debug command.');
+            return { success: true };
+        }
+        return { success: false, reason: 'file_not_found' };
+    } catch (e) {
+        console.error('[Maida] Failed to reset games:', e);
+        return { success: false, error: e.message };
+    }
+});
+
+ipcMain.handle('request-onboarding-sync', async () => {
+    console.log('[Maida] User requested onboarding sync...');
+    const scanResult = scanSteamLibrary();
+    if (scanResult.error) return scanResult;
+
+    const data = {
+        schemaVersion: SCHEMA_VERSION,
+        source: 'steam-onboarding',
+        lastSuccessfulSyncAt: new Date().toISOString(),
+        libraryProvider: 'steam',
+        games: scanResult.games
+    };
+
+    writeFileAtomic(GAMES_PATH, data);
+    return { success: true, count: scanResult.games.length };
+});
+
+ipcMain.handle('perform-background-snapshot', async () => {
+    // Always scan on startup — no cooldown.
+    // Steam scan reads local ACF files and is fast.
+    // See: docs/05-qa/2026-02-09_OPEN_background-sync-stale-data.md
+    console.log('[Maida] Running background snapshot (Healing Merge)...');
+    const scanResult = scanSteamLibrary();
+    if (scanResult.error) return { success: false, error: scanResult.error };
+
+    // 2. Load current data
+    let currentData = { games: [] };
+    try {
+        if (fs.existsSync(GAMES_PATH)) {
+            currentData = JSON.parse(fs.readFileSync(GAMES_PATH, 'utf8'));
+        }
+    } catch (e) { }
+
+    const scannedGames = scanResult.games;
+    const existingGamesRaw = currentData.games || [];
+
+    // Layer 2: Deterministic Healing Dedup (Existing Data)
+    const existingMap = new Map();
+    existingGamesRaw.forEach(g => {
+        const prev = existingMap.get(g.steamAppId);
+        if (!prev) {
+            existingMap.set(g.steamAppId, g);
+            return;
+        }
+        // Conflict resolution: Keep the one with behavioral "weight"
+        const prevActivity = Math.abs(prev.score || 0) + (prev.lastPlayed && prev.lastPlayed !== 'Never' ? 1 : 0);
+        const currActivity = Math.abs(g.score || 0) + (g.lastPlayed && g.lastPlayed !== 'Never' ? 1 : 0);
+        if (currActivity > prevActivity) {
+            existingMap.set(g.steamAppId, g);
+        }
+    });
+
+    // Layer 2: Behavioral Merge with Scanned results
+    const scannedIds = new Set(scannedGames.map(g => g.steamAppId));
+
+    // A) Process existing games
+    existingMap.forEach((g, steamAppId) => {
+        const isCurrentlyInstalled = scannedIds.has(steamAppId);
+        if (isCurrentlyInstalled && !g.installed) {
+            // RE-INSTALLED!
+            g.installed = true;
+            g.reinstalledAt = new Date().toISOString();
+            g.buffer = { type: 'visibility', remaining: 3 };
+            console.log(`[Maida] Re-install detected: ${g.title}`);
+        } else if (!isCurrentlyInstalled && g.installed) {
+            // UNINSTALLED (Soft Delete)
+            g.installed = false;
+            console.log(`[Maida] Uninstall detected: ${g.title}`);
+        }
+    });
+
+    // B) Add brand new games
+    scannedGames.forEach(g => {
+        if (!existingMap.has(g.steamAppId)) {
+            existingMap.set(g.steamAppId, {
+                ...g,
+                score: 0.00
+            });
+            console.log(`[Maida] New game discovered: ${g.title}`);
+        }
+    });
+
+    const finalGamesArray = Array.from(existingMap.values());
+
+    // Layer 3: Persistence Invariant Check
+    const finalSet = new Set();
+    const cleanGames = finalGamesArray.filter(g => {
+        if (!g.steamAppId) return true; // Keep manual entries
+        if (finalSet.has(g.steamAppId)) return false;
+        finalSet.add(g.steamAppId);
+        return true;
+    });
+
+    // 3. Atomic Write
+    const nextData = {
+        ...currentData,
+        schemaVersion: SCHEMA_VERSION,
+        source: 'steam-background',
+        lastSuccessfulSyncAt: new Date().toISOString(),
+        libraryProvider: 'steam',
+        games: cleanGames
+    };
+
+    writeFileAtomic(GAMES_PATH, nextData);
+    return { success: true, count: cleanGames.length };
+});
+
+
+
+ipcMain.handle('minimize-window', () => {
+    if (mainWindow) mainWindow.minimize();
+    return { success: true };
+});
+
+ipcMain.handle('close-window', () => {
+    if (mainWindow) mainWindow.close();
+    return { success: true };
+});
+
+// Update IPC Handlers
+ipcMain.handle('check-for-updates', async (event, options = {}) => {
+    const force = options?.force === true;
+    if (!force && updateCache.result && (Date.now() - updateCache.checkedAt < UPDATE_CACHE_TTL)) {
+        return updateCache.result;
+    }
+    const result = await checkForUpdates();
+    updateCache = { result, checkedAt: Date.now() };
+    return result;
+});
+
+ipcMain.handle('open-release-page', (event, url) => {
+    if (url) shell.openExternal(url);
+    return { success: true };
+});
+
+ipcMain.handle('get-app-version', () => {
+    return app.getVersion();
+});
+
+
+
+app.on('ready', () => {
+    ensureDataFile(GAMES_PATH, 'games');
+    ensureDataFile(PRESCRIPTIONS_PATH, 'prescriptions');
+    createWindow();
+});
+
+app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') {
+        app.quit();
+    }
+});
+
+app.on('activate', () => {
+    if (mainWindow === null) {
+        createWindow();
+    }
+});
