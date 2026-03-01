@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getActiveGame, getPrescription } from '../core/engine';
 import { applyConstraints } from '../core/constraints';
+import { applyTryScore, applySkipScore, updateGameScore, mergePenalties, removeFromSkipSets, mergeExcludeAppId, isFirstRun, resetAllScores } from '../core/session-logic';
 import { debugStore } from '../core/debugStore';
 import { loadData, saveData } from '../services/persistence';
 import bridge from '../services/bridge';
@@ -33,9 +34,9 @@ export function useMaidaSession() {
 
         if (constraintsData) setConstraints(constraintsData);
 
-        const isFirstRun = !games || !games.games || games.source === 'uninitialized' || games.games.length === 0;
+        const firstRun = isFirstRun(games);
 
-        if (isFirstRun) {
+        if (firstRun) {
             const steamCheck = await bridge.checkSteamAvailable();
             if (!steamCheck.available) {
                 setStatus('error');
@@ -135,8 +136,7 @@ export function useMaidaSession() {
     // Reset all behavioral state (used by Debug Panel)
     const resetAll = async () => {
         // Reset all scores to 0
-        const resetGamesList = data.games.games.map(g => ({ ...g, score: 0 }));
-        const nextData = { ...data.games, games: resetGamesList };
+        const nextData = { ...data.games, games: resetAllScores(data.games.games) };
 
         // Clear all behavioral state
         setSessionSkippedSet([]);
@@ -156,11 +156,7 @@ export function useMaidaSession() {
 
     // CONSTRAINTS: Hide game permanently (Debug Panel only)
     const hideGame = async (steamAppId) => {
-        const current = constraints || { exclude_appids: [] };
-        const updated = {
-            ...current,
-            exclude_appids: [...new Set([...(current.exclude_appids || []), steamAppId])]
-        };
+        const updated = mergeExcludeAppId(constraints, steamAppId);
         setConstraints(updated);
         await saveData('constraints', updated);
         debugStore.log('HIDE', { steamAppId });
@@ -190,15 +186,10 @@ export function useMaidaSession() {
             }
 
             // TRY: Commitment under uncertainty (weight +1.0)
-            const updatedGames = data.games.games.map(g => {
-                if (g.id === session.game.id) {
-                    const oldScore = g.score || 0;
-                    const newScore = Math.min(3, oldScore + 1);
-                    debugStore.log('TRY', { gameId: g.id, title: g.title, change: `${oldScore.toFixed(2)} -> ${newScore.toFixed(2)}` });
-                    return { ...g, score: newScore };
-                }
-                return g;
-            });
+            const oldScore = session.game.score || 0;
+            const newScore = applyTryScore(oldScore);
+            debugStore.log('TRY', { gameId: session.game.id, title: session.game.title, change: `${oldScore.toFixed(2)} -> ${newScore.toFixed(2)}` });
+            const updatedGames = updateGameScore(data.games.games, session.game.id, applyTryScore);
 
             const nextData = { ...data.games, games: updatedGames };
             await saveData('games', nextData);
@@ -214,24 +205,10 @@ export function useMaidaSession() {
 
             // 2. Generate new returnPenaltySet (MERGE LOGIC)
             // Core Principle: TRY can only ADD scars, never remove them (unless replaced by new ones)
-            let finalPenalties = returnPenaltySet || [];
+            const finalPenalties = mergePenalties(returnPenaltySet, sessionSkippedHistory);
 
             if (sessionSkippedHistory.length > 0) {
-                // We treat returnPenaltySet as an ordered list [Oldest -> Newest]
-                let mergedList = [...(returnPenaltySet || [])];
-
-                // Append new skips, refreshing position if already present
-                sessionSkippedHistory.forEach(id => {
-                    const idx = mergedList.indexOf(id);
-                    if (idx > -1) mergedList.splice(idx, 1);
-                    mergedList.push(id);
-                });
-
-                // Keep only the last 5 (Most Recent)
-                finalPenalties = mergedList.slice(-5);
-
                 debugStore.log('PENALTY_UPDATE', { previous: returnPenaltySet, new: finalPenalties });
-
                 setReturnPenaltySet(finalPenalties);
                 await saveData('returnPenalties', finalPenalties);
             }
@@ -265,15 +242,10 @@ export function useMaidaSession() {
             setSessionSkippedSet(updatedSkipped);
             setSessionSkippedHistory(updatedHistory);
 
-            const updatedGames = data.games.games.map(g => {
-                if (g.id === currentId) {
-                    const oldScore = g.score || 0;
-                    const newScore = Math.max(-3, oldScore - 2);
-                    debugStore.log('NOT_NOW', { gameId: g.id, title: g.title, change: `${oldScore.toFixed(2)} -> ${newScore.toFixed(2)}` });
-                    return { ...g, score: newScore };
-                }
-                return g;
-            });
+            const oldScore = session.game.score || 0;
+            const newSkipScore = applySkipScore(oldScore);
+            debugStore.log('NOT_NOW', { gameId: currentId, title: session.game.title, change: `${oldScore.toFixed(2)} -> ${newSkipScore.toFixed(2)}` });
+            const updatedGames = updateGameScore(data.games.games, currentId, applySkipScore);
 
             const nextData = { ...data.games, games: updatedGames };
             await saveData('games', nextData);
@@ -292,8 +264,7 @@ export function useMaidaSession() {
                 setHistory(null);
 
                 // CRITICAL FIX: Update exclusion sets first
-                const nextSkipped = sessionSkippedSet.filter(id => id !== restoredId);
-                const nextHistory = sessionSkippedHistory.filter(id => id !== restoredId);
+                const { skippedSet: nextSkipped, skippedHistory: nextHistory } = removeFromSkipSets(sessionSkippedSet, sessionSkippedHistory, restoredId);
 
                 setSessionSkippedSet(nextSkipped);
                 setSessionSkippedHistory(nextHistory);
