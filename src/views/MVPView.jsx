@@ -199,7 +199,7 @@ export default function MVPView({
             {game && (
                 <header className="mvp-header" onClick={onSecretTap}>
                     <span className="game-label">
-                        {isAnchored ? `(⚓Anchored) ${game.title}` : game.title}
+                        {isAnchored ? `(⚓${t('ui.game.anchored_prefix')}) ${game.title}` : game.title}
                     </span>
                 </header>
             )}
@@ -231,10 +231,10 @@ export default function MVPView({
                                 // Prevent default click because we handle action in onPointerUp
                                 onClick={(e) => { e.stopPropagation(); }}
                             >
-                                {isAnchored ? 'PLAY' : (
+                                {isAnchored ? t('ui.button.play') : (
                                     <div className="visit-btn-content">
-                                        <span className="visit-btn-title">TRY</span>
-                                        <span className="visit-btn-subtitle">hold to anchor this game</span>
+                                        <span className="visit-btn-title">{t('ui.button.try')}</span>
+                                        <span className="visit-btn-subtitle">{t('ui.button.try_hint')}</span>
                                     </div>
                                 )}
                                 {/* Long Press Progress Bar */}
@@ -255,7 +255,7 @@ export default function MVPView({
                                     else onAction('skip');
                                 }}
                             >
-                                {isAnchored ? 'Clear' : 'Not Now'}
+                                {isAnchored ? t('ui.button.clear') : t('ui.button.not_today')}
                             </button>
                         </div>
                     ) : (

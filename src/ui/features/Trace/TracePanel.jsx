@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { t } from '../../../i18n';
+import { t, getLocale, setLocale, getSupportedLocales } from '../../../i18n';
+import { loadPrescriptionTranslations } from '../../../i18n/prescriptions';
 import { debugStore } from '../../../core/debugStore';
 import bridge from '../../../services/bridge';
 import { useGameInput } from '../../../hooks/useGameInput';
@@ -86,6 +87,29 @@ export default function TracePanel({ game, temperature, decayRate, silentMode, s
                                 />
                                 Silent Mode (No Launch)
                             </label>
+                        </div>
+                        <div className="sim-row" style={{ marginTop: '4px', fontSize: '0.75rem' }}>
+                            <label style={{ color: '#888' }}>Locale: </label>
+                            <select
+                                value={getLocale()}
+                                onChange={async (e) => {
+                                    setLocale(e.target.value);
+                                    await loadPrescriptionTranslations();
+                                    window.location.reload();
+                                }}
+                                style={{
+                                    background: '#111',
+                                    color: '#ccc',
+                                    border: '1px solid #333',
+                                    padding: '2px 6px',
+                                    fontSize: '0.75rem',
+                                    borderRadius: '4px'
+                                }}
+                            >
+                                {getSupportedLocales().map(l => (
+                                    <option key={l} value={l}>{l}</option>
+                                ))}
+                            </select>
                         </div>
                         <div className="sim-actions">
                             <button onClick={() => onSimulation('simPlay')}>+1 TRY</button>

@@ -1,9 +1,11 @@
 import React from 'react';
 import { t } from '../../../i18n';
+import { localizePrescription } from '../../../i18n/prescriptions';
 import './GameDisplay.css';
 
-export default function GameDisplay({ game, prescription, debugMode, isExpanded, onSecretTap }) {
-    if (!prescription) return null;
+export default function GameDisplay({ game, prescription: rawPrescription, debugMode, isExpanded, onSecretTap }) {
+    if (!rawPrescription) return null;
+    const prescription = localizePrescription(rawPrescription);
 
     return (
         <main className="mvp-content">

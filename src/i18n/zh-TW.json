@@ -1,0 +1,43 @@
+{
+    "ui": {
+        "button": {
+            "try": "試試",
+            "try_hint": "長按以錨定這個遊戲",
+            "play": "開打",
+            "not_today": "算了",
+            "clear": "清除",
+            "back": "復原",
+            "acknowledge": "知道了",
+            "sync": "讓 Maida 看看吧",
+            "restart_selection": "再來一次",
+            "im_back": "再來一次"
+        },
+        "status": {
+            "loading": "正在掃描你的遊戲庫。\n資料不會離開你的裝置。",
+            "frozen": "Maida 已暫停。",
+            "scanning": "正在偵聽⋯⋯",
+            "error": "錯誤"
+        },
+        "game": {
+            "anchored_prefix": "錨定"
+        },
+        "debug": {
+            "badge": "DBG",
+            "inspector_title": "行為診斷",
+            "trace_btn": "TRACE",
+            "clear_games_btn": "清除所有遊戲"
+        }
+    },
+    "voice": {
+        "onboarding": {
+            "permission_intro": "Maida 可以安靜地看看你有哪些遊戲，準備好的時候再開始。",
+            "permission_hint": "——不會啟動任何遊戲。"
+        },
+        "error": {
+            "steam_not_found": "未偵測到 Steam。你可以稍後再試。"
+        },
+        "idle": {
+            "no_games": "沒有找到遊戲。Maida 正在等待。"
+        }
+    }
+}

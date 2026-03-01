@@ -9,7 +9,11 @@ import bridge from './services/bridge';
 
 import { Agentation } from 'agentation';
 import { t } from './i18n';
+import { loadPrescriptionTranslations } from './i18n/prescriptions';
 import './App.css';
+
+// Load prescription translations for detected locale (fire-and-forget)
+loadPrescriptionTranslations();
 
 // Frozen state screen with gamepad support
 // Input guard: cooldown on mount to prevent accidental double-tap from TRY
@@ -46,14 +50,14 @@ function FrozenScreen({ onResume, guardMs = 3000 }) {
 
     return (
         <div className="void-screen">
-            <p className="frozen-message">MAIDA is paused.</p>
+            <p className="frozen-message">{t('ui.status.frozen')}</p>
             <button
                 ref={btnRef}
                 className="restart-selection-btn"
                 onClick={guardedResume}
                 disabled={!ready}
             >
-                I'M BACK
+                {t('ui.button.im_back')}
             </button>
         </div>
     );

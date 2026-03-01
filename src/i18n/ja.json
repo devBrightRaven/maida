@@ -1,0 +1,43 @@
+{
+    "ui": {
+        "button": {
+            "try": "やる",
+            "try_hint": "長押しでこのゲームをアンカー",
+            "play": "プレイ",
+            "not_today": "パス",
+            "clear": "解除",
+            "back": "元に戻す",
+            "acknowledge": "了解",
+            "sync": "Maidaに見てもらう",
+            "restart_selection": "再開",
+            "im_back": "再開"
+        },
+        "status": {
+            "loading": "ライブラリをスキャン中。\nデータはデバイスの外に出ません。",
+            "frozen": "Maidaは一時停止中。",
+            "scanning": "リスニング中…",
+            "error": "エラー"
+        },
+        "game": {
+            "anchored_prefix": "アンカー"
+        },
+        "debug": {
+            "badge": "DBG",
+            "inspector_title": "動作診断",
+            "trace_btn": "TRACE",
+            "clear_games_btn": "全ゲームをクリア"
+        }
+    },
+    "voice": {
+        "onboarding": {
+            "permission_intro": "Maidaはあなたのゲームを静かに確認できます。準備ができたらどうぞ。",
+            "permission_hint": "——ゲームは起動しません。"
+        },
+        "error": {
+            "steam_not_found": "Steamが検出されません。後でもう一度お試しください。"
+        },
+        "idle": {
+            "no_games": "ゲームが見つかりません。Maidaは待機中です。"
+        }
+    }
+}

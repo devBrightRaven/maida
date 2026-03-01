@@ -1,0 +1,283 @@
+{
+    "_meta": {
+        "locale": "zh-TW",
+        "status": "draft",
+        "note": "AI 初譯，待人工校對。每條 prescription 的語感必須符合 Behavioral Constraints：只給予許可，不給建議、不鼓勵、不評價。"
+    },
+    "entry-permitted": {
+        "kernel": "不需要做決定。",
+        "interface": "你可以在不確定這是否正確的情況下開始。"
+    },
+    "no-optimization": {
+        "kernel": "不需要最佳化。",
+        "interface": "這次遊玩不需要為自己辯護。"
+    },
+    "safe-exit": {
+        "kernel": "離開永遠有效。",
+        "interface": "提早結束不會否定你曾經開始。"
+    },
+    "partial-validity": {
+        "kernel": "片段是被接受的。",
+        "interface": "一段不完整的遊玩仍然是一個完整的行動。"
+    },
+    "no-debt": {
+        "kernel": "歷史無關。",
+        "interface": "過去的不活躍不會在今天產生債務。"
+    },
+    "observation-mode": {
+        "kernel": "被動進入。",
+        "interface": "只看不玩也是一種有效的參與方式。"
+    },
+    "low-input": {
+        "kernel": "最低能量。",
+        "interface": "你不需要帶著全部的精力來這裡。"
+    },
+    "objective-optional": {
+        "kernel": "允許漫無目的。",
+        "interface": "你不需要有目標就能進入。"
+    },
+    "latency-allowed": {
+        "kernel": "猶豫是結構性的。",
+        "interface": "猶豫不是錯誤；慢慢來。"
+    },
+    "silence-valid": {
+        "kernel": "安靜的介面。",
+        "interface": "行動之前的沉默是體驗的一部分。"
+    },
+    "zero-loss": {
+        "kernel": "狀態完整性已保留。",
+        "interface": "等待不會失去任何東西。"
+    },
+    "no-obligation": {
+        "kernel": "擁有資產是中性的。",
+        "interface": "擁有不會產生義務。"
+    },
+    "intent-only": {
+        "kernel": "輸入不需要執行。",
+        "interface": "意圖就已足夠。"
+    },
+    "constant-access": {
+        "kernel": "資源不會衰減。",
+        "interface": "可用性不會隨時間遞減。"
+    },
+    "time-suspension": {
+        "kernel": "時鐘已忽略。",
+        "interface": "系統時間已暫停。"
+    },
+    "static-state": {
+        "kernel": "不需要選擇。",
+        "interface": "不做選擇是一種穩定的狀態。"
+    },
+    "inventory-neutral": {
+        "kernel": "資料庫是被動的。",
+        "interface": "遊戲庫的大小不構成任何要求。"
+    },
+    "wait-cost-zero": {
+        "kernel": "成本為零。",
+        "interface": "等待的成本是零。"
+    },
+    "availability-persistent": {
+        "kernel": "存取是靜態的。",
+        "interface": "不互動也不會影響可用性。"
+    },
+    "pause-validity": {
+        "kernel": "暫停生效中。",
+        "interface": "準備好不需要任何訊號。"
+    },
+    "muscle-memory": {
+        "kernel": "反射會自動啟動。",
+        "interface": "你的手記得該怎麼做；思考是可選的。"
+    },
+    "death-loop": {
+        "kernel": "失敗是系統狀態。",
+        "interface": "死亡只是一個循環，不是對你技術的判決。"
+    },
+    "combat-flow": {
+        "kernel": "攻擊是有節奏的。",
+        "interface": "交給戰鬥的節奏。猶豫是唯一的阻力。"
+    },
+    "dark-fantasy-step": {
+        "kernel": "進度是漸進的。",
+        "interface": "到達一個存檔點就是今天的完整勝利。"
+    },
+    "2d-combat": {
+        "kernel": "平面是線性的。",
+        "interface": "左或右。路徑很簡單，清除眼前的就好。"
+    },
+    "boss-rush": {
+        "kernel": "專注是單一的。",
+        "interface": "只有一個目標。沒有其他東西需要你的注意力。"
+    },
+    "factory-wait": {
+        "kernel": "系統會持續運行。",
+        "interface": "工廠在等你；你不需要今天全部修好。"
+    },
+    "one-belt": {
+        "kernel": "接受漸進的輸入。",
+        "interface": "放下一條輸送帶就算是完整的一次遊玩。"
+    },
+    "locomotion": {
+        "kernel": "移動就已足夠。",
+        "interface": "往前走是唯一的要求。不需要戰鬥。"
+    },
+    "connection": {
+        "kernel": "孤獨是共享的。",
+        "interface": "你在這裡是孤獨的，但並未斷開連結。"
+    },
+    "survival-state": {
+        "kernel": "危機是模擬的。",
+        "interface": "寒冷在螢幕裡，不在房間裡。你是安全的。"
+    },
+    "leadership-pause": {
+        "kernel": "責任已暫停。",
+        "interface": "你可以隨時暫停城市的需求。"
+    },
+    "internal-voice": {
+        "kernel": "混亂是可讀的。",
+        "interface": "你不需要清醒或聰明。只要讀就好。"
+    },
+    "failure-path": {
+        "kernel": "錯誤是內容。",
+        "interface": "說錯話只是另一種玩法。"
+    },
+    "dialogue-choice": {
+        "kernel": "敘事是流動的。",
+        "interface": "看著故事展開。你的輸入是引導，不是負擔。"
+    },
+    "southern-gothic": {
+        "kernel": "氛圍是首要的。",
+        "interface": "沉浸在像素藝術中。不需要分析。"
+    },
+    "audio-focus": {
+        "kernel": "視覺已暫停。",
+        "interface": "閉上眼睛。聆聽。世界由聲音構建。"
+    },
+    "breeze": {
+        "kernel": "引導是風。",
+        "interface": "跟著風走或不走。地圖不要求完成。"
+    },
+    "spectacle": {
+        "kernel": "奇觀在等待。",
+        "interface": "讓螢幕處理規模。你只需要處理按鈕。"
+    },
+    "journey": {
+        "kernel": "路徑是線性的。",
+        "interface": "前方的路很清楚。你不會迷路。"
+    },
+    "puppet-strings": {
+        "kernel": "精準是有耐心的。",
+        "interface": "節奏感會回來的。"
+    },
+    "auto-battle": {
+        "kernel": "行動是即時的。",
+        "interface": "高速，低阻力。順著流動就好。"
+    },
+    "memory-archive": {
+        "kernel": "氛圍是靜態的。",
+        "interface": "恐怖在等待你的輸入。它無法傷害你。"
+    },
+    "deep-ocean": {
+        "kernel": "存在主義模式。",
+        "interface": "你在觀察一個哲學問題，不是在解決它。"
+    },
+    "crop-cycle": {
+        "kernel": "成長是自動的。",
+        "interface": "作物會沒事的。短短一天就夠了。"
+    },
+    "dam-control": {
+        "kernel": "水流是受控的。",
+        "interface": "水按你的指令流動。不急。"
+    },
+    "survival-day": {
+        "kernel": "耐久模式。",
+        "interface": "撐過一天就好。那就是勝利。"
+    },
+    "cycle-restart": {
+        "kernel": "循環在等你。",
+        "interface": "死亡是進度的一部分，不是退步。"
+    },
+    "deep-dive": {
+        "kernel": "深度是可調的。",
+        "interface": "一次潛水就是完整的體驗。"
+    },
+    "hands-played": {
+        "kernel": "機率就是遊玩。",
+        "interface": "打一手牌就好。數學會自己處理。"
+    },
+    "floor-climb": {
+        "kernel": "回合制的安全。",
+        "interface": "敵人會永遠等你的回合。"
+    },
+    "mix-drinks": {
+        "kernel": "服務是被動的。",
+        "interface": "聽音樂，調一杯酒。不需要英雄事蹟。"
+    },
+    "tunnel-vision": {
+        "kernel": "沉浸感很重。",
+        "interface": "踏入黑暗。面罩保護著你。"
+    },
+    "infinite-space": {
+        "kernel": "目的地是可選的。",
+        "interface": "你可以只是漂流。宇宙大到無法完成。"
+    },
+    "color-flow": {
+        "kernel": "狀態是流動的。",
+        "interface": "這裡沒有失敗狀態。移動就好。"
+    },
+    "vehicle-maintain": {
+        "kernel": "動力是機械的。",
+        "interface": "讓引擎持續運轉。風景會自己移動。"
+    },
+    "gentle-puzzle": {
+        "kernel": "邏輯是柔軟的。",
+        "interface": "沒有時間限制。謎題會等你。"
+    },
+    "ocean-drift": {
+        "kernel": "浮力托著你。",
+        "interface": "你不會溺水。游就好。"
+    },
+    "history-gen": {
+        "kernel": "失敗是有趣的。",
+        "interface": "災難只是一個故事生成引擎。"
+    },
+    "ecosystem": {
+        "kernel": "掠食是自然的。",
+        "interface": "你很小，這沒關係。躲起來就好。"
+    },
+    "physics-puzzle": {
+        "kernel": "物理是可預測的。",
+        "interface": "測試機關。失敗只是數據。"
+    },
+    "logic-build": {
+        "kernel": "程式碼是靜態的。",
+        "interface": "節點在你下指令之前不會移動。"
+    },
+    "short-burst": {
+        "kernel": "時間有上限。",
+        "interface": "10 分鐘或 20 分鐘。結束是保證的。"
+    },
+    "horde-clear": {
+        "kernel": "群體控制。",
+        "interface": "清除畫面。回饋循環是即時的。"
+    },
+    "visual-read": {
+        "kernel": "故事是線性的。",
+        "interface": "點擊繼續。敘事會帶著你走。"
+    },
+    "cleanup": {
+        "kernel": "從混亂中建立秩序。",
+        "interface": "清理一個角落就是永久的進度。"
+    },
+    "new-world": {
+        "kernel": "探索模式。",
+        "interface": "踏入未知。不需要歷史。"
+    },
+    "generic-action": {
+        "kernel": "輸入已接受。",
+        "interface": "行動是思考的解藥。"
+    },
+    "generic-story": {
+        "kernel": "故事在等待。",
+        "interface": "下一頁在你準備好之前不會翻。"
+    }
+}

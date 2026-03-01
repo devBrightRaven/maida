@@ -1,18 +1,25 @@
 {
     "ui": {
         "button": {
-            "visit": "Visit",
-            "not_today": "Not Today",
+            "try": "TRY",
+            "try_hint": "hold to anchor this game",
+            "play": "PLAY",
+            "not_today": "Not Now",
+            "clear": "Clear",
             "back": "Undo (One Time Only)",
             "acknowledge": "Acknowledge",
             "sync": "Let Maida look for you",
-            "restart_selection": "Restart Selection"
+            "restart_selection": "Restart Selection",
+            "im_back": "I'M BACK"
         },
         "status": {
             "loading": "Scanning your library.\nNo data leaves your device.",
-            "frozen": "Go play.\nMaida will be here when you're done.",
+            "frozen": "MAIDA is paused.",
             "scanning": "Listening...",
             "error": "Error"
+        },
+        "game": {
+            "anchored_prefix": "Anchored"
         },
         "debug": {
             "badge": "DBG",

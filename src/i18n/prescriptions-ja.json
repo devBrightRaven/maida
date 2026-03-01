@@ -1,0 +1,283 @@
+{
+    "_meta": {
+        "locale": "ja",
+        "status": "draft",
+        "note": "AI初訳、人間によるレビュー待ち。各処方箋のトーンはBehavioral Constraintsに従う：許可を与えるのみ。助言・奨励・評価はしない。"
+    },
+    "entry-permitted": {
+        "kernel": "決断は不要。",
+        "interface": "正しい選択かどうか分からなくても始められます。"
+    },
+    "no-optimization": {
+        "kernel": "最適化は不要。",
+        "interface": "このセッションは自分を正当化する必要がありません。"
+    },
+    "safe-exit": {
+        "kernel": "退出は常に有効。",
+        "interface": "途中でやめても、始めたことは否定されません。"
+    },
+    "partial-validity": {
+        "kernel": "断片は受容される。",
+        "interface": "不完全なセッションでも、完全な行動です。"
+    },
+    "no-debt": {
+        "kernel": "履歴は無関係。",
+        "interface": "過去の非活動は今日の負債を生みません。"
+    },
+    "observation-mode": {
+        "kernel": "受動的参入。",
+        "interface": "見るだけでも有効な参加形態です。"
+    },
+    "low-input": {
+        "kernel": "最小エネルギー。",
+        "interface": "全力を持ってくる必要はありません。"
+    },
+    "objective-optional": {
+        "kernel": "無目的が許可される。",
+        "interface": "目標がなくても入れます。"
+    },
+    "latency-allowed": {
+        "kernel": "躊躇は構造的。",
+        "interface": "躊躇はエラーではありません。ゆっくりどうぞ。"
+    },
+    "silence-valid": {
+        "kernel": "静かなインターフェース。",
+        "interface": "行動前の沈黙は体験の一部です。"
+    },
+    "zero-loss": {
+        "kernel": "状態の完全性は保持。",
+        "interface": "待っても何も失われません。"
+    },
+    "no-obligation": {
+        "kernel": "所有は中立。",
+        "interface": "持っていることは義務を生みません。"
+    },
+    "intent-only": {
+        "kernel": "入力に実行は不要。",
+        "interface": "意図だけで十分です。"
+    },
+    "constant-access": {
+        "kernel": "リソースは減衰しない。",
+        "interface": "アクセス可能性は時間とともに低下しません。"
+    },
+    "time-suspension": {
+        "kernel": "時計は無視。",
+        "interface": "システム時間は停止中です。"
+    },
+    "static-state": {
+        "kernel": "選択不要。",
+        "interface": "選ばないことは安定した状態です。"
+    },
+    "inventory-neutral": {
+        "kernel": "ライブラリは受動的。",
+        "interface": "ライブラリの大きさは何も要求しません。"
+    },
+    "wait-cost-zero": {
+        "kernel": "コストはゼロ。",
+        "interface": "待つコストはゼロです。"
+    },
+    "availability-persistent": {
+        "kernel": "アクセスは静的。",
+        "interface": "操作しなくてもアクセス可能性は変わりません。"
+    },
+    "pause-validity": {
+        "kernel": "一時停止は有効。",
+        "interface": "準備ができたことにシグナルは不要です。"
+    },
+    "muscle-memory": {
+        "kernel": "反射が自動起動する。",
+        "interface": "手が覚えています。思考はオプションです。"
+    },
+    "death-loop": {
+        "kernel": "失敗はシステム状態。",
+        "interface": "死はループであり、あなたの技術への判決ではありません。"
+    },
+    "combat-flow": {
+        "kernel": "攻撃にはリズムがある。",
+        "interface": "戦闘のリズムに身を任せて。躊躇だけが抵抗です。"
+    },
+    "dark-fantasy-step": {
+        "kernel": "進行は漸進的。",
+        "interface": "セーブポイントに到達すれば、今日の完全な勝利です。"
+    },
+    "2d-combat": {
+        "kernel": "平面は線形。",
+        "interface": "左か右。道は単純です。目の前を片付けるだけ。"
+    },
+    "boss-rush": {
+        "kernel": "集中は単一。",
+        "interface": "目標は一つだけ。他に注意を向けるものはありません。"
+    },
+    "factory-wait": {
+        "kernel": "システムは稼働し続ける。",
+        "interface": "工場はあなたを待っています。今日全部直す必要はありません。"
+    },
+    "one-belt": {
+        "kernel": "漸進的入力を受容。",
+        "interface": "ベルトを一本置くだけで完全なセッションです。"
+    },
+    "locomotion": {
+        "kernel": "移動だけで十分。",
+        "interface": "前に歩くだけが唯一の要件。戦闘は不要です。"
+    },
+    "connection": {
+        "kernel": "孤独は共有される。",
+        "interface": "ここでは一人ですが、切断されてはいません。"
+    },
+    "survival-state": {
+        "kernel": "危機はシミュレーション。",
+        "interface": "寒さは画面の中にあり、部屋の中にはありません。あなたは安全です。"
+    },
+    "leadership-pause": {
+        "kernel": "責任は一時停止。",
+        "interface": "都市の要求はいつでも止められます。"
+    },
+    "internal-voice": {
+        "kernel": "混沌は可読。",
+        "interface": "覚醒も聡明さも不要。読むだけでいい。"
+    },
+    "failure-path": {
+        "kernel": "間違いはコンテンツ。",
+        "interface": "間違った発言は別のプレイスタイルにすぎません。"
+    },
+    "dialogue-choice": {
+        "kernel": "物語は流動的。",
+        "interface": "物語が展開するのを見て。あなたの入力は導きであり、重荷ではありません。"
+    },
+    "southern-gothic": {
+        "kernel": "雰囲気が最優先。",
+        "interface": "ピクセルアートに浸る。分析は不要です。"
+    },
+    "audio-focus": {
+        "kernel": "視覚は一時停止。",
+        "interface": "目を閉じて。聴いて。世界は音で構築されています。"
+    },
+    "breeze": {
+        "kernel": "導きは風。",
+        "interface": "風に従うか従わないか。マップは完了を求めません。"
+    },
+    "spectacle": {
+        "kernel": "壮観が待っている。",
+        "interface": "スケールは画面に任せて。あなたはボタンだけ扱えばいい。"
+    },
+    "journey": {
+        "kernel": "道は線形。",
+        "interface": "前方の道は明確です。迷うことはありません。"
+    },
+    "puppet-strings": {
+        "kernel": "精密さには忍耐がある。",
+        "interface": "リズム感は戻ってきます。"
+    },
+    "auto-battle": {
+        "kernel": "行動は即時。",
+        "interface": "高速、低抵抗。流れに身を任せて。"
+    },
+    "memory-archive": {
+        "kernel": "雰囲気は静的。",
+        "interface": "恐怖はあなたの入力を待っています。あなたを傷つけることはできません。"
+    },
+    "deep-ocean": {
+        "kernel": "実存主義モード。",
+        "interface": "哲学的な問いを観察しているのであって、解決しているのではありません。"
+    },
+    "crop-cycle": {
+        "kernel": "成長は自動。",
+        "interface": "作物は大丈夫。短い一日で十分です。"
+    },
+    "dam-control": {
+        "kernel": "水流は制御下。",
+        "interface": "水はあなたの指示通りに流れます。急ぐ必要はありません。"
+    },
+    "survival-day": {
+        "kernel": "耐久モード。",
+        "interface": "一日生き延びるだけでいい。それが勝利です。"
+    },
+    "cycle-restart": {
+        "kernel": "サイクルが待っている。",
+        "interface": "死は進行の一部であり、後退ではありません。"
+    },
+    "deep-dive": {
+        "kernel": "深度は調整可能。",
+        "interface": "一回のダイブが完全な体験です。"
+    },
+    "hands-played": {
+        "kernel": "確率がプレイ。",
+        "interface": "一手だけ打てばいい。数学が処理してくれます。"
+    },
+    "floor-climb": {
+        "kernel": "ターン制の安全。",
+        "interface": "敵はあなたのターンを永遠に待ちます。"
+    },
+    "mix-drinks": {
+        "kernel": "サービスは受動的。",
+        "interface": "音楽を聴いて、ドリンクを一杯作る。英雄的行為は不要です。"
+    },
+    "tunnel-vision": {
+        "kernel": "没入感は重い。",
+        "interface": "暗闇に踏み込む。マスクがあなたを守っています。"
+    },
+    "infinite-space": {
+        "kernel": "目的地はオプション。",
+        "interface": "漂流するだけでもいい。宇宙は完了できないほど広い。"
+    },
+    "color-flow": {
+        "kernel": "状態は流動的。",
+        "interface": "ここに失敗状態はありません。動くだけでいい。"
+    },
+    "vehicle-maintain": {
+        "kernel": "動力は機械的。",
+        "interface": "エンジンを動かし続けて。景色は勝手に動きます。"
+    },
+    "gentle-puzzle": {
+        "kernel": "論理は柔らかい。",
+        "interface": "時間制限はありません。パズルはあなたを待ちます。"
+    },
+    "ocean-drift": {
+        "kernel": "浮力が支えている。",
+        "interface": "溺れることはありません。泳ぐだけでいい。"
+    },
+    "history-gen": {
+        "kernel": "失敗は面白い。",
+        "interface": "災害はストーリー生成エンジンにすぎません。"
+    },
+    "ecosystem": {
+        "kernel": "捕食は自然。",
+        "interface": "あなたは小さい。それでいい。隠れるだけ。"
+    },
+    "physics-puzzle": {
+        "kernel": "物理は予測可能。",
+        "interface": "仕掛けを試す。失敗はデータにすぎません。"
+    },
+    "logic-build": {
+        "kernel": "コードは静的。",
+        "interface": "ノードはあなたが指示するまで動きません。"
+    },
+    "short-burst": {
+        "kernel": "時間に上限あり。",
+        "interface": "10分か20分。終わりは保証されています。"
+    },
+    "horde-clear": {
+        "kernel": "群衆制御。",
+        "interface": "画面をクリアする。フィードバックループは即時です。"
+    },
+    "visual-read": {
+        "kernel": "物語は線形。",
+        "interface": "クリックして続ける。ナラティブが導いてくれます。"
+    },
+    "cleanup": {
+        "kernel": "混沌から秩序を構築。",
+        "interface": "一角を片付けるだけで永続的な進歩です。"
+    },
+    "new-world": {
+        "kernel": "探索モード。",
+        "interface": "未知に踏み込む。履歴は不要です。"
+    },
+    "generic-action": {
+        "kernel": "入力は受容された。",
+        "interface": "行動は思考への解毒剤です。"
+    },
+    "generic-story": {
+        "kernel": "物語が待っている。",
+        "interface": "次のページはあなたの準備ができるまでめくられません。"
+    }
+}
