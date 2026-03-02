@@ -4,6 +4,7 @@ import OnboardingView from './views/OnboardingView';
 import { calculateTraceWeights, updateDebugTrace } from './core/engine';
 import { useMaidaSession } from './hooks/useMaidaSession';
 import { useUpdateCheck } from './hooks/useUpdateCheck';
+import { useTheme } from './hooks/useTheme';
 import { useGameInput } from './hooks/useGameInput';
 import bridge from './services/bridge';
 
@@ -83,6 +84,7 @@ function App() {
     } = useMaidaSession();
 
     const updateCheck = useUpdateCheck();
+    const { theme, toggleTheme } = useTheme();
 
     const [debugMode, setDebugMode] = useState(false);
     const [silentMode, setSilentMode] = useState(false);
@@ -93,6 +95,17 @@ function App() {
     const [tapThreshold, setTapThreshold] = useState(300);
     const [anchorThreshold, setAnchorThreshold] = useState(3000);
     const [resumeGuard, setResumeGuard] = useState(3000);
+
+    const themeToggle = (
+        <button
+            className="theme-toggle"
+            onClick={toggleTheme}
+            aria-label={theme === 'dark' ? t('ui.button.theme_light') : t('ui.button.theme_dark')}
+            title={theme === 'dark' ? t('ui.button.theme_light') : t('ui.button.theme_dark')}
+        >
+            {theme === 'dark' ? '\u2600' : '\u263D'}
+        </button>
+    );
 
     const updateTraceOnly = (currentGames, currentTemp) => {
         const calc = calculateTraceWeights(currentGames, {
@@ -219,25 +232,29 @@ function App() {
     }, [status]);
 
     if (status === 'loading') return (
-        <div className="app-loading">
-            {showLoadingText && (
-                <>
-                    <span className="dot"></span>
-                    <p>
-                        {t('ui.status.loading').split('\n').map((line, i) => (
-                            <React.Fragment key={i}>
-                                {line}
-                                <br />
-                            </React.Fragment>
-                        ))}
-                    </p>
-                </>
-            )}
-        </div>
+        <>
+            {themeToggle}
+            <div className="app-loading">
+                {showLoadingText && (
+                    <>
+                        <span className="dot"></span>
+                        <p>
+                            {t('ui.status.loading').split('\n').map((line, i) => (
+                                <React.Fragment key={i}>
+                                    {line}
+                                    <br />
+                                </React.Fragment>
+                            ))}
+                        </p>
+                    </>
+                )}
+            </div>
+        </>
     );
 
     if (status === 'error') return (
         <div className="void-screen">
+            {themeToggle}
             <p className="frozen-message">
                 {t('voice.error.steam_not_found')}
             </p>
@@ -250,16 +267,25 @@ function App() {
         </div>
     );
 
-    if (status === 'onboarding') return <OnboardingView onComplete={init} />;
+    if (status === 'onboarding') return (
+        <>
+            {themeToggle}
+            <OnboardingView onComplete={init} />
+        </>
+    );
 
     if (status === 'frozen') {
         return (
-            <FrozenScreen onResume={() => setStatus('active')} guardMs={resumeGuard} />
+            <>
+                {themeToggle}
+                <FrozenScreen onResume={() => setStatus('active')} guardMs={resumeGuard} />
+            </>
         );
     }
 
     return (
         <div className="app-root">
+            {themeToggle}
             <MVPView
                 game={session.game}
                 prescription={session.prescription}

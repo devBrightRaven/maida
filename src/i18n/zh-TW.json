@@ -10,7 +10,9 @@
             "acknowledge": "知道了",
             "sync": "讓 Maida 看看吧",
             "restart_selection": "再來一次",
-            "im_back": "再來一次"
+            "im_back": "再來一次",
+            "theme_light": "切換至淺色模式",
+            "theme_dark": "切換至深色模式"
         },
         "status": {
             "loading": "正在掃描你的遊戲庫。\n資料不會離開你的裝置。",

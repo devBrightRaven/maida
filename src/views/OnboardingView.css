@@ -3,8 +3,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #050505;
-    color: #f0f0f0;
+    background-color: var(--t-bg);
+    color: var(--t-text);
     font-family: 'Outfit', sans-serif;
     position: relative;
     overflow: hidden;
@@ -22,13 +22,13 @@
     font-weight: 300;
     line-height: 1.6;
     margin-bottom: 3rem;
-    color: rgba(240, 240, 240, 0.9);
+    color: var(--t-text);
 }
 
 .onboarding-link {
     background: none;
     border: 1px solid transparent;
-    color: rgba(240, 240, 240, 0.35);
+    color: var(--t-text-faint);
     font-size: 1rem;
     cursor: pointer;
     text-decoration: underline;
@@ -38,19 +38,19 @@
 }
 
 .onboarding-link:hover {
-    color: rgba(240, 240, 240, 0.7);
-    border-color: rgba(255, 255, 255, 0.15);
+    color: var(--t-text-soft);
+    border-color: var(--t-border-subtle);
 }
 
 /* Focus state - works with ALL focus methods (tab, d-pad, programmatic) */
 .onboarding-link:focus,
 .onboarding-link.is-focused {
     outline: none;
-    color: rgba(240, 240, 240, 1);
+    color: var(--t-text);
     text-decoration: none;
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    background: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 0 16px rgba(255, 255, 255, 0.15);
+    border: 1px solid var(--t-text-soft);
+    background: var(--t-border-subtle);
+    box-shadow: 0 0 16px var(--t-border-subtle);
 }
 
 /* Subtle hint text - offset to the right, soft aside */
@@ -58,7 +58,7 @@
     margin-top: 1.5rem;
     margin-left: calc(3rem + 64px);
     font-size: 0.85rem;
-    color: rgba(240, 240, 240, 0.55);
+    color: var(--t-text-soft);
     -webkit-user-select: none;
     user-select: none;
 }
@@ -73,14 +73,14 @@
 .listening-indicator .dot {
     width: 8px;
     height: 8px;
-    background-color: #fff;
+    background-color: var(--t-text);
     border-radius: 50%;
     animation: breathe 3s infinite ease-in-out;
 }
 
 .listening-indicator .voice-text {
     font-size: 0.9rem;
-    color: rgba(240, 240, 240, 0.5);
+    color: var(--t-text-soft);
     letter-spacing: 0.1em;
 }
 
@@ -95,7 +95,7 @@
     50% {
         opacity: 1;
         transform: scale(1.5);
-        box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        box-shadow: 0 0 20px var(--t-text-soft);
     }
 }
 
@@ -106,7 +106,7 @@
     transform: translate(-30%, -30%);
     width: 600px;
     height: 600px;
-    background: radial-gradient(circle, rgba(64, 64, 64, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
+    background: radial-gradient(circle, var(--t-glow) 0%, transparent 70%);
     border-radius: 50%;
     filter: blur(80px);
     z-index: 1;
@@ -118,7 +118,7 @@
     position: absolute;
     bottom: 12px;
     right: 16px;
-    color: rgba(240, 240, 240, 0.3);
+    color: var(--t-text-faint);
     font-family: 'Outfit', sans-serif;
     font-size: 11px;
     opacity: 0.5;

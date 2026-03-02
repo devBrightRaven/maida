@@ -1,28 +1,60 @@
+/* Theme Tokens */
+[data-theme="dark"] {
+    --t-bg: #0a0a0a;
+    --t-text: #e0e0e0;
+    --t-dim: #737373;
+    --t-accent: #ffaa00;
+    --t-border: #ffffff;
+    --t-hover-bg: #ffffff;
+    --t-hover-text: #000000;
+    --t-success: #00ff88;
+    --t-error: #ff4444;
+    --t-surface: #1a1a1a;
+    --t-glow: rgba(255, 255, 255, 0.03);
+    --t-text-soft: rgba(255, 255, 255, 0.5);
+    --t-text-faint: rgba(255, 255, 255, 0.3);
+    --t-text-ghost: rgba(255, 255, 255, 0.2);
+    --t-border-subtle: rgba(255, 255, 255, 0.1);
+    --t-accent-soft: rgba(255, 170, 0, 0.1);
+    --t-accent-border: rgba(255, 170, 0, 0.3);
+    --t-accent-glow: rgba(255, 170, 0, 0.5);
+    --t-debug-text: #ffd480;
+}
+
+[data-theme="light"] {
+    --t-bg: #fdfbf7;
+    --t-text: #2c2c2c;
+    --t-dim: #6b6560;
+    --t-accent: #96652d;
+    --t-border: #2c2c2c;
+    --t-hover-bg: #2c2c2c;
+    --t-hover-text: #fdfbf7;
+    --t-success: #1a7a45;
+    --t-error: #c0392b;
+    --t-surface: #f0ece6;
+    --t-glow: rgba(44, 44, 44, 0.03);
+    --t-text-soft: rgba(44, 44, 44, 0.5);
+    --t-text-faint: rgba(44, 44, 44, 0.35);
+    --t-text-ghost: rgba(44, 44, 44, 0.2);
+    --t-border-subtle: rgba(44, 44, 44, 0.1);
+    --t-accent-soft: rgba(150, 101, 45, 0.1);
+    --t-accent-border: rgba(150, 101, 45, 0.3);
+    --t-accent-glow: rgba(150, 101, 45, 0.5);
+    --t-debug-text: #96652d;
+}
+
+/* Global Defaults */
 :root {
-    /* Global Defaults */
     --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-
-    /* Kernel Palette (Structural, Void, Steel) */
-    --k-bg: #0a0a0a;
-    --k-text: #e0e0e0;
-    --k-dim: #4a4a4a;
-    --k-accent: #ffffff;
-
-    /* Interface Palette (Organic, Warm, Paper) */
-    --i-bg: #fdfbf7;
-    --i-text: #2c2c2c;
-    --i-dim: #8b8682;
-    --i-accent: #d4a373;
 }
 
 body {
     margin: 0;
     padding: 0;
     font-family: var(--font-sans);
-    background: black;
-    color: white;
+    background: var(--t-bg);
+    color: var(--t-text);
     overflow: hidden;
-    /* App-like feel */
     height: 100vh;
     width: 100vw;
 }
@@ -32,7 +64,6 @@ body {
     height: 100%;
 }
 
-/* Utilities */
 .hidden {
     display: none;
 }

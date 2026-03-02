@@ -10,7 +10,9 @@
             "acknowledge": "了解",
             "sync": "Maidaに見てもらう",
             "restart_selection": "再開",
-            "im_back": "再開"
+            "im_back": "再開",
+            "theme_light": "ライトモードに切り替え",
+            "theme_dark": "ダークモードに切り替え"
         },
         "status": {
             "loading": "ライブラリをスキャン中。\nデータはデバイスの外に出ません。",

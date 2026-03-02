@@ -10,7 +10,9 @@
             "acknowledge": "Acknowledge",
             "sync": "Let Maida look for you",
             "restart_selection": "Restart Selection",
-            "im_back": "I'M BACK"
+            "im_back": "I'M BACK",
+            "theme_light": "Switch to light theme",
+            "theme_dark": "Switch to dark theme"
         },
         "status": {
             "loading": "Scanning your library.\nNo data leaves your device.",

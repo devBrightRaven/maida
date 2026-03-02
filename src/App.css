@@ -1,13 +1,13 @@
 .app-root {
     width: 100vw;
     height: 100vh;
-    background: #000;
+    background: var(--t-bg);
 }
 
 .void-screen {
     width: 100vw;
     height: 100vh;
-    background: #000;
+    background: var(--t-bg);
     cursor: default;
     position: relative;
     /* For absolute positioning */
@@ -20,7 +20,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     width: 100%;
-    color: #fff;
+    color: var(--t-text);
     font-size: 18px;
     letter-spacing: 0.2em;
     text-transform: uppercase;
@@ -38,9 +38,9 @@
     transform: translate(-50%, -50%);
 
     background: transparent;
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--t-text-soft);
     /* Low contrast by default */
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid var(--t-text-faint);
     padding: 1rem 3rem;
 
     font-family: 'Inter', sans-serif;
@@ -56,18 +56,18 @@
 
 .restart-selection-btn:hover {
     background: transparent;
-    color: #fff;
-    border-color: #fff;
+    color: var(--t-text);
+    border-color: var(--t-border);
     opacity: 1;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 20px var(--t-border-subtle);
 }
 
 .restart-selection-btn:focus-visible {
     outline: none;
     opacity: 1;
-    border-color: #fff;
-    color: #fff;
-    box-shadow: 0 0 0 2px #000, 0 0 0 4px #fff;
+    border-color: var(--t-border);
+    color: var(--t-text);
+    box-shadow: 0 0 0 2px var(--t-bg), 0 0 0 4px var(--t-border);
     /* Double ring for high visibility on dark bg */
 }
 
@@ -77,21 +77,21 @@
 
 /* Focus & Accessibility (Gamepad/Keyboard) */
 .mvp-btn:focus-visible {
-    outline: 3px solid #fff;
+    outline: 3px solid var(--t-border);
     outline-offset: 4px;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 20px var(--t-text-soft);
     z-index: 10;
 }
 
 /* Anchored State Styling */
 .is-anchored .mvp-container {
-    border-color: #ffaa00;
+    border-color: var(--t-accent);
     /* Gold/Amber to signify locked state */
 }
 
 .is-anchored .game-label {
-    color: #ffaa00;
-    text-shadow: 0 0 15px rgba(255, 170, 0, 0.5);
+    color: var(--t-accent);
+    text-shadow: 0 0 15px var(--t-accent-glow);
 }
 
 .anchor-icon {
@@ -100,16 +100,16 @@
 }
 
 .anchored-btn {
-    border-color: #ffaa00 !important;
-    color: #ffaa00 !important;
-    background: rgba(255, 170, 0, 0.1) !important;
+    border-color: var(--t-accent) !important;
+    color: var(--t-accent) !important;
+    background: var(--t-accent-soft) !important;
 }
 
 .anchored-btn:hover,
 .anchored-btn:focus-visible {
-    background: #ffaa00 !important;
-    color: #000 !important;
-    box-shadow: 0 0 30px rgba(255, 170, 0, 0.6) !important;
+    background: var(--t-accent) !important;
+    color: var(--t-hover-text) !important;
+    box-shadow: 0 0 30px var(--t-accent-glow) !important;
 }
 
 /* Long Press Progress Bar */
@@ -118,11 +118,11 @@
     bottom: 0;
     left: 0;
     height: 4px;
-    background-color: #ffaa00;
+    background-color: var(--t-accent);
     /* transition: width 0.1s linear; // Handled by React state mostly, but smooth it out if needed */
     z-index: 5;
     pointer-events: none;
-    box-shadow: 0 0 10px #ffaa00;
+    box-shadow: 0 0 10px var(--t-accent);
 }
 
 /* Global Version Tag */
@@ -142,7 +142,7 @@
 }
 
 .version-name {
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--t-text-soft);
     font-size: 11px;
     font-weight: 500;
     letter-spacing: 0.1em;
@@ -150,22 +150,53 @@
 }
 
 .version-number {
-    color: rgba(255, 255, 255, 0.2);
+    color: var(--t-text-ghost);
     font-family: 'Consolas', 'Monaco', monospace;
     font-size: 10px;
     letter-spacing: 0.05em;
 }
 
 .version-link {
-    color: rgba(255, 255, 255, 0.3);
+    color: var(--t-text-faint);
     font-size: 10px;
     text-decoration: none;
     cursor: pointer;
 }
 
 .version-link:hover {
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--t-text-soft);
     text-decoration: underline;
 }
 
 /* Transitions could be added here for a smoother "fade to black" */
+
+/* Theme Toggle */
+.theme-toggle {
+    position: fixed;
+    top: 60px;
+    right: 16px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: transparent;
+    border: 1px solid var(--t-dim);
+    color: var(--t-dim);
+    font-size: 18px;
+    cursor: pointer;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s, border-color 0.2s;
+    line-height: 1;
+}
+
+.theme-toggle:hover {
+    color: var(--t-text);
+    border-color: var(--t-text);
+}
+
+.theme-toggle:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--t-bg), 0 0 0 4px var(--t-border);
+}

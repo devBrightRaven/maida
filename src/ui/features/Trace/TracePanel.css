@@ -17,14 +17,14 @@
 .debug-panel {
     width: 480px;
     height: 100%;
-    background: rgba(10, 10, 10, 0.95);
+    background: var(--t-bg);
     /* Slightly transparent for aesthetics */
-    border-left: 1px solid #333;
+    border-left: 1px solid var(--t-dim);
     padding: 2.5rem;
     overflow-y: auto;
     font-family: 'Consolas', 'Courier New', monospace;
     font-size: 0.85rem;
-    color: #888;
+    color: var(--t-dim);
     box-shadow: -20px 0 50px rgba(0, 0, 0, 0.5);
     text-align: left;
     pointer-events: auto;
@@ -37,22 +37,22 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 2rem;
-    color: #fff;
-    border-bottom: 1px solid #222;
+    color: var(--t-text);
+    border-bottom: 1px solid var(--t-surface);
     padding-bottom: 1rem;
 }
 
 .debug-close {
     background: none;
     border: none;
-    color: #555;
+    color: var(--t-dim);
     font-size: 1.5rem;
     cursor: pointer;
     transition: color 0.2s;
 }
 
 .debug-close:hover {
-    color: #fff;
+    color: var(--t-text);
 }
 
 .debug-section {
@@ -60,7 +60,7 @@
 }
 
 .debug-section h4 {
-    color: #ffaa00;
+    color: var(--t-accent);
     text-transform: uppercase;
     font-size: 0.7rem;
     margin-bottom: 1rem;
@@ -71,29 +71,29 @@
 .debug-stats {
     margin-bottom: 12px;
     padding-bottom: 12px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid var(--t-border-subtle);
     font-size: 0.9rem;
-    color: #00ff88;
+    color: var(--t-success);
 }
 
 .debug-grid {
-    background: #000;
+    background: var(--t-bg);
     padding: 1.2rem;
     border-radius: 6px;
-    border: 1px solid #1a1a1a;
+    border: 1px solid var(--t-surface);
     line-height: 1.6;
 }
 
 .highlight {
-    color: #00ff88;
+    color: var(--t-success);
     font-weight: bold;
 }
 
 .trace-scroll-container {
     max-height: 400px;
     overflow-y: auto;
-    border: 1px solid #1a1a1a;
-    background: #000;
+    border: 1px solid var(--t-surface);
+    background: var(--t-bg);
 }
 
 .trace-table {
@@ -107,39 +107,39 @@
 .trace-table td {
     text-align: left;
     padding: 0.7rem;
-    border-bottom: 1px solid #111;
+    border-bottom: 1px solid var(--t-surface);
 }
 
 .trace-table th {
-    color: #444;
+    color: var(--t-dim);
     text-transform: uppercase;
     font-size: 0.65rem;
 }
 
 .trace-table tr.active {
     background: rgba(0, 255, 136, 0.05);
-    color: #fff;
+    color: var(--t-text);
 }
 
 .rank-col {
-    color: #666;
+    color: var(--t-dim);
     font-family: monospace;
     width: 30px;
     text-align: center;
 }
 
 .trace-table tr.active .rank-col {
-    color: #00ff88;
+    color: var(--t-success);
     font-weight: bold;
 }
 
 .debug-logs {
-    background: #111;
+    background: var(--t-surface);
     padding: 1rem;
     max-height: 250px;
     overflow-y: auto;
     border-radius: 6px;
-    border: 1px solid #222;
+    border: 1px solid var(--t-surface);
 }
 
 .log-entry {
@@ -147,31 +147,31 @@
     font-size: 0.7rem;
     display: flex;
     gap: 0.8rem;
-    border-bottom: 1px solid #1a1a1a;
+    border-bottom: 1px solid var(--t-border-subtle);
     padding-bottom: 0.4rem;
 }
 
 .log-time {
-    color: #666;
+    color: var(--t-dim);
     font-family: monospace;
 }
 
 .log-event {
-    color: #ffaa00;
+    color: var(--t-accent);
     font-weight: bold;
     width: 90px;
 }
 
-.log-event[data-event="TRY"]            { color: #00ff88; }
-.log-event[data-event="PLAY"]           { color: #00ff88; }
-.log-event[data-event="NOT_NOW"]        { color: #ff4444; }
-.log-event[data-event="UNDO"]           { color: #888888; }
-.log-event[data-event="ANCHOR"]         { color: #ffcc00; }
-.log-event[data-event="CLEAR"]          { color: #888888; }
-.log-event[data-event="PENALTY_UPDATE"] { color: #ff8800; }
+.log-event[data-event="TRY"]            { color: var(--t-success); }
+.log-event[data-event="PLAY"]           { color: var(--t-success); }
+.log-event[data-event="NOT_NOW"]        { color: var(--t-error); }
+.log-event[data-event="UNDO"]           { color: var(--t-dim); }
+.log-event[data-event="ANCHOR"]         { color: var(--t-accent); }
+.log-event[data-event="CLEAR"]          { color: var(--t-dim); }
+.log-event[data-event="PENALTY_UPDATE"] { color: var(--t-accent); }
 
 .log-details {
-    color: #aaa;
+    color: var(--t-dim);
     flex: 1;
 }
 
@@ -184,17 +184,17 @@
 .debug-copy {
     flex: 1;
     padding: 1rem;
-    background: #1a1a1a;
-    border: 1px solid #333;
-    color: #ddd;
+    background: var(--t-surface);
+    border: 1px solid var(--t-dim);
+    color: var(--t-text);
     cursor: pointer;
     font-family: inherit;
     transition: all 0.2s;
 }
 
 .debug-copy:hover {
-    background: #fff;
-    color: #000;
+    background: var(--t-hover-bg);
+    color: var(--t-hover-text);
 }
 
 /* Simulation Controls */
@@ -210,7 +210,7 @@
     align-items: center;
     gap: 1rem;
     font-size: 0.8rem;
-    color: #ccc;
+    color: var(--t-text);
 }
 
 .sim-row input[type="range"] {
@@ -226,9 +226,9 @@
 
 .sim-actions button {
     flex: 1;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid #333;
-    color: #eee;
+    background: var(--t-border-subtle);
+    border: 1px solid var(--t-dim);
+    color: var(--t-text);
     padding: 6px;
     font-size: 0.75rem;
     cursor: pointer;
@@ -237,8 +237,8 @@
 }
 
 .sim-actions button:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: #ffaa00;
+    background: var(--t-text-ghost);
+    border-color: var(--t-accent);
 }
 
 @keyframes fadeIn {

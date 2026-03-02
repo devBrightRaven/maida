@@ -12,13 +12,13 @@
     font-size: 1.8rem;
     line-height: 1.4;
     font-weight: 300;
-    color: #e0e0e0;
-    text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    color: var(--t-text);
+    text-shadow: 0 0 20px var(--t-border-subtle);
     transition: color 0.3s ease;
 }
 
 .permission-text.debug-text {
-    color: #ffd480;
+    color: var(--t-debug-text);
 }
 
 /* --- DEBUG HOVER INSPECTOR --- */
@@ -35,19 +35,19 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: #666;
+    background: var(--t-dim);
 }
 
 .risk-dot.safe {
-    background: #00ff88;
+    background: var(--t-success);
 }
 
 .risk-dot.drift {
-    background: #ffaa00;
+    background: var(--t-accent);
 }
 
 .risk-dot.violation {
-    background: #ff4444;
+    background: var(--t-error);
 }
 
 
@@ -56,8 +56,8 @@
     bottom: 120%;
     left: 50%;
     transform: translateX(-50%);
-    background: #0a0a0a;
-    border: 1px solid #333;
+    background: var(--t-bg);
+    border: 1px solid var(--t-dim);
     padding: 1.5rem;
     width: 280px;
     border-radius: 8px;
@@ -78,7 +78,7 @@
 .inspector-header {
     margin-bottom: 1rem;
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid #222;
+    border-bottom: 1px solid var(--t-surface);
     display: flex;
     justify-content: space-between;
     font-size: 0.7rem;
@@ -86,13 +86,13 @@
 }
 
 .inspector-title {
-    color: #ffaa00;
+    color: var(--t-accent);
     font-weight: bold;
     text-transform: uppercase;
 }
 
 .inspector-id {
-    color: #666;
+    color: var(--t-dim);
     font-family: monospace;
 }
 
@@ -105,36 +105,36 @@
 }
 
 .inspector-row label {
-    color: #666;
+    color: var(--t-dim);
     text-transform: uppercase;
     font-size: 0.6rem;
 }
 
 .inspector-row .value {
-    color: #fff;
+    color: var(--t-text);
 }
 
 .inspector-row .highlight-effect {
-    color: #00ff88;
+    color: var(--t-success);
 }
 
 .risk-text.safe {
-    color: #00ff88;
+    color: var(--t-success);
 }
 
 .risk-text.drift {
-    color: #ffaa00;
+    color: var(--t-accent);
 }
 
 .risk-text.violation {
-    color: #ff4444;
+    color: var(--t-error);
 }
 
 .inspector-notes {
     margin-top: 1rem;
     padding-top: 0.8rem;
-    border-top: 1px solid #1a1a1a;
-    color: #888;
+    border-top: 1px solid var(--t-surface);
+    color: var(--t-dim);
     font-size: 0.75rem;
     line-height: 1.5;
     font-style: italic;
@@ -143,17 +143,17 @@
 /* --- EXPANDED DIAGNOSTIC HUD --- */
 .debug-expanded-details {
     position: fixed;
-    top: 5rem;
+    top: 2rem;
     left: 50%;
     transform: translateX(-50%);
     width: 400px;
-    max-height: 60vh;
+    max-height: 45vh;
     overflow-y: auto;
-    background: rgba(10, 10, 10, 0.95);
-    border: 1px solid #ffaa0033;
+    background: var(--t-bg);
+    border: 1px solid var(--t-accent-border);
     padding: 2.5rem;
     border-radius: 12px;
-    box-shadow: 0 0 50px rgba(0, 0, 0, 0.9), inset 0 0 20px rgba(255, 170, 0, 0.05);
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.9), inset 0 0 20px var(--t-accent-soft);
     z-index: 2000;
     text-align: left;
     backdrop-filter: blur(10px);
@@ -165,12 +165,12 @@
     justify-content: space-between;
     align-items: baseline;
     margin-bottom: 2rem;
-    border-bottom: 1px solid rgba(255, 170, 0, 0.2);
+    border-bottom: 1px solid var(--t-accent-border);
     padding-bottom: 0.8rem;
 }
 
 .expanded-title {
-    color: #ffaa00;
+    color: var(--t-accent);
     text-transform: uppercase;
     font-size: 0.8rem;
     font-weight: bold;
@@ -178,7 +178,7 @@
 }
 
 .expanded-id {
-    color: #666;
+    color: var(--t-dim);
     font-family: monospace;
     font-size: 0.7rem;
 }
@@ -189,7 +189,7 @@
 
 .detail-group label {
     display: block;
-    color: #666;
+    color: var(--t-dim);
     text-transform: uppercase;
     font-size: 0.6rem;
     letter-spacing: 0.1em;
@@ -198,11 +198,11 @@
 
 .kernel-code {
     display: block;
-    background: #000;
+    background: var(--t-bg);
     padding: 1rem;
     border-radius: 4px;
-    border-left: 2px solid #ffaa00;
-    color: #ffd480;
+    border-left: 2px solid var(--t-accent);
+    color: var(--t-debug-text);
     font-size: 0.8rem;
     line-height: 1.4;
 }
@@ -210,7 +210,7 @@
 .interface-preview {
     font-family: serif;
     font-size: 1.2rem;
-    color: #e0e0e0;
+    color: var(--t-text);
     line-height: 1.5;
     margin: 0;
 }
