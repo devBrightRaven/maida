@@ -201,6 +201,9 @@ export default function MVPView({
                     <span className="game-label">
                         {isAnchored ? `(⚓${t('ui.game.anchored_prefix')}) ${game.title}` : game.title}
                     </span>
+                    {game.hltb?.mainStory > 0 && (
+                        <span className="game-hltb-time">~{Math.round(game.hltb.mainStory)} hrs</span>
+                    )}
                 </header>
             )}
 

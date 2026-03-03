@@ -49,6 +49,15 @@
     font-weight: 200;
 }
 
+.game-hltb-time {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    font-weight: 300;
+    color: var(--t-dim);
+    margin-top: 0.3rem;
+}
+
 .idle-debug-trigger {
     position: absolute;
     top: 0;

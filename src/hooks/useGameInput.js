@@ -6,13 +6,13 @@ import { useEffect, useRef, useState } from 'react';
  * Supports "Long Press" detection for anchoring mechanics.
  *
  * Input sources:
- * - Keyboard: Arrow keys, Enter/Space, Escape/Backspace
+ * - Keyboard: Arrow keys, Enter/Space, Escape
  * - Gamepad: D-pad (buttons 12-15), A (button 0), B (button 1)
  *
  * @param {Object} config
  * @param {Function} config.onMainAction - A / Enter (Short Press)
  * @param {Function} config.onAnchor - A / Enter (Long Press > 3s)
- * @param {Function} config.onBack - B / Esc / Backspace
+ * @param {Function} config.onBack - B / Esc
  * @param {Function} config.onNav - D-pad / Arrow Keys (up, down, left, right)
  * @param {boolean} config.disabled - Disable input processing
  */
@@ -120,7 +120,7 @@ export function useGameInput({
             }
 
             // Back / Cancel / Not Today
-            if (key === 'Escape' || key === 'Backspace') {
+            if (key === 'Escape') {
                 if (callbacksRef.current.onBack) callbacksRef.current.onBack();
                 return;
             }
