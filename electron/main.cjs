@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain, shell, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const { getSteamPath, scanSteamLibrary } = require('./scanners/steam.cjs');
+const { fetchHltb } = require('./services/hltb.cjs');
 
 // ---------------------------------------------------------
 // Update Checker (GitHub Releases - Manual Download)
@@ -178,6 +179,39 @@ function writeFileAtomic(filePath, data) {
         try { fs.unlinkSync(tmpPath); } catch {}
         return { success: false, error: e.message };
     }
+}
+
+
+/**
+ * For each installed game missing hltb data, fetch from HLTB and update games.json.
+ * Runs after background snapshot, non-blocking.
+ * Rate-limited: 1 request per 500ms to avoid hammering the scraper.
+ */
+async function enrichHltbData(gamesPath, games) {
+    const missing = games.filter(g => g.installed && g.hltb === undefined);
+    if (missing.length === 0) return;
+
+    console.log(`[HLTB] Enriching ${missing.length} games...`);
+
+    for (const game of missing) {
+        await new Promise(r => setTimeout(r, 500));
+
+        const result = await fetchHltb(game.title);
+
+        try {
+            const current = JSON.parse(fs.readFileSync(gamesPath, 'utf8'));
+            current.games = current.games.map(g =>
+                g.steamAppId === game.steamAppId
+                    ? { ...g, hltb: result }
+                    : g
+            );
+            writeFileAtomic(gamesPath, current);
+        } catch (e) {
+            console.warn(`[HLTB] Write failed for ${game.title}:`, e.message);
+        }
+    }
+
+    console.log('[HLTB] Enrichment complete.');
 }
 
 
@@ -376,6 +410,12 @@ ipcMain.handle('perform-background-snapshot', async () => {
     };
 
     writeFileAtomic(GAMES_PATH, nextData);
+
+    // Fire-and-forget: enrich games missing HLTB data (non-blocking)
+    enrichHltbData(GAMES_PATH, cleanGames).catch(e =>
+        console.warn('[HLTB] Enrichment error:', e.message)
+    );
+
     return { success: true, count: cleanGames.length };
 });
 
