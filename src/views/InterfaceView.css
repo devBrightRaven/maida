@@ -54,6 +54,15 @@
     margin: 0;
 }
 
+.interface-container .game-hltb {
+    font-size: 0.8rem;
+    color: var(--i-dim);
+    font-weight: 300;
+    letter-spacing: 0.03em;
+    display: block;
+    margin-top: 0.1rem;
+}
+
 .interface-container .game-dev {
     font-size: 0.9rem;
     color: var(--i-dim);

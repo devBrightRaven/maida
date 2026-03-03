@@ -56,6 +56,15 @@
     letter-spacing: 0.2rem;
 }
 
+.kernel-container .game-hltb {
+    font-size: 0.8rem;
+    color: var(--t-dim);
+    font-weight: 300;
+    letter-spacing: 0.03em;
+    display: block;
+    margin-top: 0.3rem;
+}
+
 .kernel-container .game-dev {
     display: block;
     font-size: 0.8rem;
