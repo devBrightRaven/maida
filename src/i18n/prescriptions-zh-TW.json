@@ -94,15 +94,15 @@
     },
     "combat-flow": {
         "kernel": "攻擊是有節奏的。",
-        "interface": "交給戰鬥的節奏。猶豫是唯一的阻力。"
+        "interface": "這裡的戰鬥是有節奏的。攻擊與等待以相同頻率交替。"
     },
     "dark-fantasy-step": {
         "kernel": "進度是漸進的。",
-        "interface": "到達一個存檔點就是今天的完整勝利。"
+        "interface": "到達一個存檔點是一次有效的遊玩邊界。"
     },
     "2d-combat": {
         "kernel": "平面是線性的。",
-        "interface": "左或右。路徑很簡單，清除眼前的就好。"
+        "interface": "左或右。移動平面是平坦的；下一個障礙物始終可見。"
     },
     "boss-rush": {
         "kernel": "專注是單一的。",
@@ -122,11 +122,11 @@
     },
     "connection": {
         "kernel": "孤獨是共享的。",
-        "interface": "你在這裡是孤獨的，但並未斷開連結。"
+        "interface": "孤獨是這款遊戲的狀態。其他玩家的痕跡留存於環境中。"
     },
     "survival-state": {
         "kernel": "危機是模擬的。",
-        "interface": "寒冷在螢幕裡，不在房間裡。你是安全的。"
+        "interface": "寒冷在螢幕裡，不在房間裡。危機是模擬的。"
     },
     "leadership-pause": {
         "kernel": "責任已暫停。",
@@ -142,15 +142,15 @@
     },
     "dialogue-choice": {
         "kernel": "敘事是流動的。",
-        "interface": "看著故事展開。你的輸入是引導，不是負擔。"
+        "interface": "敘事依輸入推進。選擇影響方向，但不構成束縛。"
     },
     "southern-gothic": {
         "kernel": "氛圍是首要的。",
-        "interface": "沉浸在像素藝術中。不需要分析。"
+        "interface": "氛圍是這裡的主要內容。不需要分析。"
     },
     "audio-focus": {
         "kernel": "視覺已暫停。",
-        "interface": "閉上眼睛。聆聽。世界由聲音構建。"
+        "interface": "視覺在這裡不是主要的輸入管道。世界由聲音構建。"
     },
     "breeze": {
         "kernel": "引導是風。",
@@ -166,15 +166,15 @@
     },
     "puppet-strings": {
         "kernel": "精準是有耐心的。",
-        "interface": "節奏感會回來的。"
+        "interface": "精準度沒有時間限制。每次嘗試的窗口都相同。"
     },
     "auto-battle": {
         "kernel": "行動是即時的。",
-        "interface": "高速，低阻力。順著流動就好。"
+        "interface": "戰鬥以高速解決。輸入需求最低。"
     },
     "memory-archive": {
         "kernel": "氛圍是靜態的。",
-        "interface": "恐怖在等待你的輸入。它無法傷害你。"
+        "interface": "恐怖的節奏由你的輸入控制。沒有刻意的行動，什麼都不會推進。"
     },
     "deep-ocean": {
         "kernel": "存在主義模式。",
@@ -190,7 +190,7 @@
     },
     "survival-day": {
         "kernel": "耐久模式。",
-        "interface": "撐過一天就好。那就是勝利。"
+        "interface": "遊戲內的每一天是獨立的單位。完成一天就足夠了。"
     },
     "cycle-restart": {
         "kernel": "循環在等你。",
@@ -210,11 +210,11 @@
     },
     "mix-drinks": {
         "kernel": "服務是被動的。",
-        "interface": "聽音樂，調一杯酒。不需要英雄事蹟。"
+        "interface": "音樂在播放。服務是核心機制。高風險不是這裡的特色。"
     },
     "tunnel-vision": {
         "kernel": "沉浸感很重。",
-        "interface": "踏入黑暗。面罩保護著你。"
+        "interface": "隧道是線性的。環境危害透過裝備管理。"
     },
     "infinite-space": {
         "kernel": "目的地是可選的。",
@@ -226,7 +226,7 @@
     },
     "vehicle-maintain": {
         "kernel": "動力是機械的。",
-        "interface": "讓引擎持續運轉。風景會自己移動。"
+        "interface": "引擎是主要的互動。向前移動是結果。"
     },
     "gentle-puzzle": {
         "kernel": "邏輯是柔軟的。",
@@ -242,7 +242,7 @@
     },
     "ecosystem": {
         "kernel": "掠食是自然的。",
-        "interface": "你很小，這沒關係。躲起來就好。"
+        "interface": "體型差異是設計的一部分。隱藏是主要機制。"
     },
     "physics-puzzle": {
         "kernel": "物理是可預測的。",
@@ -258,11 +258,11 @@
     },
     "horde-clear": {
         "kernel": "群體控制。",
-        "interface": "清除畫面。回饋循環是即時的。"
+        "interface": "敵群密度是主要的變數。回饋是即時的。"
     },
     "visual-read": {
         "kernel": "故事是線性的。",
-        "interface": "點擊繼續。敘事會帶著你走。"
+        "interface": "每個場景在玩家輸入後結束。故事以刻意的節奏推進。"
     },
     "cleanup": {
         "kernel": "從混亂中建立秩序。",
@@ -270,11 +270,11 @@
     },
     "new-world": {
         "kernel": "探索模式。",
-        "interface": "踏入未知。不需要歷史。"
+        "interface": "不需要系列作品的先備知識。世界背景嵌入於敘事之中。"
     },
     "generic-action": {
         "kernel": "輸入已接受。",
-        "interface": "行動是思考的解藥。"
+        "interface": "這款遊戲接受輸入，無需事先規劃。"
     },
     "generic-story": {
         "kernel": "故事在等待。",

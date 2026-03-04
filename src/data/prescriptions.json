@@ -282,12 +282,12 @@
                     "id": "combat-flow",
                     "tier": 2,
                     "kernel": "Aggression is rhythmic.",
-                    "interface": "Surrender to the rhythm of combat. Hesitation is the only friction.",
+                    "interface": "Combat here is rhythmic. Aggression and patience alternate at the same frequency.",
                     "momentum": "unlock",
                     "audit": {
                         "permission_effect": "increase_interest",
-                        "risk": "drift",
-                        "notes": "Imperative command ('Surrender') and negative framing of hesitation ('friction')."
+                        "risk": "safe",
+                        "notes": "Fixed: removed imperative 'Surrender' and negative framing of hesitation."
                     }
                 }
             ],
@@ -296,12 +296,12 @@
                     "id": "dark-fantasy-step",
                     "tier": 2,
                     "kernel": "Progress is incremental.",
-                    "interface": "One checkpoint reached is a complete victory for today.",
+                    "interface": "Reaching a checkpoint is a valid session boundary.",
                     "momentum": "stabilize",
                     "audit": {
-                        "permission_effect": "increase_interest",
-                        "risk": "drift",
-                        "notes": "Value elevation ('complete victory'). Maida should not measure success."
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Fixed: removed value elevation ('complete victory'), reframed as administrative boundary."
                     }
                 }
             ],
@@ -310,12 +310,12 @@
                     "id": "2d-combat",
                     "tier": 2,
                     "kernel": "Plane is linear.",
-                    "interface": "Left or right. The path is simple, just clear what is in front of you.",
+                    "interface": "Left or right. The movement plane is flat; the next obstacle is always in view.",
                     "momentum": "unlock",
                     "audit": {
-                        "permission_effect": "increase_interest",
-                        "risk": "drift",
-                        "notes": "Encouragement ('just clear') and subjective framing of difficulty ('simple')."
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Fixed: removed directive ('just clear') and subjective difficulty claim ('simple')."
                     }
                 }
             ],
@@ -376,12 +376,12 @@
                     "id": "connection",
                     "tier": 2,
                     "kernel": "Isolation is shared.",
-                    "interface": "You are alone here, but not disconnected.",
+                    "interface": "Isolation is the game's state. Other players' traces remain present in the environment.",
                     "momentum": "stabilize",
                     "audit": {
-                        "permission_effect": "increase_interest",
-                        "risk": "drift",
-                        "notes": "Emotional reassurance/comfort ('not disconnected'). Drifts into therapeutic tone."
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Fixed: replaced emotional reassurance with factual system description."
                     }
                 }
             ],
@@ -390,12 +390,12 @@
                     "id": "survival-state",
                     "tier": 2,
                     "kernel": "Crisis is simulated.",
-                    "interface": "The cold is in the screen, not in the room. You are safe.",
+                    "interface": "The cold is in the screen, not in the room. Crisis is simulated.",
                     "momentum": "stabilize",
                     "audit": {
-                        "permission_effect": "ambiguous",
-                        "risk": "drift",
-                        "notes": "Emotional comfort ('You are safe'). Shifts from permission to soothing."
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Fixed: replaced 'You are safe' soothing with factual restatement of kernel."
                     }
                 },
                 {
@@ -442,12 +442,12 @@
                     "id": "dialogue-choice",
                     "tier": 2,
                     "kernel": "Narrative is fluid.",
-                    "interface": "Watch the story unfold. Your input guides, but does not burden.",
+                    "interface": "The narrative advances on input. Choices shape direction without binding it.",
                     "momentum": "stabilize",
                     "audit": {
-                        "permission_effect": "increase_interest",
-                        "risk": "drift",
-                        "notes": "Recommendation tone ('Watch the story unfold')."
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Fixed: removed directive 'Watch', reframed as system description."
                     }
                 }
             ],
@@ -456,12 +456,12 @@
                     "id": "southern-gothic",
                     "tier": 2,
                     "kernel": "Atmosphere is primary.",
-                    "interface": "Soak in the pixel art. Analysis is not required.",
+                    "interface": "Atmosphere is the primary content here. Analysis is not required.",
                     "momentum": "unlock",
                     "audit": {
-                        "permission_effect": "increase_interest",
-                        "risk": "drift",
-                        "notes": "Directive to appreciate aesthetics ('Soak in')."
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Fixed: removed directive 'Soak in', replaced with factual content description."
                     }
                 }
             ],
@@ -470,12 +470,12 @@
                     "id": "audio-focus",
                     "tier": 2,
                     "kernel": "Vision is suspended.",
-                    "interface": "Close your eyes. Listen. The world is built by sound.",
+                    "interface": "Vision is not the primary input channel here. The world is constructed in audio.",
                     "momentum": "unlock",
                     "audit": {
-                        "permission_effect": "increase_interest",
-                        "risk": "violation",
-                        "notes": "Direct instructions ('Close your eyes'). Immersive coaching."
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Fixed: removed all direct instructions, replaced with factual description of game mechanics."
                     }
                 }
             ],
@@ -526,12 +526,12 @@
                     "id": "puppet-strings",
                     "tier": 2,
                     "kernel": "Precision is patient.",
-                    "interface": "The timing will come back to you.",
+                    "interface": "Precision has no time limit. The window is the same on every attempt.",
                     "momentum": "unlock",
                     "audit": {
-                        "permission_effect": "ambiguous",
-                        "risk": "drift",
-                        "notes": "Predictive reassurance. Maida should not predict user state/recovery."
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Fixed: replaced predictive reassurance with factual system property."
                     }
                 }
             ],
@@ -540,12 +540,12 @@
                     "id": "auto-battle",
                     "tier": 2,
                     "kernel": "Action is immediate.",
-                    "interface": "High speed, low friction. Just flow.",
+                    "interface": "Combat resolves at high speed. Input requirements are minimal.",
                     "momentum": "unlock",
                     "audit": {
-                        "permission_effect": "increase_interest",
-                        "risk": "violation",
-                        "notes": "Marketing language ('High speed') and directive instruction ('Just flow')."
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Fixed: removed marketing language and directive, reframed as factual system description."
                     }
                 }
             ],
@@ -554,12 +554,12 @@
                     "id": "memory-archive",
                     "tier": 2,
                     "kernel": "Atmosphere is static.",
-                    "interface": "The horror waits for your input. It cannot hurt you.",
+                    "interface": "The horror is paced by your input. Nothing advances without deliberate action.",
                     "momentum": "stabilize",
                     "audit": {
-                        "permission_effect": "ambiguous",
-                        "risk": "drift",
-                        "notes": "Emotional reassurance ('It cannot hurt you')."
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Fixed: removed emotional reassurance, replaced with factual description of pacing mechanic."
                     }
                 }
             ],
@@ -610,12 +610,12 @@
                     "id": "survival-day",
                     "tier": 2,
                     "kernel": "Endurance mode.",
-                    "interface": "Just survive one day. That is victory.",
+                    "interface": "Each in-game day is a discrete unit. One day is sufficient.",
                     "momentum": "release",
                     "audit": {
-                        "permission_effect": "increase_interest",
-                        "risk": "drift",
-                        "notes": "Value elevation ('victory'). Prescribes what counts as success."
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Fixed: removed value elevation ('victory') and directive, reframed as administrative boundary."
                     }
                 }
             ],
@@ -680,12 +680,12 @@
                     "id": "mix-drinks",
                     "tier": 2,
                     "kernel": "Service is passive.",
-                    "interface": "Listen to the music, mix a drink. No heroics needed.",
+                    "interface": "Music plays. Service is the mechanic. High stakes are not a feature here.",
                     "momentum": "unlock",
                     "audit": {
-                        "permission_effect": "increase_interest",
-                        "risk": "drift",
-                        "notes": "Directive ('Listen', 'mix'). 'No heroics needed' is safe, but the first half instructs behavior."
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Fixed: removed directives ('Listen', 'mix'), reframed as factual system description."
                     }
                 }
             ],
@@ -694,12 +694,12 @@
                     "id": "tunnel-vision",
                     "tier": 2,
                     "kernel": "Immersion is heavy.",
-                    "interface": "Step into the dark. The mask protects you.",
+                    "interface": "The tunnels are linear. Environmental hazards are managed through equipment.",
                     "momentum": "unlock",
                     "audit": {
-                        "permission_effect": "increase_interest",
-                        "risk": "drift",
-                        "notes": "Immersive / Dramatic language ('Step into the dark')."
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Fixed: removed dramatic directive, replaced with factual description of structure and mechanics."
                     }
                 }
             ],
@@ -736,12 +736,12 @@
                     "id": "vehicle-maintain",
                     "tier": 2,
                     "kernel": "Momentum is mechanical.",
-                    "interface": "Keep the engine running. The view moves itself.",
+                    "interface": "The engine is the primary interaction. Forward motion is the result.",
                     "momentum": "stabilize",
                     "audit": {
-                        "permission_effect": "ambiguous",
-                        "risk": "drift",
-                        "notes": "Directive ('Keep the engine running')."
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Fixed: removed directive ('Keep'), replaced with factual description of interaction loop."
                     }
                 }
             ],
@@ -792,12 +792,12 @@
                     "id": "ecosystem",
                     "tier": 2,
                     "kernel": "Predation is natural.",
-                    "interface": "You are small, and that is okay. Just hide.",
+                    "interface": "Scale is part of the design. Concealment is a primary mechanic.",
                     "momentum": "stabilize",
                     "audit": {
-                        "permission_effect": "ambiguous",
-                        "risk": "drift",
-                        "notes": "Emotional validation ('that is okay'). 'Just hide' is a survival instruction."
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Fixed: removed emotional validation and directive, reframed as design description."
                     }
                 }
             ],
@@ -848,12 +848,12 @@
                     "id": "horde-clear",
                     "tier": 2,
                     "kernel": "Crowd control.",
-                    "interface": "Clear the screen. The feedback loop is instant.",
+                    "interface": "Crowd density is the primary variable. Feedback is immediate.",
                     "momentum": "unlock",
                     "audit": {
-                        "permission_effect": "increase_interest",
-                        "risk": "drift",
-                        "notes": "Directive ('Clear the screen') + Engagement optimization ('feedback loop is instant')."
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Fixed: removed directive and engagement optimization, reframed as system description."
                     }
                 }
             ],
@@ -862,12 +862,12 @@
                     "id": "visual-read",
                     "tier": 2,
                     "kernel": "Story is linear.",
-                    "interface": "Click to proceed. The narrative carries you.",
+                    "interface": "Each scene ends on player input. The story advances at a deliberate pace.",
                     "momentum": "stabilize",
                     "audit": {
-                        "permission_effect": "increase_interest",
-                        "risk": "violation",
-                        "notes": "Explicit UI instruction ('Click to proceed') + promising an experience."
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Fixed: removed UI instruction and promised experience, replaced with factual pacing description."
                     }
                 }
             ],
@@ -890,12 +890,12 @@
                     "id": "new-world",
                     "tier": 2,
                     "kernel": "Exploration mode.",
-                    "interface": "Step into the unknown. No history required.",
+                    "interface": "No prior series knowledge is required. The world context is embedded in the narrative.",
                     "momentum": "unlock",
                     "audit": {
-                        "permission_effect": "increase_interest",
-                        "risk": "drift",
-                        "notes": "Dramatic/Marketing language ('Step into the unknown')."
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Fixed: removed dramatic directive, replaced with factual statement of entry requirement."
                     }
                 }
             ],
@@ -904,12 +904,12 @@
                     "id": "generic-action",
                     "tier": 1,
                     "kernel": "Input accepted.",
-                    "interface": "Action is the antidote to thought.",
+                    "interface": "The game accepts input without prior planning.",
                     "momentum": "unlock",
                     "audit": {
-                        "permission_effect": "increase_interest",
-                        "risk": "drift",
-                        "notes": "Aphorism/Philosophy. Drifts into 'wise' advice rather than administrative permission."
+                        "permission_effect": "lower_obligation",
+                        "risk": "safe",
+                        "notes": "Fixed: removed aphorism, replaced with factual administrative permission statement."
                     }
                 }
             ],
