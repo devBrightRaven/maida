@@ -116,7 +116,6 @@ export default function NeriView({ onSwitchToAida }) {
                         <ShowcaseList
                             games={showcaseGames}
                             onRemove={handleRemove}
-                            onComplete={handleComplete}
                         />
                         <button
                             type="button"

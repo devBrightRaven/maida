@@ -8,7 +8,7 @@ function getSteamHeaderUrl(steamAppId) {
     return `https://cdn.akamai.steamstatic.com/steam/apps/${steamAppId}/header.jpg`;
 }
 
-export default function ShowcaseList({ games, onRemove, onComplete }) {
+export default function ShowcaseList({ games, onRemove }) {
     return (
         <div className="showcase-list" role="list" aria-label="Your showcase">
             {games.map(game => {
@@ -33,18 +33,10 @@ export default function ShowcaseList({ games, onRemove, onComplete }) {
                             <button
                                 type="button"
                                 className="showcase-action-btn"
-                                onClick={() => onComplete(id)}
-                                aria-label={`Mark ${game.title} as completed`}
-                            >
-                                done
-                            </button>
-                            <button
-                                type="button"
-                                className="showcase-action-btn showcase-action-remove"
                                 onClick={() => onRemove(id)}
-                                aria-label={`Remove ${game.title} from showcase`}
+                                aria-label={`Put ${game.title} back to shelf`}
                             >
-                                remove
+                                put back
                             </button>
                         </div>
                     </div>
