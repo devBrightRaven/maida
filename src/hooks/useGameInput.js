@@ -14,6 +14,8 @@ import { useEffect, useRef, useState } from 'react';
  * @param {Function} config.onAnchor - A / Enter (Long Press > 3s)
  * @param {Function} config.onBack - B / Esc
  * @param {Function} config.onNav - D-pad / Arrow Keys (up, down, left, right)
+ * @param {Function} config.onL1 - L1/LB (button 4) — face switch
+ * @param {Function} config.onR1 - R1/RB (button 5) — face switch
  * @param {boolean} config.disabled - Disable input processing
  */
 export function useGameInput({
@@ -21,6 +23,8 @@ export function useGameInput({
     onAnchor,
     onBack,
     onNav,
+    onL1,
+    onR1,
     disabled = false,
     tapThreshold = 300,
     anchorThreshold = 3000
@@ -43,10 +47,10 @@ export function useGameInput({
     };
 
     // Use refs for callbacks to avoid re-running effect on every render
-    const callbacksRef = useRef({ onMainAction, onAnchor, onBack, onNav });
+    const callbacksRef = useRef({ onMainAction, onAnchor, onBack, onNav, onL1, onR1 });
     useEffect(() => {
-        callbacksRef.current = { onMainAction, onAnchor, onBack, onNav };
-    }, [onMainAction, onAnchor, onBack, onNav]);
+        callbacksRef.current = { onMainAction, onAnchor, onBack, onNav, onL1, onR1 };
+    }, [onMainAction, onAnchor, onBack, onNav, onL1, onR1]);
 
     // Animation Loop for smooth progress bar
     const updateProgress = () => {
@@ -155,7 +159,7 @@ export function useGameInput({
         if (disabled) return;
 
         // Button indices (standard gamepad mapping)
-        const BTN_A = 0, BTN_B = 1;
+        const BTN_A = 0, BTN_B = 1, BTN_L1 = 4, BTN_R1 = 5;
         const DPAD_UP = 12, DPAD_DOWN = 13, DPAD_LEFT = 14, DPAD_RIGHT = 15;
 
         // Debounce state for D-pad (prevent rapid fire)
@@ -163,6 +167,8 @@ export function useGameInput({
         let aButtonDown = false;
         let aButtonTarget = null;
         let lastB = false;
+        let lastL1 = false;
+        let lastR1 = false;
 
         // Helper: get focused button element
         const getFocusedButton = () => {
@@ -222,6 +228,15 @@ export function useGameInput({
                 const bPressed = btn(BTN_B);
                 if (bPressed && !lastB) callbacksRef.current.onBack?.();
                 lastB = bPressed;
+
+                // L1/R1 - face switching (only when configured)
+                const l1Pressed = btn(BTN_L1);
+                if (l1Pressed && !lastL1) callbacksRef.current.onL1?.();
+                lastL1 = l1Pressed;
+
+                const r1Pressed = btn(BTN_R1);
+                if (r1Pressed && !lastR1) callbacksRef.current.onR1?.();
+                lastR1 = r1Pressed;
             }
 
             animFrame = requestAnimationFrame(pollGamepad);
@@ -244,6 +259,8 @@ export function useGameInput({
             aButtonDown = false;
             aButtonTarget = null;
             lastB = false;
+            lastL1 = false;
+            lastR1 = false;
             Object.assign(lastDpad, { up: false, down: false, left: false, right: false });
         };
 

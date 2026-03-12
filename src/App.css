@@ -200,3 +200,47 @@
     outline: none;
     box-shadow: 0 0 0 2px var(--t-bg), 0 0 0 4px var(--t-border);
 }
+
+/* Face switch buttons */
+.face-switch-btn {
+    position: fixed;
+    bottom: 1.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    border: 1px solid var(--t-border, rgba(255,255,255,0.08));
+    background: var(--t-bg, #050505);
+    color: var(--t-text-muted, #666);
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+    opacity: 0.4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.face-switch-btn:hover,
+.face-switch-btn:focus-visible {
+    opacity: 0.8;
+}
+
+.face-switch-btn:focus-visible {
+    outline: 2px solid var(--t-accent, #c8a050);
+    outline-offset: 2px;
+}
+
+.face-switch-right {
+    right: 1.5rem;
+}
+
+.face-switch-left {
+    left: 1.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .face-switch-btn {
+        transition: none;
+    }
+}

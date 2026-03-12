@@ -1,6 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import MVPView from './views/MVPView';
+import NeriView from './views/NeriView';
 import OnboardingView from './views/OnboardingView';
+import FaceSwitchButton from './ui/FaceSwitchButton';
 import { calculateTraceWeights, updateDebugTrace } from './core/engine';
 import { useMaidaSession } from './hooks/useMaidaSession';
 import { useUpdateCheck } from './hooks/useUpdateCheck';
@@ -85,6 +87,24 @@ function App() {
 
     const updateCheck = useUpdateCheck();
     const { theme, toggleTheme } = useTheme();
+
+    // Face switching (Aida ↔ Neri)
+    const [face, setFace] = useState('aida');
+    const switchToNeri = useCallback(() => setFace('neri'), []);
+    const switchToAida = useCallback(() => setFace('aida'), []);
+    const toggleFace = useCallback(() => setFace(f => f === 'aida' ? 'neri' : 'aida'), []);
+
+    // Ctrl+Tab keyboard shortcut (undocumented)
+    useEffect(() => {
+        const handler = (e) => {
+            if (e.ctrlKey && e.key === 'Tab') {
+                e.preventDefault();
+                toggleFace();
+            }
+        };
+        window.addEventListener('keydown', handler);
+        return () => window.removeEventListener('keydown', handler);
+    }, [toggleFace]);
 
     const [debugMode, setDebugMode] = useState(false);
     const [silentMode, setSilentMode] = useState(false);
@@ -283,6 +303,16 @@ function App() {
         );
     }
 
+    if (face === 'neri') {
+        return (
+            <div className="app-root">
+                {themeToggle}
+                <NeriView onSwitchToAida={switchToAida} />
+                {import.meta.env.DEV && <Agentation endpoint="http://localhost:4747" />}
+            </div>
+        );
+    }
+
     return (
         <div className="app-root">
             {themeToggle}
@@ -304,6 +334,7 @@ function App() {
                 anchorThreshold={anchorThreshold}
                 resumeGuard={resumeGuard}
                 onHideGame={hideGame}
+                onSwitchToNeri={switchToNeri}
             />
             <div className="global-version-tag" role="contentinfo">
                 <span className="version-name">Maida · Alpha</span>

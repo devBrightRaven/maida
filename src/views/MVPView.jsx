@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { t } from '../i18n';
 import GameDisplay from '../ui/features/Uncertainty/GameDisplay';
 import TracePanel from '../ui/features/Trace/TracePanel';
+import FaceSwitchButton from '../ui/FaceSwitchButton';
 import { useGameInput } from '../hooks/useGameInput';
 import './MVPView.css';
 
@@ -26,7 +27,8 @@ export default function MVPView({
     tapThreshold,
     anchorThreshold,
     resumeGuard,
-    onHideGame
+    onHideGame,
+    onSwitchToNeri
 }) {
     const [expanded, setExpanded] = useState(false);
     const [showTrace, setShowTrace] = useState(false);
@@ -311,6 +313,10 @@ export default function MVPView({
                     returnPenaltySet={returnPenaltySet}
                     onHideGame={onHideGame}
                 />
+            )}
+
+            {onSwitchToNeri && (
+                <FaceSwitchButton direction="to-neri" onClick={onSwitchToNeri} />
             )}
         </div>
     );
