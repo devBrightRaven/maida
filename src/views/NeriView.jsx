@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import FaceSwitchButton from '../ui/FaceSwitchButton';
 import ShowcaseList from '../ui/features/Neri/ShowcaseList';
 import ShowcaseEmpty from '../ui/features/Neri/ShowcaseEmpty';
@@ -76,13 +76,41 @@ export default function NeriView({ onSwitchToAida }) {
         await persistShowcase(next);
     }, [showcaseState, persistShowcase]);
 
+    const containerRef = useRef(null);
+
+    // D-pad navigation: cycle through focusable elements
+    const handleNav = useCallback((dir) => {
+        const container = containerRef.current;
+        if (!container) return;
+        const focusable = Array.from(container.querySelectorAll(
+            'button:not(:disabled), input, [tabindex]:not([tabindex="-1"])'
+        ));
+        if (focusable.length === 0) return;
+        const current = focusable.indexOf(document.activeElement);
+        let next;
+        if (dir === 'down' || dir === 'right') {
+            next = current < focusable.length - 1 ? current + 1 : 0;
+        } else {
+            next = current > 0 ? current - 1 : focusable.length - 1;
+        }
+        focusable[next]?.focus();
+    }, []);
+
+    // A button: click focused element
+    const handleMainAction = useCallback(() => {
+        const el = document.activeElement;
+        if (el && el.tagName === 'BUTTON') el.click();
+    }, []);
+
     useGameInput({
         onBack: exploring ? () => setExploring(false) : undefined,
+        onNav: handleNav,
+        onMainAction: handleMainAction,
     });
 
     if (loading) {
         return (
-            <div className="neri-view">
+            <div className="neri-view" ref={containerRef}>
                 <div className="neri-content">
                     <p className="neri-loading">Loading...</p>
                 </div>
@@ -92,7 +120,7 @@ export default function NeriView({ onSwitchToAida }) {
 
     if (exploring) {
         return (
-            <div className="neri-view">
+            <div className="neri-view" ref={containerRef}>
                 <ExploreView
                     showcaseState={showcaseState}
                     onAdd={handleAdd}
@@ -104,7 +132,7 @@ export default function NeriView({ onSwitchToAida }) {
     }
 
     return (
-        <div className="neri-view">
+        <div className="neri-view" ref={containerRef}>
             <div className="neri-content">
                 <NeriSearch
                     showcaseIds={showcaseState.games}
