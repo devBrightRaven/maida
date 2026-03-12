@@ -349,7 +349,6 @@
 .explore-card-img {
     width: 100%;
     display: block;
-    object-fit: contain;
 }
 
 .explore-card-no-img {

@@ -20,7 +20,7 @@ function getSteamCoverUrl(steamAppId) {
  */
 export default function ExploreCard({ game, onAdd, onDismiss }) {
     const [imgError, setImgError] = useState(false);
-    const [imgSrc, setImgSrc] = useState('cover'); // 'cover' | 'header' | 'none'
+    const [imgSrc, setImgSrc] = useState('header'); // 'header' | 'cover' | 'none'
 
     if (!game) return null;
 
@@ -32,15 +32,14 @@ export default function ExploreCard({ game, onAdd, onDismiss }) {
     const headerUrl = getSteamHeaderUrl(appId);
 
     const handleImgError = () => {
-        if (imgSrc === 'cover') {
-            // Fallback from cover to header
-            setImgSrc('header');
+        if (imgSrc === 'header') {
+            setImgSrc('cover');
         } else {
             setImgSrc('none');
         }
     };
 
-    const currentImgUrl = imgSrc === 'cover' ? coverUrl : imgSrc === 'header' ? headerUrl : null;
+    const currentImgUrl = imgSrc === 'header' ? headerUrl : imgSrc === 'cover' ? coverUrl : null;
 
     return (
         <div className="explore-card" role="article" aria-label={title}>
@@ -49,7 +48,7 @@ export default function ExploreCard({ game, onAdd, onDismiss }) {
                     <img
                         src={currentImgUrl}
                         alt={`${title} cover art`}
-                        className={`explore-card-img ${imgSrc === 'cover' ? 'explore-card-img-cover' : 'explore-card-img-header'}`}
+                        className="explore-card-img"
                         onError={handleImgError}
                         loading="eager"
                     />
