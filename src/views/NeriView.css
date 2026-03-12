@@ -172,6 +172,13 @@
     flex: 1;
 }
 
+.showcase-item-uninstalled,
+.neri-search-uninstalled {
+    font-size: 0.75rem;
+    color: var(--t-error);
+    font-style: italic;
+}
+
 .showcase-counter {
     text-align: right;
     font-size: 0.875rem;

@@ -488,7 +488,11 @@ ipcMain.handle('sample-warehouse', (event, excludeIds) => {
         const data = JSON.parse(fs.readFileSync(GAMES_PATH, 'utf8'));
         const games = data.games || [];
         const excludeSet = new Set(excludeIds || []);
-        const candidates = games.filter(g => !excludeSet.has(g.steamAppId) && !excludeSet.has(g.id));
+        const candidates = games.filter(g =>
+            g.installed &&
+            !excludeSet.has(g.steamAppId) &&
+            !excludeSet.has(g.id)
+        );
         if (candidates.length === 0) return null;
         const idx = Math.floor(Math.random() * candidates.length);
         return candidates[idx];

@@ -63,7 +63,10 @@ export default function NeriSearch({ showcaseIds, onAdd }) {
                                 role="option"
                                 aria-selected={inShowcase}
                             >
-                                <span className="neri-search-result-title">{game.title}</span>
+                                <span className="neri-search-result-title">
+                                    {game.title}
+                                    {!game.installed && <span className="neri-search-uninstalled"> (not installed)</span>}
+                                </span>
                                 <button
                                     type="button"
                                     className="neri-search-add-btn"
