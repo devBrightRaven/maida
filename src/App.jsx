@@ -94,6 +94,12 @@ function App() {
     const switchToAida = useCallback(() => setFace('aida'), []);
     const toggleFace = useCallback(() => setFace(f => f === 'aida' ? 'neri' : 'aida'), []);
 
+    // L1/R1 gamepad face switching
+    useGameInput({
+        onL1: switchToAida,
+        onR1: switchToNeri,
+    });
+
     // Ctrl+Tab keyboard shortcut (undocumented)
     useEffect(() => {
         const handler = (e) => {
