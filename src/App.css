@@ -1,7 +1,8 @@
 .app-root {
     width: 100vw;
-    min-height: 100vh;
+    height: 100vh;
     background: var(--t-bg);
+    overflow-y: auto;
 }
 
 .void-screen {
