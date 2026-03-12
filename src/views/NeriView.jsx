@@ -18,13 +18,20 @@ export default function NeriView({ onSwitchToAida }) {
     const [showcaseGames, setShowcaseGames] = useState([]);
     const [loading, setLoading] = useState(true);
     const [exploring, setExploring] = useState(false);
+    const [autoExploreChecked, setAutoExploreChecked] = useState(false);
 
     // Load showcase on mount
     useEffect(() => {
         (async () => {
             const data = await bridge.getShowcase();
-            setShowcaseState(data || { games: [] });
+            const state = data || { games: [] };
+            setShowcaseState(state);
             setLoading(false);
+            // Auto-enter explore if showcase is empty
+            if (state.games.length === 0) {
+                setExploring(true);
+            }
+            setAutoExploreChecked(true);
         })();
     }, []);
 
