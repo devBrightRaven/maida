@@ -32,13 +32,14 @@ export default function MVPView({
 }) {
     const [expanded, setExpanded] = useState(false);
     const [showTrace, setShowTrace] = useState(false);
-    const [focusedBtn, setFocusedBtn] = useState(null); // 'visit' | 'notToday' | 'back' | null
+    const [focusedBtn, setFocusedBtn] = useState(null); // 'visit' | 'notToday' | 'back' | 'switchNeri' | null
 
     // Refs for Focus Management
     const btnRefs = {
         visit: React.useRef(null),
         notToday: React.useRef(null),
-        back: React.useRef(null)
+        back: React.useRef(null),
+        switchNeri: React.useRef(null)
     };
 
     // Helper to focus a button and update state
@@ -161,16 +162,21 @@ export default function MVPView({
                 return;
             }
 
+            const isSwitchNeri = current === btnRefs.switchNeri.current;
+
             // Up / Left = Previous (backwards)
             if (dir === 'left' || dir === 'up') {
                 if (isNotToday) focusBtn('visit');
                 else if (isBack) focusBtn('notToday');
                 else if (isTraceBtn) focusBtn('visit');
+                else if (isSwitchNeri) canUndo ? focusBtn('back') : focusBtn('notToday');
             }
             // Down / Right = Next (forwards)
             else if (dir === 'right' || dir === 'down') {
                 if (isVisit) focusBtn('notToday');
                 else if (isNotToday && canUndo) focusBtn('back');
+                else if (isNotToday && !canUndo) focusBtn('switchNeri');
+                else if (isBack) focusBtn('switchNeri');
             }
         }
     });
@@ -316,7 +322,7 @@ export default function MVPView({
             )}
 
             {onSwitchToNeri && (
-                <FaceSwitchButton direction="to-neri" onClick={onSwitchToNeri} />
+                <FaceSwitchButton ref={btnRefs.switchNeri} direction="to-neri" onClick={onSwitchToNeri} />
             )}
         </div>
     );

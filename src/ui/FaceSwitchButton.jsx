@@ -1,13 +1,16 @@
+import { forwardRef } from 'react';
+
 /**
- * Corner button for switching between Aida and Neri faces.
- * Bottom-right in Aida (→ Neri), bottom-left in Neri (← Aida).
+ * Edge button for switching between Aida and Neri faces.
+ * Right edge in Aida (→ Neri), left edge in Neri (← Aida).
  * No tooltip, no label — only aria-label for screen readers.
  */
-export default function FaceSwitchButton({ direction, onClick }) {
+const FaceSwitchButton = forwardRef(function FaceSwitchButton({ direction, onClick }, ref) {
     const isToNeri = direction === 'to-neri';
 
     return (
         <button
+            ref={ref}
             type="button"
             className={`face-switch-btn face-switch-${isToNeri ? 'right' : 'left'}`}
             onClick={onClick}
@@ -16,4 +19,6 @@ export default function FaceSwitchButton({ direction, onClick }) {
             <span aria-hidden="true">{isToNeri ? '\u203A' : '\u2039'}</span>
         </button>
     );
-}
+});
+
+export default FaceSwitchButton;
