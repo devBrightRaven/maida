@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { t } from '../i18n';
 import { useGameInput } from '../hooks/useGameInput';
+import CurationPrompt from '../ui/features/Onboarding/CurationPrompt';
 import './OnboardingView.css';
 
 export default function OnboardingView({ onComplete }) {
-    const [state, setState] = useState('idle'); // 'idle' | 'scanning' | 'error'
+    const [state, setState] = useState('idle'); // 'idle' | 'scanning' | 'error' | 'curating'
     const [isFocused, setIsFocused] = useState(false);
     const btnRef = useRef(null);
 
@@ -74,11 +75,22 @@ export default function OnboardingView({ onComplete }) {
         clearTimeout(timer);
 
         if (result.success) {
-            onComplete();
+            setState('curating');
         } else {
             setState('error');
         }
     };
+
+    if (state === 'curating') {
+        return (
+            <div className="onboarding-container">
+                <main className="onboarding-content">
+                    <CurationPrompt onDone={onComplete} />
+                </main>
+                <div className="bg-glow"></div>
+            </div>
+        );
+    }
 
     return (
         <div className="onboarding-container">
