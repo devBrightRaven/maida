@@ -10,17 +10,29 @@ export function calculateTraceWeights(gamesData, options = {}) {
     const {
         sessionSkippedSet = [],
         returnPenaltySet = [],
-        temperature = 1.5
+        temperature = 1.5,
+        candidatePool = null
     } = options;
 
     if (!gamesData || !gamesData.games) return null;
 
     const uniqueGamesMap = new Map();
-    gamesData.games.forEach(g => {
-        if (g.installed && !uniqueGamesMap.has(g.id)) {
-            uniqueGamesMap.set(g.id, g);
-        }
-    });
+    if (candidatePool) {
+        // Showcase mode: only include games whose ID is in the candidate pool
+        const poolSet = new Set(candidatePool);
+        gamesData.games.forEach(g => {
+            if (poolSet.has(g.id) && !uniqueGamesMap.has(g.id)) {
+                uniqueGamesMap.set(g.id, g);
+            }
+        });
+    } else {
+        // Legacy mode: all installed games
+        gamesData.games.forEach(g => {
+            if (g.installed && !uniqueGamesMap.has(g.id)) {
+                uniqueGamesMap.set(g.id, g);
+            }
+        });
+    }
     const allCandidates = Array.from(uniqueGamesMap.values());
 
     if (allCandidates.length === 0) return null;

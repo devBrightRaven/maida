@@ -161,6 +161,56 @@ describe('calculateTraceWeights', () => {
         const dup = result.candidates.find(c => c.id === 'dup');
         expect(dup.score).toBe(1);
     });
+
+    // --- candidatePool (Showcase mode) ---
+
+    it('filters to candidatePool when provided', () => {
+        const games = [
+            makeGame({ id: 'a', installed: true }),
+            makeGame({ id: 'b', installed: true }),
+            makeGame({ id: 'c', installed: true }),
+        ];
+        const result = calculateTraceWeights(makeGamesData(games), {
+            candidatePool: ['a', 'c'],
+        });
+
+        expect(result.candidates).toHaveLength(2);
+        expect(result.candidates.map(c => c.id).sort()).toEqual(['a', 'c']);
+    });
+
+    it('includes uninstalled games when in candidatePool', () => {
+        const games = [
+            makeGame({ id: 'a', installed: false }),
+            makeGame({ id: 'b', installed: true }),
+        ];
+        const result = calculateTraceWeights(makeGamesData(games), {
+            candidatePool: ['a'],
+        });
+
+        // 'a' is not installed but IS in candidatePool — should be included
+        expect(result.candidates).toHaveLength(1);
+        expect(result.candidates[0].id).toBe('a');
+    });
+
+    it('returns null for empty candidatePool', () => {
+        const games = [makeGame({ id: 'a' })];
+        const result = calculateTraceWeights(makeGamesData(games), {
+            candidatePool: [],
+        });
+        expect(result).toBeNull();
+    });
+
+    it('preserves existing behavior without candidatePool', () => {
+        const games = [
+            makeGame({ id: 'installed', installed: true }),
+            makeGame({ id: 'not-installed', installed: false }),
+        ];
+        const result = calculateTraceWeights(makeGamesData(games));
+
+        // Without candidatePool, only installed games
+        expect(result.candidates).toHaveLength(1);
+        expect(result.candidates[0].id).toBe('installed');
+    });
 });
 
 // ---------------------------------------------------------------------------

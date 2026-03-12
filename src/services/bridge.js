@@ -60,6 +60,35 @@ const bridge = {
         return { success: false };
     },
 
+    // Showcase & Warehouse
+    getShowcase: async () => {
+        if (window.maidaAPI?.getShowcase) {
+            return await window.maidaAPI.getShowcase();
+        }
+        return { games: [], box: [], exploreHistory: { lastSessionDate: null, cardsShownToday: 0 } };
+    },
+
+    saveShowcase: async (data) => {
+        if (window.maidaAPI?.saveShowcase) {
+            return await window.maidaAPI.saveShowcase(data);
+        }
+        return { success: false };
+    },
+
+    searchWarehouse: async (query) => {
+        if (window.maidaAPI?.searchWarehouse) {
+            return await window.maidaAPI.searchWarehouse(query);
+        }
+        return [];
+    },
+
+    sampleWarehouse: async (excludeIds) => {
+        if (window.maidaAPI?.sampleWarehouse) {
+            return await window.maidaAPI.sampleWarehouse(excludeIds);
+        }
+        return null;
+    },
+
     // Session log
     appendSessionLog: async (entry) => {
         if (window.maidaAPI?.appendSessionLog) {

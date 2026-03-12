@@ -131,6 +131,7 @@ const PRESCRIPTIONS_PATH = path.join(userDataPath, 'prescriptions.json');
 const ANCHOR_PATH = path.join(userDataPath, 'anchor.json');
 const RETURN_PENALTIES_PATH = path.join(userDataPath, 'returnPenalties.json');
 const CONSTRAINTS_PATH = path.join(userDataPath, 'constraints.json');
+const SHOWCASE_PATH = path.join(userDataPath, 'showcase.json');
 
 // Template paths: In production, extraResources are at process.resourcesPath/data/
 // In development, they're at ../src/data/
@@ -449,6 +450,51 @@ ipcMain.handle('open-release-page', (event, url) => {
 
 ipcMain.handle('get-app-version', () => {
     return app.getVersion();
+});
+
+// ---------------------------------------------------------
+// Showcase & Warehouse IPC
+// ---------------------------------------------------------
+
+ipcMain.handle('get-showcase', () => {
+    if (!fs.existsSync(SHOWCASE_PATH)) return { games: [], box: [], exploreHistory: { lastSessionDate: null, cardsShownToday: 0 } };
+    try {
+        return JSON.parse(fs.readFileSync(SHOWCASE_PATH, 'utf8'));
+    } catch (e) {
+        return { games: [], box: [], exploreHistory: { lastSessionDate: null, cardsShownToday: 0 } };
+    }
+});
+
+ipcMain.handle('save-showcase', (event, data) => {
+    return writeFileAtomic(SHOWCASE_PATH, data);
+});
+
+ipcMain.handle('search-warehouse', (event, query) => {
+    if (!query || !query.trim()) return [];
+    try {
+        const data = JSON.parse(fs.readFileSync(GAMES_PATH, 'utf8'));
+        const games = data.games || [];
+        const lower = query.trim().toLowerCase();
+        return games
+            .filter(g => g.title && g.title.toLowerCase().includes(lower))
+            .slice(0, 20);
+    } catch (e) {
+        return [];
+    }
+});
+
+ipcMain.handle('sample-warehouse', (event, excludeIds) => {
+    try {
+        const data = JSON.parse(fs.readFileSync(GAMES_PATH, 'utf8'));
+        const games = data.games || [];
+        const excludeSet = new Set(excludeIds || []);
+        const candidates = games.filter(g => !excludeSet.has(g.steamAppId) && !excludeSet.has(g.id));
+        if (candidates.length === 0) return null;
+        const idx = Math.floor(Math.random() * candidates.length);
+        return candidates[idx];
+    } catch (e) {
+        return null;
+    }
 });
 
 // ---------------------------------------------------------

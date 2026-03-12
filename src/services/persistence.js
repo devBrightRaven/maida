@@ -56,3 +56,21 @@ export async function saveData(type, data) {
 export async function syncLibrary() {
     return await bridge.requestOnboardingSync();
 }
+
+// Showcase persistence
+export async function loadShowcase() {
+    return await bridge.getShowcase();
+}
+
+export async function saveShowcase(data) {
+    return await bridge.saveShowcase(data);
+}
+
+// Warehouse search
+export async function searchWarehouse(query) {
+    return await bridge.searchWarehouse(query);
+}
+
+export async function sampleWarehouse(excludeIds) {
+    return await bridge.sampleWarehouse(excludeIds);
+}

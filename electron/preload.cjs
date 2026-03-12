@@ -10,6 +10,11 @@ contextBridge.exposeInMainWorld('maidaAPI', {
     closeWindow: () => ipcRenderer.invoke('close-window'),
     checkSteamAvailable: () => ipcRenderer.invoke('check-steam-available'),
     resetGamesData: () => ipcRenderer.invoke('reset-games-data'),
+    // Showcase & Warehouse
+    getShowcase: () => ipcRenderer.invoke('get-showcase'),
+    saveShowcase: (data) => ipcRenderer.invoke('save-showcase', data),
+    searchWarehouse: (query) => ipcRenderer.invoke('search-warehouse', query),
+    sampleWarehouse: (excludeIds) => ipcRenderer.invoke('sample-warehouse', excludeIds),
     // Session Log
     appendSessionLog: (entry) => ipcRenderer.invoke('append-session-log', entry),
     exportSessionLog: () => ipcRenderer.invoke('export-session-log'),
