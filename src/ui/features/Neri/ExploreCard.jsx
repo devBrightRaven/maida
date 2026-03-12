@@ -20,7 +20,7 @@ function getSteamCoverUrl(steamAppId) {
  */
 export default function ExploreCard({ game, onAdd, onDismiss }) {
     const [imgError, setImgError] = useState(false);
-    const [imgSrc, setImgSrc] = useState('header'); // 'header' | 'cover' | 'none'
+    const [imgSrc, setImgSrc] = useState('cover'); // 'cover' | 'header' | 'none'
 
     if (!game) return null;
 
@@ -32,14 +32,14 @@ export default function ExploreCard({ game, onAdd, onDismiss }) {
     const headerUrl = getSteamHeaderUrl(appId);
 
     const handleImgError = () => {
-        if (imgSrc === 'header') {
-            setImgSrc('cover');
+        if (imgSrc === 'cover') {
+            setImgSrc('header');
         } else {
             setImgSrc('none');
         }
     };
 
-    const currentImgUrl = imgSrc === 'header' ? headerUrl : imgSrc === 'cover' ? coverUrl : null;
+    const currentImgUrl = imgSrc === 'cover' ? coverUrl : imgSrc === 'header' ? headerUrl : null;
 
     return (
         <div className="explore-card" role="article" aria-label={title}>
