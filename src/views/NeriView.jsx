@@ -77,7 +77,7 @@ export default function NeriView({ onSwitchToAida }) {
     }, [showcaseState, persistShowcase]);
 
     useGameInput({
-        onBack: exploring ? () => setExploring(false) : onSwitchToAida,
+        onBack: exploring ? () => setExploring(false) : undefined,
     });
 
     if (loading) {
