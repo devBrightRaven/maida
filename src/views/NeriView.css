@@ -5,6 +5,7 @@
     background: var(--t-bg);
     color: var(--t-text);
     position: relative;
+    overflow-y: auto;
 }
 
 .neri-content {
