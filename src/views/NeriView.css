@@ -19,7 +19,7 @@
 }
 
 .neri-loading {
-    color: var(--t-text-soft);
+    color: var(--t-text);
     font-size: 0.8rem;
     text-align: center;
     padding-top: 40vh;
@@ -39,18 +39,18 @@
     letter-spacing: 0.02em;
     color: var(--t-text);
     background: var(--t-surface);
-    border: 1px solid var(--t-border-subtle);
+    border: 1px solid var(--t-dim);
     border-radius: 6px;
     outline: none;
     transition: border-color 0.15s ease;
 }
 
 .neri-search-input:focus {
-    border-color: var(--t-text-faint);
+    border-color: var(--t-dim);
 }
 
 .neri-search-input::placeholder {
-    color: var(--t-text-ghost);
+    color: var(--t-dim);
 }
 
 .neri-search-results {
@@ -59,7 +59,7 @@
     left: 0;
     right: 0;
     background: var(--t-surface);
-    border: 1px solid var(--t-border-subtle);
+    border: 1px solid var(--t-dim);
     border-top: none;
     border-radius: 0 0 6px 6px;
     max-height: 240px;
@@ -93,9 +93,9 @@
     font-size: 0.875rem;
     font-family: inherit;
     letter-spacing: 0.05em;
-    color: var(--t-text-soft);
+    color: var(--t-text);
     background: transparent;
-    border: 1px solid var(--t-border-subtle);
+    border: 1px solid var(--t-dim);
     border-radius: 4px;
     cursor: pointer;
     transition: color 0.15s ease, border-color 0.15s ease;
@@ -104,7 +104,7 @@
 
 .neri-search-add-btn:hover:not(:disabled) {
     color: var(--t-text);
-    border-color: var(--t-text-faint);
+    border-color: var(--t-dim);
 }
 
 .neri-search-add-btn:disabled {
@@ -120,7 +120,7 @@
 .neri-search-status {
     display: block;
     font-size: 0.6875rem;
-    color: var(--t-text-ghost);
+    color: var(--t-dim);
     padding-top: 0.25rem;
 }
 
@@ -149,7 +149,7 @@
     justify-content: space-between;
     padding: 0.75rem 1rem;
     background: var(--t-surface);
-    border: 1px solid var(--t-border-subtle);
+    border: 1px solid var(--t-dim);
     border-radius: 8px;
     gap: 1rem;
 }
@@ -182,17 +182,17 @@
     font-size: 0.875rem;
     font-family: inherit;
     letter-spacing: 0.06em;
-    color: var(--t-text-faint);
+    color: var(--t-dim);
     background: transparent;
-    border: 1px solid var(--t-border-subtle);
+    border: 1px solid var(--t-dim);
     border-radius: 3px;
     cursor: pointer;
     transition: color 0.15s ease, border-color 0.15s ease;
 }
 
 .showcase-action-btn:hover {
-    color: var(--t-text-soft);
-    border-color: var(--t-text-faint);
+    color: var(--t-text);
+    border-color: var(--t-dim);
 }
 
 .showcase-action-btn:focus-visible {
@@ -235,9 +235,9 @@
     font-size: 1rem;
     font-family: inherit;
     letter-spacing: 0.06em;
-    color: var(--t-text-soft);
+    color: var(--t-text);
     background: transparent;
-    border: 1px solid var(--t-border-subtle);
+    border: 1px solid var(--t-dim);
     border-radius: 4px;
     cursor: pointer;
     transition: color 0.15s ease, border-color 0.15s ease;
@@ -245,7 +245,7 @@
 
 .showcase-empty-explore-btn:hover {
     color: var(--t-text);
-    border-color: var(--t-text-faint);
+    border-color: var(--t-dim);
 }
 
 .showcase-empty-explore-btn:focus-visible {
@@ -261,17 +261,17 @@
     font-size: 1rem;
     font-family: inherit;
     letter-spacing: 0.06em;
-    color: var(--t-text-faint);
+    color: var(--t-dim);
     background: transparent;
-    border: 1px solid var(--t-border-subtle);
+    border: 1px solid var(--t-dim);
     border-radius: 4px;
     cursor: pointer;
     transition: color 0.15s ease, border-color 0.15s ease;
 }
 
 .neri-explore-btn:hover {
-    color: var(--t-text-soft);
-    border-color: var(--t-text-faint);
+    color: var(--t-text);
+    border-color: var(--t-dim);
 }
 
 .neri-explore-btn:focus-visible {
@@ -307,7 +307,7 @@
     letter-spacing: 0.04em;
     color: var(--t-dim);
     background: transparent;
-    border: 1.5px solid var(--t-border-subtle);
+    border: 1.5px solid var(--t-dim);
     border-radius: 6px;
     cursor: pointer;
 }
@@ -360,7 +360,7 @@
     justify-content: center;
     background: var(--t-border-subtle);
     font-size: 3rem;
-    color: var(--t-text-ghost);
+    color: var(--t-dim);
 }
 
 .explore-card-title {
@@ -449,15 +449,15 @@
     font-size: 1rem;
     font-family: inherit;
     letter-spacing: 0.06em;
-    color: var(--t-text-faint);
+    color: var(--t-dim);
     background: transparent;
-    border: 1px solid var(--t-border-subtle);
+    border: 1px solid var(--t-dim);
     border-radius: 4px;
     cursor: pointer;
 }
 
 .explore-limit-btn:hover {
-    color: var(--t-text-soft);
+    color: var(--t-text);
 }
 
 .explore-limit-btn:focus-visible {
