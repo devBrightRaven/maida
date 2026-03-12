@@ -82,7 +82,9 @@ function App() {
         setSessionSkippedSet,
         isAnchored,
         resetAll,
-        hideGame
+        hideGame,
+        reloadShowcase,
+        showcaseIds
     } = useMaidaSession();
 
     const updateCheck = useUpdateCheck();
@@ -91,7 +93,10 @@ function App() {
     // Face switching (Aida ↔ Neri)
     const [face, setFace] = useState('aida');
     const switchToNeri = useCallback(() => setFace('neri'), []);
-    const switchToAida = useCallback(() => setFace('aida'), []);
+    const switchToAida = useCallback(() => {
+        setFace('aida');
+        reloadShowcase(); // Re-roll with updated showcase
+    }, [reloadShowcase]);
     const toggleFace = useCallback(() => setFace(f => f === 'aida' ? 'neri' : 'aida'), []);
 
     // L1/R1 gamepad face switching

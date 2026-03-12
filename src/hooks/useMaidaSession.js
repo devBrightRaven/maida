@@ -5,6 +5,7 @@ import { applyTryScore, applySkipScore, updateGameScore, mergePenalties, removeF
 import { debugStore } from '../core/debugStore';
 import { loadData, saveData } from '../services/persistence';
 import bridge from '../services/bridge';
+import { loadShowcase } from '../services/persistence';
 
 export function useMaidaSession() {
     const [data, setData] = useState({ games: null, prescriptions: null });
@@ -23,16 +24,24 @@ export function useMaidaSession() {
     // CONSTRAINTS (friction elimination)
     const [constraints, setConstraints] = useState(null);
 
+    // SHOWCASE (Neri curation — candidatePool for engine)
+    const [showcaseIds, setShowcaseIds] = useState(null); // null = not loaded yet, [] = empty
+
     const init = async () => {
-        const [games, prescriptions, anchorData, returnPenalties, constraintsData] = await Promise.all([
+        const [games, prescriptions, anchorData, returnPenalties, constraintsData, showcaseData] = await Promise.all([
             loadData('games'),
             loadData('prescriptions'),
             loadData('anchor'),
             loadData('returnPenalties'),
-            loadData('constraints')
+            loadData('constraints'),
+            loadShowcase()
         ]);
 
         if (constraintsData) setConstraints(constraintsData);
+
+        // Load showcase IDs for candidatePool
+        const loadedShowcaseIds = showcaseData?.games?.length > 0 ? showcaseData.games : null;
+        setShowcaseIds(loadedShowcaseIds);
 
         const firstRun = isFirstRun(games);
 
@@ -75,10 +84,13 @@ export function useMaidaSession() {
         }
 
         // Normal flow if no anchor
-        const constrainedGames = applyConstraints(freshGames, constraintsData);
+        const constrainedGames = loadedShowcaseIds
+            ? freshGames  // Showcase mode: skip constraints, candidatePool handles filtering
+            : applyConstraints(freshGames, constraintsData);
         const game = getActiveGame(constrainedGames, {
             sessionSkippedSet: [],
-            returnPenaltySet: returnPenalties || []
+            returnPenaltySet: returnPenalties || [],
+            candidatePool: loadedShowcaseIds || undefined
         });
         const prescription = getPrescription(game, prescriptions);
 
@@ -107,11 +119,14 @@ export function useMaidaSession() {
         }
 
         const gamesSource = overrideData || data.games;
-        const constrainedGames = applyConstraints(gamesSource, constraints);
+        const constrainedGames = showcaseIds
+            ? gamesSource  // Showcase mode: skip constraints
+            : applyConstraints(gamesSource, constraints);
 
         let nextGame = getActiveGame(constrainedGames, {
             sessionSkippedSet: currentSkipped,
-            returnPenaltySet: currentPenalties
+            returnPenaltySet: currentPenalties,
+            candidatePool: showcaseIds || undefined
         });
 
         // SOFT RESET (Exhausted pool fallback)
@@ -120,7 +135,8 @@ export function useMaidaSession() {
             setSessionSkippedHistory([]);
             nextGame = getActiveGame(constrainedGames, {
                 sessionSkippedSet: [],
-                returnPenaltySet: currentPenalties
+                returnPenaltySet: currentPenalties,
+                candidatePool: showcaseIds || undefined
             });
         }
 
@@ -310,6 +326,26 @@ export function useMaidaSession() {
         }
     };
 
+    // Reload showcase and re-roll (called when switching back from Neri)
+    const reloadShowcase = async () => {
+        const showcaseData = await loadShowcase();
+        const newIds = showcaseData?.games?.length > 0 ? showcaseData.games : null;
+        setShowcaseIds(newIds);
+        // Re-roll with updated pool
+        const gamesSource = data.games;
+        if (!gamesSource) return;
+        const constrainedGames = newIds ? gamesSource : applyConstraints(gamesSource, constraints);
+        const game = getActiveGame(constrainedGames, {
+            sessionSkippedSet: [],
+            returnPenaltySet,
+            candidatePool: newIds || undefined
+        });
+        const prescription = getPrescription(game, data.prescriptions);
+        setSessionSkippedSet([]);
+        setSessionSkippedHistory([]);
+        setSession({ game, prescription });
+    };
+
     return {
         data,
         session,
@@ -317,6 +353,7 @@ export function useMaidaSession() {
         sessionSkippedSet,
         returnPenaltySet,
         isAnchored,
+        showcaseIds,
         setData,
         setStatus,
         setSessionSkippedSet,
@@ -326,6 +363,7 @@ export function useMaidaSession() {
         canUndo: !!history,
         resetAll,
         constraints,
-        hideGame
+        hideGame,
+        reloadShowcase
     };
 }
