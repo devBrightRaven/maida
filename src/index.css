@@ -2,7 +2,7 @@
 [data-theme="dark"] {
     --t-bg: #0a0a0a;
     --t-text: #e0e0e0;
-    --t-dim: #9a9a9a;
+    --t-dim: #b0b0b0;
     --t-accent: #ffaa00;
     --t-border: #ffffff;
     --t-hover-bg: #ffffff;
@@ -24,7 +24,7 @@
 [data-theme="light"] {
     --t-bg: #fdfbf7;
     --t-text: #2c2c2c;
-    --t-dim: #6b6560;
+    --t-dim: #555250;
     --t-accent: #96652d;
     --t-border: #2c2c2c;
     --t-hover-bg: #2c2c2c;
