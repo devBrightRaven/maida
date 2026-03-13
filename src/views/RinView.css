@@ -1,18 +1,37 @@
 /* RinView.css - Layout and Component Container only */
 
-.rin-title {
+.rin-title-block {
     position: absolute;
     top: 1.5rem;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 3rem;
-    font-weight: 300;
-    color: var(--t-dim);
-    letter-spacing: 0.1em;
+    left: 1.5rem;
     user-select: none;
     -webkit-user-select: none;
     pointer-events: none;
     z-index: 1;
+}
+
+.rin-title-kanji {
+    font-size: 6rem;
+    font-weight: 300;
+    color: var(--t-dim);
+    line-height: 1;
+    margin: 0;
+}
+
+.rin-title-reading {
+    font-size: 0.875rem;
+    color: var(--t-dim);
+    letter-spacing: 0.08em;
+    margin-top: 0.25rem;
+}
+
+.rin-title-desc {
+    font-size: 0.75rem;
+    color: var(--t-dim);
+    opacity: 0.7;
+    margin-top: 0.125rem;
+    max-width: 220px;
+    line-height: 1.4;
 }
 
 .mvp-container {

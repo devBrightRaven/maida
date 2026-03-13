@@ -133,9 +133,12 @@ export default function KamaeView({ onSwitchToRin }) {
 
     return (
         <div className="kamae-view" ref={containerRef}>
+            <div className="kamae-title-block" aria-hidden="true">
+                <p className="kamae-title-kanji">構</p>
+                <p className="kamae-title-reading">kamae — to prepare your stance</p>
+                <p className="kamae-title-desc">Shape what's on the shelf before you face it.</p>
+            </div>
             <div className="kamae-content">
-                <h1 className="kamae-title" aria-hidden="true">構</h1>
-
                 <KamaeSearch
                     showcaseIds={showcaseState.games}
                     onAdd={handleAdd}
