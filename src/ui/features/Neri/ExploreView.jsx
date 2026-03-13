@@ -20,11 +20,15 @@ export default function ExploreView({ showcaseState, onAdd, onBack, onShowcaseUp
 
     const todayDate = new Date().toISOString().slice(0, 10);
 
-    // Reset daily counter if new day
+    // Reset daily counter if new day (synchronous, before first render decision)
+    const [ready, setReady] = useState(false);
     useEffect(() => {
         const reset = resetDailyExplore(exploreState, todayDate);
-        if (reset !== exploreState) setExploreState(reset);
-    }, [todayDate]);
+        if (reset !== exploreState) {
+            setExploreState(reset);
+        }
+        setReady(true);
+    }, []);
 
     const fetchNextCard = useCallback(async () => {
         // Build exclusion list: showcase + active box + already shown this session
@@ -46,12 +50,12 @@ export default function ExploreView({ showcaseState, onAdd, onBack, onShowcaseUp
         setCurrentGame(game);
     }, [showcaseState.games, showcaseState.box]);
 
-    // Fetch first card on mount
+    // Fetch first card after reset is applied
     useEffect(() => {
-        if (canExploreMore(exploreState) && !exhausted) {
+        if (ready && canExploreMore(exploreState) && !exhausted) {
             fetchNextCard();
         }
-    }, []);
+    }, [ready]);
 
     const advanceCard = useCallback(async (updatedExplore) => {
         setExploreState(updatedExplore);

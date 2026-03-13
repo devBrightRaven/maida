@@ -100,10 +100,10 @@ export default function ShowcaseList({ games, onRemove }) {
                                 loading="lazy"
                             />
                         )}
-                        <span className="showcase-item-title">
-                            {game.title}
-                            {!game.installed && <span className="showcase-item-uninstalled"> (not installed)</span>}
-                        </span>
+                        <div className="showcase-item-info">
+                            <span className="showcase-item-title">{game.title}</span>
+                            {!game.installed && <span className="showcase-item-uninstalled">not installed</span>}
+                        </div>
                         <div className="showcase-item-actions">
                             <HoldButton
                                 onConfirm={() => onRemove(id)}

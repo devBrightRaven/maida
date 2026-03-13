@@ -163,16 +163,27 @@
     flex-shrink: 0;
 }
 
+.showcase-item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex: 1;
+    min-width: 0;
+}
+
 .showcase-item-title {
     font-size: 1rem;
     color: var(--t-text);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    flex: 1;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
-.showcase-item-uninstalled,
+.showcase-item-uninstalled {
+    font-size: 0.75rem;
+    color: var(--t-error);
+    font-style: italic;
+}
+
 .neri-search-uninstalled {
     font-size: 0.75rem;
     color: var(--t-error);
