@@ -12,6 +12,22 @@ const HOLD_DURATION = 3000; // 3 seconds
  * Long-press button — requires holding for 3 seconds to activate.
  * Shows progress bar while holding.
  */
+/**
+ * Eased progress: 0→50% fast (0.5s), 50→100% slow (2.5s).
+ * Gives instant visual feedback but requires commitment to finish.
+ */
+function easedProgress(elapsed) {
+    const FAST_PHASE = 500;   // 0.5s for first 50%
+    const SLOW_PHASE = 2500;  // 2.5s for last 50%
+    if (elapsed <= FAST_PHASE) {
+        return (elapsed / FAST_PHASE) * 0.5;
+    }
+    const slowElapsed = elapsed - FAST_PHASE;
+    return 0.5 + (slowElapsed / SLOW_PHASE) * 0.5;
+}
+
+const TOTAL_HOLD = 3000; // 0.5s + 2.5s
+
 function HoldButton({ onConfirm, label, ariaLabel }) {
     const [progress, setProgress] = useState(0);
     const startRef = useRef(null);
@@ -31,14 +47,14 @@ function HoldButton({ onConfirm, label, ariaLabel }) {
     const animate = useCallback(() => {
         if (!startRef.current) return;
         const elapsed = Date.now() - startRef.current;
-        const p = Math.min(elapsed / HOLD_DURATION, 1);
+        const p = Math.min(easedProgress(elapsed), 1);
         setProgress(p);
 
-        if (p >= 1 && !triggeredRef.current) {
+        if (elapsed >= TOTAL_HOLD && !triggeredRef.current) {
             triggeredRef.current = true;
             onConfirm();
             reset();
-        } else if (p < 1) {
+        } else if (elapsed < TOTAL_HOLD) {
             frameRef.current = requestAnimationFrame(animate);
         }
     }, [onConfirm, reset]);
@@ -54,6 +70,20 @@ function HoldButton({ onConfirm, label, ariaLabel }) {
         reset();
     }, [reset]);
 
+    // Keyboard hold: Enter/Space down = start, up = end
+    const handleKeyDown = useCallback((e) => {
+        if ((e.key === 'Enter' || e.key === ' ') && !e.repeat) {
+            e.preventDefault();
+            handleStart();
+        }
+    }, [handleStart]);
+
+    const handleKeyUp = useCallback((e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            handleEnd();
+        }
+    }, [handleEnd]);
+
     useEffect(() => {
         return () => reset();
     }, [reset]);
@@ -65,6 +95,8 @@ function HoldButton({ onConfirm, label, ariaLabel }) {
             onPointerDown={handleStart}
             onPointerUp={handleEnd}
             onPointerLeave={handleEnd}
+            onKeyDown={handleKeyDown}
+            onKeyUp={handleKeyUp}
             aria-label={ariaLabel}
         >
             <span className="showcase-hold-bg" style={{ width: `${progress * 100}%` }} />
@@ -107,7 +139,7 @@ export default function ShowcaseList({ games, onRemove }) {
                         <div className="showcase-item-actions">
                             <HoldButton
                                 onConfirm={() => onRemove(id)}
-                                label="put back to the shelf"
+                                label="put back"
                                 ariaLabel={`Hold to put ${game.title} back to shelf`}
                             />
                         </div>
