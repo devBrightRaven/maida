@@ -209,13 +209,13 @@
     transform: translateY(-50%);
     width: 2rem;
     height: 40vh;
-    border: 1px solid var(--t-dim, #737373);
-    background: var(--t-surface, #1a1a1a);
-    color: var(--t-dim, #737373);
+    border: 1px solid var(--t-dim);
+    background: var(--t-surface);
+    color: var(--t-text);
     font-size: 1.25rem;
     cursor: pointer;
     transition: opacity 0.2s ease, background 0.15s ease;
-    opacity: 0.3;
+    opacity: 0.5;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -225,7 +225,7 @@
 
 .face-switch-btn:hover,
 .face-switch-btn:focus-visible {
-    opacity: 0.7;
+    opacity: 0.85;
     background: var(--t-accent-soft, rgba(255,170,0,0.1));
 }
 
