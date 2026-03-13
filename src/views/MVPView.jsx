@@ -140,7 +140,8 @@ export default function MVPView({
             if (isAnchored) {
                 onAction('release'); // B -> Clear Anchor
             } else {
-                onAction('skip'); // B -> Not Today
+                // Two-step: B/Escape focuses NOT NOW, user must confirm with A/Enter
+                focusBtn('notToday');
             }
         },
         onNav: (dir) => {
