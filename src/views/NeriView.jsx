@@ -78,12 +78,12 @@ export default function NeriView({ onSwitchToAida }) {
 
     const containerRef = useRef(null);
 
-    // D-pad navigation: cycle through focusable elements
+    // D-pad navigation: cycle through buttons only (skip inputs to avoid virtual keyboard)
     const handleNav = useCallback((dir) => {
         const container = containerRef.current;
         if (!container) return;
         const focusable = Array.from(container.querySelectorAll(
-            'button:not(:disabled), input, [tabindex]:not([tabindex="-1"])'
+            'button:not(:disabled), [tabindex]:not([tabindex="-1"])'
         ));
         if (focusable.length === 0) return;
         const current = focusable.indexOf(document.activeElement);

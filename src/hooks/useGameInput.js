@@ -130,16 +130,27 @@ export function useGameInput({
             }
 
             // Main Action (Start Press)
+            // If a button or input is focused, let browser handle it natively
+            // Only intercept when no interactive element has focus
             if (key === 'Enter' || key === ' ') {
+                const active = document.activeElement;
+                const isInteractive = active && (
+                    active.tagName === 'BUTTON' ||
+                    active.tagName === 'INPUT' ||
+                    active.tagName === 'TEXTAREA' ||
+                    active.tagName === 'SELECT' ||
+                    active.tagName === 'A'
+                );
+                if (isInteractive) return; // Let browser native click/submit handle it
                 if (!e.repeat) handleStartPress();
             }
         };
 
         const handleKeyUp = (e) => {
             const key = e.key;
-            // Main Action (Release)
+            // Main Action (Release) — only if we started the press
             if (key === 'Enter' || key === ' ') {
-                handleEndPress();
+                if (pressStartTime.current) handleEndPress();
             }
         };
 
