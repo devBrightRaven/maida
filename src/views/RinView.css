@@ -2,8 +2,8 @@
 
 .rin-title-block {
     position: fixed;
-    top: 1.5rem;
-    left: 1.5rem;
+    top: 3.5rem;
+    left: 1.25rem;
     user-select: none;
     -webkit-user-select: none;
     pointer-events: none;
@@ -282,8 +282,8 @@
 /* Debug Controls (below theme toggle) */
 .debug-controls {
     position: fixed;
-    top: 44px;
-    right: 4px;
+    top: 52px;
+    right: 20px;
     display: flex;
     gap: 0.5rem;
     z-index: 100;
