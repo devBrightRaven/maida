@@ -20,7 +20,7 @@
 }
 
 .kamae-title-block {
-    position: absolute;
+    position: fixed;
     top: 1.5rem;
     right: 1.5rem;
     text-align: right;

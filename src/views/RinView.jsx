@@ -201,15 +201,16 @@ export default function RinView({
     };
 
     return (
+        <>
+        <div className="rin-title-block" aria-hidden="true">
+            <p className="rin-title-kanji">臨</p>
+            <p className="rin-title-reading">rin — to face the threshold</p>
+            <p className="rin-title-desc">Stand before the door. Don't think. See what appears.</p>
+        </div>
         <div
             className={`mvp-container ${!game ? 'is-idle' : ''} ${debugMode ? 'debug-mode' : ''} ${expanded ? 'is-expanded' : ''} ${isAnchored ? 'is-anchored' : ''}`}
             onClick={handleContainerClick}
         >
-            <div className="rin-title-block" aria-hidden="true">
-                <p className="rin-title-kanji">臨</p>
-                <p className="rin-title-reading">rin — to face the threshold</p>
-                <p className="rin-title-desc">Stand before the door. Don't think. See what appears.</p>
-            </div>
             {game && (
                 <header className="mvp-header" onClick={onSecretTap}>
                     <span className="game-label">
@@ -331,6 +332,7 @@ export default function RinView({
                 <FaceSwitchButton ref={btnRefs.switchKamae} direction="to-kamae" onClick={onSwitchToKamae} />
             )}
         </div>
+        </>
     );
 }
 
