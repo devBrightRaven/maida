@@ -279,11 +279,11 @@
     background: transparent;
 }
 
-/* Debug Controls (top-right, relative to container) */
+/* Debug Controls (below theme toggle) */
 .debug-controls {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
+    position: fixed;
+    top: 44px;
+    right: 4px;
     display: flex;
     gap: 0.5rem;
     z-index: 100;
