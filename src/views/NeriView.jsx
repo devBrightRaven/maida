@@ -134,6 +134,8 @@ export default function NeriView({ onSwitchToAida }) {
     return (
         <div className="neri-view" ref={containerRef}>
             <div className="neri-content">
+                <h1 className="neri-title" aria-hidden="true">構</h1>
+
                 <NeriSearch
                     showcaseIds={showcaseState.games}
                     onAdd={handleAdd}

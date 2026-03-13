@@ -19,6 +19,17 @@
     gap: 1.5rem;
 }
 
+.neri-title {
+    font-size: 3rem;
+    font-weight: 300;
+    color: var(--t-dim);
+    text-align: center;
+    margin: 0;
+    letter-spacing: 0.1em;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
 .neri-loading {
     color: var(--t-text);
     font-size: 0.8rem;

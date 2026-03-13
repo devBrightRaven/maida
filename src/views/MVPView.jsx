@@ -205,6 +205,7 @@ export default function MVPView({
             className={`mvp-container ${!game ? 'is-idle' : ''} ${debugMode ? 'debug-mode' : ''} ${expanded ? 'is-expanded' : ''} ${isAnchored ? 'is-anchored' : ''}`}
             onClick={handleContainerClick}
         >
+            <span className="aida-title" aria-hidden="true">臨</span>
             {game && (
                 <header className="mvp-header" onClick={onSecretTap}>
                     <span className="game-label">

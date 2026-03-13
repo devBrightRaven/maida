@@ -1,5 +1,20 @@
 /* MVPView.css - Layout and Component Container only */
 
+.aida-title {
+    position: absolute;
+    top: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 3rem;
+    font-weight: 300;
+    color: var(--t-dim);
+    letter-spacing: 0.1em;
+    user-select: none;
+    -webkit-user-select: none;
+    pointer-events: none;
+    z-index: 1;
+}
+
 .mvp-container {
     height: 100%;
     width: 100%;
