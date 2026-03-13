@@ -24,7 +24,7 @@ export function useMaidaSession() {
     // CONSTRAINTS (friction elimination)
     const [constraints, setConstraints] = useState(null);
 
-    // SHOWCASE (Neri curation — candidatePool for engine)
+    // SHOWCASE (Kamae curation — candidatePool for engine)
     const [showcaseIds, setShowcaseIds] = useState(null); // null = not loaded yet, [] = empty
 
     const init = async () => {
@@ -326,7 +326,7 @@ export function useMaidaSession() {
         }
     };
 
-    // Reload showcase and re-roll (called when switching back from Neri)
+    // Reload showcase and re-roll (called when switching back from Kamae)
     const reloadShowcase = async () => {
         const showcaseData = await loadShowcase();
         const newIds = showcaseData?.games?.length > 0 ? showcaseData.games : null;

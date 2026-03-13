@@ -4,13 +4,13 @@ import GameDisplay from '../ui/features/Uncertainty/GameDisplay';
 import TracePanel from '../ui/features/Trace/TracePanel';
 import FaceSwitchButton from '../ui/FaceSwitchButton';
 import { useGameInput } from '../hooks/useGameInput';
-import './MVPView.css';
+import './RinView.css';
 
 /**
- * MVPView
+ * RinView
  * The single, low-presence interface for the Maida MVP.
  */
-export default function MVPView({
+export default function RinView({
     game,
     prescription,
     onAction,
@@ -28,18 +28,18 @@ export default function MVPView({
     anchorThreshold,
     resumeGuard,
     onHideGame,
-    onSwitchToNeri
+    onSwitchToKamae
 }) {
     const [expanded, setExpanded] = useState(false);
     const [showTrace, setShowTrace] = useState(false);
-    const [focusedBtn, setFocusedBtn] = useState(null); // 'visit' | 'notToday' | 'back' | 'switchNeri' | null
+    const [focusedBtn, setFocusedBtn] = useState(null); // 'visit' | 'notToday' | 'back' | 'switchKamae' | null
 
     // Refs for Focus Management
     const btnRefs = {
         visit: React.useRef(null),
         notToday: React.useRef(null),
         back: React.useRef(null),
-        switchNeri: React.useRef(null)
+        switchKamae: React.useRef(null)
     };
 
     // Helper to focus a button and update state
@@ -163,7 +163,7 @@ export default function MVPView({
                 return;
             }
 
-            const isSwitchNeri = current === btnRefs.switchNeri.current;
+            const isSwitchNeri = current === btnRefs.switchKamae.current;
 
             // Up / Left = Previous (backwards)
             if (dir === 'left' || dir === 'up') {
@@ -176,8 +176,8 @@ export default function MVPView({
             else if (dir === 'right' || dir === 'down') {
                 if (isVisit) focusBtn('notToday');
                 else if (isNotToday && canUndo) focusBtn('back');
-                else if (isNotToday && !canUndo) focusBtn('switchNeri');
-                else if (isBack) focusBtn('switchNeri');
+                else if (isNotToday && !canUndo) focusBtn('switchKamae');
+                else if (isBack) focusBtn('switchKamae');
             }
         }
     });
@@ -205,7 +205,7 @@ export default function MVPView({
             className={`mvp-container ${!game ? 'is-idle' : ''} ${debugMode ? 'debug-mode' : ''} ${expanded ? 'is-expanded' : ''} ${isAnchored ? 'is-anchored' : ''}`}
             onClick={handleContainerClick}
         >
-            <span className="aida-title" aria-hidden="true">臨</span>
+            <span className="rin-title" aria-hidden="true">臨</span>
             {game && (
                 <header className="mvp-header" onClick={onSecretTap}>
                     <span className="game-label">
@@ -323,8 +323,8 @@ export default function MVPView({
                 />
             )}
 
-            {onSwitchToNeri && (
-                <FaceSwitchButton ref={btnRefs.switchNeri} direction="to-neri" onClick={onSwitchToNeri} />
+            {onSwitchToKamae && (
+                <FaceSwitchButton ref={btnRefs.switchKamae} direction="to-kamae" onClick={onSwitchToKamae} />
             )}
         </div>
     );

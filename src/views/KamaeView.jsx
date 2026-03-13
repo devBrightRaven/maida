@@ -1,19 +1,19 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import FaceSwitchButton from '../ui/FaceSwitchButton';
-import ShowcaseList from '../ui/features/Neri/ShowcaseList';
-import ShowcaseEmpty from '../ui/features/Neri/ShowcaseEmpty';
-import NeriSearch from '../ui/features/Neri/NeriSearch';
-import ExploreView from '../ui/features/Neri/ExploreView';
+import ShowcaseList from '../ui/features/Kamae/ShowcaseList';
+import ShowcaseEmpty from '../ui/features/Kamae/ShowcaseEmpty';
+import KamaeSearch from '../ui/features/Kamae/KamaeSearch';
+import ExploreView from '../ui/features/Kamae/ExploreView';
 import { useGameInput } from '../hooks/useGameInput';
 import { addToShowcase, removeFromShowcase, markCompleted } from '../core/showcase';
 import bridge from '../services/bridge';
-import './NeriView.css';
+import './KamaeView.css';
 
 /**
- * Neri (練) — slow curation face.
+ * Kamae (構) — slow curation face.
  * Showcase view + search + explore entry.
  */
-export default function NeriView({ onSwitchToAida }) {
+export default function KamaeView({ onSwitchToRin }) {
     const [showcaseState, setShowcaseState] = useState({ games: [] });
     const [showcaseGames, setShowcaseGames] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -110,9 +110,9 @@ export default function NeriView({ onSwitchToAida }) {
 
     if (loading) {
         return (
-            <div className="neri-view" ref={containerRef}>
-                <div className="neri-content">
-                    <p className="neri-loading">Loading...</p>
+            <div className="kamae-view" ref={containerRef}>
+                <div className="kamae-content">
+                    <p className="kamae-loading">Loading...</p>
                 </div>
             </div>
         );
@@ -120,7 +120,7 @@ export default function NeriView({ onSwitchToAida }) {
 
     if (exploring) {
         return (
-            <div className="neri-view" ref={containerRef}>
+            <div className="kamae-view" ref={containerRef}>
                 <ExploreView
                     showcaseState={showcaseState}
                     onAdd={handleAdd}
@@ -132,11 +132,11 @@ export default function NeriView({ onSwitchToAida }) {
     }
 
     return (
-        <div className="neri-view" ref={containerRef}>
-            <div className="neri-content">
-                <h1 className="neri-title" aria-hidden="true">構</h1>
+        <div className="kamae-view" ref={containerRef}>
+            <div className="kamae-content">
+                <h1 className="kamae-title" aria-hidden="true">構</h1>
 
-                <NeriSearch
+                <KamaeSearch
                     showcaseIds={showcaseState.games}
                     onAdd={handleAdd}
                 />
@@ -149,7 +149,7 @@ export default function NeriView({ onSwitchToAida }) {
                         />
                         <button
                             type="button"
-                            className="neri-explore-btn"
+                            className="kamae-explore-btn"
                             onClick={() => setExploring(true)}
                         >
                             explore more
@@ -159,7 +159,7 @@ export default function NeriView({ onSwitchToAida }) {
                     <ShowcaseEmpty onExplore={() => setExploring(true)} />
                 )}
             </div>
-            <FaceSwitchButton direction="to-aida" onClick={onSwitchToAida} />
+            <FaceSwitchButton direction="to-rin" onClick={onSwitchToRin} />
         </div>
     );
 }

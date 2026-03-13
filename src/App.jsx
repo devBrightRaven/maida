@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import MVPView from './views/MVPView';
-import NeriView from './views/NeriView';
+import RinView from './views/RinView';
+import KamaeView from './views/KamaeView';
 import OnboardingView from './views/OnboardingView';
 import FaceSwitchButton from './ui/FaceSwitchButton';
 import { calculateTraceWeights, updateDebugTrace } from './core/engine';
@@ -90,19 +90,19 @@ function App() {
     const updateCheck = useUpdateCheck();
     const { theme, toggleTheme } = useTheme();
 
-    // Face switching (Aida ↔ Neri)
-    const [face, setFace] = useState('aida');
-    const switchToNeri = useCallback(() => setFace('neri'), []);
-    const switchToAida = useCallback(() => {
-        setFace('aida');
+    // Face switching (Rin ↔ Kamae)
+    const [face, setFace] = useState('rin');
+    const switchToKamae = useCallback(() => setFace('kamae'), []);
+    const switchToRin = useCallback(() => {
+        setFace('rin');
         reloadShowcase(); // Re-roll with updated showcase
     }, [reloadShowcase]);
-    const toggleFace = useCallback(() => setFace(f => f === 'aida' ? 'neri' : 'aida'), []);
+    const toggleFace = useCallback(() => setFace(f => f === 'rin' ? 'kamae' : 'rin'), []);
 
     // L1/R1 gamepad face switching
     useGameInput({
-        onL1: switchToAida,
-        onR1: switchToNeri,
+        onL1: switchToRin,
+        onR1: switchToKamae,
     });
 
     // Ctrl+Tab keyboard shortcut (undocumented)
@@ -314,11 +314,11 @@ function App() {
         );
     }
 
-    if (face === 'neri') {
+    if (face === 'kamae') {
         return (
             <div className="app-root">
                 {themeToggle}
-                <NeriView onSwitchToAida={switchToAida} />
+                <KamaeView onSwitchToRin={switchToRin} />
                 {import.meta.env.DEV && <Agentation endpoint="http://localhost:4747" />}
             </div>
         );
@@ -327,7 +327,7 @@ function App() {
     return (
         <div className="app-root">
             {themeToggle}
-            <MVPView
+            <RinView
                 game={session.game}
                 prescription={session.prescription}
                 onAction={(type) => handleAction(type, { silent: silentMode })}
@@ -345,7 +345,7 @@ function App() {
                 anchorThreshold={anchorThreshold}
                 resumeGuard={resumeGuard}
                 onHideGame={hideGame}
-                onSwitchToNeri={switchToNeri}
+                onSwitchToKamae={switchToKamae}
             />
             <div className="global-version-tag" role="contentinfo">
                 <span className="version-name">Maida · Alpha</span>

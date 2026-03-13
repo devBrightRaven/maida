@@ -2,10 +2,10 @@ import { useState, useRef, useEffect } from 'react';
 import bridge from '../../../services/bridge';
 
 /**
- * NeriSearch — search warehouse, add results to showcase.
+ * KamaeSearch — search warehouse, add results to showcase.
  * Unlimited search (no daily cap). Results limited to 20 by IPC.
  */
-export default function NeriSearch({ showcaseIds, onAdd }) {
+export default function KamaeSearch({ showcaseIds, onAdd }) {
     const [query, setQuery] = useState('');
     const [results, setResults] = useState([]);
     const [searching, setSearching] = useState(false);
@@ -39,37 +39,37 @@ export default function NeriSearch({ showcaseIds, onAdd }) {
     };
 
     return (
-        <div className="neri-search" role="search">
-            <label htmlFor="neri-search-input" className="sr-only">Search games</label>
+        <div className="kamae-search" role="search">
+            <label htmlFor="kamae-search-input" className="sr-only">Search games</label>
             <input
-                id="neri-search-input"
+                id="kamae-search-input"
                 ref={inputRef}
                 type="search"
-                className="neri-search-input"
+                className="kamae-search-input"
                 value={query}
                 onChange={e => setQuery(e.target.value)}
                 placeholder="Search your library..."
                 autoComplete="off"
             />
             {results.length > 0 && (
-                <div className="neri-search-results" role="listbox" aria-label="Search results">
+                <div className="kamae-search-results" role="listbox" aria-label="Search results">
                     {results.map(game => {
                         const id = game.id || game.steamAppId;
                         const inShowcase = showcaseSet.has(id);
                         return (
                             <div
                                 key={id}
-                                className="neri-search-result"
+                                className="kamae-search-result"
                                 role="option"
                                 aria-selected={inShowcase}
                             >
-                                <span className="neri-search-result-title">
+                                <span className="kamae-search-result-title">
                                     {game.title}
-                                    {!game.installed && <span className="neri-search-uninstalled"> (not installed)</span>}
+                                    {!game.installed && <span className="kamae-search-uninstalled"> (not installed)</span>}
                                 </span>
                                 <button
                                     type="button"
-                                    className="neri-search-add-btn"
+                                    className="kamae-search-add-btn"
                                     onClick={() => handleAdd(id)}
                                     disabled={inShowcase}
                                     aria-label={inShowcase ? `${game.title} already in showcase` : `Add ${game.title} to showcase`}
@@ -81,7 +81,7 @@ export default function NeriSearch({ showcaseIds, onAdd }) {
                     })}
                 </div>
             )}
-            {searching && <span className="neri-search-status" aria-live="polite">Searching...</span>}
+            {searching && <span className="kamae-search-status" aria-live="polite">Searching...</span>}
         </div>
     );
 }

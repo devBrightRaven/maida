@@ -1,6 +1,6 @@
-/* MVPView.css - Layout and Component Container only */
+/* RinView.css - Layout and Component Container only */
 
-.aida-title {
+.rin-title {
     position: absolute;
     top: 1.5rem;
     left: 50%;
@@ -54,7 +54,7 @@
     /* Subtle scale for tactile feel */
 }
 
-/* MVPView.css */
+/* RinView.css */
 /* Correcting game label size */
 .game-label {
     font-size: 18px;

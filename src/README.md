@@ -32,7 +32,7 @@ src/
 │   └── prescriptions.json # Behavioral prescriptions (69 entries across categories)
 │
 ├── views/                 # Top-level page components
-│   ├── MVPView.jsx        # Main game suggestion view (TRY/NOT NOW/anchor)
+│   ├── RinView.jsx        # Main game suggestion view (TRY/NOT NOW/anchor)
 │   └── OnboardingView.jsx # First-run Steam sync
 │
 ├── ui/features/           # Feature-specific components
