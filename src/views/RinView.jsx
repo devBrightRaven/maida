@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { t } from '../i18n';
+import { formatPlaytime } from '../core/format';
 import GameDisplay from '../ui/features/Uncertainty/GameDisplay';
 import TracePanel from '../ui/features/Trace/TracePanel';
 import FaceSwitchButton from '../ui/FaceSwitchButton';
@@ -216,9 +217,11 @@ export default function RinView({
                     <span className="game-label">
                         {isAnchored ? `(⚓${t('ui.game.anchored_prefix')}) ${game.title}` : game.title}
                     </span>
-                    {game.hltb?.mainStory > 0 && (
-                        <span className="game-hltb-time">~{Math.round(game.hltb.mainStory)} hrs</span>
-                    )}
+                    {(() => {
+                        const ttb = game.igdb?.timeToBeat?.normally ?? game.hltb?.mainStory ?? null;
+                        const display = formatPlaytime(ttb);
+                        return display ? <span className="game-hltb-time">~{display}</span> : null;
+                    })()}
                 </header>
             )}
 

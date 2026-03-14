@@ -4,6 +4,17 @@ const fs = require('fs');
 const { getSteamPath, scanSteamLibrary } = require('./scanners/steam.cjs');
 const { fetchHltb } = require('./services/hltb.cjs');
 
+// IGDB integration (Groups 1-3 must exist for these to work)
+// Wrapped in try/catch so app still works if auth/services files don't exist yet
+let loadCredentials, refreshIfExpired, fetchIgdbTimeToBeat;
+try {
+    ({ loadCredentials } = require('./auth/credentials.cjs'));
+    ({ refreshIfExpired } = require('./auth/twitch-token.cjs'));
+    ({ fetchIgdbTimeToBeat } = require('./services/igdb.cjs'));
+} catch (e) {
+    console.log('[IGDB] Auth/service modules not found — IGDB enrichment disabled.');
+}
+
 // ---------------------------------------------------------
 // Update Checker (GitHub Releases - Manual Download)
 // 可替換：這段邏輯是獨立的，未來可以換成其他更新機制
@@ -216,6 +227,64 @@ async function enrichHltbData(gamesPath, games) {
 }
 
 
+/**
+ * For each installed game missing igdb data, fetch from IGDB and update games.json.
+ * Requires Twitch credentials (loadCredentials, refreshIfExpired) and igdb service.
+ * If no credentials configured, skips silently.
+ */
+async function enrichIgdbData(gamesPath, games) {
+    // Skip if IGDB modules not loaded
+    if (!loadCredentials || !refreshIfExpired || !fetchIgdbTimeToBeat) {
+        return;
+    }
+
+    // Load credentials — if none, skip silently
+    const credentials = loadCredentials();
+    if (!credentials) {
+        return;
+    }
+
+    // Get/refresh Twitch token
+    let token;
+    try {
+        token = await refreshIfExpired(credentials.clientId, credentials.clientSecret);
+    } catch (e) {
+        console.warn('[IGDB] Failed to get Twitch token:', e.message);
+        return;
+    }
+    if (!token) {
+        console.warn('[IGDB] No valid Twitch token available.');
+        return;
+    }
+
+    const missing = games.filter(g => g.installed && g.igdb === undefined);
+    if (missing.length === 0) return;
+
+    console.log(`[IGDB] Enriching ${missing.length} games...`);
+
+    for (const game of missing) {
+        const result = await fetchIgdbTimeToBeat(game.steamAppId, game.title, token);
+
+        try {
+            const current = JSON.parse(fs.readFileSync(gamesPath, 'utf8'));
+            current.games = current.games.map(g =>
+                g.steamAppId === game.steamAppId
+                    ? { ...g, igdb: result ? { timeToBeat: result } : null }
+                    : g
+            );
+            writeFileAtomic(gamesPath, current);
+        } catch (e) {
+            console.warn(`[IGDB] Write failed for ${game.title}:`, e.message);
+        }
+
+        // 250ms delay between write cycles
+        await new Promise(r => setTimeout(r, 250));
+    }
+
+    console.log('[IGDB] Enrichment complete.');
+}
+
+
 // ---------------------------------------------------------
 // IPC Handlers
 // ---------------------------------------------------------
@@ -412,10 +481,14 @@ ipcMain.handle('perform-background-snapshot', async () => {
 
     writeFileAtomic(GAMES_PATH, nextData);
 
-    // Fire-and-forget: enrich games missing HLTB data (non-blocking)
-    enrichHltbData(GAMES_PATH, cleanGames).catch(e =>
-        console.warn('[HLTB] Enrichment error:', e.message)
+    // Fire-and-forget: enrich games missing IGDB data (non-blocking)
+    enrichIgdbData(GAMES_PATH, cleanGames).catch(e =>
+        console.warn('[IGDB] Enrichment error:', e.message)
     );
+
+    // enrichHltbData(GAMES_PATH, cleanGames).catch(e =>
+    //     console.warn('[HLTB] Enrichment error:', e.message)
+    // );
 
     return { success: true, count: cleanGames.length };
 });

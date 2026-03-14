@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { t } from '../../../i18n';
+import { formatPlaytime } from '../../../core/format';
 
 /**
  * Steam CDN image URLs — no API key needed.
@@ -27,7 +28,9 @@ export default function ExploreCard({ game, onAdd, onDismiss }) {
 
     const title = game.title || 'Unknown';
     const appId = game.steamAppId;
-    const hltb = game.hltb?.main;
+    // Prefer IGDB time-to-beat, fall back to HLTB
+    const timeToBeatSeconds = game.igdb?.timeToBeat?.normally ?? game.hltb?.main ?? null;
+    const timeToBeatDisplay = formatPlaytime(timeToBeatSeconds);
 
     const coverUrl = getSteamCoverUrl(appId);
     const headerUrl = getSteamHeaderUrl(appId);
@@ -64,9 +67,9 @@ export default function ExploreCard({ game, onAdd, onDismiss }) {
 
             <h2 className="explore-card-title">{title}</h2>
 
-            {hltb && (
+            {timeToBeatDisplay && (
                 <p className="explore-card-hltb">
-                    ~{Math.round(hltb / 60)} hours
+                    ~{timeToBeatDisplay}
                 </p>
             )}
 
