@@ -233,16 +233,20 @@ async function enrichHltbData(gamesPath, games) {
  * If no credentials configured, skips silently.
  */
 async function enrichIgdbData(gamesPath, games) {
+    console.log('[IGDB] enrichIgdbData called');
     // Skip if IGDB modules not loaded
     if (!loadCredentials || !refreshIfExpired || !fetchIgdbTimeToBeat) {
+        console.log('[IGDB] Skipped — modules not loaded');
         return;
     }
 
     // Load credentials — if none, skip silently
     const credentials = loadCredentials();
     if (!credentials) {
+        console.log('[IGDB] Skipped — no credentials found');
         return;
     }
+    console.log('[IGDB] Credentials loaded, clientId:', credentials.clientId?.slice(0, 8) + '...');
 
     // Get/refresh Twitch token
     let token;
@@ -256,9 +260,13 @@ async function enrichIgdbData(gamesPath, games) {
         console.warn('[IGDB] No valid Twitch token available.');
         return;
     }
+    console.log('[IGDB] Token acquired, length:', token.length);
 
-    const missing = games.filter(g => g.installed && g.igdb === undefined);
-    if (missing.length === 0) return;
+    const missing = games.filter(g => g.installed && (g.igdb === undefined || g.igdb === null));
+    if (missing.length === 0) {
+        console.log('[IGDB] No games need enrichment (all have igdb data or are not installed)');
+        return;
+    }
 
     console.log(`[IGDB] Enriching ${missing.length} games...`);
 
@@ -528,6 +536,19 @@ ipcMain.handle('get-app-version', () => {
 // ---------------------------------------------------------
 // Showcase & Warehouse IPC
 // ---------------------------------------------------------
+
+ipcMain.handle('reset-explore-limit', () => {
+    if (!fs.existsSync(SHOWCASE_PATH)) return { success: false };
+    try {
+        const data = JSON.parse(fs.readFileSync(SHOWCASE_PATH, 'utf8'));
+        data.exploreHistory = { lastSessionDate: null, cardsShownToday: 0 };
+        writeFileAtomic(SHOWCASE_PATH, data);
+        console.log('[Maida] Explore limit reset');
+        return { success: true };
+    } catch (e) {
+        return { success: false, error: e.message };
+    }
+});
 
 ipcMain.handle('get-showcase', () => {
     if (!fs.existsSync(SHOWCASE_PATH)) return { games: [], box: [], exploreHistory: { lastSessionDate: null, cardsShownToday: 0 } };

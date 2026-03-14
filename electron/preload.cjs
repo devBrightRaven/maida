@@ -27,6 +27,7 @@ contextBridge.exposeInMainWorld('maidaAPI', {
     loadIgdbCredentials: () => ipcRenderer.invoke('load-igdb-credentials'),
     testIgdbCredentials: (clientId, clientSecret) => ipcRenderer.invoke('test-igdb-credentials', clientId, clientSecret),
     clearIgdbCredentials: () => ipcRenderer.invoke('clear-igdb-credentials'),
+    resetExploreLimit: () => ipcRenderer.invoke('reset-explore-limit'),
     isElectron: true
 });
 

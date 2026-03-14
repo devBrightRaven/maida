@@ -51,7 +51,9 @@ async function igdbPost(endpoint, body, clientId, accessToken) {
                 res.on('end', () => {
                     try {
                         if (res.statusCode !== 200) {
-                            console.warn(`[IGDB] API returned ${res.statusCode}: ${data}`);
+                            console.warn(`[IGDB] API ${endpoint} returned ${res.statusCode}`);
+                            console.warn(`[IGDB] Query: ${body}`);
+                            console.warn(`[IGDB] Response: ${data.slice(0, 300)}`);
                             resolve(null);
                             return;
                         }
@@ -79,13 +81,12 @@ async function igdbPost(endpoint, body, clientId, accessToken) {
  * @param {object} game - IGDB game with time_to_beat field
  * @returns {{ hastily: number|null, normally: number|null, completely: number|null } | null}
  */
-function extractTimeToBeat(game) {
-    if (!game || !game.time_to_beat) return null;
+function extractTimeToBeat(data) {
+    if (!data) return null;
 
-    const ttb = game.time_to_beat;
-    const hastily = ttb.hastily || null;
-    const normally = ttb.normally || null;
-    const completely = ttb.completely || null;
+    const hastily = data.hastily || null;
+    const normally = data.normally || null;
+    const completely = data.completely || null;
 
     // All null means no data
     if (!hastily && !normally && !completely) return null;
@@ -109,27 +110,33 @@ function extractTimeToBeat(game) {
 async function fetchIgdbTimeToBeat(steamAppId, title, accessToken, clientId) {
     if (!accessToken || !clientId) return null;
 
-    // Primary: Steam appId lookup via external_games
-    if (steamAppId) {
-        const query = `fields game.time_to_beat.*; where uid = "${steamAppId}" & category = 1; limit 1;`;
-        const results = await igdbPost('external_games', query, clientId, accessToken);
+    // Step 1: Get IGDB game ID via Steam appId or title search
+    let igdbGameId = null;
 
+    if (steamAppId) {
+        const query = `fields game; where uid = "${steamAppId}" & category = 1; limit 1;`;
+        const results = await igdbPost('external_games', query, clientId, accessToken);
         if (results && results.length > 0) {
-            const game = results[0].game;
-            const ttb = extractTimeToBeat(game);
-            if (ttb) return ttb;
+            igdbGameId = results[0].game;
         }
     }
 
-    // Fallback: search by title
-    if (title) {
-        const query = `fields time_to_beat.*; search "${title.replace(/"/g, '\\"')}"; where category = 0; limit 1;`;
+    if (!igdbGameId && title) {
+        const query = `fields id; search "${title.replace(/"/g, '\\"')}"; limit 1;`;
         const results = await igdbPost('games', query, clientId, accessToken);
-
         if (results && results.length > 0) {
-            const ttb = extractTimeToBeat(results[0]);
-            if (ttb) return ttb;
+            igdbGameId = results[0].id;
         }
+    }
+
+    if (!igdbGameId) return null;
+
+    // Step 2: Query gametimetobeats endpoint with game_id
+    const ttbQuery = `fields hastily,normally,completely; where game_id = ${igdbGameId}; limit 1;`;
+    const ttbResults = await igdbPost('game_time_to_beats', ttbQuery, clientId, accessToken);
+
+    if (ttbResults && ttbResults.length > 0) {
+        return extractTimeToBeat(ttbResults[0]);
     }
 
     return null;
