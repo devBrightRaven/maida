@@ -123,6 +123,35 @@ const bridge = {
             return await window.maidaAPI.getAppVersion();
         }
         return typeof __APP_VERSION__ !== 'undefined' ? __APP_VERSION__ : 'dev';
+    },
+
+    // IGDB Credentials
+    saveIgdbCredentials: async (clientId, clientSecret) => {
+        if (window.maidaAPI?.saveIgdbCredentials) {
+            return await window.maidaAPI.saveIgdbCredentials(clientId, clientSecret);
+        }
+        return { success: false, error: 'API not available' };
+    },
+
+    loadIgdbCredentials: async () => {
+        if (window.maidaAPI?.loadIgdbCredentials) {
+            return await window.maidaAPI.loadIgdbCredentials();
+        }
+        return null;
+    },
+
+    testIgdbCredentials: async (clientId, clientSecret) => {
+        if (window.maidaAPI?.testIgdbCredentials) {
+            return await window.maidaAPI.testIgdbCredentials(clientId, clientSecret);
+        }
+        return { success: false, error: 'API not available' };
+    },
+
+    clearIgdbCredentials: async () => {
+        if (window.maidaAPI?.clearIgdbCredentials) {
+            return await window.maidaAPI.clearIgdbCredentials();
+        }
+        return { success: false, error: 'API not available' };
     }
 };
 

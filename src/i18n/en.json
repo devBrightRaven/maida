@@ -54,6 +54,21 @@
             "limit_back": "back to shelf",
             "exhausted": "Nothing new to explore right now."
         },
+        "settings": {
+            "title": "Settings",
+            "igdb_title": "IGDB (Game Duration Data)",
+            "igdb_desc": "Optional. Enter your Twitch Developer credentials to show estimated play time.",
+            "client_id": "Client ID",
+            "client_secret": "Client Secret",
+            "test": "test",
+            "save": "save",
+            "clear": "clear",
+            "test_success": "Connected!",
+            "test_fail": "Connection failed. Check your credentials.",
+            "back": "back",
+            "credentials_saved": "Saved. IGDB data will appear on next restart.",
+            "credentials_cleared": "Cleared."
+        },
         "curation": {
             "first_prompt": "Is there a game you've been wanting to play?",
             "more_prompt": "Any others?",

@@ -54,6 +54,21 @@
             "limit_back": "棚に戻る",
             "exhausted": "今は新しいものがない。"
         },
+        "settings": {
+            "title": "設定",
+            "igdb_title": "IGDB（ゲーム時間データ）",
+            "igdb_desc": "任意。Twitch Developer認証情報を入力すると、推定プレイ時間が表示されます。",
+            "client_id": "Client ID",
+            "client_secret": "Client Secret",
+            "test": "テスト",
+            "save": "保存",
+            "clear": "クリア",
+            "test_success": "接続成功！",
+            "test_fail": "接続失敗。認証情報を確認してください。",
+            "back": "戻る",
+            "credentials_saved": "保存しました。次回起動時にIGDBデータが表示されます。",
+            "credentials_cleared": "クリアしました。"
+        },
         "curation": {
             "first_prompt": "ずっとやりたかったゲームはある？",
             "more_prompt": "他にもある？",

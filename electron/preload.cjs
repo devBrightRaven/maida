@@ -22,6 +22,11 @@ contextBridge.exposeInMainWorld('maidaAPI', {
     checkForUpdates: () => ipcRenderer.invoke('check-for-updates'),
     openReleasePage: (url) => ipcRenderer.invoke('open-release-page', url),
     getAppVersion: () => ipcRenderer.invoke('get-app-version'),
+    // IGDB Credentials
+    saveIgdbCredentials: (clientId, clientSecret) => ipcRenderer.invoke('save-igdb-credentials', clientId, clientSecret),
+    loadIgdbCredentials: () => ipcRenderer.invoke('load-igdb-credentials'),
+    testIgdbCredentials: (clientId, clientSecret) => ipcRenderer.invoke('test-igdb-credentials', clientId, clientSecret),
+    clearIgdbCredentials: () => ipcRenderer.invoke('clear-igdb-credentials'),
     isElectron: true
 });
 

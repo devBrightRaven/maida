@@ -54,6 +54,21 @@
             "limit_back": "回到眼前",
             "exhausted": "目前沒有新的可以看了。"
         },
+        "settings": {
+            "title": "設定",
+            "igdb_title": "IGDB（遊戲時長資料）",
+            "igdb_desc": "選填。輸入 Twitch Developer 憑證以顯示預估遊玩時長。",
+            "client_id": "Client ID",
+            "client_secret": "Client Secret",
+            "test": "測試",
+            "save": "儲存",
+            "clear": "清除",
+            "test_success": "連線成功！",
+            "test_fail": "連線失敗。請檢查憑證。",
+            "back": "返回",
+            "credentials_saved": "已儲存。IGDB 資料將在下次啟動時出現。",
+            "credentials_cleared": "已清除。"
+        },
         "curation": {
             "first_prompt": "有沒有一款你一直想玩的遊戲？",
             "more_prompt": "還有嗎？",

@@ -4,6 +4,7 @@ import ShowcaseList from '../ui/features/Kamae/ShowcaseList';
 import ShowcaseEmpty from '../ui/features/Kamae/ShowcaseEmpty';
 import KamaeSearch from '../ui/features/Kamae/KamaeSearch';
 import ExploreView from '../ui/features/Kamae/ExploreView';
+import SettingsPanel from '../ui/features/Kamae/SettingsPanel';
 import { useGameInput } from '../hooks/useGameInput';
 import { addToShowcase, removeFromShowcase, markCompleted } from '../core/showcase';
 import { t } from '../i18n';
@@ -20,6 +21,7 @@ export default function KamaeView({ onSwitchToRin }) {
     const [loading, setLoading] = useState(true);
     const [exploring, setExploring] = useState(false);
     const [autoExploreChecked, setAutoExploreChecked] = useState(false);
+    const [showSettings, setShowSettings] = useState(false);
 
     // Load showcase on mount
     useEffect(() => {
@@ -119,6 +121,16 @@ export default function KamaeView({ onSwitchToRin }) {
         );
     }
 
+    if (showSettings) {
+        return (
+            <div className="kamae-view" ref={containerRef}>
+                <div className="kamae-content">
+                    <SettingsPanel onClose={() => setShowSettings(false)} />
+                </div>
+            </div>
+        );
+    }
+
     if (exploring) {
         return (
             <div className="kamae-view" ref={containerRef}>
@@ -162,6 +174,13 @@ export default function KamaeView({ onSwitchToRin }) {
                 ) : (
                     <ShowcaseEmpty onExplore={() => setExploring(true)} />
                 )}
+                <button
+                    type="button"
+                    className="kamae-settings-link"
+                    onClick={() => setShowSettings(true)}
+                >
+                    {t('ui.settings.title').toLowerCase()}
+                </button>
             </div>
             <FaceSwitchButton direction="to-rin" onClick={onSwitchToRin} />
         </div>

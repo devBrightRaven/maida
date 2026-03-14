@@ -540,13 +540,224 @@
     outline-offset: 2px;
 }
 
+/* ── Settings Link ────────────────────── */
+
+.kamae-settings-link {
+    align-self: center;
+    padding: 0.375rem 0;
+    font-size: 0.75rem;
+    font-family: inherit;
+    letter-spacing: 0.04em;
+    color: var(--t-dim);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: color 0.15s ease;
+}
+
+.kamae-settings-link:hover {
+    color: var(--t-text);
+}
+
+.kamae-settings-link:focus-visible {
+    outline: 2px solid var(--t-accent);
+    outline-offset: 2px;
+}
+
+/* ── Settings Panel ───────────────────── */
+
+.kamae-settings {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.kamae-settings-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.kamae-settings-title {
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: var(--t-text);
+    margin: 0;
+}
+
+.kamae-settings-back-btn {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.875rem;
+    font-family: inherit;
+    letter-spacing: 0.04em;
+    color: var(--t-dim);
+    background: transparent;
+    border: 1.5px solid var(--t-dim);
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.kamae-settings-back-btn:hover {
+    color: var(--t-text);
+    border-color: var(--t-text);
+}
+
+.kamae-settings-back-btn:focus-visible {
+    outline: 2px solid var(--t-accent);
+    outline-offset: 2px;
+}
+
+.kamae-settings-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.kamae-settings-section-title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--t-text);
+    margin: 0;
+}
+
+.kamae-settings-section-desc {
+    font-size: 0.75rem;
+    color: var(--t-dim);
+    margin: 0;
+    line-height: 1.5;
+}
+
+.kamae-settings-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+}
+
+.kamae-settings-label {
+    font-size: 0.75rem;
+    color: var(--t-dim);
+    letter-spacing: 0.04em;
+}
+
+.kamae-settings-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    font-family: inherit;
+    letter-spacing: 0.02em;
+    color: var(--t-text);
+    background: var(--t-surface);
+    border: 1px solid var(--t-dim);
+    border-radius: 6px;
+    outline: none;
+    transition: border-color 0.15s ease;
+    box-sizing: border-box;
+}
+
+.kamae-settings-input:focus {
+    border-color: var(--t-text);
+}
+
+.kamae-settings-masked {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: var(--t-surface);
+    border: 1px solid var(--t-dim);
+    border-radius: 6px;
+}
+
+.kamae-settings-masked-text {
+    font-size: 1rem;
+    color: var(--t-dim);
+    letter-spacing: 0.15em;
+    flex: 1;
+}
+
+.kamae-settings-change-btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    font-family: inherit;
+    color: var(--t-dim);
+    background: transparent;
+    border: 1px solid var(--t-dim);
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.kamae-settings-change-btn:hover {
+    color: var(--t-text);
+    border-color: var(--t-text);
+}
+
+.kamae-settings-change-btn:focus-visible {
+    outline: 2px solid var(--t-accent);
+    outline-offset: 2px;
+}
+
+.kamae-settings-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.kamae-settings-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-family: inherit;
+    letter-spacing: 0.04em;
+    color: var(--t-dim);
+    background: transparent;
+    border: 1.5px solid var(--t-dim);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.kamae-settings-btn:hover:not(:disabled) {
+    color: var(--t-text);
+    border-color: var(--t-text);
+}
+
+.kamae-settings-btn:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+.kamae-settings-btn:focus-visible {
+    outline: 2px solid var(--t-accent);
+    outline-offset: 2px;
+}
+
+.kamae-settings-btn--danger:hover:not(:disabled) {
+    color: var(--t-error);
+    border-color: var(--t-error);
+}
+
+.kamae-settings-status {
+    font-size: 0.75rem;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.kamae-settings-status--success {
+    color: var(--t-accent);
+}
+
+.kamae-settings-status--error {
+    color: var(--t-error);
+}
+
 /* ── Reduced motion ────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
     .kamae-search-input,
     .kamae-search-add-btn,
     .showcase-action-btn,
-    .showcase-empty-explore-btn {
+    .showcase-empty-explore-btn,
+    .kamae-settings-link,
+    .kamae-settings-input,
+    .kamae-settings-btn {
         transition: none;
     }
 }

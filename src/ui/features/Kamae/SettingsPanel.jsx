@@ -1,0 +1,170 @@
+import { useState, useEffect, useCallback } from 'react';
+import { t } from '../../../i18n';
+import bridge from '../../../services/bridge';
+
+/**
+ * SettingsPanel — inline panel for IGDB credential management.
+ * Renders inside KamaeView when settings is toggled open.
+ */
+export default function SettingsPanel({ onClose }) {
+    const [clientId, setClientId] = useState('');
+    const [clientSecret, setClientSecret] = useState('');
+    const [hasExisting, setHasExisting] = useState(false);
+    const [showSecretInput, setShowSecretInput] = useState(false);
+    const [status, setStatus] = useState(null); // { type: 'success'|'error', message }
+    const [testing, setTesting] = useState(false);
+
+    // Load existing credentials on mount
+    useEffect(() => {
+        (async () => {
+            const creds = await bridge.loadIgdbCredentials();
+            if (creds && creds.clientId) {
+                setClientId(creds.clientId);
+                setHasExisting(true);
+            }
+        })();
+    }, []);
+
+    const handleTest = useCallback(async () => {
+        setTesting(true);
+        setStatus(null);
+        try {
+            const result = await bridge.testIgdbCredentials(clientId, clientSecret);
+            if (result && result.success) {
+                setStatus({ type: 'success', message: t('ui.settings.test_success') });
+            } else {
+                setStatus({ type: 'error', message: t('ui.settings.test_fail') });
+            }
+        } catch {
+            setStatus({ type: 'error', message: t('ui.settings.test_fail') });
+        }
+        setTesting(false);
+    }, [clientId, clientSecret]);
+
+    const handleSave = useCallback(async () => {
+        setStatus(null);
+        const result = await bridge.saveIgdbCredentials(clientId, clientSecret);
+        if (result && result.success) {
+            setHasExisting(true);
+            setShowSecretInput(false);
+            setStatus({ type: 'success', message: t('ui.settings.credentials_saved') });
+        } else {
+            setStatus({ type: 'error', message: result?.error || 'Save failed' });
+        }
+    }, [clientId, clientSecret]);
+
+    const handleClear = useCallback(async () => {
+        setStatus(null);
+        const result = await bridge.clearIgdbCredentials();
+        if (result && result.success) {
+            setClientId('');
+            setClientSecret('');
+            setHasExisting(false);
+            setShowSecretInput(false);
+            setStatus({ type: 'success', message: t('ui.settings.credentials_cleared') });
+        }
+    }, []);
+
+    const secretDisplay = hasExisting && !showSecretInput;
+
+    return (
+        <div className="kamae-settings" role="region" aria-label={t('ui.settings.title')}>
+            <div className="kamae-settings-header">
+                <h2 className="kamae-settings-title">{t('ui.settings.title')}</h2>
+                <button
+                    type="button"
+                    className="kamae-settings-back-btn"
+                    onClick={onClose}
+                >
+                    {t('ui.settings.back')}
+                </button>
+            </div>
+
+            <section className="kamae-settings-section">
+                <h3 className="kamae-settings-section-title">{t('ui.settings.igdb_title')}</h3>
+                <p className="kamae-settings-section-desc">{t('ui.settings.igdb_desc')}</p>
+
+                <div className="kamae-settings-field">
+                    <label htmlFor="igdb-client-id" className="kamae-settings-label">
+                        {t('ui.settings.client_id')}
+                    </label>
+                    <input
+                        id="igdb-client-id"
+                        type="text"
+                        className="kamae-settings-input"
+                        value={clientId}
+                        onChange={e => setClientId(e.target.value)}
+                        autoComplete="off"
+                    />
+                </div>
+
+                <div className="kamae-settings-field">
+                    <label htmlFor="igdb-client-secret" className="kamae-settings-label">
+                        {t('ui.settings.client_secret')}
+                    </label>
+                    {secretDisplay ? (
+                        <div className="kamae-settings-masked">
+                            <span className="kamae-settings-masked-text">{'****'}</span>
+                            <button
+                                type="button"
+                                className="kamae-settings-change-btn"
+                                onClick={() => {
+                                    setShowSecretInput(true);
+                                    setClientSecret('');
+                                }}
+                            >
+                                change
+                            </button>
+                        </div>
+                    ) : (
+                        <input
+                            id="igdb-client-secret"
+                            type="password"
+                            className="kamae-settings-input"
+                            value={clientSecret}
+                            onChange={e => setClientSecret(e.target.value)}
+                            autoComplete="off"
+                        />
+                    )}
+                </div>
+
+                <div className="kamae-settings-actions">
+                    <button
+                        type="button"
+                        className="kamae-settings-btn"
+                        onClick={handleTest}
+                        disabled={testing || !clientId || (!clientSecret && !hasExisting)}
+                    >
+                        {t('ui.settings.test')}
+                    </button>
+                    <button
+                        type="button"
+                        className="kamae-settings-btn"
+                        onClick={handleSave}
+                        disabled={!clientId || !clientSecret}
+                    >
+                        {t('ui.settings.save')}
+                    </button>
+                    <button
+                        type="button"
+                        className="kamae-settings-btn kamae-settings-btn--danger"
+                        onClick={handleClear}
+                        disabled={!hasExisting}
+                    >
+                        {t('ui.settings.clear')}
+                    </button>
+                </div>
+
+                {status && (
+                    <p
+                        className={`kamae-settings-status kamae-settings-status--${status.type}`}
+                        role="status"
+                        aria-live="polite"
+                    >
+                        {status.message}
+                    </p>
+                )}
+            </section>
+        </div>
+    );
+}

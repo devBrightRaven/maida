@@ -628,6 +628,37 @@ ipcMain.handle('export-session-log', async () => {
     }
 });
 
+// ── IGDB Credentials IPC ─────────────────────
+ipcMain.handle('save-igdb-credentials', (event, clientId, clientSecret) => {
+    if (!loadCredentials) return { success: false, error: 'IGDB modules not loaded' };
+    const { saveCredentials } = require('./auth/credentials.cjs');
+    return saveCredentials(clientId, clientSecret);
+});
+
+ipcMain.handle('load-igdb-credentials', () => {
+    if (!loadCredentials) return null;
+    const creds = loadCredentials();
+    if (!creds) return null;
+    // Return clientId but mask the secret — never send raw secret to renderer
+    return { clientId: creds.clientId, hasSecret: true };
+});
+
+ipcMain.handle('test-igdb-credentials', async (event, clientId, clientSecret) => {
+    if (!refreshIfExpired) return { success: false, error: 'IGDB modules not loaded' };
+    try {
+        const token = await refreshIfExpired(clientId, clientSecret);
+        return { success: !!token };
+    } catch (e) {
+        return { success: false, error: e.message };
+    }
+});
+
+ipcMain.handle('clear-igdb-credentials', () => {
+    if (!loadCredentials) return { success: false, error: 'IGDB modules not loaded' };
+    const { clearCredentials } = require('./auth/credentials.cjs');
+    return clearCredentials();
+});
+
 app.on('ready', () => {
     pruneSessionLog();
     ensureDataFile(GAMES_PATH, 'games');
