@@ -263,7 +263,7 @@ async function enrichIgdbData(gamesPath, games) {
     console.log(`[IGDB] Enriching ${missing.length} games...`);
 
     for (const game of missing) {
-        const result = await fetchIgdbTimeToBeat(game.steamAppId, game.title, token);
+        const result = await fetchIgdbTimeToBeat(game.steamAppId, game.title, token, credentials.clientId);
 
         try {
             const current = JSON.parse(fs.readFileSync(gamesPath, 'utf8'));
