@@ -6,6 +6,7 @@ import KamaeSearch from '../ui/features/Kamae/KamaeSearch';
 import ExploreView from '../ui/features/Kamae/ExploreView';
 import { useGameInput } from '../hooks/useGameInput';
 import { addToShowcase, removeFromShowcase, markCompleted } from '../core/showcase';
+import { t } from '../i18n';
 import bridge from '../services/bridge';
 import './KamaeView.css';
 
@@ -135,8 +136,8 @@ export default function KamaeView({ onSwitchToRin }) {
         <div className="kamae-view" ref={containerRef}>
             <div className="kamae-title-block" aria-hidden="true">
                 <p className="kamae-title-kanji">構</p>
-                <p className="kamae-title-reading">kamae — to prepare your stance</p>
-                <p className="kamae-title-desc">Shape what's on the shelf before you face it.</p>
+                <p className="kamae-title-reading">{t('ui.kamae.reading')}</p>
+                <p className="kamae-title-desc">{t('ui.kamae.desc')}</p>
             </div>
             <div className="kamae-content">
                 <KamaeSearch

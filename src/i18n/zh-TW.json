@@ -28,6 +28,39 @@
             "inspector_title": "行為診斷",
             "trace_btn": "TRACE",
             "clear_games_btn": "清除所有遊戲"
+        },
+        "rin": {
+            "reading": "臨 — 面臨門前的瞬間",
+            "desc": "站在門前。不用想。看看出現什麼。",
+            "empty_showcase": "眼前還沒有任何遊戲。",
+            "empty_showcase_btn": "擺幾款上去"
+        },
+        "kamae": {
+            "reading": "構 — 為下一刻做好準備",
+            "desc": "在面臨之前，先整理好眼前的陣容。",
+            "search_placeholder": "搜尋你的遊戲庫⋯⋯",
+            "searching": "搜尋中⋯⋯",
+            "not_installed": "未安裝",
+            "add": "擺上去",
+            "added": "已擺上",
+            "put_back": "收回去"
+        },
+        "explore": {
+            "later": "以後再說",
+            "add": "擺上去",
+            "back": "返回",
+            "limit_title": "今天就到這裡。",
+            "limit_hint": "明天再來看看。",
+            "limit_back": "回到眼前",
+            "exhausted": "目前沒有新的可以看了。"
+        },
+        "curation": {
+            "first_prompt": "有沒有一款你一直想玩的遊戲？",
+            "more_prompt": "還有嗎？",
+            "search_placeholder": "輸入遊戲名稱⋯⋯",
+            "added_mark": "（已擺上）",
+            "done": "好了",
+            "skip": "跳過"
         }
     },
     "voice": {

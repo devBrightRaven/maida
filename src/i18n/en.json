@@ -28,6 +28,39 @@
             "inspector_title": "Audit Diagnostics",
             "trace_btn": "TRACE",
             "clear_games_btn": "Clear All Games"
+        },
+        "rin": {
+            "reading": "rin — to face the threshold",
+            "desc": "Stand before the door. Don't think. See what appears.",
+            "empty_showcase": "Nothing on your shelf yet.",
+            "empty_showcase_btn": "add a few games"
+        },
+        "kamae": {
+            "reading": "kamae — to prepare your stance",
+            "desc": "Shape what's on the shelf before you face it.",
+            "search_placeholder": "Search your library...",
+            "searching": "Searching...",
+            "not_installed": "not installed",
+            "add": "add",
+            "added": "added",
+            "put_back": "put back"
+        },
+        "explore": {
+            "later": "later",
+            "add": "add",
+            "back": "back",
+            "limit_title": "That's enough for today.",
+            "limit_hint": "Come back tomorrow to explore more.",
+            "limit_back": "back to shelf",
+            "exhausted": "Nothing new to explore right now."
+        },
+        "curation": {
+            "first_prompt": "Is there a game you've been wanting to play?",
+            "more_prompt": "Any others?",
+            "search_placeholder": "Type a game name...",
+            "added_mark": "(added)",
+            "done": "done",
+            "skip": "skip"
         }
     },
     "voice": {

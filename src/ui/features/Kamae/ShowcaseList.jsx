@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
+import { t } from '../../../i18n';
 import { MAX_SHOWCASE } from '../../../core/showcase';
 
 function getSteamHeaderUrl(steamAppId) {
@@ -134,12 +135,12 @@ export default function ShowcaseList({ games, onRemove }) {
                         )}
                         <div className="showcase-item-info">
                             <span className="showcase-item-title">{game.title}</span>
-                            {!game.installed && <span className="showcase-item-uninstalled">not installed</span>}
+                            {!game.installed && <span className="showcase-item-uninstalled">{t('ui.kamae.not_installed')}</span>}
                         </div>
                         <div className="showcase-item-actions">
                             <HoldButton
                                 onConfirm={() => onRemove(id)}
-                                label="put back"
+                                label={t('ui.kamae.put_back')}
                                 ariaLabel={`Hold to put ${game.title} back to shelf`}
                             />
                         </div>

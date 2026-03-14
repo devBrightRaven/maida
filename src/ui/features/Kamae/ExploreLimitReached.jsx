@@ -1,17 +1,19 @@
+import { t } from '../../../i18n';
+
 /**
  * Shown when the daily explore limit (10 cards) is reached.
  */
 export default function ExploreLimitReached({ onBack }) {
     return (
         <div className="explore-limit">
-            <p className="explore-limit-text">That's enough for today.</p>
-            <p className="explore-limit-hint">Come back tomorrow to explore more.</p>
+            <p className="explore-limit-text">{t('ui.explore.limit_title')}</p>
+            <p className="explore-limit-hint">{t('ui.explore.limit_hint')}</p>
             <button
                 type="button"
                 className="explore-limit-btn"
                 onClick={onBack}
             >
-                back to shelf
+                {t('ui.explore.limit_back')}
             </button>
         </div>
     );

@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { t } from '../../../i18n';
 import bridge from '../../../services/bridge';
 
 /**
@@ -48,7 +49,7 @@ export default function KamaeSearch({ showcaseIds, onAdd }) {
                 className="kamae-search-input"
                 value={query}
                 onChange={e => setQuery(e.target.value)}
-                placeholder="Search your library..."
+                placeholder={t('ui.kamae.search_placeholder')}
                 autoComplete="off"
             />
             {results.length > 0 && (
@@ -65,7 +66,7 @@ export default function KamaeSearch({ showcaseIds, onAdd }) {
                             >
                                 <span className="kamae-search-result-title">
                                     {game.title}
-                                    {!game.installed && <span className="kamae-search-uninstalled"> (not installed)</span>}
+                                    {!game.installed && <span className="kamae-search-uninstalled"> {t('ui.kamae.not_installed')}</span>}
                                 </span>
                                 <button
                                     type="button"
@@ -74,14 +75,14 @@ export default function KamaeSearch({ showcaseIds, onAdd }) {
                                     disabled={inShowcase}
                                     aria-label={inShowcase ? `${game.title} already in showcase` : `Add ${game.title} to showcase`}
                                 >
-                                    {inShowcase ? 'added' : 'add'}
+                                    {inShowcase ? t('ui.kamae.added') : t('ui.kamae.add')}
                                 </button>
                             </div>
                         );
                     })}
                 </div>
             )}
-            {searching && <span className="kamae-search-status" aria-live="polite">Searching...</span>}
+            {searching && <span className="kamae-search-status" aria-live="polite">{t('ui.kamae.searching')}</span>}
         </div>
     );
 }

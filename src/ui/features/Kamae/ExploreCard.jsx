@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { t } from '../../../i18n';
 
 /**
  * Steam CDN image URLs — no API key needed.
@@ -76,7 +77,7 @@ export default function ExploreCard({ game, onAdd, onDismiss }) {
                     onClick={onDismiss}
                     aria-label="Skip this game"
                 >
-                    later
+                    {t('ui.explore.later')}
                 </button>
                 <button
                     type="button"
@@ -84,7 +85,7 @@ export default function ExploreCard({ game, onAdd, onDismiss }) {
                     onClick={onAdd}
                     aria-label="Add to showcase"
                 >
-                    add
+                    {t('ui.explore.add')}
                 </button>
             </div>
         </div>

@@ -28,6 +28,39 @@
             "inspector_title": "動作診断",
             "trace_btn": "TRACE",
             "clear_games_btn": "全ゲームをクリア"
+        },
+        "rin": {
+            "reading": "臨 — 扉の前に立つ",
+            "desc": "扉の前に立つ。考えない。現れるものを見る。",
+            "empty_showcase": "棚にはまだ何もない。",
+            "empty_showcase_btn": "ゲームを載せる"
+        },
+        "kamae": {
+            "reading": "構 — 次の瞬間に備える",
+            "desc": "臨む前に、棚を整える。",
+            "search_placeholder": "ライブラリを検索…",
+            "searching": "検索中…",
+            "not_installed": "未インストール",
+            "add": "載せる",
+            "added": "載せ済み",
+            "put_back": "戻す"
+        },
+        "explore": {
+            "later": "あとで",
+            "add": "載せる",
+            "back": "戻る",
+            "limit_title": "今日はここまで。",
+            "limit_hint": "明日またどうぞ。",
+            "limit_back": "棚に戻る",
+            "exhausted": "今は新しいものがない。"
+        },
+        "curation": {
+            "first_prompt": "ずっとやりたかったゲームはある？",
+            "more_prompt": "他にもある？",
+            "search_placeholder": "ゲーム名を入力…",
+            "added_mark": "（載せ済み）",
+            "done": "完了",
+            "skip": "スキップ"
         }
     },
     "voice": {

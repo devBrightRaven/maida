@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { t } from '../../../i18n';
 import bridge from '../../../services/bridge';
 import { addToShowcase, createEmptyShowcase } from '../../../core/showcase';
 
@@ -50,8 +51,8 @@ export default function CurationPrompt({ onDone }) {
     };
 
     const prompt = addedNames.length === 0
-        ? 'Is there a game you\'ve been wanting to play?'
-        : 'Any others?';
+        ? t('ui.curation.first_prompt')
+        : t('ui.curation.more_prompt');
 
     return (
         <div className="curation-prompt">
@@ -66,7 +67,7 @@ export default function CurationPrompt({ onDone }) {
                     className="curation-prompt-input"
                     value={query}
                     onChange={e => setQuery(e.target.value)}
-                    placeholder="Type a game name..."
+                    placeholder={t('ui.curation.search_placeholder')}
                     autoComplete="off"
                 />
                 {results.length > 0 && (
@@ -83,7 +84,7 @@ export default function CurationPrompt({ onDone }) {
                                     disabled={alreadyAdded}
                                 >
                                     {game.title}
-                                    {alreadyAdded && <span className="curation-added-mark"> (added)</span>}
+                                    {alreadyAdded && <span className="curation-added-mark"> {t('ui.curation.added_mark')}</span>}
                                 </button>
                             );
                         })}
@@ -104,7 +105,7 @@ export default function CurationPrompt({ onDone }) {
                 className="curation-prompt-skip"
                 onClick={handleDone}
             >
-                {addedNames.length > 0 ? 'done' : 'skip'}
+                {addedNames.length > 0 ? t('ui.curation.done') : t('ui.curation.skip')}
             </button>
         </div>
     );

@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { t } from '../../../i18n';
 import ExploreCard from './ExploreCard';
 import ExploreLimitReached from './ExploreLimitReached';
 import { canExploreMore, recordCardShown, resetDailyExplore } from '../../../core/explore';
@@ -113,9 +114,9 @@ export default function ExploreView({ showcaseState, onAdd, onBack, onShowcaseUp
     if (exhausted) {
         return (
             <div className="explore-exhausted">
-                <p>Nothing new to explore right now.</p>
+                <p>{t('ui.explore.exhausted')}</p>
                 <button type="button" className="explore-limit-btn" onClick={onBack}>
-                    back to shelf
+                    {t('ui.explore.limit_back')}
                 </button>
             </div>
         );
@@ -130,7 +131,7 @@ export default function ExploreView({ showcaseState, onAdd, onBack, onShowcaseUp
                     onClick={onBack}
                     aria-label="Return to showcase"
                 >
-                    back
+                    {t('ui.explore.back')}
                 </button>
                 <span className="explore-counter">
                     {exploreState.cardsShownToday} / 10
