@@ -2,11 +2,11 @@
     "ui": {
         "button": {
             "try": "やる",
-            "try_hint": "長押しでこのゲームをアンカー",
+            "try_hint": "長押しでアンカー",
             "play": "プレイ",
             "not_today": "パス",
             "clear": "解除",
-            "back": "元に戻す",
+            "back": "元に戻す\n（一回限り）",
             "acknowledge": "了解",
             "sync": "Maidaに見てもらう",
             "restart_selection": "再開",
@@ -30,14 +30,14 @@
             "clear_games_btn": "全ゲームをクリア"
         },
         "rin": {
-            "reading": "臨 — 扉の前に立つ",
-            "desc": "扉の前に立つ。考えない。現れるものを見る。",
+            "reading": "臨 rin",
+            "desc": "現れたものと、向き合う。",
             "empty_showcase": "棚にはまだ何もない。",
             "empty_showcase_btn": "ゲームを載せる"
         },
         "kamae": {
-            "reading": "構 — 次の瞬間に備える",
-            "desc": "臨む前に、棚を整える。",
+            "reading": "構 kamae",
+            "desc": "臨む前の、静かな仕度。",
             "search_placeholder": "ライブラリを検索…",
             "searching": "検索中…",
             "not_installed": "未インストール",

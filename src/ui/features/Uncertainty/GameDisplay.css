@@ -8,9 +8,8 @@
 
 .permission-wrapper .permission-text {
     font-family: 'Inter', sans-serif;
-    /* Accessible sans-serif */
-    font-size: 1.8rem;
-    line-height: 1.4;
+    font-size: var(--prescription-size, 18px);
+    line-height: 1.35;
     font-weight: 300;
     color: var(--t-text);
     text-shadow: 0 0 20px var(--t-border-subtle);

@@ -2,11 +2,11 @@
     "ui": {
         "button": {
             "try": "TRY",
-            "try_hint": "hold to anchor this game",
+            "try_hint": "hold to anchor",
             "play": "PLAY",
             "not_today": "Not Now",
             "clear": "Clear",
-            "back": "Undo (One Time Only)",
+            "back": "Undo\n(One Time Only)",
             "acknowledge": "Acknowledge",
             "sync": "Let Maida look for you",
             "restart_selection": "Restart Selection",
@@ -30,14 +30,14 @@
             "clear_games_btn": "Clear All Games"
         },
         "rin": {
-            "reading": "rin — to face the threshold",
-            "desc": "Stand before the door. Don't think. See what appears.",
+            "reading": "臨 rin",
+            "desc": "Meet what appears.",
             "empty_showcase": "Nothing on your shelf yet.",
             "empty_showcase_btn": "add a few games"
         },
         "kamae": {
-            "reading": "kamae — to prepare your stance",
-            "desc": "Shape what's on the shelf before you face it.",
+            "reading": "構 kamae",
+            "desc": "Quiet preparation before you face it.",
             "search_placeholder": "Search your library...",
             "searching": "Searching...",
             "not_installed": "not installed",

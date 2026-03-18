@@ -6,6 +6,61 @@ import bridge from '../../../services/bridge';
 import { useGameInput } from '../../../hooks/useGameInput';
 import './TracePanel.css';
 
+const FONT_CONTROLS = [
+    { label: 'Prescription', prop: '--prescription-size', min: 10, max: 32, def: 18 },
+    { label: 'Game Title', prop: '--game-title-size', min: 10, max: 24, def: 16 },
+    { label: 'Button', prop: '--button-size', min: 10, max: 32, def: 18 },
+    { label: 'Button Hint', prop: '--button-hint-size', min: 8, max: 20, def: 12 },
+    { label: 'Undo', prop: '--undo-size', min: 8, max: 20, def: 12 },
+    { label: 'Label Reading', prop: '--label-reading-size', min: 8, max: 24, def: 14 },
+    { label: 'Label Desc', prop: '--label-desc-size', min: 8, max: 20, def: 12 },
+];
+
+const FONT_STORAGE_KEY = 'maida-debug-font-sizes';
+
+function FontSizeTuner() {
+    const [sizes, setSizes] = useState(() => {
+        const defaults = Object.fromEntries(FONT_CONTROLS.map(c => [c.prop, c.def]));
+        try {
+            const saved = JSON.parse(localStorage.getItem(FONT_STORAGE_KEY));
+            if (saved) return { ...defaults, ...saved };
+        } catch {}
+        return defaults;
+    });
+
+    // Apply saved values on mount
+    useEffect(() => {
+        Object.entries(sizes).forEach(([prop, val]) => {
+            document.documentElement.style.setProperty(prop, val + 'px');
+        });
+    }, []);
+
+    const handleChange = (prop, value) => {
+        document.documentElement.style.setProperty(prop, value + 'px');
+        const next = { ...sizes, [prop]: value };
+        setSizes(next);
+        try { localStorage.setItem(FONT_STORAGE_KEY, JSON.stringify(next)); } catch {}
+    };
+
+    return (
+        <div className="debug-grid simulation-grid">
+            {FONT_CONTROLS.map(({ label, prop, min, max }) => (
+                <div className="sim-row" key={prop}>
+                    <label>{label}: <span className="highlight">{sizes[prop]}px</span></label>
+                    <input
+                        type="range"
+                        min={min}
+                        max={max}
+                        step={1}
+                        value={sizes[prop]}
+                        onChange={(e) => handleChange(prop, parseInt(e.target.value, 10))}
+                    />
+                </div>
+            ))}
+        </div>
+    );
+}
+
 export default function TracePanel({ game, temperature, decayRate, silentMode, setSilentMode, onSimulation, onClose, tapThreshold, anchorThreshold, resumeGuard, isAnchored, returnPenaltySet, onHideGame }) {
     // Local state to force re-render when store updates
     const [storeState, setStoreState] = useState({
@@ -165,6 +220,9 @@ export default function TracePanel({ game, temperature, decayRate, silentMode, s
                             />
                         </div>
                     </div>
+
+                    <h4>B2) Font Size Tuning</h4>
+                    <FontSizeTuner />
 
                     <h4>C) Current State</h4>
                     <div className="debug-grid">

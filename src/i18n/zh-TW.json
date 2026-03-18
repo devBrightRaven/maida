@@ -2,11 +2,11 @@
     "ui": {
         "button": {
             "try": "試試",
-            "try_hint": "長按以錨定這個遊戲",
+            "try_hint": "長按以錨定",
             "play": "開打",
             "not_today": "算了",
             "clear": "清除",
-            "back": "復原",
+            "back": "復原\n（僅限一次）",
             "acknowledge": "知道了",
             "sync": "讓 Maida 看看吧",
             "restart_selection": "再來一次",
@@ -30,14 +30,14 @@
             "clear_games_btn": "清除所有遊戲"
         },
         "rin": {
-            "reading": "臨 — 面臨門前的瞬間",
-            "desc": "站在門前。不用想。看看出現什麼。",
+            "reading": "臨 rin",
+            "desc": "與眼前的，相遇。",
             "empty_showcase": "眼前還沒有任何遊戲。",
             "empty_showcase_btn": "擺幾款上去"
         },
         "kamae": {
-            "reading": "構 — 為下一刻做好準備",
-            "desc": "在面臨之前，先整理好眼前的陣容。",
+            "reading": "構 kamae",
+            "desc": "面臨之前，靜靜準備。",
             "search_placeholder": "搜尋你的遊戲庫⋯⋯",
             "searching": "搜尋中⋯⋯",
             "not_installed": "未安裝",
