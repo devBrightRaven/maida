@@ -35,9 +35,9 @@ export function normalizePlayniteGame(raw) {
     importedAt: new Date().toISOString(),
     description: stripHtml(raw.Description),
     coverUrl: steamCoverUrl(steamAppId),
-    developers: (raw.Developers ?? []).map(d => d.Name),
-    genres: (raw.Genres ?? []).map(g => g.Name),
+    developers: (raw.Developers ?? []).filter(Boolean).map(d => d.Name),
+    genres: (raw.Genres ?? []).filter(Boolean).map(g => g.Name),
     releaseYear: raw.ReleaseYear ?? null,
-    links: (raw.Links ?? []).map(l => ({ name: l.Name, url: l.Url })),
+    links: (raw.Links ?? []).filter(Boolean).map(l => ({ name: l.Name, url: l.Url })),
   };
 }

@@ -1,158 +1,106 @@
 /**
- * Maida API Bridge
- * Safe wrapper around window.maidaAPI to allow for easier mocking and decoupling.
+ * Maida API Bridge — Tauri edition
+ *
+ * Single abstraction layer between React frontend and Tauri Rust backend.
+ * All IPC goes through @tauri-apps/api invoke().
+ * Fallbacks ensure the app degrades gracefully if a command isn't registered yet.
  */
+import { invoke } from '@tauri-apps/api/core';
+
+async function call(cmd, args = {}) {
+    try {
+        return await invoke(cmd, args);
+    } catch (err) {
+        console.warn(`[Bridge] ${cmd} failed:`, err);
+        return null;
+    }
+}
 
 const bridge = {
-    getData: async (type) => {
-        if (window.maidaAPI) {
-            return await window.maidaAPI.getData(type);
-        }
-        console.warn(`[Bridge] maidaAPI.getData not found for ${type}`);
-        return null;
-    },
+    // --- Data persistence ---
+    getData: (type) => call('get_data', { dataType: type }),
 
-    saveData: async (type, data) => {
-        if (window.maidaAPI) {
-            return await window.maidaAPI.saveData(type, data);
-        }
-        console.warn(`[Bridge] maidaAPI.saveData not found for ${type}`);
-        return { success: false };
-    },
+    saveData: (type, data) => call('save_data', { dataType: type, data }),
 
-    requestOnboardingSync: async () => {
-        if (window.maidaAPI) {
-            return await window.maidaAPI.requestOnboardingSync();
-        }
-        return { error: 'API not available' };
-    },
+    resetGamesData: () => call('reset_games_data'),
 
-    performBackgroundSnapshot: async () => {
-        if (window.maidaAPI && window.maidaAPI.performBackgroundSnapshot) {
-            return await window.maidaAPI.performBackgroundSnapshot();
-        }
-        return { success: false };
-    },
-
-    minimizeWindow: () => {
-        if (window.maidaAPI && window.maidaAPI.minimizeWindow) {
-            window.maidaAPI.minimizeWindow();
-        }
-    },
-
-    closeWindow: () => {
-        if (window.maidaAPI && window.maidaAPI.closeWindow) {
-            window.maidaAPI.closeWindow();
-        }
-    },
-
+    // --- Steam ---
     checkSteamAvailable: async () => {
-        if (window.maidaAPI && window.maidaAPI.checkSteamAvailable) {
-            return await window.maidaAPI.checkSteamAvailable();
-        }
-        return { available: false };
+        const result = await call('check_steam_available');
+        return result ?? { available: false };
     },
 
-    resetGamesData: async () => {
-        if (window.maidaAPI && window.maidaAPI.resetGamesData) {
-            return await window.maidaAPI.resetGamesData();
-        }
-        return { success: false };
-    },
+    requestOnboardingSync: () => call('request_onboarding_sync'),
 
-    // Showcase & Warehouse
+    performBackgroundSnapshot: () => call('perform_background_snapshot'),
+
+    // --- Showcase & Warehouse ---
     getShowcase: async () => {
-        if (window.maidaAPI?.getShowcase) {
-            return await window.maidaAPI.getShowcase();
-        }
-        return { games: [], box: [], exploreHistory: { lastSessionDate: null, cardsShownToday: 0 } };
+        const result = await call('get_showcase');
+        return result ?? { games: [], box: [], channels: [], activeChannelId: null, exploreHistory: { lastSessionDate: null, cardsShownToday: 0 } };
     },
 
-    saveShowcase: async (data) => {
-        if (window.maidaAPI?.saveShowcase) {
-            return await window.maidaAPI.saveShowcase(data);
-        }
-        return { success: false };
-    },
+    saveShowcase: (data) => call('save_showcase', { data }),
 
     searchWarehouse: async (query) => {
-        if (window.maidaAPI?.searchWarehouse) {
-            return await window.maidaAPI.searchWarehouse(query);
-        }
-        return [];
+        const result = await call('search_warehouse', { query });
+        return result ?? [];
     },
 
-    sampleWarehouse: async (excludeIds) => {
-        if (window.maidaAPI?.sampleWarehouse) {
-            return await window.maidaAPI.sampleWarehouse(excludeIds);
-        }
-        return null;
-    },
+    sampleWarehouse: (excludeIds) => call('sample_warehouse', { excludeIds }),
 
-    // Session log
-    appendSessionLog: async (entry) => {
-        if (window.maidaAPI?.appendSessionLog) {
-            return await window.maidaAPI.appendSessionLog(entry);
-        }
-        return { success: false };
-    },
+    resetExploreLimit: () => call('reset_explore_limit'),
 
-    exportSessionLog: async () => {
-        if (window.maidaAPI?.exportSessionLog) {
-            return await window.maidaAPI.exportSessionLog();
-        }
-        return { success: false };
-    },
+    // --- Session log ---
+    appendSessionLog: (entry) => call('append_session_log', { entry }),
 
-    // Update checker
-    checkForUpdates: async (options) => {
-        if (window.maidaAPI?.checkForUpdates) {
-            return await window.maidaAPI.checkForUpdates(options);
-        }
-        return null;
-    },
+    exportSessionLog: () => call('export_session_log'),
 
-    openReleasePage: (url) => {
-        if (window.maidaAPI?.openReleasePage) {
-            window.maidaAPI.openReleasePage(url);
-        }
-    },
+    // --- Window ---
+    minimizeWindow: () => call('minimize_window'),
+
+    closeWindow: () => call('close_window'),
 
     getAppVersion: async () => {
-        if (window.maidaAPI?.getAppVersion) {
-            return await window.maidaAPI.getAppVersion();
-        }
-        return typeof __APP_VERSION__ !== 'undefined' ? __APP_VERSION__ : 'dev';
+        const result = await call('get_app_version');
+        return result ?? (typeof __APP_VERSION__ !== 'undefined' ? __APP_VERSION__ : 'dev');
     },
 
-    // IGDB Credentials
+    // --- Update checker (Phase 2) ---
+    checkForUpdates: async (options) => {
+        const result = await call('check_for_updates', { options });
+        return result;
+    },
+
+    openReleasePage: (url) => call('open_release_page', { url }),
+
+    // --- IGDB Credentials (Phase 2) ---
     saveIgdbCredentials: async (clientId, clientSecret) => {
-        if (window.maidaAPI?.saveIgdbCredentials) {
-            return await window.maidaAPI.saveIgdbCredentials(clientId, clientSecret);
-        }
-        return { success: false, error: 'API not available' };
+        const result = await call('save_igdb_credentials', { clientId, clientSecret });
+        return result ?? { success: false, error: 'not implemented' };
     },
 
-    loadIgdbCredentials: async () => {
-        if (window.maidaAPI?.loadIgdbCredentials) {
-            return await window.maidaAPI.loadIgdbCredentials();
-        }
-        return null;
-    },
+    loadIgdbCredentials: () => call('load_igdb_credentials'),
 
     testIgdbCredentials: async (clientId, clientSecret) => {
-        if (window.maidaAPI?.testIgdbCredentials) {
-            return await window.maidaAPI.testIgdbCredentials(clientId, clientSecret);
-        }
-        return { success: false, error: 'API not available' };
+        const result = await call('test_igdb_credentials', { clientId, clientSecret });
+        return result ?? { success: false, error: 'not implemented' };
     },
 
     clearIgdbCredentials: async () => {
-        if (window.maidaAPI?.clearIgdbCredentials) {
-            return await window.maidaAPI.clearIgdbCredentials();
-        }
-        return { success: false, error: 'API not available' };
-    }
+        const result = await call('clear_igdb_credentials');
+        return result ?? { success: false, error: 'not implemented' };
+    },
+
+    // --- License (Phase 4) ---
+    saveLicenseKey: (key) => call('save_license_key', { key }),
+
+    loadLicenseKey: () => call('load_license_key'),
+
+    checkLicense: async () => {
+        const result = await call('check_license');
+        return result ?? { licensed: false };
+    },
 };
 
 export default bridge;

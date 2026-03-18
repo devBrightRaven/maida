@@ -92,6 +92,21 @@ describe('normalizePlayniteGame', () => {
     expect(result.links).toEqual([]);
   });
 
+  it('survives null elements inside Developers/Genres/Links arrays', () => {
+    const raw = {
+      Id: 'x',
+      Name: 'Broken Export',
+      Developers: [{ Id: 'd1', Name: 'Studio' }, null, undefined],
+      Genres: [null, { Id: 'g1', Name: 'Action' }],
+      Links: [{ Name: 'Web', Url: 'https://example.com' }, null],
+    };
+    const result = normalizePlayniteGame(raw);
+
+    expect(result.developers).toEqual(['Studio']);
+    expect(result.genres).toEqual(['Action']);
+    expect(result.links).toEqual([{ name: 'Web', url: 'https://example.com' }]);
+  });
+
   it('returns null for entries without a name', () => {
     expect(normalizePlayniteGame({ Id: 'x' })).toBeNull();
     expect(normalizePlayniteGame(null)).toBeNull();

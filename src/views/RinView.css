@@ -1,28 +1,36 @@
 /* RinView.css - Layout and Component Container only */
 
+/* Background calligraphy watermark — left side */
+.rin-calligraphy-bg {
+    position: absolute;
+    top: 50%;
+    left: -20%;
+    transform: translateY(-50%);
+    height: 95%;
+    width: 95%;
+    color: var(--t-dim);
+    opacity: 0.15;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+}
+
+/* Corner label — reading + description */
 .rin-title-block {
     position: fixed;
-    top: 3.5rem;
-    left: 1.25rem;
+    top: 1rem;
+    left: 1.5rem;
     user-select: none;
     -webkit-user-select: none;
     pointer-events: none;
     z-index: 1;
 }
 
-.rin-title-kanji {
-    font-size: 6rem;
-    font-weight: 300;
-    color: var(--t-dim);
-    line-height: 1;
-    margin: 0;
-}
-
 .rin-title-reading {
     font-size: 0.875rem;
     color: var(--t-dim);
     letter-spacing: 0.08em;
-    margin-top: 0.25rem;
+    margin: 0;
 }
 
 .rin-title-desc {
@@ -32,6 +40,16 @@
     margin-top: 0.125rem;
     max-width: 220px;
     line-height: 1.4;
+}
+
+@media (max-height: 800px) {
+    .mvp-container { padding: 1.5rem 2rem 1rem; }
+    .mvp-btn { min-height: 56px; font-size: 18px; }
+    .mvp-btn.visit { min-height: 64px; }
+    .primary-actions { gap: 0.75rem; }
+    .action-row { gap: 0.375rem; }
+    .mvp-footer { padding-bottom: 0; }
+    .back-link { padding: 0.5rem 2rem; font-size: 0.8rem; }
 }
 
 .mvp-container {
@@ -282,7 +300,7 @@
 /* Debug Controls (below theme toggle) */
 .debug-controls {
     position: fixed;
-    top: 52px;
+    top: 7.5rem;
     right: 20px;
     display: flex;
     gap: 0.5rem;

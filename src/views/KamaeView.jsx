@@ -5,10 +5,13 @@ import ShowcaseEmpty from '../ui/features/Kamae/ShowcaseEmpty';
 import KamaeSearch from '../ui/features/Kamae/KamaeSearch';
 import ExploreView from '../ui/features/Kamae/ExploreView';
 import SettingsPanel from '../ui/features/Kamae/SettingsPanel';
+import ChannelPanel from '../ui/features/Kamae/ChannelPanel';
 import { useGameInput } from '../hooks/useGameInput';
 import { addToShowcase, removeFromShowcase, markCompleted } from '../core/showcase';
+import { isChannelsUnlocked } from '../core/license';
 import { t } from '../i18n';
 import bridge from '../services/bridge';
+import CalligraphyBg from '../ui/CalligraphyBg';
 import './KamaeView.css';
 
 /**
@@ -22,6 +25,12 @@ export default function KamaeView({ onSwitchToRin }) {
     const [exploring, setExploring] = useState(false);
     const [autoExploreChecked, setAutoExploreChecked] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
+    const [licenseState, setLicenseState] = useState({ licensed: false });
+
+    // Load license state on mount
+    useEffect(() => {
+        bridge.checkLicense().then(setLicenseState);
+    }, []);
 
     // Load showcase on mount
     useEffect(() => {
@@ -79,6 +88,12 @@ export default function KamaeView({ onSwitchToRin }) {
         await persistShowcase(next);
     }, [showcaseState, persistShowcase]);
 
+    const handleChannelUpdate = useCallback(async ({ channels, activeChannelId }) => {
+        const next = { ...showcaseState, channels, activeChannelId };
+        setShowcaseState(next);
+        await bridge.saveShowcase(next);
+    }, [showcaseState]);
+
     const containerRef = useRef(null);
 
     // D-pad navigation: cycle through buttons only (skip inputs to avoid virtual keyboard)
@@ -133,7 +148,7 @@ export default function KamaeView({ onSwitchToRin }) {
 
     if (exploring) {
         return (
-            <div className="kamae-view" ref={containerRef}>
+            <div className="kamae-view kamae-view--explore" ref={containerRef}>
                 <ExploreView
                     showcaseState={showcaseState}
                     onAdd={handleAdd}
@@ -146,8 +161,8 @@ export default function KamaeView({ onSwitchToRin }) {
 
     return (
         <div className="kamae-view" ref={containerRef}>
-            <div className="kamae-title-block" aria-hidden="true">
-                <p className="kamae-title-kanji">構</p>
+            <CalligraphyBg char="構" className="kamae-calligraphy-bg" />
+            <div className="kamae-title-block" role="img" aria-label={t('ui.kamae.reading')}>
                 <p className="kamae-title-reading">{t('ui.kamae.reading')}</p>
                 <p className="kamae-title-desc">{t('ui.kamae.desc')}</p>
             </div>
@@ -163,12 +178,19 @@ export default function KamaeView({ onSwitchToRin }) {
                             games={showcaseGames}
                             onRemove={handleRemove}
                         />
+                        <ChannelPanel
+                            channels={showcaseState.channels || []}
+                            activeChannelId={showcaseState.activeChannelId || null}
+                            showcaseGames={showcaseGames}
+                            licensed={isChannelsUnlocked(licenseState)}
+                            onUpdate={handleChannelUpdate}
+                        />
                         <button
                             type="button"
                             className="kamae-explore-btn"
                             onClick={() => setExploring(true)}
                         >
-                            explore more
+                            {t('ui.kamae.explore_more')}
                         </button>
                     </>
                 ) : (

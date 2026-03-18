@@ -123,10 +123,8 @@ export default function TracePanel({ game, temperature, decayRate, silentMode, s
                                 }
                             }} style={{ color: '#ff4444', borderColor: '#ff4444' }}>{t('ui.debug.clear_games_btn')}</button>
                             <button onClick={async () => {
-                                if (window.maidaAPI?.resetExploreLimit) {
-                                    await window.maidaAPI.resetExploreLimit();
-                                    alert('Explore limit reset');
-                                }
+                                await bridge.resetExploreLimit();
+                                alert('Explore limit reset');
                             }} style={{ color: '#ffaa00', borderColor: '#ffaa00' }}>Reset Explore Limit</button>
                         </div>
                     </div>

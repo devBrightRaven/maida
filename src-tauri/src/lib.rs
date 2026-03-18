@@ -1,0 +1,56 @@
+mod commands;
+mod persistence;
+mod decay;
+mod steam;
+mod credentials;
+mod enrichment;
+
+#[cfg_attr(mobile, tauri::mobile_entry_point)]
+pub fn run() {
+    tauri::Builder::default()
+        .plugin(tauri_plugin_opener::init())
+        .plugin(tauri_plugin_dialog::init())
+        .plugin(tauri_plugin_single_instance::init(|_app, _args, _cwd| {}))
+        .plugin(tauri_plugin_store::Builder::default().build())
+        .setup(|app| {
+            let base = persistence::app_data_dir(&app.handle());
+            persistence::ensure_dir(&base);
+            persistence::migrate_from_electron(&base);
+            commands::session_log::prune_session_log(&base);
+            Ok(())
+        })
+        .invoke_handler(tauri::generate_handler![
+            // Data persistence
+            commands::data::get_data,
+            commands::data::save_data,
+            commands::data::reset_games_data,
+            // Showcase & Warehouse
+            commands::showcase::get_showcase,
+            commands::showcase::save_showcase,
+            commands::showcase::search_warehouse,
+            commands::showcase::sample_warehouse,
+            commands::showcase::reset_explore_limit,
+            // Session log
+            commands::session_log::append_session_log,
+            commands::session_log::export_session_log,
+            // Window
+            commands::window::minimize_window,
+            commands::window::close_window,
+            commands::window::get_app_version,
+            // Steam
+            commands::steam::check_steam_available,
+            commands::steam::request_onboarding_sync,
+            commands::steam::perform_background_snapshot,
+            // IGDB
+            commands::igdb::save_igdb_credentials,
+            commands::igdb::load_igdb_credentials,
+            commands::igdb::test_igdb_credentials,
+            commands::igdb::clear_igdb_credentials,
+            // License
+            commands::license::save_license_key,
+            commands::license::load_license_key,
+            commands::license::check_license,
+        ])
+        .run(tauri::generate_context!())
+        .expect("error while running Maida");
+}

@@ -5,6 +5,7 @@ import GameDisplay from '../ui/features/Uncertainty/GameDisplay';
 import TracePanel from '../ui/features/Trace/TracePanel';
 import FaceSwitchButton from '../ui/FaceSwitchButton';
 import { useGameInput } from '../hooks/useGameInput';
+import CalligraphyBg from '../ui/CalligraphyBg';
 import './RinView.css';
 
 /**
@@ -203,8 +204,7 @@ export default function RinView({
 
     return (
         <>
-        <div className="rin-title-block" aria-hidden="true">
-            <p className="rin-title-kanji">臨</p>
+        <div className="rin-title-block" role="img" aria-label={t('ui.rin.reading')}>
             <p className="rin-title-reading">{t('ui.rin.reading')}</p>
             <p className="rin-title-desc">{t('ui.rin.desc')}</p>
         </div>
@@ -212,6 +212,7 @@ export default function RinView({
             className={`mvp-container ${!game ? 'is-idle' : ''} ${debugMode ? 'debug-mode' : ''} ${expanded ? 'is-expanded' : ''} ${isAnchored ? 'is-anchored' : ''}`}
             onClick={handleContainerClick}
         >
+            <CalligraphyBg char="臨" className="rin-calligraphy-bg" />
             {game && (
                 <header className="mvp-header" onClick={onSecretTap}>
                     <span className="game-label">

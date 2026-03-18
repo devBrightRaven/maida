@@ -11,7 +11,7 @@ src/
 │   └── debugStore.js      # Observable debug state + session log forwarding
 │
 ├── services/              # Infrastructure layer
-│   ├── bridge.js          # Wraps window.maidaAPI (Electron IPC)
+│   ├── bridge.js          # Wraps Tauri invoke() IPC
 │   └── persistence.js     # loadData/saveData with IPC → localStorage → fetch fallback
 │
 ├── hooks/                 # React hooks (connection layer)

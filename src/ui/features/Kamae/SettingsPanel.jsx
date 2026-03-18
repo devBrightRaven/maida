@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { t } from '../../../i18n';
+import { validateKeyFormat, formatLicenseKey } from '../../../core/license';
 import bridge from '../../../services/bridge';
 
 /**
@@ -14,13 +15,23 @@ export default function SettingsPanel({ onClose }) {
     const [status, setStatus] = useState(null); // { type: 'success'|'error', message }
     const [testing, setTesting] = useState(false);
 
-    // Load existing credentials on mount
+    // License state
+    const [licenseKey, setLicenseKey] = useState('');
+    const [licenseActive, setLicenseActive] = useState(false);
+    const [licenseStatus, setLicenseStatus] = useState(null);
+
+    // Load existing credentials + license on mount
     useEffect(() => {
         (async () => {
             const creds = await bridge.loadIgdbCredentials();
             if (creds && creds.clientId) {
                 setClientId(creds.clientId);
                 setHasExisting(true);
+            }
+            const key = await bridge.loadLicenseKey();
+            if (key) {
+                setLicenseKey(key);
+                setLicenseActive(true);
             }
         })();
     }, []);
@@ -64,6 +75,21 @@ export default function SettingsPanel({ onClose }) {
             setStatus({ type: 'success', message: t('ui.settings.credentials_cleared') });
         }
     }, []);
+
+    const handleLicenseActivate = useCallback(async () => {
+        setLicenseStatus(null);
+        if (!validateKeyFormat(licenseKey)) {
+            setLicenseStatus({ type: 'error', message: t('ui.settings.license.error_format') });
+            return;
+        }
+        const result = await bridge.saveLicenseKey(licenseKey);
+        if (result && result.success) {
+            setLicenseActive(true);
+            setLicenseStatus({ type: 'success', message: t('ui.settings.license.success') });
+        } else {
+            setLicenseStatus({ type: 'error', message: result?.error || 'Activation failed' });
+        }
+    }, [licenseKey]);
 
     const secretDisplay = hasExisting && !showSecretInput;
 
@@ -162,6 +188,54 @@ export default function SettingsPanel({ onClose }) {
                         aria-live="polite"
                     >
                         {status.message}
+                    </p>
+                )}
+            </section>
+
+            <section className="kamae-settings-section">
+                <h3 className="kamae-settings-section-title">{t('ui.settings.license.title')}</h3>
+                <p className="kamae-settings-section-desc">
+                    {licenseActive
+                        ? t('ui.settings.license.desc_active')
+                        : t('ui.settings.license.desc_inactive')}
+                </p>
+
+                <div className="kamae-settings-field">
+                    <label htmlFor="license-key" className="kamae-settings-label">
+                        {t('ui.settings.license.label')}
+                    </label>
+                    <input
+                        id="license-key"
+                        type="text"
+                        className="kamae-settings-input"
+                        value={licenseKey}
+                        onChange={e => setLicenseKey(formatLicenseKey(e.target.value))}
+                        placeholder="MAIDA-XXXXX-XXXXX-XXXXX"
+                        disabled={licenseActive}
+                        autoComplete="off"
+                    />
+                </div>
+
+                {!licenseActive && (
+                    <div className="kamae-settings-actions">
+                        <button
+                            type="button"
+                            className="kamae-settings-btn"
+                            onClick={handleLicenseActivate}
+                            disabled={!licenseKey}
+                        >
+                            {t('ui.settings.license.activate')}
+                        </button>
+                    </div>
+                )}
+
+                {licenseStatus && (
+                    <p
+                        className={`kamae-settings-status kamae-settings-status--${licenseStatus.type}`}
+                        role="status"
+                        aria-live="polite"
+                    >
+                        {licenseStatus.message}
                     </p>
                 )}
             </section>

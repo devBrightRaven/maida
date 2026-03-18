@@ -6,6 +6,7 @@ import { debugStore } from '../core/debugStore';
 import { loadData, saveData } from '../services/persistence';
 import bridge from '../services/bridge';
 import { loadShowcase } from '../services/persistence';
+import { getActivePool } from '../core/channels';
 
 export function useMaidaSession() {
     const [data, setData] = useState({ games: null, prescriptions: null });
@@ -39,9 +40,12 @@ export function useMaidaSession() {
 
         if (constraintsData) setConstraints(constraintsData);
 
-        // Load showcase IDs for candidatePool
+        // Load showcase IDs for candidatePool (channel-aware)
         const loadedShowcaseIds = showcaseData?.games?.length > 0 ? showcaseData.games : null;
-        setShowcaseIds(loadedShowcaseIds);
+        const channelPool = loadedShowcaseIds
+            ? getActivePool(showcaseData, showcaseData.channels || [], showcaseData.activeChannelId || null)
+            : null;
+        setShowcaseIds(channelPool);
 
         const firstRun = isFirstRun(games);
 
@@ -329,7 +333,10 @@ export function useMaidaSession() {
     // Reload showcase and re-roll (called when switching back from Kamae)
     const reloadShowcase = async () => {
         const showcaseData = await loadShowcase();
-        const newIds = showcaseData?.games?.length > 0 ? showcaseData.games : null;
+        const rawIds = showcaseData?.games?.length > 0 ? showcaseData.games : null;
+        const newIds = rawIds
+            ? getActivePool(showcaseData, showcaseData.channels || [], showcaseData.activeChannelId || null)
+            : null;
         setShowcaseIds(newIds);
         // Re-roll with updated pool
         const gamesSource = data.games;

@@ -15,9 +15,13 @@ export default defineConfig({
         include: ['react', 'react-dom']
     },
     server: {
+        port: 5173,
+        strictPort: true,
         // 預熱常用檔案
         warmup: {
             clientFiles: ['./src/App.jsx', './src/main.jsx']
         }
-    }
+    },
+    // Clear console on dev server start for Tauri
+    clearScreen: false
 })

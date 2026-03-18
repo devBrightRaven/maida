@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { t } from '../i18n';
 import { useGameInput } from '../hooks/useGameInput';
 import CurationPrompt from '../ui/features/Onboarding/CurationPrompt';
+import bridge from '../services/bridge';
 import './OnboardingView.css';
 
 export default function OnboardingView({ onComplete }) {
@@ -71,7 +72,7 @@ export default function OnboardingView({ onComplete }) {
             // This is just a UI hint, the scan continues in background
         }, 8000);
 
-        const result = await window.maidaAPI.requestOnboardingSync();
+        const result = await bridge.requestOnboardingSync();
         clearTimeout(timer);
 
         if (result.success) {

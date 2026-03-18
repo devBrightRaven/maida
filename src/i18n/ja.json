@@ -43,7 +43,8 @@
             "not_installed": "未インストール",
             "add": "載せる",
             "added": "載せ済み",
-            "put_back": "戻す"
+            "put_back": "戻す",
+            "explore_more": "もっと見る"
         },
         "explore": {
             "later": "あとで",
@@ -68,6 +69,26 @@
             "back": "戻る",
             "credentials_saved": "保存しました。次回起動時にIGDBデータが表示されます。",
             "credentials_cleared": "クリアしました。"
+        },
+        "license": {
+            "title": "Maida Plus",
+            "desc_active": "チャンネル機能が有効です。",
+            "desc_inactive": "ライセンスキーを入力してチャンネルを解除します。",
+            "label": "ライセンスキー",
+            "activate": "有効化",
+            "success": "有効化しました！チャンネル機能が利用可能です。",
+            "error_format": "キー形式が正しくありません。形式：MAIDA-XXXXX-XXXXX-XXXXX"
+        },
+        "channels": {
+            "title": "チャンネル",
+            "create": "新しいチャンネル",
+            "create_placeholder": "チャンネル名…",
+            "active": "アクティブ",
+            "all_games": "すべてのゲーム",
+            "empty": "このチャンネルにはゲームがありません",
+            "delete_confirm": "このチャンネルを削除しますか？",
+            "locked_title": "チャンネル",
+            "locked_desc": "Maida Plusで利用可能です。設定でキーを入力してください。"
         },
         "curation": {
             "first_prompt": "ずっとやりたかったゲームはある？",

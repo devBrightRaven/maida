@@ -43,7 +43,8 @@
             "not_installed": "未安裝",
             "add": "擺上去",
             "added": "已擺上",
-            "put_back": "收回去"
+            "put_back": "收回去",
+            "explore_more": "再看看"
         },
         "explore": {
             "later": "以後再說",
@@ -68,6 +69,26 @@
             "back": "返回",
             "credentials_saved": "已儲存。IGDB 資料將在下次啟動時出現。",
             "credentials_cleared": "已清除。"
+        },
+        "license": {
+            "title": "Maida Plus",
+            "desc_active": "頻道功能已啟用。",
+            "desc_inactive": "輸入授權碼以解鎖頻道功能。",
+            "label": "授權碼",
+            "activate": "啟用",
+            "success": "已啟用！頻道功能現在可以使用。",
+            "error_format": "格式不正確。格式：MAIDA-XXXXX-XXXXX-XXXXX"
+        },
+        "channels": {
+            "title": "頻道",
+            "create": "新頻道",
+            "create_placeholder": "頻道名稱⋯⋯",
+            "active": "啟用中",
+            "all_games": "全部遊戲",
+            "empty": "這個頻道還沒有遊戲",
+            "delete_confirm": "移除這個頻道？",
+            "locked_title": "頻道",
+            "locked_desc": "Maida Plus 功能。在設定中輸入授權碼。"
         },
         "curation": {
             "first_prompt": "有沒有一款你一直想玩的遊戲？",
