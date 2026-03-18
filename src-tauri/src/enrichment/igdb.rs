@@ -122,21 +122,38 @@ pub async fn fetch_time_to_beat(
     }))
 }
 
+/// Max games to enrich per startup cycle.
+/// At 250ms/request with 2-3 API calls per game, 10 games ≈ 5-8 seconds.
+const MAX_ENRICH_PER_CYCLE: usize = 10;
+
 /// Enrich a list of games with IGDB time-to-beat data.
-/// Only enriches games that don't already have IGDB data.
+/// Only enriches installed games that don't already have IGDB data.
+/// Caps at MAX_ENRICH_PER_CYCLE per startup to avoid 429 rate limiting.
 pub async fn enrich_games(
     games: &mut Vec<Value>,
     client_id: &str,
     access_token: &str,
 ) {
-    log::info!("[IGDB] Enrichment starting for {} games", games.len());
+    // Collect indices of games that need enrichment (installed + no igdb data)
+    let needs_enrichment: Vec<usize> = games.iter().enumerate()
+        .filter(|(_, g)| {
+            g.get("igdb").is_none()
+                && g.get("installed").and_then(|v| v.as_bool()).unwrap_or(false)
+        })
+        .map(|(i, _)| i)
+        .take(MAX_ENRICH_PER_CYCLE)
+        .collect();
 
-    for game in games.iter_mut() {
-        // Skip if already enriched
-        if game.get("igdb").is_some() {
-            continue;
-        }
+    if needs_enrichment.is_empty() {
+        log::info!("[IGDB] No games need enrichment.");
+        return;
+    }
 
+    log::info!("[IGDB] Enriching {} of {} total games", needs_enrichment.len(), games.len());
+
+    let mut enriched = 0;
+    for idx in needs_enrichment {
+        let game = &games[idx];
         let steam_app_id = game.get("steamAppId")
             .and_then(|v| v.as_str())
             .unwrap_or("");
@@ -149,12 +166,13 @@ pub async fn enrich_games(
         }
 
         if let Some(ttb) = fetch_time_to_beat(steam_app_id, title, client_id, access_token).await {
-            game["igdb"] = json!({
+            games[idx]["igdb"] = json!({
                 "timeToBeat": ttb,
                 "enrichedAt": chrono::Utc::now().to_rfc3339()
             });
+            enriched += 1;
         }
     }
 
-    log::info!("[IGDB] Enrichment complete.");
+    log::info!("[IGDB] Enrichment complete. {}/{} enriched.", enriched, games.len());
 }
