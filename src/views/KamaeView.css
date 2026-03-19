@@ -75,7 +75,7 @@
 }
 
 @media (max-height: 800px) {
-    .kamae-content { padding-top: 8rem; }
+    .kamae-content { padding-top: 5rem; }
 }
 
 .kamae-loading {
