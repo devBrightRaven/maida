@@ -18,10 +18,11 @@ export function calculateTraceWeights(gamesData, options = {}) {
 
     const uniqueGamesMap = new Map();
     if (candidatePool) {
-        // Showcase mode: only include games whose ID is in the candidate pool
+        // Showcase mode: only include installed games from the candidate pool
+        // Uninstalled games stay in Kamae showcase but Rin won't dice them
         const poolSet = new Set(candidatePool);
         gamesData.games.forEach(g => {
-            if (poolSet.has(g.id) && !uniqueGamesMap.has(g.id)) {
+            if (poolSet.has(g.id) && g.installed && !uniqueGamesMap.has(g.id)) {
                 uniqueGamesMap.set(g.id, g);
             }
         });
