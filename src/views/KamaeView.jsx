@@ -130,7 +130,7 @@ export default function KamaeView({ onSwitchToRin }) {
         return (
             <div className="kamae-view" ref={containerRef}>
                 <div className="kamae-content">
-                    <p className="kamae-loading">Loading...</p>
+                    <p className="kamae-loading">{t('ui.status.loading')}</p>
                 </div>
             </div>
         );

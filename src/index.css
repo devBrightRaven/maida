@@ -80,6 +80,11 @@ body {
 button {
     cursor: pointer;
     border: none;
-    outline: none;
     background: transparent;
+}
+
+/* Default focus indicator for all buttons (WCAG 2.4.11) */
+button:focus-visible {
+    outline: 2px solid var(--accent-gold, #c8a84e);
+    outline-offset: 2px;
 }
