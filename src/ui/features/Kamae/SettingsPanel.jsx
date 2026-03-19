@@ -15,6 +15,9 @@ export default function SettingsPanel({ onClose }) {
     const [status, setStatus] = useState(null); // { type: 'success'|'error', message }
     const [testing, setTesting] = useState(false);
 
+    // Telemetry state
+    const [telemetryEnabled, setTelemetryEnabled] = useState(true);
+
     // License state
     const [licenseKey, setLicenseKey] = useState('');
     const [licenseActive, setLicenseActive] = useState(false);
@@ -33,6 +36,8 @@ export default function SettingsPanel({ onClose }) {
                 setLicenseKey(key);
                 setLicenseActive(true);
             }
+            const telEnabled = await bridge.getTelemetryEnabled();
+            setTelemetryEnabled(telEnabled);
         })();
     }, []);
 
@@ -238,6 +243,30 @@ export default function SettingsPanel({ onClose }) {
                         {licenseStatus.message}
                     </p>
                 )}
+            </section>
+
+            <section className="kamae-settings-section">
+                <h3 className="kamae-settings-section-title">{t('ui.telemetry.title')}</h3>
+                <p className="kamae-settings-section-desc">{t('ui.telemetry.desc')}</p>
+
+                <div className="kamae-settings-field">
+                    <label className="kamae-settings-toggle">
+                        <input
+                            type="checkbox"
+                            checked={telemetryEnabled}
+                            onChange={async (e) => {
+                                const val = e.target.checked;
+                                setTelemetryEnabled(val);
+                                await bridge.setTelemetryEnabled(val);
+                            }}
+                        />
+                        <span>{t('ui.telemetry.enabled')}</span>
+                    </label>
+                </div>
+
+                <p className="kamae-settings-section-desc kamae-settings-privacy">
+                    {t('ui.telemetry.privacy')}
+                </p>
             </section>
         </div>
     );

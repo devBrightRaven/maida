@@ -84,7 +84,15 @@ const bridge = {
         return result ?? { success: false, error: 'not implemented' };
     },
 
-    // --- License (Phase 4) ---
+    // --- Telemetry ---
+    getTelemetryEnabled: async () => {
+        const result = await call('get_telemetry_enabled');
+        return result ?? true;
+    },
+
+    setTelemetryEnabled: (enabled) => call('set_telemetry_enabled', { enabled }),
+
+    // --- License ---
     saveLicenseKey: (key) => call('save_license_key', { key }),
 
     loadLicenseKey: () => call('load_license_key'),

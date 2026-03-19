@@ -70,6 +70,12 @@
             "credentials_saved": "Saved. IGDB data will appear on next restart.",
             "credentials_cleared": "Cleared."
         },
+        "telemetry": {
+            "title": "Anonymous Usage Data",
+            "desc": "Maida sends a single anonymous ping on each launch. No personal data, no game data, no tracking. You can turn this off anytime.",
+            "enabled": "Send anonymous usage data",
+            "privacy": "What we collect: a random ID and how many days since install. That's it."
+        },
         "license": {
             "title": "Maida Plus",
             "desc_active": "Channels feature is active.",

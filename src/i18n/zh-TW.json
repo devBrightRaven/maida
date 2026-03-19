@@ -70,6 +70,12 @@
             "credentials_saved": "已儲存。IGDB 資料將在下次啟動時出現。",
             "credentials_cleared": "已清除。"
         },
+        "telemetry": {
+            "title": "匿名使用數據",
+            "desc": "Maida 每次啟動時發送一次匿名 ping。不包含個人資料、遊戲數據或追蹤。你可以隨時關閉。",
+            "enabled": "發送匿名使用數據",
+            "privacy": "我們收集的：一個隨機 ID 和安裝天數。僅此而已。"
+        },
         "license": {
             "title": "Maida Plus",
             "desc_active": "頻道功能已啟用。",
