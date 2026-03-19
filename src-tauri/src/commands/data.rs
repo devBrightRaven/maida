@@ -4,9 +4,17 @@ use tauri::AppHandle;
 use crate::persistence;
 use crate::decay;
 
+const ALLOWED_DATA_TYPES: &[&str] = &[
+    "games", "prescriptions", "anchor", "returnPenalties",
+    "constraints", "showcase", "config",
+];
+
 #[tauri::command]
 pub fn get_data(app: AppHandle, #[allow(non_snake_case)] dataType: String) -> Result<Value, String> {
     let data_type = dataType;
+    if !ALLOWED_DATA_TYPES.contains(&data_type.as_str()) {
+        return Err(format!("Unknown data type: {}", data_type));
+    }
     let base = persistence::app_data_dir(&app);
     persistence::ensure_dir(&base);
 
@@ -35,6 +43,9 @@ pub fn get_data(app: AppHandle, #[allow(non_snake_case)] dataType: String) -> Re
 #[tauri::command]
 pub fn save_data(app: AppHandle, #[allow(non_snake_case)] dataType: String, data: Value) -> Result<(), String> {
     let data_type = dataType;
+    if !ALLOWED_DATA_TYPES.contains(&data_type.as_str()) {
+        return Err(format!("Unknown data type: {}", data_type));
+    }
     let base = persistence::app_data_dir(&app);
     persistence::ensure_dir(&base);
     let path = persistence::data_path(&base, &data_type);

@@ -137,7 +137,7 @@ export function updateDebugTrace(traceCandidates, selected, temperature, totalGa
         totalGames: totalGames,
         selected: selected ? {
             id: selected.id,
-            weight: (traceCandidates.find(c => c.id === selected.id).weight / totalWeight).toFixed(4)
+            weight: ((traceCandidates.find(c => c.id === selected.id)?.weight ?? 0) / totalWeight).toFixed(4)
         } : null,
         candidates: normalizedCandidates
             .sort((a, b) => {

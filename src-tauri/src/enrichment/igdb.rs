@@ -73,8 +73,8 @@ pub async fn fetch_time_to_beat(
 
     let mut igdb_game_id: Option<i64> = None;
 
-    // Step 1: Lookup by Steam appId
-    if !steam_app_id.is_empty() {
+    // Step 1: Lookup by Steam appId (must be numeric to prevent query injection)
+    if !steam_app_id.is_empty() && steam_app_id.chars().all(|c| c.is_ascii_digit()) {
         let query = format!(
             "fields game; where uid = \"{}\" & category = 1; limit 1;",
             steam_app_id
