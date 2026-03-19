@@ -1,61 +1,50 @@
 import { useState, useEffect } from 'react';
-import bridge from '../services/bridge';
+import { check } from '@tauri-apps/plugin-updater';
+import { relaunch } from '@tauri-apps/plugin-process';
 
 /**
  * Silent update checker hook.
- * Checks GitHub Releases for new versions on mount (fire-and-forget).
+ * Uses tauri-plugin-updater to check GitHub Releases.
  * Never disrupts — state is only consumed by the version tag area.
  */
 export function useUpdateCheck() {
     const [updateState, setUpdateState] = useState({
-        currentVersion: null,
-        latestVersion: null,
         isUpdateAvailable: false,
-        releaseUrl: null,
-        checkedAt: null,
+        latestVersion: null,
+        updating: false,
         error: null
     });
 
-    const check = async (force = false) => {
-        try {
-            const version = await bridge.getAppVersion();
-            const result = await bridge.checkForUpdates(force ? { force: true } : undefined);
+    useEffect(() => {
+        (async () => {
+            try {
+                const update = await check();
+                if (update) {
+                    setUpdateState({
+                        isUpdateAvailable: true,
+                        latestVersion: update.version,
+                        updating: false,
+                        error: null
+                    });
+                }
+            } catch {
+                // Silent — dev mode or network failure
+            }
+        })();
+    }, []);
 
-            if (result) {
-                // Update available
-                setUpdateState({
-                    currentVersion: result.currentVersion || version,
-                    latestVersion: result.latestVersion,
-                    isUpdateAvailable: true,
-                    releaseUrl: result.releaseUrl,
-                    checkedAt: new Date().toISOString(),
-                    error: null
-                });
-            } else {
-                // No update (or dev mode — returns null)
-                setUpdateState({
-                    currentVersion: version,
-                    latestVersion: null,
-                    isUpdateAvailable: false,
-                    releaseUrl: null,
-                    checkedAt: new Date().toISOString(),
-                    error: null
-                });
+    const installUpdate = async () => {
+        try {
+            setUpdateState(prev => ({ ...prev, updating: true }));
+            const update = await check();
+            if (update) {
+                await update.downloadAndInstall();
+                await relaunch();
             }
         } catch {
-            setUpdateState(prev => ({
-                ...prev,
-                error: 'Unable to check'
-            }));
+            setUpdateState(prev => ({ ...prev, updating: false, error: 'Update failed' }));
         }
     };
 
-    useEffect(() => {
-        check(false);
-    }, []);
-
-    return {
-        ...updateState,
-        recheckNow: () => check(true)
-    };
+    return { ...updateState, installUpdate };
 }

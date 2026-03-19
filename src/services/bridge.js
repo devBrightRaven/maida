@@ -66,15 +66,7 @@ const bridge = {
         return result ?? (typeof __APP_VERSION__ !== 'undefined' ? __APP_VERSION__ : 'dev');
     },
 
-    // --- Update checker (Phase 2) ---
-    checkForUpdates: async (options) => {
-        const result = await call('check_for_updates', { options });
-        return result;
-    },
-
-    openReleasePage: (url) => call('open_release_page', { url }),
-
-    // --- IGDB Credentials (Phase 2) ---
+    // --- IGDB Credentials ---
     saveIgdbCredentials: async (clientId, clientSecret) => {
         const result = await call('save_igdb_credentials', { clientId, clientSecret });
         return result ?? { success: false, error: 'not implemented' };
