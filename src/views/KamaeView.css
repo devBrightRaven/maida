@@ -237,9 +237,17 @@
     overflow-wrap: break-word;
 }
 
+.showcase-item--dimmed {
+    opacity: 0.45;
+}
+
+.showcase-item--dimmed .showcase-item-img {
+    filter: grayscale(0.6);
+}
+
 .showcase-item-uninstalled {
     font-size: 0.75rem;
-    color: var(--t-error);
+    color: var(--t-dim);
     font-style: italic;
 }
 

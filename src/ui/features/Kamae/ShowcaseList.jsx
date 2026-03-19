@@ -122,7 +122,7 @@ export default function ShowcaseList({ games, onRemove }) {
                 return (
                     <div
                         key={id}
-                        className="showcase-item"
+                        className={`showcase-item ${!game.installed ? 'showcase-item--dimmed' : ''}`}
                         role="listitem"
                     >
                         {headerUrl && (
