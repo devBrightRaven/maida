@@ -178,7 +178,7 @@ describe('calculateTraceWeights', () => {
         expect(result.candidates.map(c => c.id).sort()).toEqual(['a', 'c']);
     });
 
-    it('includes uninstalled games when in candidatePool', () => {
+    it('excludes uninstalled games even when in candidatePool', () => {
         const games = [
             makeGame({ id: 'a', installed: false }),
             makeGame({ id: 'b', installed: true }),
@@ -187,9 +187,8 @@ describe('calculateTraceWeights', () => {
             candidatePool: ['a'],
         });
 
-        // 'a' is not installed but IS in candidatePool — should be included
-        expect(result.candidates).toHaveLength(1);
-        expect(result.candidates[0].id).toBe('a');
+        // 'a' is not installed — Rin won't dice uninstalled games (they stay in Kamae showcase)
+        expect(result).toBeNull();
     });
 
     it('returns null for empty candidatePool', () => {
