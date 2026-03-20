@@ -499,6 +499,11 @@
     border-color: var(--t-accent-border);
 }
 
+.channel-item--empty {
+    opacity: 0.5;
+    cursor: default;
+}
+
 .channel-item-name {
     display: flex;
     align-items: center;

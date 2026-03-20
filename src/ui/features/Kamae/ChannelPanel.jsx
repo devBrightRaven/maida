@@ -142,8 +142,8 @@ export default function ChannelPanel({
                 <div key={ch.id} className="channel-group">
                     <button
                         type="button"
-                        className={`channel-item ${activeChannelId === ch.id ? 'channel-item--active' : ''}`}
-                        onClick={() => handleSetActive(ch.id)}
+                        className={`channel-item ${activeChannelId === ch.id ? 'channel-item--active' : ''} ${ch.gameIds.length === 0 ? 'channel-item--empty' : ''}`}
+                        onClick={() => ch.gameIds.length > 0 && handleSetActive(ch.id)}
                     >
                         <span className="channel-item-name">
                             {editingId === ch.id ? (
