@@ -175,7 +175,7 @@ describe('renameChannel', () => {
 });
 
 describe('MAX_CHANNELS', () => {
-    it('is 5', () => {
-        expect(MAX_CHANNELS).toBe(5);
+    it('is 2', () => {
+        expect(MAX_CHANNELS).toBe(2);
     });
 });

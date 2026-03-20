@@ -1,4 +1,5 @@
-export const MAX_CHANNELS = 5;
+export const MAX_CHANNELS = 2;
+export const MAX_CHANNELS_LIMIT = 10;
 
 export function createChannel(name) {
     if (!name || typeof name !== 'string') return null;
