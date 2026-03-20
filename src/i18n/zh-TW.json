@@ -87,6 +87,7 @@
         },
         "channels": {
             "title": "型（Kata）",
+            "hint": "選擇一個型，臨會從中擲骰。",
             "create": "新增型",
             "create_placeholder": "型的名稱⋯⋯",
             "active": "啟用中",

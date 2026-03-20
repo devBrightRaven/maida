@@ -87,6 +87,7 @@
         },
         "channels": {
             "title": "Kata",
+            "hint": "Select one to set what Rin rolls from.",
             "create": "new kata",
             "create_placeholder": "kata name...",
             "active": "active",

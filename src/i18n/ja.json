@@ -87,6 +87,7 @@
         },
         "channels": {
             "title": "型（カタ）",
+            "hint": "型を選ぶと、臨がそこからダイスを振ります。",
             "create": "新しい型",
             "create_placeholder": "型の名前…",
             "active": "アクティブ",

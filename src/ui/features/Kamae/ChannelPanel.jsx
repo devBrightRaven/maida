@@ -73,7 +73,10 @@ export default function ChannelPanel({
     return (
         <div className="channel-panel">
             <div className="channel-panel-header">
-                <h3 className="channel-panel-title">{t('ui.channels.title')}</h3>
+                <div>
+                    <h3 className="channel-panel-title">{t('ui.channels.title')}</h3>
+                    <p className="channel-panel-hint">{t('ui.channels.hint')}</p>
+                </div>
                 {channels.length < MAX_CHANNELS && !creating && (
                     <button
                         type="button"
