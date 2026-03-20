@@ -148,26 +148,25 @@ export default function ChannelPanel({
                             <span className="channel-item-count">({ch.gameIds.length})</span>
                         </span>
                         {activeChannelId === ch.id && <span className="channel-item-badge">{t('ui.channels.active')}</span>}
+                        <span className="channel-item-actions" onClick={(e) => e.stopPropagation()}>
+                            <button
+                                type="button"
+                                className="channel-expand-btn"
+                                onClick={(e) => { e.stopPropagation(); setExpandedId(expandedId === ch.id ? null : ch.id); }}
+                                aria-label="Edit kata games"
+                            >
+                                {expandedId === ch.id ? '−' : '+'}
+                            </button>
+                            <button
+                                type="button"
+                                className="channel-delete-btn"
+                                onClick={(e) => { e.stopPropagation(); handleDelete(ch.id); }}
+                                aria-label="Delete kata"
+                            >
+                                ×
+                            </button>
+                        </span>
                     </button>
-
-                    <div className="channel-item-actions">
-                        <button
-                            type="button"
-                            className="channel-expand-btn"
-                            onClick={() => setExpandedId(expandedId === ch.id ? null : ch.id)}
-                            aria-label="Edit kata games"
-                        >
-                            {expandedId === ch.id ? '−' : '+'}
-                        </button>
-                        <button
-                            type="button"
-                            className="channel-delete-btn"
-                            onClick={() => handleDelete(ch.id)}
-                            aria-label="Delete kata"
-                        >
-                            ×
-                        </button>
-                    </div>
 
                     {expandedId === ch.id && (
                         <div className="channel-game-list">

@@ -521,35 +521,11 @@
     color: var(--t-accent);
 }
 
-/* "All games" standalone item — pad right to align ACTIVE badge with kata rows */
-.channel-panel > .channel-item {
-    padding-right: 4.5rem;
-}
-
-/* Kata group — wraps item + action buttons in one bordered row */
+/* Kata group — wraps item + expanded game list */
 .channel-group {
     position: relative;
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
-    border: 1px solid var(--t-border-subtle);
-    border-radius: 6px;
-    transition: background 0.15s ease, border-color 0.15s ease;
-}
-
-.channel-group:hover {
-    background: var(--t-accent-soft);
-}
-
-.channel-group:has(.channel-item--active) {
-    background: var(--t-accent-soft);
-    border-color: var(--t-accent-border);
-}
-
-.channel-group .channel-item {
-    flex: 1;
-    border: none;
-    background: transparent;
 }
 
 .channel-item-actions {
