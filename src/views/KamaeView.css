@@ -519,6 +519,13 @@
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--t-accent);
+    width: 4rem;
+    text-align: right;
+    flex-shrink: 0;
+}
+
+.channel-item-badge--hidden {
+    visibility: hidden;
 }
 
 /* Kata group — wraps item + expanded game list */
@@ -532,6 +539,10 @@
     display: flex;
     gap: 0.25rem;
     flex-shrink: 0;
+}
+
+.channel-item-actions--placeholder {
+    width: 3.75rem;
 }
 
 .channel-rename-input {

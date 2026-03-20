@@ -147,7 +147,6 @@ export default function ChannelPanel({
                             )}
                             <span className="channel-item-count">({ch.gameIds.length})</span>
                         </span>
-                        {activeChannelId === ch.id && <span className="channel-item-badge">{t('ui.channels.active')}</span>}
                         <span className="channel-item-actions" onClick={(e) => e.stopPropagation()}>
                             <button
                                 type="button"
@@ -166,6 +165,7 @@ export default function ChannelPanel({
                                 ×
                             </button>
                         </span>
+                        <span className={`channel-item-badge ${activeChannelId === ch.id ? '' : 'channel-item-badge--hidden'}`}>{t('ui.channels.active')}</span>
                     </button>
 
                     {expandedId === ch.id && (
