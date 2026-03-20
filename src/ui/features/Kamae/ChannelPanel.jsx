@@ -118,11 +118,12 @@ export default function ChannelPanel({
             )}
 
             {channels.map(ch => (
-                <div key={ch.id} className="channel-group">
+                <div key={ch.id} className={`channel-group ${activeChannelId === ch.id ? 'channel-group--active' : ''} ${ch.gameIds.length === 0 ? 'channel-group--empty' : ''}`}>
                     <button
                         type="button"
-                        className={`channel-item ${activeChannelId === ch.id ? 'channel-item--active' : ''} ${ch.gameIds.length === 0 ? 'channel-item--empty' : ''}`}
+                        className="channel-select-btn"
                         onClick={() => ch.gameIds.length > 0 && handleSetActive(ch.id)}
+                        aria-label={`Select ${ch.name}`}
                     >
                         <span className="channel-item-name">
                             {editingId === ch.id ? (
@@ -147,26 +148,26 @@ export default function ChannelPanel({
                             )}
                             <span className="channel-item-count">({ch.gameIds.length})</span>
                         </span>
-                        <span className="channel-item-actions" onClick={(e) => e.stopPropagation()}>
-                            <button
-                                type="button"
-                                className="channel-expand-btn"
-                                onClick={(e) => { e.stopPropagation(); setExpandedId(expandedId === ch.id ? null : ch.id); }}
-                                aria-label="Edit kata games"
-                            >
-                                {expandedId === ch.id ? '−' : '+'}
-                            </button>
-                            <button
-                                type="button"
-                                className="channel-delete-btn"
-                                onClick={(e) => { e.stopPropagation(); handleDelete(ch.id); }}
-                                aria-label="Delete kata"
-                            >
-                                ×
-                            </button>
-                        </span>
-                        <span className={`channel-item-badge ${activeChannelId === ch.id ? '' : 'channel-item-badge--hidden'}`}>{t('ui.channels.active')}</span>
                     </button>
+                    <div className="channel-item-actions">
+                        <button
+                            type="button"
+                            className="channel-expand-btn"
+                            onClick={() => setExpandedId(expandedId === ch.id ? null : ch.id)}
+                            aria-label={`Edit ${ch.name} games`}
+                        >
+                            {expandedId === ch.id ? '−' : '+'}
+                        </button>
+                        <button
+                            type="button"
+                            className="channel-delete-btn"
+                            onClick={() => handleDelete(ch.id)}
+                            aria-label={`Delete ${ch.name}`}
+                        >
+                            ×
+                        </button>
+                    </div>
+                    <span className={`channel-item-badge ${activeChannelId === ch.id ? '' : 'channel-item-badge--hidden'}`}>{t('ui.channels.active')}</span>
 
                     {expandedId === ch.id && (
                         <div className="channel-game-list">

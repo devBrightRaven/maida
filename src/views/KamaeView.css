@@ -498,11 +498,6 @@
     border-color: var(--t-accent-border);
 }
 
-.channel-item--empty {
-    opacity: 0.5;
-    cursor: default;
-}
-
 .channel-item-name {
     display: flex;
     align-items: center;
@@ -528,11 +523,45 @@
     visibility: hidden;
 }
 
-/* Kata group — wraps item + expanded game list */
+/* Kata row — select button + actions + badge in one line */
 .channel-group {
-    position: relative;
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--t-border-subtle);
+    border-radius: 6px;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.channel-group:hover {
+    background: var(--t-accent-soft);
+}
+
+.channel-group--active {
+    background: var(--t-accent-soft);
+    border-color: var(--t-accent-border);
+}
+
+.channel-group--empty {
+    opacity: 0.5;
+}
+
+.channel-select-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.875rem;
+    font-family: inherit;
+    color: var(--t-dim);
+    text-align: left;
+    padding: 0;
+}
+
+.channel-group--active .channel-select-btn {
+    color: var(--t-text);
 }
 
 .channel-item-actions {
