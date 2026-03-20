@@ -56,6 +56,9 @@ const bridge = {
 
     exportSessionLog: () => call('export_session_log'),
 
+    // --- Game launch ---
+    launchGame: (steamUrl) => call('launch_game', { url: steamUrl }),
+
     // --- Window ---
     minimizeWindow: () => call('minimize_window'),
 

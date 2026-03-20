@@ -46,6 +46,7 @@ pub fn run() {
             commands::window::minimize_window,
             commands::window::close_window,
             commands::window::get_app_version,
+            commands::window::launch_game,
             // Steam
             commands::steam::check_steam_available,
             commands::steam::request_onboarding_sync,
