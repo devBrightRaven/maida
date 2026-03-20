@@ -300,12 +300,13 @@
     background: transparent;
 }
 
-/* Debug Controls (below theme toggle) */
+/* Debug Controls (left of theme toggle) */
 .debug-controls {
     position: fixed;
-    top: 7.5rem;
-    right: 20px;
+    top: 5.5rem;
+    right: 64px;
     display: flex;
+    align-items: center;
     gap: 0.5rem;
     z-index: 100;
 }
