@@ -477,6 +477,7 @@
     justify-content: space-between;
     width: 100%;
     padding: 0.5rem 0.75rem;
+    min-height: 2.75rem;
     font-size: 0.875rem;
     font-family: inherit;
     color: var(--t-dim);
@@ -530,6 +531,7 @@
     align-items: center;
     width: 100%;
     padding: 0.5rem 0.75rem;
+    min-height: 2.75rem;
     border: 1px solid var(--t-border-subtle);
     border-radius: 6px;
     transition: background 0.15s ease, border-color 0.15s ease;
