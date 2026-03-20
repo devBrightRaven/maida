@@ -520,10 +520,22 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    transition: border-color 0.15s ease;
+}
+
+.channel-group:hover {
+    border-color: var(--t-dim);
+}
+
+.channel-group:has(.channel-item--active) {
+    border-color: var(--t-text);
 }
 
 .channel-group .channel-item {
     flex: 1;
+    border: none;
 }
 
 .channel-item-actions {
