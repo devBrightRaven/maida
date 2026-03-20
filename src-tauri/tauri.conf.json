@@ -24,7 +24,7 @@
       }
     ],
     "security": {
-      "csp": "default-src 'self'; script-src 'self'; connect-src 'self' https://api.igdb.com https://id.twitch.tv; img-src 'self' https://images.igdb.com data:; style-src 'self' 'unsafe-inline'"
+      "csp": "default-src 'self'; script-src 'self'; connect-src 'self' https://api.igdb.com https://id.twitch.tv; img-src 'self' https://steamcdn-a.akamaihd.net https://cdn.akamai.steamstatic.com https://images.igdb.com data:; style-src 'self' 'unsafe-inline'"
     }
   },
   "plugins": {
