@@ -178,8 +178,7 @@ export default function KamaeView({ onSwitchToRin }) {
                 <ChannelPanel
                     channels={showcaseState.channels || []}
                     activeChannelId={activeChannelId}
-                    showcaseGames={displayedGames}
-                    licensed={true}
+                    showcaseGames={allInstalledGames}
                     onUpdate={handleChannelUpdate}
                 />
                 <KamaeSearch
@@ -191,13 +190,15 @@ export default function KamaeView({ onSwitchToRin }) {
                     onRemove={handleRemove}
                     isKataMode={activeKata !== null}
                 />
-                <button
-                    type="button"
-                    className="kamae-explore-btn"
-                    onClick={() => setExploring(true)}
-                >
-                    {t('ui.kamae.explore_more')}
-                </button>
+                {activeChannelId && (
+                    <button
+                        type="button"
+                        className="kamae-explore-btn"
+                        onClick={() => setExploring(true)}
+                    >
+                        {t('ui.kamae.explore_more')}
+                    </button>
+                )}
                 <button
                     type="button"
                     className="kamae-settings-link"
