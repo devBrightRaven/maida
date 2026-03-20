@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { t } from '../../../i18n';
 import ExploreCard from './ExploreCard';
 import ExploreLimitReached from './ExploreLimitReached';
-import { canExploreMore, recordCardShown, resetDailyExplore } from '../../../core/explore';
+import { canExploreMore, recordCardShown, resetDailyExplore, DAILY_EXPLORE_LIMIT } from '../../../core/explore';
 import { addToBox } from '../../../core/box';
 import { useGameInput } from '../../../hooks/useGameInput';
 import bridge from '../../../services/bridge';
@@ -91,7 +91,6 @@ export default function ExploreView({ showcaseState, onAdd, onBack, onShowcaseUp
         );
         const nextShowcase = { ...showcaseState, box: nextBox.entries };
         onShowcaseUpdate(nextShowcase);
-        await bridge.saveShowcase({ ...nextShowcase, exploreHistory: exploreState });
 
         const nextExplore = recordCardShown(exploreState);
         await advanceCard(nextExplore);
@@ -134,7 +133,7 @@ export default function ExploreView({ showcaseState, onAdd, onBack, onShowcaseUp
                     {t('ui.explore.back')}
                 </button>
                 <span className="explore-counter">
-                    {exploreState.cardsShownToday} / 10
+                    {exploreState.cardsShownToday} / {DAILY_EXPLORE_LIMIT}
                 </span>
             </div>
             <ExploreCard
