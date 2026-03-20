@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { t } from '../../../i18n';
-import { MAX_SHOWCASE } from '../../../core/showcase';
+import { MAX_KATA_GAMES } from '../../../core/katas';
 
 function getSteamHeaderUrl(steamAppId) {
     if (!steamAppId) return null;
@@ -110,12 +110,14 @@ function HoldButton({ onConfirm, label, ariaLabel }) {
  * ShowcaseList — displays curated games with cover images.
  * "put back to the shelf" requires holding for 3 seconds.
  */
-export default function ShowcaseList({ games, onRemove }) {
+export default function ShowcaseList({ games, onRemove, isKataMode }) {
     return (
         <div className="showcase-list" role="list" aria-label="Your showcase">
-            <div className="showcase-counter" aria-live="polite">
-                {games.length} / {MAX_SHOWCASE}
-            </div>
+            {isKataMode && (
+                <div className="showcase-counter" aria-live="polite">
+                    {games.length} / {MAX_KATA_GAMES}
+                </div>
+            )}
             {games.map(game => {
                 const id = game.id || game.steamAppId;
                 const headerUrl = getSteamHeaderUrl(game.steamAppId);

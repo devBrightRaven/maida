@@ -1,13 +1,12 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import FaceSwitchButton from '../ui/FaceSwitchButton';
 import ShowcaseList from '../ui/features/Kamae/ShowcaseList';
-import ShowcaseEmpty from '../ui/features/Kamae/ShowcaseEmpty';
 import KamaeSearch from '../ui/features/Kamae/KamaeSearch';
 import ExploreView from '../ui/features/Kamae/ExploreView';
 import SettingsPanel from '../ui/features/Kamae/SettingsPanel';
 import ChannelPanel from '../ui/features/Kamae/ChannelPanel';
 import { useGameInput } from '../hooks/useGameInput';
-import { addToShowcase, removeFromShowcase, markCompleted } from '../core/showcase';
+import { addGameToKata, removeGameFromKata } from '../core/katas';
 import { t } from '../i18n';
 import bridge from '../services/bridge';
 import CalligraphyBg from '../ui/CalligraphyBg';
@@ -15,51 +14,56 @@ import './KamaeView.css';
 
 /**
  * Kamae (構) — slow curation face.
- * Showcase view + search + explore entry.
+ * Kata selector + game list + search + explore entry.
  */
 export default function KamaeView({ onSwitchToRin }) {
     const [showcaseState, setShowcaseState] = useState({ games: [] });
-    const [showcaseGames, setShowcaseGames] = useState([]);
+    const [allInstalledGames, setAllInstalledGames] = useState([]);
+    const [gameMap, setGameMap] = useState(new Map());
     const [loading, setLoading] = useState(true);
     const [exploring, setExploring] = useState(false);
-    const [autoExploreChecked, setAutoExploreChecked] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
 
-    // Load showcase on mount
+    // Load showcase + all installed games on mount
     useEffect(() => {
         (async () => {
-            const data = await bridge.getShowcase();
+            const [data, gamesData] = await Promise.all([
+                bridge.getShowcase(),
+                bridge.getData('games'),
+            ]);
             const state = data || { games: [] };
             setShowcaseState(state);
-            setLoading(false);
-            // Auto-enter explore if showcase is empty
-            if (state.games.length === 0) {
-                setExploring(true);
+
+            if (gamesData?.games) {
+                const installed = gamesData.games.filter(g => g.installed);
+                setAllInstalledGames(installed);
+                const map = new Map();
+                installed.forEach(g => {
+                    map.set(g.id, g);
+                    if (g.steamAppId) map.set(g.steamAppId, g);
+                });
+                setGameMap(map);
             }
-            setAutoExploreChecked(true);
+
+            setLoading(false);
         })();
     }, []);
 
-    // Resolve showcase IDs to full game objects
-    useEffect(() => {
-        if (showcaseState.games.length === 0) {
-            setShowcaseGames([]);
-            return;
-        }
-        (async () => {
-            const gamesData = await bridge.getData('games');
-            if (!gamesData?.games) return;
-            const gameMap = new Map();
-            gamesData.games.forEach(g => {
-                gameMap.set(g.id, g);
-                gameMap.set(g.steamAppId, g);
-            });
-            const resolved = showcaseState.games
-                .map(id => gameMap.get(id))
-                .filter(Boolean);
-            setShowcaseGames(resolved);
-        })();
-    }, [showcaseState.games]);
+    const activeChannelId = showcaseState.activeChannelId || null;
+    const activeKata = useMemo(() => {
+        if (!activeChannelId) return null;
+        return (showcaseState.channels || []).find(k => k.id === activeChannelId) || null;
+    }, [activeChannelId, showcaseState.channels]);
+
+    const displayedGames = useMemo(() => {
+        if (!activeKata) return allInstalledGames;
+        return activeKata.gameIds.map(id => gameMap.get(id)).filter(Boolean);
+    }, [activeKata, allInstalledGames, gameMap]);
+
+    const activeKataGameIds = useMemo(() => {
+        if (!activeKata) return null;
+        return activeKata.gameIds;
+    }, [activeKata]);
 
     const persistShowcase = useCallback(async (nextState) => {
         setShowcaseState(nextState);
@@ -67,22 +71,27 @@ export default function KamaeView({ onSwitchToRin }) {
     }, []);
 
     const handleAdd = useCallback(async (gameId) => {
-        const next = addToShowcase(showcaseState, gameId);
-        if (next !== showcaseState) await persistShowcase(next);
-    }, [showcaseState, persistShowcase]);
+        if (!activeChannelId || !activeKata) return;
+        const updated = addGameToKata(activeKata, gameId);
+        if (updated === activeKata) return;
+        const nextChannels = (showcaseState.channels || []).map(k =>
+            k.id === activeChannelId ? updated : k
+        );
+        await persistShowcase({ ...showcaseState, channels: nextChannels });
+    }, [activeChannelId, activeKata, showcaseState, persistShowcase]);
 
     const handleRemove = useCallback(async (gameId) => {
-        const next = removeFromShowcase(showcaseState, gameId);
-        await persistShowcase(next);
-    }, [showcaseState, persistShowcase]);
+        if (!activeChannelId || !activeKata) return;
+        const updated = removeGameFromKata(activeKata, gameId);
+        if (updated === activeKata) return;
+        const nextChannels = (showcaseState.channels || []).map(k =>
+            k.id === activeChannelId ? updated : k
+        );
+        await persistShowcase({ ...showcaseState, channels: nextChannels });
+    }, [activeChannelId, activeKata, showcaseState, persistShowcase]);
 
-    const handleComplete = useCallback(async (gameId) => {
-        const next = markCompleted(showcaseState, gameId);
-        await persistShowcase(next);
-    }, [showcaseState, persistShowcase]);
-
-    const handleChannelUpdate = useCallback(async ({ channels, activeChannelId }) => {
-        const next = { ...showcaseState, channels, activeChannelId };
+    const handleChannelUpdate = useCallback(async ({ channels, activeChannelId: newActiveId }) => {
+        const next = { ...showcaseState, channels, activeChannelId: newActiveId };
         setShowcaseState(next);
         await bridge.saveShowcase(next);
     }, [showcaseState]);
@@ -160,35 +169,29 @@ export default function KamaeView({ onSwitchToRin }) {
                 <p className="kamae-title-desc">{t('ui.kamae.desc')}</p>
             </div>
             <div className="kamae-content">
+                <ChannelPanel
+                    channels={showcaseState.channels || []}
+                    activeChannelId={activeChannelId}
+                    showcaseGames={displayedGames}
+                    licensed={true}
+                    onUpdate={handleChannelUpdate}
+                />
                 <KamaeSearch
-                    showcaseIds={showcaseState.games}
+                    activeKataGameIds={activeKataGameIds}
                     onAdd={handleAdd}
                 />
-
-                {showcaseGames.length > 0 ? (
-                    <>
-                        <ShowcaseList
-                            games={showcaseGames}
-                            onRemove={handleRemove}
-                        />
-                        <ChannelPanel
-                            channels={showcaseState.channels || []}
-                            activeChannelId={showcaseState.activeChannelId || null}
-                            showcaseGames={showcaseGames}
-                            licensed={true}
-                            onUpdate={handleChannelUpdate}
-                        />
-                        <button
-                            type="button"
-                            className="kamae-explore-btn"
-                            onClick={() => setExploring(true)}
-                        >
-                            {t('ui.kamae.explore_more')}
-                        </button>
-                    </>
-                ) : (
-                    <ShowcaseEmpty onExplore={() => setExploring(true)} />
-                )}
+                <ShowcaseList
+                    games={displayedGames}
+                    onRemove={handleRemove}
+                    isKataMode={activeKata !== null}
+                />
+                <button
+                    type="button"
+                    className="kamae-explore-btn"
+                    onClick={() => setExploring(true)}
+                >
+                    {t('ui.kamae.explore_more')}
+                </button>
                 <button
                     type="button"
                     className="kamae-settings-link"

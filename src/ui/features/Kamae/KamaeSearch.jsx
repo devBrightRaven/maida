@@ -6,14 +6,14 @@ import bridge from '../../../services/bridge';
  * KamaeSearch — search warehouse, add results to showcase.
  * Unlimited search (no daily cap). Results limited to 20 by IPC.
  */
-export default function KamaeSearch({ showcaseIds, onAdd }) {
+export default function KamaeSearch({ activeKataGameIds, onAdd }) {
     const [query, setQuery] = useState('');
     const [results, setResults] = useState([]);
     const [searching, setSearching] = useState(false);
     const debounceRef = useRef(null);
     const inputRef = useRef(null);
 
-    const showcaseSet = new Set(showcaseIds);
+    const kataSet = activeKataGameIds ? new Set(activeKataGameIds) : null;
 
     useEffect(() => {
         if (!query.trim()) {
@@ -39,6 +39,10 @@ export default function KamaeSearch({ showcaseIds, onAdd }) {
         inputRef.current?.focus();
     };
 
+    if (!kataSet) {
+        return null;
+    }
+
     return (
         <div className="kamae-search" role="search">
             <label htmlFor="kamae-search-input" className="sr-only">Search games</label>
@@ -56,13 +60,13 @@ export default function KamaeSearch({ showcaseIds, onAdd }) {
                 <div className="kamae-search-results" role="listbox" aria-label="Search results">
                     {results.map(game => {
                         const id = game.id || game.steamAppId;
-                        const inShowcase = showcaseSet.has(id);
+                        const inKata = kataSet.has(id);
                         return (
                             <div
                                 key={id}
                                 className="kamae-search-result"
                                 role="option"
-                                aria-selected={inShowcase}
+                                aria-selected={inKata}
                             >
                                 <span className="kamae-search-result-title">
                                     {game.title}
@@ -72,10 +76,10 @@ export default function KamaeSearch({ showcaseIds, onAdd }) {
                                     type="button"
                                     className="kamae-search-add-btn"
                                     onClick={() => handleAdd(id)}
-                                    disabled={inShowcase}
-                                    aria-label={inShowcase ? `${game.title} already in showcase` : `Add ${game.title} to showcase`}
+                                    disabled={inKata}
+                                    aria-label={inKata ? `${game.title} already added` : `Add ${game.title}`}
                                 >
-                                    {inShowcase ? t('ui.kamae.added') : t('ui.kamae.add')}
+                                    {inKata ? t('ui.kamae.added') : t('ui.kamae.add')}
                                 </button>
                             </div>
                         );
