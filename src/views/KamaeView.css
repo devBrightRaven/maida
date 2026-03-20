@@ -471,6 +471,7 @@
     font-family: inherit;
 }
 
+/* Kata items — shared base for "all games" and kata rows */
 .channel-item {
     display: flex;
     align-items: center;
@@ -481,20 +482,21 @@
     font-family: inherit;
     color: var(--t-dim);
     background: transparent;
-    border: 1px solid transparent;
+    border: 1px solid var(--t-border-subtle);
     border-radius: 6px;
     cursor: pointer;
     text-align: left;
-    transition: border-color 0.15s ease;
+    transition: background 0.15s ease, border-color 0.15s ease;
 }
 
 .channel-item:hover {
-    border-color: var(--t-dim);
+    background: var(--t-accent-soft);
 }
 
 .channel-item--active {
     color: var(--t-text);
-    border-color: var(--t-text);
+    background: var(--t-accent-soft);
+    border-color: var(--t-accent-border);
 }
 
 .channel-item-name {
@@ -515,27 +517,35 @@
     color: var(--t-accent);
 }
 
+/* "All games" standalone item — pad right to align ACTIVE badge with kata rows */
+.channel-panel > .channel-item {
+    padding-right: 4.5rem;
+}
+
+/* Kata group — wraps item + action buttons in one bordered row */
 .channel-group {
     position: relative;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    border: 1px solid transparent;
+    border: 1px solid var(--t-border-subtle);
     border-radius: 6px;
-    transition: border-color 0.15s ease;
+    transition: background 0.15s ease, border-color 0.15s ease;
 }
 
 .channel-group:hover {
-    border-color: var(--t-dim);
+    background: var(--t-accent-soft);
 }
 
 .channel-group:has(.channel-item--active) {
-    border-color: var(--t-text);
+    background: var(--t-accent-soft);
+    border-color: var(--t-accent-border);
 }
 
 .channel-group .channel-item {
     flex: 1;
     border: none;
+    background: transparent;
 }
 
 .channel-item-actions {
