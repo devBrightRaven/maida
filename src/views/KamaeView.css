@@ -534,6 +534,7 @@
     min-height: 2.75rem;
     border: 1px solid var(--t-border-subtle);
     border-radius: 6px;
+    cursor: pointer;
     transition: background 0.15s ease, border-color 0.15s ease;
 }
 

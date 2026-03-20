@@ -118,13 +118,16 @@ export default function ChannelPanel({
             )}
 
             {channels.map(ch => (
-                <div key={ch.id} className={`channel-group ${activeChannelId === ch.id ? 'channel-group--active' : ''} ${ch.gameIds.length === 0 ? 'channel-group--empty' : ''}`}>
-                    <button
-                        type="button"
-                        className="channel-select-btn"
-                        onClick={() => ch.gameIds.length > 0 && handleSetActive(ch.id)}
-                        aria-label={`Select ${ch.name}`}
-                    >
+                <div
+                    key={ch.id}
+                    className={`channel-group ${activeChannelId === ch.id ? 'channel-group--active' : ''} ${ch.gameIds.length === 0 ? 'channel-group--empty' : ''}`}
+                    onClick={() => ch.gameIds.length > 0 && handleSetActive(ch.id)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); ch.gameIds.length > 0 && handleSetActive(ch.id); } }}
+                    aria-label={`Select ${ch.name}`}
+                >
+                    <span className="channel-select-btn">
                         <span className="channel-item-name">
                             {editingId === ch.id ? (
                                 <input
@@ -148,12 +151,12 @@ export default function ChannelPanel({
                             )}
                             <span className="channel-item-count">({ch.gameIds.length})</span>
                         </span>
-                    </button>
+                    </span>
                     <div className="channel-item-actions">
                         <button
                             type="button"
                             className="channel-expand-btn"
-                            onClick={() => setExpandedId(expandedId === ch.id ? null : ch.id)}
+                            onClick={(e) => { e.stopPropagation(); setExpandedId(expandedId === ch.id ? null : ch.id); }}
                             aria-label={`Edit ${ch.name} games`}
                         >
                             {expandedId === ch.id ? '−' : '+'}
@@ -161,7 +164,7 @@ export default function ChannelPanel({
                         <button
                             type="button"
                             className="channel-delete-btn"
-                            onClick={() => handleDelete(ch.id)}
+                            onClick={(e) => { e.stopPropagation(); handleDelete(ch.id); }}
                             aria-label={`Delete ${ch.name}`}
                         >
                             ×
