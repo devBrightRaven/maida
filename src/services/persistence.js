@@ -16,8 +16,8 @@ export async function loadData(type) {
     try {
         const data = await bridge.getData(type);
 
-        // IPC returned data (including null for "file exists but empty")
-        if (data !== undefined) return data;
+        // IPC returned valid data — null means file not found, fall through to next
+        if (data != null) return data;
     } catch (e) {
         console.warn(`[Maida] IPC getData(${type}) failed:`, e);
     }

@@ -70,6 +70,12 @@
             "credentials_saved": "保存しました。次回起動時にIGDBデータが表示されます。",
             "credentials_cleared": "クリアしました。"
         },
+        "telemetry": {
+            "title": "匿名利用データ",
+            "desc": "Maida は起動時に匿名の ping を 1 回送信します。個人情報、ゲームデータ、トラッキングは含まれません。いつでもオフにできます。",
+            "enabled": "匿名利用データを送信",
+            "privacy": "収集するもの：ランダム ID とインストールからの日数。それだけです。"
+        },
         "license": {
             "title": "Maida Plus",
             "desc_active": "チャンネル機能が有効です。",

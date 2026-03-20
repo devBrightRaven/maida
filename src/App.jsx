@@ -351,18 +351,17 @@ function App() {
                 <span className="version-name">Maida · Alpha</span>
                 <span className="version-number">
                     v{__APP_VERSION__}
-                    {updateCheck.isUpdateAvailable && ' (update available)'}
-                    {updateCheck.checkedAt && !updateCheck.isUpdateAvailable && !updateCheck.error && ' (latest)'}
+                    {updateCheck.isUpdateAvailable && ` → ${updateCheck.latestVersion}`}
                 </span>
-                {updateCheck.isUpdateAvailable && updateCheck.releaseUrl && (
-                    <a
+                {updateCheck.isUpdateAvailable && (
+                    <button
                         className="version-link"
-                        href={updateCheck.releaseUrl}
-                        onClick={(e) => { e.preventDefault(); bridge.openReleasePage(updateCheck.releaseUrl); }}
-                        aria-label="View latest release on GitHub"
+                        onClick={updateCheck.installUpdate}
+                        disabled={updateCheck.updating}
+                        aria-label={`Update to ${updateCheck.latestVersion}`}
                     >
-                        View on GitHub
-                    </a>
+                        {updateCheck.updating ? 'Updating...' : 'Update'}
+                    </button>
                 )}
             </div>
             {import.meta.env.DEV && <Agentation endpoint="http://localhost:4747" />}

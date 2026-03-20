@@ -71,7 +71,10 @@ pub fn user_data_default(data_type: &str) -> Value {
             }
         }),
         "config" => serde_json::json!({
-            "license": null
+            "license": null,
+            "telemetry": {
+                "enabled": true
+            }
         }),
         _ => serde_json::json!(null),
     }

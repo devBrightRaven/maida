@@ -4,6 +4,7 @@ mod decay;
 mod steam;
 mod credentials;
 mod enrichment;
+mod telemetry;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -12,11 +13,19 @@ pub fn run() {
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_single_instance::init(|_app, _args, _cwd| {}))
         .plugin(tauri_plugin_store::Builder::default().build())
+        .plugin(tauri_plugin_updater::Builder::new().build())
         .setup(|app| {
             let base = persistence::app_data_dir(&app.handle());
             persistence::ensure_dir(&base);
             persistence::migrate_from_electron(&base);
             commands::session_log::prune_session_log(&base);
+
+            // Fire-and-forget telemetry ping
+            let telemetry_base = base.clone();
+            tauri::async_runtime::spawn(async move {
+                telemetry::send_launch_ping(&telemetry_base).await;
+            });
+
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
@@ -50,6 +59,9 @@ pub fn run() {
             commands::license::save_license_key,
             commands::license::load_license_key,
             commands::license::check_license,
+            // Telemetry
+            telemetry::get_telemetry_enabled,
+            telemetry::set_telemetry_enabled,
         ])
         .run(tauri::generate_context!())
         .expect("error while running Maida");

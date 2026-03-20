@@ -12,8 +12,8 @@
     --t-surface: #1a1a1a;
     --t-glow: rgba(255, 255, 255, 0.03);
     --t-text-soft: rgba(255, 255, 255, 0.6);
-    --t-text-faint: rgba(255, 255, 255, 0.45);
-    --t-text-ghost: rgba(255, 255, 255, 0.35);
+    --t-text-faint: rgba(255, 255, 255, 0.58);
+    --t-text-ghost: rgba(255, 255, 255, 0.48);
     --t-border-subtle: rgba(255, 255, 255, 0.1);
     --t-accent-soft: rgba(255, 170, 0, 0.1);
     --t-accent-border: rgba(255, 170, 0, 0.3);
@@ -34,8 +34,8 @@
     --t-surface: #f0ece6;
     --t-glow: rgba(44, 44, 44, 0.03);
     --t-text-soft: rgba(44, 44, 44, 0.65);
-    --t-text-faint: rgba(44, 44, 44, 0.5);
-    --t-text-ghost: rgba(44, 44, 44, 0.4);
+    --t-text-faint: rgba(44, 44, 44, 0.62);
+    --t-text-ghost: rgba(44, 44, 44, 0.52);
     --t-border-subtle: rgba(44, 44, 44, 0.1);
     --t-accent-soft: rgba(150, 101, 45, 0.1);
     --t-accent-border: rgba(150, 101, 45, 0.3);
@@ -80,6 +80,11 @@ body {
 button {
     cursor: pointer;
     border: none;
-    outline: none;
     background: transparent;
+}
+
+/* Default focus indicator for all buttons (WCAG 2.4.11) */
+button:focus-visible {
+    outline: 2px solid var(--accent-gold, #c8a84e);
+    outline-offset: 2px;
 }

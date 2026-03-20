@@ -75,7 +75,7 @@ export default function OnboardingView({ onComplete }) {
         const result = await bridge.requestOnboardingSync();
         clearTimeout(timer);
 
-        if (result.success) {
+        if (result?.success) {
             setState('curating');
         } else {
             setState('error');

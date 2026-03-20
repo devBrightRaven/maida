@@ -27,7 +27,7 @@ pub async fn get_access_token(client_id: &str, client_secret: &str) -> Option<St
 
     // Check cache
     {
-        let cache = TOKEN_CACHE.lock().unwrap();
+        let cache = TOKEN_CACHE.lock().unwrap_or_else(|p| p.into_inner());
         if let (Some(token), Some(expires)) = (&cache.access_token, cache.expires_at) {
             if Instant::now() < expires {
                 return Some(token.clone());
@@ -79,7 +79,7 @@ pub async fn get_access_token(client_id: &str, client_secret: &str) -> Option<St
     // Cache with 60s early expiry
     let expires_at = Instant::now() + Duration::from_secs(data.expires_in.saturating_sub(60));
     {
-        let mut cache = TOKEN_CACHE.lock().unwrap();
+        let mut cache = TOKEN_CACHE.lock().unwrap_or_else(|p| p.into_inner());
         cache.access_token = Some(data.access_token.clone());
         cache.expires_at = Some(expires_at);
     }
@@ -88,7 +88,7 @@ pub async fn get_access_token(client_id: &str, client_secret: &str) -> Option<St
 }
 
 pub fn clear_cache() {
-    let mut cache = TOKEN_CACHE.lock().unwrap();
+    let mut cache = TOKEN_CACHE.lock().unwrap_or_else(|p| p.into_inner());
     cache.access_token = None;
     cache.expires_at = None;
 }
