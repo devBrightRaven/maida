@@ -29,7 +29,7 @@
 .kamae-calligraphy-bg {
     position: fixed;
     top: 58%;
-    right: calc(-10% - 5px);
+    right: -5%;
     transform: translateY(-50%);
     height: 90vh;
     width: 90vh;
