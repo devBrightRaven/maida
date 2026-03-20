@@ -24,6 +24,7 @@ export default function ChannelPanel({
     const [expandedId, setExpandedId] = useState(null);
     const [editingId, setEditingId] = useState(null);
     const [editName, setEditName] = useState('');
+    const [confirmDeleteId, setConfirmDeleteId] = useState(null);
 
     const handleCreate = useCallback(() => {
         const ch = createKata(newName);
@@ -163,11 +164,20 @@ export default function ChannelPanel({
                         </button>
                         <button
                             type="button"
-                            className="channel-delete-btn"
-                            onClick={(e) => { e.stopPropagation(); handleDelete(ch.id); }}
-                            aria-label={`Delete ${ch.name}`}
+                            className={`channel-delete-btn ${confirmDeleteId === ch.id ? 'channel-delete-btn--confirm' : ''}`}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                if (confirmDeleteId === ch.id) {
+                                    handleDelete(ch.id);
+                                    setConfirmDeleteId(null);
+                                } else {
+                                    setConfirmDeleteId(ch.id);
+                                }
+                            }}
+                            onBlur={() => setConfirmDeleteId(null)}
+                            aria-label={confirmDeleteId === ch.id ? `Confirm delete ${ch.name}` : `Delete ${ch.name}`}
                         >
-                            ×
+                            {confirmDeleteId === ch.id ? '?' : '×'}
                         </button>
                     </div>
                     <span className={`channel-item-badge ${activeChannelId === ch.id ? '' : 'channel-item-badge--hidden'}`}>{t('ui.channels.active')}</span>

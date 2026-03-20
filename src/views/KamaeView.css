@@ -610,6 +610,12 @@
     border-color: var(--t-dim);
 }
 
+.channel-delete-btn--confirm {
+    color: var(--t-error);
+    border-color: var(--t-error);
+    font-weight: 700;
+}
+
 .channel-game-list {
     width: 100%;
     padding: 0.5rem 0 0.5rem 1rem;
