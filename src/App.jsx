@@ -20,7 +20,7 @@ loadPrescriptionTranslations();
 
 // Frozen state screen with gamepad support
 // Input guard: cooldown on mount to prevent accidental double-tap from TRY
-function FrozenScreen({ onResume, guardMs = 3000 }) {
+function FrozenScreen({ onResume, guardMs = 5000 }) {
     const btnRef = useRef(null);
     const [ready, setReady] = useState(false);
 

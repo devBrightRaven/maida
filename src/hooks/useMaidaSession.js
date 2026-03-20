@@ -6,6 +6,7 @@ import { debugStore } from '../core/debugStore';
 import { loadData, saveData } from '../services/persistence';
 import bridge from '../services/bridge';
 import { loadShowcase } from '../services/persistence';
+import { open } from '@tauri-apps/plugin-opener';
 
 export function useMaidaSession() {
     const [data, setData] = useState({ games: null, prescriptions: null });
@@ -194,7 +195,7 @@ export function useMaidaSession() {
                 console.log('[Maida PLAY] options:', options, 'steamUrl:', session.game.steamUrl);
 
                 if (!options.silent && session.game.steamUrl) {
-                    window.open(session.game.steamUrl, '_blank');
+                    open(session.game.steamUrl).catch(() => {});
                 }
 
                 // Transition to freeze state (shows "MAIDA IS PAUSED" screen)
@@ -215,7 +216,7 @@ export function useMaidaSession() {
             setData(prev => ({ ...prev, games: nextData }));
 
             if (!options.silent && session.game.steamUrl) {
-                window.open(session.game.steamUrl, '_blank');
+                open(session.game.steamUrl).catch(() => {});
             }
 
             // SYSTEM EVENT: COMMITMENT
