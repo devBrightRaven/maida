@@ -199,7 +199,8 @@ export default function KamaeView({ onSwitchToRin }) {
                     onRemove={handleRemove}
                     isKataMode={activeKata !== null}
                 />
-                {activeChannelId && (
+                {/* Explore hidden for v0.1.0 — kata search replaces it */}
+                {false && activeChannelId && (
                     <button
                         type="button"
                         className="kamae-explore-btn"

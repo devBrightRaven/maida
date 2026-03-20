@@ -197,7 +197,8 @@ export default function SettingsPanel({ onClose }) {
                 )}
             </section>
 
-            <section className="kamae-settings-section">
+            {/* License section hidden for v0.1.0 — no paywall */}
+            {false && <section className="kamae-settings-section">
                 <h3 className="kamae-settings-section-title">{t('ui.settings.license.title')}</h3>
                 <p className="kamae-settings-section-desc">
                     {licenseActive
@@ -243,7 +244,7 @@ export default function SettingsPanel({ onClose }) {
                         {licenseStatus.message}
                     </p>
                 )}
-            </section>
+            </section>}
 
             <section className="kamae-settings-section">
                 <h3 className="kamae-settings-section-title">{t('ui.telemetry.title')}</h3>
