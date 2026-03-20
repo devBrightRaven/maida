@@ -8,7 +8,6 @@ import SettingsPanel from '../ui/features/Kamae/SettingsPanel';
 import ChannelPanel from '../ui/features/Kamae/ChannelPanel';
 import { useGameInput } from '../hooks/useGameInput';
 import { addToShowcase, removeFromShowcase, markCompleted } from '../core/showcase';
-import { isChannelsUnlocked } from '../core/license';
 import { t } from '../i18n';
 import bridge from '../services/bridge';
 import CalligraphyBg from '../ui/CalligraphyBg';
@@ -25,12 +24,6 @@ export default function KamaeView({ onSwitchToRin }) {
     const [exploring, setExploring] = useState(false);
     const [autoExploreChecked, setAutoExploreChecked] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
-    const [licenseState, setLicenseState] = useState({ licensed: false });
-
-    // Load license state on mount
-    useEffect(() => {
-        bridge.checkLicense().then(setLicenseState);
-    }, []);
 
     // Load showcase on mount
     useEffect(() => {
@@ -182,7 +175,7 @@ export default function KamaeView({ onSwitchToRin }) {
                             channels={showcaseState.channels || []}
                             activeChannelId={showcaseState.activeChannelId || null}
                             showcaseGames={showcaseGames}
-                            licensed={isChannelsUnlocked(licenseState)}
+                            licensed={true}
                             onUpdate={handleChannelUpdate}
                         />
                         <button

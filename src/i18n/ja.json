@@ -86,14 +86,14 @@
             "error_format": "キー形式が正しくありません。形式：MAIDA-XXXXX-XXXXX-XXXXX"
         },
         "channels": {
-            "title": "チャンネル",
-            "create": "新しいチャンネル",
-            "create_placeholder": "チャンネル名…",
+            "title": "型（カタ）",
+            "create": "新しい型",
+            "create_placeholder": "型の名前…",
             "active": "アクティブ",
             "all_games": "すべてのゲーム",
-            "empty": "このチャンネルにはゲームがありません",
-            "delete_confirm": "このチャンネルを削除しますか？",
-            "locked_title": "チャンネル",
+            "empty": "この型にはゲームがありません",
+            "delete_confirm": "この型を削除しますか？",
+            "locked_title": "型（カタ）",
             "locked_desc": "Maida Plusで利用可能です。設定でキーを入力してください。"
         },
         "curation": {

@@ -86,14 +86,14 @@
             "error_format": "格式不正確。格式：MAIDA-XXXXX-XXXXX-XXXXX"
         },
         "channels": {
-            "title": "頻道",
-            "create": "新頻道",
-            "create_placeholder": "頻道名稱⋯⋯",
+            "title": "型（Kata）",
+            "create": "新增型",
+            "create_placeholder": "型的名稱⋯⋯",
             "active": "啟用中",
             "all_games": "全部遊戲",
-            "empty": "這個頻道還沒有遊戲",
-            "delete_confirm": "移除這個頻道？",
-            "locked_title": "頻道",
+            "empty": "這個型還沒有遊戲",
+            "delete_confirm": "移除這個型？",
+            "locked_title": "型（Kata）",
             "locked_desc": "Maida Plus 功能。在設定中輸入授權碼。"
         },
         "curation": {

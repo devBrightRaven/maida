@@ -86,14 +86,14 @@
             "error_format": "Invalid key format. Expected: MAIDA-XXXXX-XXXXX-XXXXX"
         },
         "channels": {
-            "title": "Channels",
-            "create": "new channel",
-            "create_placeholder": "channel name...",
+            "title": "Kata",
+            "create": "new kata",
+            "create_placeholder": "kata name...",
             "active": "active",
             "all_games": "all games",
-            "empty": "no games in this channel",
-            "delete_confirm": "remove this channel?",
-            "locked_title": "Channels",
+            "empty": "no games in this kata",
+            "delete_confirm": "remove this kata?",
+            "locked_title": "Kata",
             "locked_desc": "Available with Maida Plus. Enter your key in settings."
         },
         "curation": {
