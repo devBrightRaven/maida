@@ -847,19 +847,21 @@
 
 .kamae-settings-link {
     align-self: center;
-    padding: 0.375rem 0;
+    padding: 0.5rem 1.5rem;
     font-size: 0.75rem;
     font-family: inherit;
     letter-spacing: 0.04em;
     color: var(--t-dim);
     background: transparent;
-    border: none;
+    border: 1px solid var(--t-border-subtle);
+    border-radius: 6px;
     cursor: pointer;
-    transition: color 0.15s ease;
+    transition: color 0.15s ease, border-color 0.15s ease;
 }
 
 .kamae-settings-link:hover {
     color: var(--t-text);
+    border-color: var(--t-dim);
 }
 
 .kamae-settings-link:focus-visible {
