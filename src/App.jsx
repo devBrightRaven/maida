@@ -348,7 +348,7 @@ function App() {
                 onSwitchToKamae={switchToKamae}
             />
             <div className="global-version-tag" role="contentinfo">
-                <span className="version-name">Maida · Alpha</span>
+                <span className="version-name">Maida マイダ</span>
                 <span className="version-number">
                     v{__APP_VERSION__}
                     {updateCheck.isUpdateAvailable && ` → ${updateCheck.latestVersion}`}
