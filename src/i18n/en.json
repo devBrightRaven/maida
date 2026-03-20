@@ -91,7 +91,7 @@
             "create": "new kata",
             "create_placeholder": "kata name...",
             "active": "active",
-            "all_games": "all games",
+            "all_games": "all installed games",
             "empty": "no games in this kata",
             "delete_confirm": "remove this kata?",
             "locked_title": "Kata",

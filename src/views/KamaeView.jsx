@@ -152,10 +152,16 @@ export default function KamaeView({ onSwitchToRin }) {
         return (
             <div className="kamae-view kamae-view--explore" ref={containerRef}>
                 <ExploreView
-                    showcaseState={showcaseState}
-                    onAdd={handleAdd}
+                    allInstalledGames={allInstalledGames}
+                    katas={showcaseState.channels || []}
+                    onAddToKata={handleAdd}
                     onBack={() => setExploring(false)}
-                    onShowcaseUpdate={setShowcaseState}
+                    exploreHistory={showcaseState.exploreHistory}
+                    onExploreHistoryUpdate={async (history) => {
+                        const next = { ...showcaseState, exploreHistory: history };
+                        setShowcaseState(next);
+                        await bridge.saveShowcase(next);
+                    }}
                 />
             </div>
         );

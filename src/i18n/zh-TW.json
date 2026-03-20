@@ -91,7 +91,7 @@
             "create": "新增型",
             "create_placeholder": "型的名稱⋯⋯",
             "active": "啟用中",
-            "all_games": "全部遊戲",
+            "all_games": "全部已安裝遊戲",
             "empty": "這個型還沒有遊戲",
             "delete_confirm": "移除這個型？",
             "locked_title": "型（Kata）",

@@ -3,18 +3,17 @@ import { t } from '../../../i18n';
 import ExploreCard from './ExploreCard';
 import ExploreLimitReached from './ExploreLimitReached';
 import { canExploreMore, recordCardShown, resetDailyExplore, DAILY_EXPLORE_LIMIT } from '../../../core/explore';
-import { addToBox } from '../../../core/box';
+import { getUncategorizedGames } from '../../../core/katas';
 import { useGameInput } from '../../../hooks/useGameInput';
-import bridge from '../../../services/bridge';
 
 /**
- * ExploreView — card-by-card warehouse discovery.
- * Fetches one random game at a time, tracks daily limit.
+ * ExploreView — card-by-card discovery of uncategorized installed games.
+ * Picks randomly from installed games not yet in any kata, tracks daily limit.
  */
-export default function ExploreView({ showcaseState, onAdd, onBack, onShowcaseUpdate }) {
+export default function ExploreView({ allInstalledGames, katas, onAddToKata, onBack, exploreHistory, onExploreHistoryUpdate }) {
     const [currentGame, setCurrentGame] = useState(null);
     const [exploreState, setExploreState] = useState(
-        showcaseState.exploreHistory || { lastSessionDate: null, cardsShownToday: 0 }
+        exploreHistory || { lastSessionDate: null, cardsShownToday: 0 }
     );
     const [exhausted, setExhausted] = useState(false);
     const sessionShownRef = useRef(new Set());
@@ -31,25 +30,18 @@ export default function ExploreView({ showcaseState, onAdd, onBack, onShowcaseUp
         setReady(true);
     }, []);
 
-    const fetchNextCard = useCallback(async () => {
-        // Build exclusion list: showcase + active box + already shown this session
-        const excludeIds = [
-            ...showcaseState.games,
-            ...(showcaseState.box || []).map(e => e.gameId || e),
-            ...sessionShownRef.current,
-        ];
-
-        const game = await bridge.sampleWarehouse(excludeIds);
-        if (!game) {
+    const fetchNextCard = useCallback(() => {
+        const uncategorized = getUncategorizedGames(allInstalledGames, katas);
+        const unseen = uncategorized.filter(g => !sessionShownRef.current.has(g.id));
+        if (unseen.length === 0) {
             setExhausted(true);
             setCurrentGame(null);
             return;
         }
-
-        const gameId = game.id || game.steamAppId;
-        sessionShownRef.current.add(gameId);
-        setCurrentGame(game);
-    }, [showcaseState.games, showcaseState.box]);
+        const pick = unseen[Math.floor(Math.random() * unseen.length)];
+        sessionShownRef.current.add(pick.id);
+        setCurrentGame(pick);
+    }, [allInstalledGames, katas]);
 
     // Fetch first card after reset is applied
     useEffect(() => {
@@ -58,43 +50,26 @@ export default function ExploreView({ showcaseState, onAdd, onBack, onShowcaseUp
         }
     }, [ready]);
 
-    const advanceCard = useCallback(async (updatedExplore) => {
+    const advanceCard = useCallback((updatedExplore) => {
         setExploreState(updatedExplore);
-        // Persist explore history
-        const nextShowcase = { ...showcaseState, exploreHistory: updatedExplore };
-        await bridge.saveShowcase(nextShowcase);
-
+        onExploreHistoryUpdate(updatedExplore);
         if (canExploreMore(updatedExplore)) {
-            await fetchNextCard();
+            fetchNextCard();
         }
-    }, [showcaseState, fetchNextCard]);
+    }, [onExploreHistoryUpdate, fetchNextCard]);
 
-    const handleAdd = useCallback(async () => {
+    const handleAdd = useCallback(() => {
         if (!currentGame) return;
         const gameId = currentGame.id || currentGame.steamAppId;
-        onAdd(gameId);
+        onAddToKata(gameId);
         const nextExplore = recordCardShown(exploreState);
-        await advanceCard(nextExplore);
-    }, [currentGame, exploreState, onAdd, advanceCard]);
+        advanceCard(nextExplore);
+    }, [currentGame, exploreState, onAddToKata, advanceCard]);
 
-    const handleDismiss = useCallback(async () => {
-        if (!currentGame) return;
-        const gameId = currentGame.id || currentGame.steamAppId;
-        const now = new Date().toISOString();
-
-        // Add to box
-        const currentBox = showcaseState.box || { entries: [] };
-        const nextBox = addToBox(
-            Array.isArray(currentBox) ? { entries: currentBox } : currentBox,
-            gameId,
-            now
-        );
-        const nextShowcase = { ...showcaseState, box: nextBox.entries };
-        onShowcaseUpdate(nextShowcase);
-
+    const handleDismiss = useCallback(() => {
         const nextExplore = recordCardShown(exploreState);
-        await advanceCard(nextExplore);
-    }, [currentGame, showcaseState, exploreState, onShowcaseUpdate, advanceCard]);
+        advanceCard(nextExplore);
+    }, [exploreState, advanceCard]);
 
     // Gamepad: D-pad Right = add, D-pad Left = dismiss, B = back
     useGameInput({

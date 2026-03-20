@@ -91,7 +91,7 @@
             "create": "新しい型",
             "create_placeholder": "型の名前…",
             "active": "アクティブ",
-            "all_games": "すべてのゲーム",
+            "all_games": "インストール済み全ゲーム",
             "empty": "この型にはゲームがありません",
             "delete_confirm": "この型を削除しますか？",
             "locked_title": "型（カタ）",

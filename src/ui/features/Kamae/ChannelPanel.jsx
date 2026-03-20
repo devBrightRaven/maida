@@ -1,13 +1,13 @@
 import { useState, useCallback } from 'react';
 import { t } from '../../../i18n';
 import {
-    createChannel,
-    deleteChannel,
-    addGameToChannel,
-    removeGameFromChannel,
-    renameChannel,
-    MAX_CHANNELS,
-} from '../../../core/channels';
+    createKata,
+    deleteKata,
+    addGameToKata,
+    removeGameFromKata,
+    renameKata,
+    MAX_KATAS,
+} from '../../../core/katas';
 
 /**
  * ChannelPanel — manage mood-period game groupings.
@@ -17,7 +17,6 @@ export default function ChannelPanel({
     channels,
     activeChannelId,
     showcaseGames,
-    licensed,
     onUpdate,
 }) {
     const [creating, setCreating] = useState(false);
@@ -26,18 +25,8 @@ export default function ChannelPanel({
     const [editingId, setEditingId] = useState(null);
     const [editName, setEditName] = useState('');
 
-    // Locked state — show but disable
-    if (!licensed) {
-        return (
-            <div className="channel-panel channel-panel--locked">
-                <h3 className="channel-panel-title">{t('ui.channels.locked_title')}</h3>
-                <p className="channel-panel-locked-desc">{t('ui.channels.locked_desc')}</p>
-            </div>
-        );
-    }
-
     const handleCreate = useCallback(() => {
-        const ch = createChannel(newName);
+        const ch = createKata(newName);
         if (!ch) return;
         onUpdate({
             channels: [...channels, ch],
@@ -48,7 +37,7 @@ export default function ChannelPanel({
     }, [newName, channels, activeChannelId, onUpdate]);
 
     const handleDelete = useCallback((channelId) => {
-        const next = deleteChannel(channels, channelId);
+        const next = deleteKata(channels, channelId);
         onUpdate({
             channels: next,
             activeChannelId: activeChannelId === channelId ? null : activeChannelId,
@@ -67,8 +56,8 @@ export default function ChannelPanel({
         const ch = channels.find(c => c.id === channelId);
         if (!ch) return;
         const updated = ch.gameIds.includes(gameId)
-            ? removeGameFromChannel(ch, gameId)
-            : addGameToChannel(ch, gameId);
+            ? removeGameFromKata(ch, gameId)
+            : addGameToKata(ch, gameId);
         const nextChannels = channels.map(c => c.id === channelId ? updated : c);
         onUpdate({ channels: nextChannels, activeChannelId });
     }, [channels, activeChannelId, onUpdate]);
@@ -87,7 +76,7 @@ export default function ChannelPanel({
         }
         const ch = channels.find(c => c.id === editingId);
         if (!ch) { setEditingId(null); return; }
-        const updated = renameChannel(ch, trimmed);
+        const updated = renameKata(ch, trimmed);
         const nextChannels = channels.map(c => c.id === editingId ? updated : c);
         onUpdate({ channels: nextChannels, activeChannelId });
         setEditingId(null);
@@ -100,7 +89,7 @@ export default function ChannelPanel({
                     <h3 className="channel-panel-title">{t('ui.channels.title')}</h3>
                     <p className="channel-panel-hint">{t('ui.channels.hint')}</p>
                 </div>
-                {channels.length < MAX_CHANNELS && !creating && (
+                {channels.length < MAX_KATAS && !creating && (
                     <button
                         type="button"
                         className="channel-create-btn"
@@ -176,7 +165,7 @@ export default function ChannelPanel({
                             type="button"
                             className="channel-expand-btn"
                             onClick={() => setExpandedId(expandedId === ch.id ? null : ch.id)}
-                            aria-label="Edit channel games"
+                            aria-label="Edit kata games"
                         >
                             {expandedId === ch.id ? '−' : '+'}
                         </button>
@@ -184,7 +173,7 @@ export default function ChannelPanel({
                             type="button"
                             className="channel-delete-btn"
                             onClick={() => handleDelete(ch.id)}
-                            aria-label="Delete channel"
+                            aria-label="Delete kata"
                         >
                             ×
                         </button>

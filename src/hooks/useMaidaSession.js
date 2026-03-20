@@ -6,7 +6,6 @@ import { debugStore } from '../core/debugStore';
 import { loadData, saveData } from '../services/persistence';
 import bridge from '../services/bridge';
 import { loadShowcase } from '../services/persistence';
-import { getActivePool } from '../core/channels';
 
 export function useMaidaSession() {
     const [data, setData] = useState({ games: null, prescriptions: null });
@@ -40,11 +39,11 @@ export function useMaidaSession() {
 
         if (constraintsData) setConstraints(constraintsData);
 
-        // Load showcase IDs for candidatePool (channel-aware)
-        const loadedShowcaseIds = showcaseData?.games?.length > 0 ? showcaseData.games : null;
-        const channelPool = loadedShowcaseIds
-            ? getActivePool(showcaseData, showcaseData.channels || [], showcaseData.activeChannelId || null)
-            : null;
+        // Load showcase IDs for candidatePool (kata-aware)
+        const activeKataId = showcaseData?.activeChannelId || null;
+        const katas = showcaseData?.channels || [];
+        const activeKata = activeKataId ? katas.find(k => k.id === activeKataId) : null;
+        const channelPool = activeKata?.gameIds?.length > 0 ? activeKata.gameIds : null;
         setShowcaseIds(channelPool);
 
         const firstRun = isFirstRun(games);
@@ -88,13 +87,13 @@ export function useMaidaSession() {
         }
 
         // Normal flow if no anchor
-        const constrainedGames = loadedShowcaseIds
+        const constrainedGames = channelPool
             ? freshGames  // Showcase mode: skip constraints, candidatePool handles filtering
             : applyConstraints(freshGames, constraintsData);
         const game = getActiveGame(constrainedGames, {
             sessionSkippedSet: [],
             returnPenaltySet: returnPenalties || [],
-            candidatePool: loadedShowcaseIds || undefined
+            candidatePool: channelPool || undefined
         });
         const prescription = getPrescription(game, prescriptions);
 
@@ -333,10 +332,10 @@ export function useMaidaSession() {
     // Reload showcase and re-roll (called when switching back from Kamae)
     const reloadShowcase = async () => {
         const showcaseData = await loadShowcase();
-        const rawIds = showcaseData?.games?.length > 0 ? showcaseData.games : null;
-        const newIds = rawIds
-            ? getActivePool(showcaseData, showcaseData.channels || [], showcaseData.activeChannelId || null)
-            : null;
+        const activeKataId = showcaseData?.activeChannelId || null;
+        const katas = showcaseData?.channels || [];
+        const activeKata = activeKataId ? katas.find(k => k.id === activeKataId) : null;
+        const newIds = activeKata?.gameIds?.length > 0 ? activeKata.gameIds : null;
         setShowcaseIds(newIds);
         // Re-roll with updated pool
         const gamesSource = data.games;
