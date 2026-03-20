@@ -554,6 +554,18 @@
     flex-shrink: 0;
 }
 
+.channel-rename-input {
+    font-size: 0.875rem;
+    font-family: inherit;
+    color: var(--t-text);
+    background: var(--t-bg);
+    border: 1px solid var(--t-accent-border);
+    border-radius: 4px;
+    padding: 0.125rem 0.375rem;
+    outline: none;
+    width: 8rem;
+}
+
 .channel-expand-btn,
 .channel-delete-btn {
     width: 1.75rem;

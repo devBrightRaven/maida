@@ -5,6 +5,7 @@ import {
     deleteChannel,
     addGameToChannel,
     removeGameFromChannel,
+    renameChannel,
     MAX_CHANNELS,
 } from '../../../core/channels';
 
@@ -22,6 +23,8 @@ export default function ChannelPanel({
     const [creating, setCreating] = useState(false);
     const [newName, setNewName] = useState('');
     const [expandedId, setExpandedId] = useState(null);
+    const [editingId, setEditingId] = useState(null);
+    const [editName, setEditName] = useState('');
 
     // Locked state — show but disable
     if (!licensed) {
@@ -69,6 +72,26 @@ export default function ChannelPanel({
         const nextChannels = channels.map(c => c.id === channelId ? updated : c);
         onUpdate({ channels: nextChannels, activeChannelId });
     }, [channels, activeChannelId, onUpdate]);
+
+    const handleStartRename = useCallback((ch) => {
+        setEditingId(ch.id);
+        setEditName(ch.name);
+    }, []);
+
+    const handleCommitRename = useCallback(() => {
+        if (!editingId) return;
+        const trimmed = editName.trim();
+        if (trimmed.length === 0) {
+            setEditingId(null);
+            return;
+        }
+        const ch = channels.find(c => c.id === editingId);
+        if (!ch) { setEditingId(null); return; }
+        const updated = renameChannel(ch, trimmed);
+        const nextChannels = channels.map(c => c.id === editingId ? updated : c);
+        onUpdate({ channels: nextChannels, activeChannelId });
+        setEditingId(null);
+    }, [editingId, editName, channels, activeChannelId, onUpdate]);
 
     return (
         <div className="channel-panel">
@@ -123,7 +146,26 @@ export default function ChannelPanel({
                         onClick={() => handleSetActive(ch.id)}
                     >
                         <span className="channel-item-name">
-                            {ch.name}
+                            {editingId === ch.id ? (
+                                <input
+                                    type="text"
+                                    className="channel-rename-input"
+                                    value={editName}
+                                    onChange={(e) => setEditName(e.target.value)}
+                                    onBlur={handleCommitRename}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter') handleCommitRename();
+                                        if (e.key === 'Escape') setEditingId(null);
+                                    }}
+                                    onClick={(e) => e.stopPropagation()}
+                                    maxLength={30}
+                                    autoFocus
+                                />
+                            ) : (
+                                <span onDoubleClick={(e) => { e.stopPropagation(); handleStartRename(ch); }}>
+                                    {ch.name}
+                                </span>
+                            )}
                             <span className="channel-item-count">({ch.gameIds.length})</span>
                         </span>
                         {activeChannelId === ch.id && <span className="channel-item-badge">{t('ui.channels.active')}</span>}
