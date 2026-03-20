@@ -28,8 +28,8 @@
 /* Background calligraphy watermark — right side */
 .kamae-calligraphy-bg {
     position: fixed;
-    top: 55%;
-    right: -10%;
+    top: 58%;
+    right: calc(-10% - 5px);
     transform: translateY(-50%);
     height: 90vh;
     width: 90vh;

@@ -3,7 +3,7 @@
 /* Background calligraphy watermark — left side */
 .rin-calligraphy-bg {
     position: absolute;
-    top: 55%;
+    top: 58%;
     left: -20%;
     transform: translateY(-50%);
     height: 95%;
