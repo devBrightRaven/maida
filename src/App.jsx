@@ -125,7 +125,7 @@ function App() {
     // Input UX Thresholds (ms)
     const [tapThreshold, setTapThreshold] = useState(300);
     const [anchorThreshold, setAnchorThreshold] = useState(3000);
-    const [resumeGuard, setResumeGuard] = useState(3000);
+    const [resumeGuard, setResumeGuard] = useState(5000);
 
     const themeToggle = (
         <button

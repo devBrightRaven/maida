@@ -6,7 +6,7 @@ import { debugStore } from '../core/debugStore';
 import { loadData, saveData } from '../services/persistence';
 import bridge from '../services/bridge';
 import { loadShowcase } from '../services/persistence';
-import { open } from '@tauri-apps/plugin-opener';
+import { openUrl } from '@tauri-apps/plugin-opener';
 
 export function useMaidaSession() {
     const [data, setData] = useState({ games: null, prescriptions: null });
@@ -195,7 +195,7 @@ export function useMaidaSession() {
                 console.log('[Maida PLAY] options:', options, 'steamUrl:', session.game.steamUrl);
 
                 if (!options.silent && session.game.steamUrl) {
-                    open(session.game.steamUrl).catch(() => {});
+                    openUrl(session.game.steamUrl).catch(e => console.warn('[Maida] Failed to launch game:', e));
                 }
 
                 // Transition to freeze state (shows "MAIDA IS PAUSED" screen)
