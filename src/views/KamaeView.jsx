@@ -175,6 +175,14 @@ export default function KamaeView({ onSwitchToRin }) {
                 <p className="kamae-title-desc">{t('ui.kamae.desc')}</p>
             </div>
             <div className="kamae-content">
+                <button
+                    type="button"
+                    className={`channel-item ${activeChannelId === null ? 'channel-item--active' : ''}`}
+                    onClick={() => handleChannelUpdate({ channels: showcaseState.channels || [], activeChannelId: null })}
+                >
+                    <span className="channel-item-name">{t('ui.channels.all_games')}</span>
+                    {activeChannelId === null && <span className="channel-item-badge">{t('ui.channels.active')}</span>}
+                </button>
                 <ChannelPanel
                     channels={showcaseState.channels || []}
                     activeChannelId={activeChannelId}

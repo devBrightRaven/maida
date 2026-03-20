@@ -117,16 +117,6 @@ export default function ChannelPanel({
                 </div>
             )}
 
-            {/* "All games" option */}
-            <button
-                type="button"
-                className={`channel-item ${activeChannelId === null ? 'channel-item--active' : ''}`}
-                onClick={() => onUpdate({ channels, activeChannelId: null })}
-            >
-                <span className="channel-item-name">{t('ui.channels.all_games')}</span>
-                {activeChannelId === null && <span className="channel-item-badge">{t('ui.channels.active')}</span>}
-            </button>
-
             {channels.map(ch => (
                 <div key={ch.id} className="channel-group">
                     <button
