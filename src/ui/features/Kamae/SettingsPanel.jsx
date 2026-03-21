@@ -101,7 +101,7 @@ export default function SettingsPanel({ onClose }) {
     return (
         <section className="kamae-settings" aria-label={t('ui.settings.title')}>
             <header className="kamae-settings-header">
-                <h2 className="kamae-settings-title">{t('ui.settings.title')}</h2>
+                <h1 className="kamae-settings-title">{t('ui.settings.title')}</h1>
                 <button
                     type="button"
                     className="kamae-settings-back-btn"
@@ -111,8 +111,8 @@ export default function SettingsPanel({ onClose }) {
                 </button>
             </header>
 
-            <section className="kamae-settings-section">
-                <h3 className="kamae-settings-section-title">{t('ui.settings.igdb_title')}</h3>
+            <section className="kamae-settings-section" aria-labelledby="settings-igdb-title">
+                <h2 id="settings-igdb-title" className="kamae-settings-section-title">{t('ui.settings.igdb_title')}</h2>
                 <p className="kamae-settings-section-desc">{t('ui.settings.igdb_desc')}</p>
 
                 <div className="kamae-settings-field">
@@ -199,7 +199,7 @@ export default function SettingsPanel({ onClose }) {
 
             {/* License section hidden for v0.1.0 — no paywall */}
             {false && <section className="kamae-settings-section">
-                <h3 className="kamae-settings-section-title">{t('ui.settings.license.title')}</h3>
+                <h2 className="kamae-settings-section-title">{t('ui.settings.license.title')}</h2>
                 <p className="kamae-settings-section-desc">
                     {licenseActive
                         ? t('ui.settings.license.desc_active')
@@ -246,8 +246,8 @@ export default function SettingsPanel({ onClose }) {
                 )}
             </section>}
 
-            <section className="kamae-settings-section">
-                <h3 className="kamae-settings-section-title">{t('ui.telemetry.title')}</h3>
+            <section className="kamae-settings-section" aria-labelledby="settings-telemetry-title">
+                <h2 id="settings-telemetry-title" className="kamae-settings-section-title">{t('ui.telemetry.title')}</h2>
                 <p className="kamae-settings-section-desc">{t('ui.telemetry.desc')}</p>
 
                 <div className="kamae-settings-field">
