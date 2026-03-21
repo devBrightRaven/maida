@@ -240,7 +240,7 @@ export default function RinView({
 
             <footer className="mvp-footer">
                 <div className="action-row">
-                    {game ? (
+                    {game && (
                         <div className="primary-actions">
                             <button
                                 ref={btnRefs.visit}
@@ -282,15 +282,6 @@ export default function RinView({
                                 {isAnchored ? t('ui.button.clear') : t('ui.button.not_today')}
                             </button>
                         </div>
-                    ) : (
-                        <button
-                            ref={btnRefs.notToday}
-                            className={`mvp-btn not-today full-width ${focusedBtn === 'notToday' ? 'is-focused' : ''}`}
-                            aria-label={t('ui.button.acknowledge')}
-                            onClick={(e) => { e.stopPropagation(); onAction('skip'); }}
-                        >
-                            {t('ui.button.acknowledge')}
-                        </button>
                     )}
 
                     <button
