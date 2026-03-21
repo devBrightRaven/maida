@@ -122,11 +122,8 @@ export default function KamaeView({ onSwitchToRin }) {
         if (el && el.tagName === 'BUTTON') el.click();
     }, []);
 
-    useGameInput({
-        onBack: exploring ? () => setExploring(false) : undefined,
-        onNav: handleNav,
-        onMainAction: handleMainAction,
-    });
+    // Gamepad disabled in Kamae — management UI requires keyboard/mouse
+    useGameInput({ disabled: true });
 
     if (loading) {
         return (
