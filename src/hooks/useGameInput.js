@@ -204,53 +204,57 @@ export function useGameInput({
             if (gp) {
                 const btn = (i) => gp.buttons[i]?.pressed;
 
-                // D-pad navigation (with edge detection)
-                const dpadState = {
-                    up: btn(DPAD_UP),
-                    down: btn(DPAD_DOWN),
-                    left: btn(DPAD_LEFT),
-                    right: btn(DPAD_RIGHT)
-                };
+                // D-pad, A, B — only process if this instance handles them
+                const hasNavHandlers = callbacksRef.current.onNav || callbacksRef.current.onMainAction || callbacksRef.current.onBack;
 
-                if (dpadState.up && !lastDpad.up) callbacksRef.current.onNav?.('up');
-                if (dpadState.down && !lastDpad.down) callbacksRef.current.onNav?.('down');
-                if (dpadState.left && !lastDpad.left) callbacksRef.current.onNav?.('left');
-                if (dpadState.right && !lastDpad.right) callbacksRef.current.onNav?.('right');
+                if (hasNavHandlers) {
+                    // D-pad navigation (with edge detection)
+                    const dpadState = {
+                        up: btn(DPAD_UP),
+                        down: btn(DPAD_DOWN),
+                        left: btn(DPAD_LEFT),
+                        right: btn(DPAD_RIGHT)
+                    };
 
-                Object.assign(lastDpad, dpadState);
+                    if (dpadState.up && !lastDpad.up) callbacksRef.current.onNav?.('up');
+                    if (dpadState.down && !lastDpad.down) callbacksRef.current.onNav?.('down');
+                    if (dpadState.left && !lastDpad.left) callbacksRef.current.onNav?.('left');
+                    if (dpadState.right && !lastDpad.right) callbacksRef.current.onNav?.('right');
 
-                // A button - activates the FOCUSED element
-                const aPressed = btn(BTN_A);
-                if (aPressed && !aButtonDown) {
-                    aButtonDown = true;
-                    aButtonTarget = getFocusedInteractive();
-                    if (aButtonTarget) {
-                        // Only dispatch pointer events for elements that need long-press (Rin's TRY button)
-                        const needsLongPress = aButtonTarget.classList.contains('visit');
-                        if (needsLongPress) {
-                            aButtonTarget.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
+                    Object.assign(lastDpad, dpadState);
+
+                    // A button - activates the FOCUSED element
+                    const aPressed = btn(BTN_A);
+                    if (aPressed && !aButtonDown) {
+                        aButtonDown = true;
+                        aButtonTarget = getFocusedInteractive();
+                        if (aButtonTarget) {
+                            const needsLongPress = aButtonTarget.classList.contains('visit');
+                            if (needsLongPress) {
+                                aButtonTarget.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
+                            }
+                        } else {
+                            handleStartPress();
                         }
-                    } else {
-                        handleStartPress();
-                    }
-                } else if (!aPressed && aButtonDown) {
-                    aButtonDown = false;
-                    if (aButtonTarget) {
-                        const needsLongPress = aButtonTarget.classList.contains('visit');
-                        if (needsLongPress) {
-                            aButtonTarget.dispatchEvent(new PointerEvent('pointerup', { bubbles: true }));
+                    } else if (!aPressed && aButtonDown) {
+                        aButtonDown = false;
+                        if (aButtonTarget) {
+                            const needsLongPress = aButtonTarget.classList.contains('visit');
+                            if (needsLongPress) {
+                                aButtonTarget.dispatchEvent(new PointerEvent('pointerup', { bubbles: true }));
+                            }
+                            aButtonTarget.click();
+                            aButtonTarget = null;
+                        } else {
+                            handleEndPress();
                         }
-                        aButtonTarget.click();
-                        aButtonTarget = null;
-                    } else {
-                        handleEndPress();
                     }
+
+                    // B button - contextual back/cancel
+                    const bPressed = btn(BTN_B);
+                    if (bPressed && !lastB) callbacksRef.current.onBack?.();
+                    lastB = bPressed;
                 }
-
-                // B button - contextual back/cancel
-                const bPressed = btn(BTN_B);
-                if (bPressed && !lastB) callbacksRef.current.onBack?.();
-                lastB = bPressed;
 
                 // L1/R1 - face switching (only when configured)
                 const l1Pressed = btn(BTN_L1);
