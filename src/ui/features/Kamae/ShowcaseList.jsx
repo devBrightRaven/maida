@@ -31,27 +31,21 @@ function GameCover({ steamAppId, title }) {
     );
 }
 
-const HOLD_DURATION = 3000; // 3 seconds
-
 /**
- * Long-press button — requires holding for 3 seconds to activate.
- * Shows progress bar while holding.
- */
-/**
- * Eased progress: 0→50% fast (0.5s), 50→100% slow (2.5s).
- * Gives instant visual feedback but requires commitment to finish.
+ * Eased progress: 0→75% fast (1s), 75→100% slow (1s).
+ * Fast feedback, then deliberate final confirmation.
  */
 function easedProgress(elapsed) {
-    const FAST_PHASE = 500;   // 0.5s for first 50%
-    const SLOW_PHASE = 2500;  // 2.5s for last 50%
+    const FAST_PHASE = 1000;  // 1s for first 75%
+    const SLOW_PHASE = 1000;  // 1s for last 25%
     if (elapsed <= FAST_PHASE) {
-        return (elapsed / FAST_PHASE) * 0.5;
+        return (elapsed / FAST_PHASE) * 0.75;
     }
     const slowElapsed = elapsed - FAST_PHASE;
-    return 0.5 + (slowElapsed / SLOW_PHASE) * 0.5;
+    return 0.75 + (slowElapsed / SLOW_PHASE) * 0.25;
 }
 
-const TOTAL_HOLD = 3000; // 0.5s + 2.5s
+const TOTAL_HOLD = 2000; // 1s + 1s
 
 function HoldButton({ onConfirm, label, ariaLabel }) {
     const [progress, setProgress] = useState(0);
