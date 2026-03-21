@@ -265,7 +265,6 @@ function App() {
 
     if (status === 'loading') return (
         <>
-            {themeToggle}
             <div className="app-loading">
                 {showLoadingText && (
                     <>
@@ -281,12 +280,12 @@ function App() {
                     </>
                 )}
             </div>
+            {themeToggle}
         </>
     );
 
     if (status === 'error') return (
         <div className="void-screen">
-            {themeToggle}
             <p className="frozen-message">
                 {t('voice.error.steam_not_found')}
             </p>
@@ -296,21 +295,22 @@ function App() {
             >
                 {t('ui.button.sync')}
             </button>
+            {themeToggle}
         </div>
     );
 
     if (status === 'onboarding') return (
         <>
-            {themeToggle}
             <OnboardingView onComplete={init} />
+            {themeToggle}
         </>
     );
 
     if (status === 'frozen') {
         return (
             <>
-                {themeToggle}
                 <FrozenScreen onResume={() => setStatus('active')} guardMs={resumeGuard} />
+                {themeToggle}
             </>
         );
     }
@@ -318,8 +318,8 @@ function App() {
     if (face === 'kamae') {
         return (
             <div className="app-root">
-                {themeToggle}
                 <KamaeView onSwitchToRin={switchToRin} />
+                {themeToggle}
                 {import.meta.env.DEV && <div aria-hidden="true"><Agentation endpoint="http://localhost:4747" /></div>}
             </div>
         );
@@ -327,7 +327,6 @@ function App() {
 
     return (
         <div className="app-root">
-            {themeToggle}
             <RinView
                 game={session.game}
                 prescription={session.prescription}
@@ -348,6 +347,7 @@ function App() {
                 onHideGame={hideGame}
                 onSwitchToKamae={switchToKamae}
             />
+            {themeToggle}
             <div className="global-version-tag" role="contentinfo">
                 <span className="version-name">Maida マイダ</span>
                 <span className="version-number">
