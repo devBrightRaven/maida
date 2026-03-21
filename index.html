@@ -10,6 +10,14 @@
         document.documentElement.setAttribute('data-theme',
           localStorage.getItem('maida-theme') || 'dark'
         );
+        // Set lang for screen readers before React loads
+        var supported = ['en', 'zh-TW', 'ja'];
+        var stored = localStorage.getItem('maida_locale');
+        var lang = stored && supported.indexOf(stored) >= 0 ? stored : (navigator.language || 'en');
+        var base = lang.split('-')[0];
+        var match = supported.find(function(l) { return l === lang; }) ||
+                    supported.find(function(l) { return l.split('-')[0] === base; }) || 'en';
+        document.documentElement.lang = match;
       } catch (e) {
         document.documentElement.setAttribute('data-theme', 'dark');
       }
