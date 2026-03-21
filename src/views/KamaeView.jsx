@@ -120,7 +120,6 @@ export default function KamaeView({ onSwitchToRin }) {
     const handleMainAction = useCallback(() => {
         const el = document.activeElement;
         if (!el) return;
-        console.log('[Kamae Gamepad A]', el.tagName, el.className, el.type);
         if (el.tagName === 'BUTTON' || el.getAttribute('role') === 'button') {
             el.click();
         } else if (el.tagName === 'INPUT') {

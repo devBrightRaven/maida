@@ -223,19 +223,23 @@ export function useGameInput({
                 const aPressed = btn(BTN_A);
                 if (aPressed && !aButtonDown) {
                     aButtonDown = true;
-                    const el = document.activeElement;
-                    console.log('[Gamepad A down]', el?.tagName, el?.className, el?.type, el?.getAttribute?.('role'));
                     aButtonTarget = getFocusedInteractive();
-                    console.log('[Gamepad A target]', aButtonTarget?.tagName);
                     if (aButtonTarget) {
-                        aButtonTarget.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
+                        // Only dispatch pointer events for elements that need long-press (Rin's TRY button)
+                        const needsLongPress = aButtonTarget.classList.contains('visit');
+                        if (needsLongPress) {
+                            aButtonTarget.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
+                        }
                     } else {
                         handleStartPress();
                     }
                 } else if (!aPressed && aButtonDown) {
                     aButtonDown = false;
                     if (aButtonTarget) {
-                        aButtonTarget.dispatchEvent(new PointerEvent('pointerup', { bubbles: true }));
+                        const needsLongPress = aButtonTarget.classList.contains('visit');
+                        if (needsLongPress) {
+                            aButtonTarget.dispatchEvent(new PointerEvent('pointerup', { bubbles: true }));
+                        }
                         aButtonTarget.click();
                         aButtonTarget = null;
                     } else {
