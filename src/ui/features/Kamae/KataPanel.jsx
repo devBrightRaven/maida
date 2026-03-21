@@ -18,10 +18,11 @@ export default function KataPanel({
     activeKataId,
     showcaseGames,
     onUpdate,
+    expandedId,
+    onExpandToggle,
 }) {
     const [creating, setCreating] = useState(false);
     const [newName, setNewName] = useState('');
-    const [expandedId, setExpandedId] = useState(null);
     const [editingId, setEditingId] = useState(null);
     const [editName, setEditName] = useState('');
     const [confirmDeleteId, setConfirmDeleteId] = useState(null);
@@ -43,7 +44,7 @@ export default function KataPanel({
             katas: next,
             activeKataId: activeKataId === kataId ? null : activeKataId,
         });
-        if (expandedId === kataId) setExpandedId(null);
+        if (expandedId === kataId) onExpandToggle(null);
     }, [katas, activeKataId, expandedId, onUpdate]);
 
     const handleSetActive = useCallback((kataId) => {
@@ -157,7 +158,7 @@ export default function KataPanel({
                         <button
                             type="button"
                             className="kata-expand-btn"
-                            onClick={(e) => { e.stopPropagation(); setExpandedId(expandedId === ch.id ? null : ch.id); }}
+                            onClick={(e) => { e.stopPropagation(); onExpandToggle(expandedId === ch.id ? null : ch.id); }}
                             aria-label={`Edit ${ch.name} games`}
                         >
                             {expandedId === ch.id ? '−' : '+'}

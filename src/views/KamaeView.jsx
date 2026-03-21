@@ -23,6 +23,7 @@ export default function KamaeView({ onSwitchToRin }) {
     const [loading, setLoading] = useState(true);
     const [exploring, setExploring] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
+    const [expandedKataId, setExpandedKataId] = useState(null);
 
     // Load showcase + all installed games on mount
     useEffect(() => {
@@ -131,10 +132,24 @@ export default function KamaeView({ onSwitchToRin }) {
         }
     }, []);
 
+    const handleBack = useCallback(() => {
+        if (exploring) {
+            setExploring(false);
+        } else if (expandedKataId) {
+            setExpandedKataId(null);
+        } else {
+            // Focus first kata item
+            const container = containerRef.current;
+            if (container) {
+                const firstKata = container.querySelector('[role="button"], .kata-item');
+                if (firstKata) firstKata.focus();
+            }
+        }
+    }, [exploring, expandedKataId]);
+
     useGameInput({
-        onBack: exploring ? () => setExploring(false) : undefined,
+        onBack: handleBack,
         onNav: handleNav,
-        onMainAction: handleMainAction,
         onMainAction: handleMainAction,
     });
 
@@ -199,6 +214,8 @@ export default function KamaeView({ onSwitchToRin }) {
                     activeKataId={activeKataId}
                     showcaseGames={allInstalledGames}
                     onUpdate={handleKataUpdate}
+                    expandedId={expandedKataId}
+                    onExpandToggle={setExpandedKataId}
                 />
                 <KamaeSearch
                     activeKataGameIds={activeKataGameIds}
