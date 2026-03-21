@@ -245,6 +245,7 @@ export default function RinView({
                             <button
                                 ref={btnRefs.visit}
                                 className={`mvp-btn visit ${isAnchored ? 'anchored-btn' : ''} ${focusedBtn === 'visit' ? 'is-focused' : ''}`}
+                                aria-label={isAnchored ? `${t('ui.button.play')} ${game.title}` : `${t('ui.button.try')} ${game.title}`}
                                 // Pointer Events for unified input handling
                                 onPointerDown={handlers.onPressStart}
                                 onPointerUp={handlers.onPressEnd}
@@ -271,6 +272,7 @@ export default function RinView({
                             <button
                                 ref={btnRefs.notToday}
                                 className={`mvp-btn not-today ${focusedBtn === 'notToday' ? 'is-focused' : ''}`}
+                                aria-label={isAnchored ? `${t('ui.button.clear')} ${game.title}` : t('ui.button.not_today')}
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     if (isAnchored) onAction('release');
@@ -284,6 +286,7 @@ export default function RinView({
                         <button
                             ref={btnRefs.notToday}
                             className={`mvp-btn not-today full-width ${focusedBtn === 'notToday' ? 'is-focused' : ''}`}
+                            aria-label={t('ui.button.acknowledge')}
                             onClick={(e) => { e.stopPropagation(); onAction('skip'); }}
                         >
                             {t('ui.button.acknowledge')}
@@ -293,6 +296,7 @@ export default function RinView({
                     <button
                         ref={btnRefs.back}
                         className={`mvp-btn back-link ${(!canUndo || isAnchored) ? 'is-hidden' : ''} ${focusedBtn === 'back' ? 'is-focused' : ''}`}
+                        aria-label={t('ui.button.back')}
                         onClick={(e) => { e.stopPropagation(); if (canUndo && !isAnchored) onAction('back'); }}
                         disabled={!canUndo || isAnchored}
                         tabIndex={(!canUndo || isAnchored) ? -1 : 0}
@@ -306,7 +310,7 @@ export default function RinView({
 
             {debugMode && (
                 <div className="debug-controls">
-                    <button className="debug-trace-btn" onClick={(e) => { e.stopPropagation(); setShowTrace(true); }}>
+                    <button className="debug-trace-btn" aria-label="Open debug trace panel" onClick={(e) => { e.stopPropagation(); setShowTrace(true); }}>
                         {t('ui.debug.trace_btn')}
                     </button>
                 </div>

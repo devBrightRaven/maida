@@ -57,6 +57,7 @@ function FrozenScreen({ onResume, guardMs = 5000 }) {
             <button
                 ref={btnRef}
                 className="restart-selection-btn"
+                aria-label={t('ui.button.im_back')}
                 onClick={guardedResume}
                 disabled={!ready}
             >
