@@ -99,8 +99,8 @@ export default function SettingsPanel({ onClose }) {
     const secretDisplay = hasExisting && !showSecretInput;
 
     return (
-        <div className="kamae-settings" role="region" aria-label={t('ui.settings.title')}>
-            <div className="kamae-settings-header">
+        <section className="kamae-settings" aria-label={t('ui.settings.title')}>
+            <header className="kamae-settings-header">
                 <h2 className="kamae-settings-title">{t('ui.settings.title')}</h2>
                 <button
                     type="button"
@@ -109,7 +109,7 @@ export default function SettingsPanel({ onClose }) {
                 >
                     {t('ui.settings.back')}
                 </button>
-            </div>
+            </header>
 
             <section className="kamae-settings-section">
                 <h3 className="kamae-settings-section-title">{t('ui.settings.igdb_title')}</h3>
@@ -269,6 +269,6 @@ export default function SettingsPanel({ onClose }) {
                     {t('ui.telemetry.privacy')}
                 </p>
             </section>
-        </div>
+        </section>
     );
 }

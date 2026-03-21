@@ -136,7 +136,7 @@ function HoldButton({ onConfirm, label, ariaLabel }) {
  */
 export default function ShowcaseList({ games, onRemove, isKataMode }) {
     return (
-        <div className="showcase-list" role="list" aria-label="Your showcase">
+        <ul className="showcase-list" aria-label="Your showcase">
             {isKataMode && (
                 <div className="showcase-counter" aria-live="polite">
                     {games.length} / {MAX_KATA_GAMES}
@@ -146,10 +146,9 @@ export default function ShowcaseList({ games, onRemove, isKataMode }) {
                 const id = game.id || game.steamAppId;
                 const headerUrl = getSteamHeaderUrl(game.steamAppId);
                 return (
-                    <div
+                    <li
                         key={id}
                         className={`showcase-item ${!game.installed ? 'showcase-item--dimmed' : ''}`}
-                        role="listitem"
                     >
                         <GameCover steamAppId={game.steamAppId} title={game.title} />
                         <div className="showcase-item-info">
@@ -163,9 +162,9 @@ export default function ShowcaseList({ games, onRemove, isKataMode }) {
                                 ariaLabel={`Hold to put ${game.title} back to shelf`}
                             />
                         </div>
-                    </div>
+                    </li>
                 );
             })}
-        </div>
+        </ul>
     );
 }

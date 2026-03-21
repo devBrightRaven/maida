@@ -208,7 +208,7 @@ export default function RinView({
             <p className="rin-title-reading">{t('ui.rin.reading')}</p>
             <p className="rin-title-desc">{t('ui.rin.desc')}</p>
         </div>
-        <div
+        <main
             className={`mvp-container ${!game ? 'is-idle' : ''} ${debugMode ? 'debug-mode' : ''} ${expanded ? 'is-expanded' : ''} ${isAnchored ? 'is-anchored' : ''}`}
             onClick={handleContainerClick}
         >
@@ -339,7 +339,7 @@ export default function RinView({
             {onSwitchToKamae && (
                 <FaceSwitchButton ref={btnRefs.switchKamae} direction="to-kamae" onClick={onSwitchToKamae} />
             )}
-        </div>
+        </main>
         </>
     );
 }

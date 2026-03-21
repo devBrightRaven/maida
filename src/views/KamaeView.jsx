@@ -130,27 +130,27 @@ export default function KamaeView({ onSwitchToRin }) {
 
     if (loading) {
         return (
-            <div className="kamae-view" ref={containerRef}>
+            <main className="kamae-view" ref={containerRef}>
                 <div className="kamae-content">
                     <p className="kamae-loading">{t('ui.status.loading')}</p>
                 </div>
-            </div>
+            </main>
         );
     }
 
     if (showSettings) {
         return (
-            <div className="kamae-view" ref={containerRef}>
+            <main className="kamae-view" ref={containerRef}>
                 <div className="kamae-content">
                     <SettingsPanel onClose={() => setShowSettings(false)} />
                 </div>
-            </div>
+            </main>
         );
     }
 
     if (exploring) {
         return (
-            <div className="kamae-view kamae-view--explore" ref={containerRef}>
+            <main className="kamae-view kamae-view--explore" ref={containerRef}>
                 <ExploreView
                     allInstalledGames={allInstalledGames}
                     katas={showcaseState.katas || []}
@@ -163,12 +163,12 @@ export default function KamaeView({ onSwitchToRin }) {
                         await bridge.saveShowcase(next);
                     }}
                 />
-            </div>
+            </main>
         );
     }
 
     return (
-        <div className="kamae-view" ref={containerRef}>
+        <main className="kamae-view" ref={containerRef}>
             <CalligraphyBg char="構" className="kamae-calligraphy-bg" />
             <div className="kamae-title-block" role="img" aria-label={t('ui.kamae.reading')}>
                 <p className="kamae-title-reading">{t('ui.kamae.reading')}</p>
@@ -218,6 +218,6 @@ export default function KamaeView({ onSwitchToRin }) {
                 </button>
             </div>
             <FaceSwitchButton direction="to-rin" onClick={onSwitchToRin} />
-        </div>
+        </main>
     );
 }

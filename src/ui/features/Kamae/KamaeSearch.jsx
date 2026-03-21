@@ -57,12 +57,12 @@ export default function KamaeSearch({ activeKataGameIds, onAdd }) {
                 autoComplete="off"
             />
             {results.length > 0 && (
-                <div className="kamae-search-results" role="listbox" aria-label="Search results">
+                <ul className="kamae-search-results" role="listbox" aria-label="Search results">
                     {results.map(game => {
                         const id = game.id || game.steamAppId;
                         const inKata = kataSet.has(id);
                         return (
-                            <div
+                            <li
                                 key={id}
                                 className="kamae-search-result"
                                 role="option"
@@ -81,10 +81,10 @@ export default function KamaeSearch({ activeKataGameIds, onAdd }) {
                                 >
                                     {inKata ? t('ui.kamae.added') : t('ui.kamae.add')}
                                 </button>
-                            </div>
+                            </li>
                         );
                     })}
-                </div>
+                </ul>
             )}
             {searching && <span className="kamae-search-status" aria-live="polite">{t('ui.kamae.searching')}</span>}
         </div>

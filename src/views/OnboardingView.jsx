@@ -84,18 +84,18 @@ export default function OnboardingView({ onComplete }) {
 
     if (state === 'curating') {
         return (
-            <div className="onboarding-container">
-                <main className="onboarding-content">
+            <main className="onboarding-container">
+                <section className="onboarding-content" aria-label="Onboarding">
                     <CurationPrompt onDone={onComplete} />
-                </main>
+                </section>
                 <div className="bg-glow"></div>
             </div>
         );
     }
 
     return (
-        <div className="onboarding-container">
-            <main className="onboarding-content">
+        <main className="onboarding-container">
+            <section className="onboarding-content" aria-label="Onboarding">
                 <p className="onboarding-voice">
                     {state === 'error'
                         ? t('voice.error.steam_not_found')
@@ -133,9 +133,9 @@ export default function OnboardingView({ onComplete }) {
                         </button>
                     )}
                 </div>
-            </main>
+            </section>
             <div className="bg-glow"></div>
             <div className="app-version-tag">v{__APP_VERSION__}</div>
-        </div>
+        </main>
     );
 }

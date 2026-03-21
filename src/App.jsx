@@ -52,7 +52,7 @@ function FrozenScreen({ onResume, guardMs = 5000 }) {
     });
 
     return (
-        <div className="void-screen">
+        <main className="void-screen">
             <p className="frozen-message">{t('ui.status.frozen')}</p>
             <button
                 ref={btnRef}
@@ -63,7 +63,7 @@ function FrozenScreen({ onResume, guardMs = 5000 }) {
             >
                 {t('ui.button.im_back')}
             </button>
-        </div>
+        </main>
     );
 }
 

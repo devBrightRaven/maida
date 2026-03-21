@@ -84,8 +84,8 @@ export default function KataPanel({
     }, [editingId, editName, katas, activeKataId, onUpdate]);
 
     return (
-        <div className="kata-panel">
-            <div className="kata-panel-header">
+        <section className="kata-panel" aria-label={t('ui.katas.title')}>
+            <header className="kata-panel-header">
                 <div>
                     <h3 className="kata-panel-title">{t('ui.katas.title')}</h3>
                     <p className="kata-panel-hint">{t('ui.katas.hint')}</p>
@@ -99,7 +99,7 @@ export default function KataPanel({
                         {t('ui.katas.create')}
                     </button>
                 )}
-            </div>
+            </header>
 
             {creating && (
                 <div className="kata-create-form">
@@ -205,6 +205,6 @@ export default function KataPanel({
                     )}
                 </div>
             ))}
-        </div>
+        </section>
     );
 }
