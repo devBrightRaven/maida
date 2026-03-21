@@ -32,11 +32,11 @@ function GameCover({ steamAppId, title }) {
 }
 
 /**
- * Eased progress: 0→75% fast (1s), 75→100% slow (1s).
+ * Eased progress: 0→75% fast (1.5s), 75→100% slow (1s).
  * Fast feedback, then deliberate final confirmation.
  */
 function easedProgress(elapsed) {
-    const FAST_PHASE = 1000;  // 1s for first 75%
+    const FAST_PHASE = 1500;  // 1.5s for first 75%
     const SLOW_PHASE = 1000;  // 1s for last 25%
     if (elapsed <= FAST_PHASE) {
         return (elapsed / FAST_PHASE) * 0.75;
@@ -45,7 +45,7 @@ function easedProgress(elapsed) {
     return 0.75 + (slowElapsed / SLOW_PHASE) * 0.25;
 }
 
-const TOTAL_HOLD = 2000; // 1s + 1s
+const TOTAL_HOLD = 2500; // 1.5s + 1s
 
 function HoldButton({ onConfirm, label, ariaLabel }) {
     const [progress, setProgress] = useState(0);
