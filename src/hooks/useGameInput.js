@@ -223,7 +223,10 @@ export function useGameInput({
                 const aPressed = btn(BTN_A);
                 if (aPressed && !aButtonDown) {
                     aButtonDown = true;
+                    const el = document.activeElement;
+                    console.log('[Gamepad A down]', el?.tagName, el?.className, el?.type, el?.getAttribute?.('role'));
                     aButtonTarget = getFocusedInteractive();
+                    console.log('[Gamepad A target]', aButtonTarget?.tagName);
                     if (aButtonTarget) {
                         aButtonTarget.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
                     } else {

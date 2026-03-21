@@ -136,6 +136,7 @@ export default function KamaeView({ onSwitchToRin }) {
         onBack: exploring ? () => setExploring(false) : undefined,
         onNav: handleNav,
         onMainAction: handleMainAction,
+        onMainAction: handleMainAction,
     });
 
     if (loading) {
