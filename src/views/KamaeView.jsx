@@ -98,12 +98,12 @@ export default function KamaeView({ onSwitchToRin }) {
 
     const containerRef = useRef(null);
 
-    // D-pad navigation: cycle through buttons only (skip inputs to avoid virtual keyboard)
+    // D-pad navigation: cycle through all interactive elements
     const handleNav = useCallback((dir) => {
         const container = containerRef.current;
         if (!container) return;
         const focusable = Array.from(container.querySelectorAll(
-            'button:not(:disabled), [tabindex]:not([tabindex="-1"])'
+            'button:not(:disabled), input:not(:disabled), [tabindex]:not([tabindex="-1"]), [role="button"]'
         ));
         if (focusable.length === 0) return;
         const current = focusable.indexOf(document.activeElement);
@@ -116,14 +116,22 @@ export default function KamaeView({ onSwitchToRin }) {
         focusable[next]?.focus();
     }, []);
 
-    // A button: click focused element
+    // A button: activate focused element (button click or checkbox toggle)
     const handleMainAction = useCallback(() => {
         const el = document.activeElement;
-        if (el && el.tagName === 'BUTTON') el.click();
+        if (!el) return;
+        if (el.tagName === 'BUTTON' || el.getAttribute('role') === 'button') {
+            el.click();
+        } else if (el.tagName === 'INPUT' && el.type === 'checkbox') {
+            el.click();
+        }
     }, []);
 
-    // Gamepad disabled in Kamae — management UI requires keyboard/mouse
-    useGameInput({ disabled: true });
+    useGameInput({
+        onBack: exploring ? () => setExploring(false) : undefined,
+        onNav: handleNav,
+        onMainAction: handleMainAction,
+    });
 
     if (loading) {
         return (

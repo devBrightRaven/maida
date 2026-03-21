@@ -181,10 +181,14 @@ export function useGameInput({
         let lastL1 = false;
         let lastR1 = false;
 
-        // Helper: get focused button element
-        const getFocusedButton = () => {
+        // Helper: get focused interactive element (button, checkbox, role=button)
+        const getFocusedInteractive = () => {
             const el = document.activeElement;
-            return (el && el.tagName === 'BUTTON') ? el : null;
+            if (!el) return null;
+            if (el.tagName === 'BUTTON') return el;
+            if (el.getAttribute('role') === 'button') return el;
+            if (el.tagName === 'INPUT' && el.type === 'checkbox') return el;
+            return null;
         };
 
         let animFrame = null;
@@ -218,7 +222,7 @@ export function useGameInput({
                 const aPressed = btn(BTN_A);
                 if (aPressed && !aButtonDown) {
                     aButtonDown = true;
-                    aButtonTarget = getFocusedButton();
+                    aButtonTarget = getFocusedInteractive();
                     if (aButtonTarget) {
                         aButtonTarget.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
                     } else {
