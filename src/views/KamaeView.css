@@ -207,6 +207,15 @@
 
 /* ── Showcase List ─────────────────────── */
 
+.showcase-heading {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--t-dim);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin: 0;
+}
+
 .showcase-list {
     display: flex;
     flex-direction: column;
@@ -875,7 +884,7 @@
     letter-spacing: 0.04em;
     color: var(--t-dim);
     background: transparent;
-    border: 1px solid var(--t-border-subtle);
+    border: 2px solid var(--t-dim);
     border-radius: 6px;
     cursor: pointer;
     transition: color 0.15s ease, border-color 0.15s ease;
