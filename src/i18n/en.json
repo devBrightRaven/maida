@@ -37,6 +37,7 @@
         "rin": {
             "reading": "臨 rin",
             "mode_prefix": "Rin mode: ",
+            "prescription_heading": "Message",
             "desc": "Meet what appears.",
             "empty_showcase": "Nothing on your shelf yet.",
             "empty_showcase_btn": "add a few games"

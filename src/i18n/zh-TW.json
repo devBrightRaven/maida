@@ -37,6 +37,7 @@
         "rin": {
             "reading": "臨 rin",
             "mode_prefix": "臨模式：",
+            "prescription_heading": "訊息",
             "desc": "與眼前的，相遇。",
             "empty_showcase": "眼前還沒有任何遊戲。",
             "empty_showcase_btn": "擺幾款上去"
