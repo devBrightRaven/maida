@@ -49,7 +49,7 @@ export default function KataPanel({
     const handleSetActive = useCallback((kataId) => {
         onUpdate({
             katas,
-            activeKataId: activeKataId === kataId ? null : kataId,
+            activeKataId: kataId,
         });
     }, [katas, activeKataId, onUpdate]);
 
