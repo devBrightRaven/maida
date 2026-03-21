@@ -31,12 +31,14 @@
         },
         "rin": {
             "reading": "臨 rin",
+            "mode_prefix": "Rin mode: ",
             "desc": "Meet what appears.",
             "empty_showcase": "Nothing on your shelf yet.",
             "empty_showcase_btn": "add a few games"
         },
         "kamae": {
             "reading": "構 kamae",
+            "mode_prefix": "Kamae mode: ",
             "desc": "Quiet preparation before you face it.",
             "search_placeholder": "Search your library...",
             "searching": "Searching...",

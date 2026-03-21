@@ -216,6 +216,7 @@ export default function RinView({
             {game && (
                 <header className="mvp-header" onClick={onSecretTap}>
                     <h1 className="game-label">
+                        <span className="sr-only">{t('ui.rin.mode_prefix')}</span>
                         {isAnchored ? `(⚓${t('ui.game.anchored_prefix')}) ${game.title}` : game.title}
                     </h1>
                     {(() => {

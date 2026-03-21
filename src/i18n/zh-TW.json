@@ -31,12 +31,14 @@
         },
         "rin": {
             "reading": "臨 rin",
+            "mode_prefix": "臨模式：",
             "desc": "與眼前的，相遇。",
             "empty_showcase": "眼前還沒有任何遊戲。",
             "empty_showcase_btn": "擺幾款上去"
         },
         "kamae": {
             "reading": "構 kamae",
+            "mode_prefix": "構模式：",
             "desc": "面臨之前，靜靜準備。",
             "search_placeholder": "搜尋你的遊戲庫⋯⋯",
             "searching": "搜尋中⋯⋯",

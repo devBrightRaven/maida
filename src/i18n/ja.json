@@ -31,12 +31,14 @@
         },
         "rin": {
             "reading": "臨 rin",
+            "mode_prefix": "臨モード：",
             "desc": "現れたものと、向き合う。",
             "empty_showcase": "棚にはまだ何もない。",
             "empty_showcase_btn": "ゲームを載せる"
         },
         "kamae": {
             "reading": "構 kamae",
+            "mode_prefix": "構モード：",
             "desc": "臨む前の、静かな仕度。",
             "search_placeholder": "ライブラリを検索…",
             "searching": "検索中…",
