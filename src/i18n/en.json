@@ -78,14 +78,14 @@
         },
         "license": {
             "title": "Maida Plus",
-            "desc_active": "Channels feature is active.",
-            "desc_inactive": "Enter your license key to unlock Channels.",
+            "desc_active": "Kata feature is active.",
+            "desc_inactive": "Enter your license key to unlock Kata.",
             "label": "License Key",
             "activate": "activate",
-            "success": "Activated! Channels are now available.",
+            "success": "Activated! Kata is now available.",
             "error_format": "Invalid key format. Expected: MAIDA-XXXXX-XXXXX-XXXXX"
         },
-        "channels": {
+        "katas": {
             "title": "Kata",
             "hint": "Choose a kata. Rin will present them to you, one at a time.",
             "create": "new kata",

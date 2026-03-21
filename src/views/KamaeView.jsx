@@ -4,7 +4,7 @@ import ShowcaseList from '../ui/features/Kamae/ShowcaseList';
 import KamaeSearch from '../ui/features/Kamae/KamaeSearch';
 import ExploreView from '../ui/features/Kamae/ExploreView';
 import SettingsPanel from '../ui/features/Kamae/SettingsPanel';
-import ChannelPanel from '../ui/features/Kamae/ChannelPanel';
+import KataPanel from '../ui/features/Kamae/KataPanel';
 import { useGameInput } from '../hooks/useGameInput';
 import { addGameToKata, removeGameFromKata } from '../core/katas';
 import { t } from '../i18n';
@@ -49,11 +49,11 @@ export default function KamaeView({ onSwitchToRin }) {
         })();
     }, []);
 
-    const activeChannelId = showcaseState.activeChannelId || null;
+    const activeKataId = showcaseState.activeKataId || null;
     const activeKata = useMemo(() => {
-        if (!activeChannelId) return null;
-        return (showcaseState.channels || []).find(k => k.id === activeChannelId) || null;
-    }, [activeChannelId, showcaseState.channels]);
+        if (!activeKataId) return null;
+        return (showcaseState.katas || []).find(k => k.id === activeKataId) || null;
+    }, [activeKataId, showcaseState.katas]);
 
     const displayedGames = useMemo(() => {
         if (!activeKata) return allInstalledGames;
@@ -71,27 +71,27 @@ export default function KamaeView({ onSwitchToRin }) {
     }, []);
 
     const handleAdd = useCallback(async (gameId) => {
-        if (!activeChannelId || !activeKata) return;
+        if (!activeKataId || !activeKata) return;
         const updated = addGameToKata(activeKata, gameId);
         if (updated === activeKata) return;
-        const nextChannels = (showcaseState.channels || []).map(k =>
-            k.id === activeChannelId ? updated : k
+        const nextKatas = (showcaseState.katas || []).map(k =>
+            k.id === activeKataId ? updated : k
         );
-        await persistShowcase({ ...showcaseState, channels: nextChannels });
-    }, [activeChannelId, activeKata, showcaseState, persistShowcase]);
+        await persistShowcase({ ...showcaseState, katas: nextKatas });
+    }, [activeKataId, activeKata, showcaseState, persistShowcase]);
 
     const handleRemove = useCallback(async (gameId) => {
-        if (!activeChannelId || !activeKata) return;
+        if (!activeKataId || !activeKata) return;
         const updated = removeGameFromKata(activeKata, gameId);
         if (updated === activeKata) return;
-        const nextChannels = (showcaseState.channels || []).map(k =>
-            k.id === activeChannelId ? updated : k
+        const nextKatas = (showcaseState.katas || []).map(k =>
+            k.id === activeKataId ? updated : k
         );
-        await persistShowcase({ ...showcaseState, channels: nextChannels });
-    }, [activeChannelId, activeKata, showcaseState, persistShowcase]);
+        await persistShowcase({ ...showcaseState, katas: nextKatas });
+    }, [activeKataId, activeKata, showcaseState, persistShowcase]);
 
-    const handleChannelUpdate = useCallback(async ({ channels, activeChannelId: newActiveId }) => {
-        const next = { ...showcaseState, channels, activeChannelId: newActiveId };
+    const handleKataUpdate = useCallback(async ({ katas, activeKataId: newActiveId }) => {
+        const next = { ...showcaseState, katas, activeKataId: newActiveId };
         setShowcaseState(next);
         await bridge.saveShowcase(next);
     }, [showcaseState]);
@@ -153,7 +153,7 @@ export default function KamaeView({ onSwitchToRin }) {
             <div className="kamae-view kamae-view--explore" ref={containerRef}>
                 <ExploreView
                     allInstalledGames={allInstalledGames}
-                    katas={showcaseState.channels || []}
+                    katas={showcaseState.katas || []}
                     onAddToKata={handleAdd}
                     onBack={() => setExploring(false)}
                     exploreHistory={showcaseState.exploreHistory}
@@ -177,18 +177,18 @@ export default function KamaeView({ onSwitchToRin }) {
             <div className="kamae-content">
                 <button
                     type="button"
-                    className={`channel-item ${activeChannelId === null ? 'channel-item--active' : ''}`}
-                    onClick={() => handleChannelUpdate({ channels: showcaseState.channels || [], activeChannelId: null })}
+                    className={`kata-item ${activeKataId === null ? 'kata-item--active' : ''}`}
+                    onClick={() => handleKataUpdate({ katas: showcaseState.katas || [], activeKataId: null })}
                 >
-                    <span className="channel-item-name">{t('ui.channels.all_games')}</span>
-                    <span className="channel-item-actions channel-item-actions--placeholder" />
-                    <span className={`channel-item-badge ${activeChannelId === null ? '' : 'channel-item-badge--hidden'}`}>{t('ui.channels.active')}</span>
+                    <span className="kata-item-name">{t('ui.katas.all_games')}</span>
+                    <span className="kata-item-actions kata-item-actions--placeholder" />
+                    <span className={`kata-item-badge ${activeKataId === null ? '' : 'kata-item-badge--hidden'}`}>{t('ui.katas.active')}</span>
                 </button>
-                <ChannelPanel
-                    channels={showcaseState.channels || []}
-                    activeChannelId={activeChannelId}
+                <KataPanel
+                    katas={showcaseState.katas || []}
+                    activeKataId={activeKataId}
                     showcaseGames={allInstalledGames}
-                    onUpdate={handleChannelUpdate}
+                    onUpdate={handleKataUpdate}
                 />
                 <KamaeSearch
                     activeKataGameIds={activeKataGameIds}
@@ -200,7 +200,7 @@ export default function KamaeView({ onSwitchToRin }) {
                     isKataMode={activeKata !== null}
                 />
                 {/* Explore hidden for v0.1.0 — kata search replaces it */}
-                {false && activeChannelId && (
+                {false && activeKataId && (
                     <button
                         type="button"
                         className="kamae-explore-btn"

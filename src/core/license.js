@@ -16,6 +16,6 @@ export function formatLicenseKey(raw) {
     return `MAIDA-${parts.join('-')}`;
 }
 
-export function isChannelsUnlocked(licenseState) {
+export function isKataUnlocked(licenseState) {
     return licenseState?.licensed === true;
 }

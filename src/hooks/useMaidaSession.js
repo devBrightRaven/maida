@@ -40,11 +40,11 @@ export function useMaidaSession() {
         if (constraintsData) setConstraints(constraintsData);
 
         // Load showcase IDs for candidatePool (kata-aware)
-        const activeKataId = showcaseData?.activeChannelId || null;
-        const katas = showcaseData?.channels || [];
+        const activeKataId = showcaseData?.activeKataId || null;
+        const katas = showcaseData?.katas || [];
         const activeKata = activeKataId ? katas.find(k => k.id === activeKataId) : null;
-        const channelPool = activeKata?.gameIds?.length > 0 ? activeKata.gameIds : null;
-        setShowcaseIds(channelPool);
+        const kataPool = activeKata?.gameIds?.length > 0 ? activeKata.gameIds : null;
+        setShowcaseIds(kataPool);
 
         const firstRun = isFirstRun(games);
 
@@ -87,13 +87,13 @@ export function useMaidaSession() {
         }
 
         // Normal flow if no anchor
-        const constrainedGames = channelPool
+        const constrainedGames = kataPool
             ? freshGames  // Showcase mode: skip constraints, candidatePool handles filtering
             : applyConstraints(freshGames, constraintsData);
         const game = getActiveGame(constrainedGames, {
             sessionSkippedSet: [],
             returnPenaltySet: returnPenalties || [],
-            candidatePool: channelPool || undefined
+            candidatePool: kataPool || undefined
         });
         const prescription = getPrescription(game, prescriptions);
 
@@ -332,8 +332,8 @@ export function useMaidaSession() {
     // Reload showcase and re-roll (called when switching back from Kamae)
     const reloadShowcase = async () => {
         const showcaseData = await loadShowcase();
-        const activeKataId = showcaseData?.activeChannelId || null;
-        const katas = showcaseData?.channels || [];
+        const activeKataId = showcaseData?.activeKataId || null;
+        const katas = showcaseData?.katas || [];
         const activeKata = activeKataId ? katas.find(k => k.id === activeKataId) : null;
         const newIds = activeKata?.gameIds?.length > 0 ? activeKata.gameIds : null;
         setShowcaseIds(newIds);

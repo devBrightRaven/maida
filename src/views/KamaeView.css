@@ -397,32 +397,32 @@
     outline-offset: 2px;
 }
 
-/* ── Channel Panel ────────────────────── */
+/* ── Kata Panel ──────────────────────── */
 
-.channel-panel {
+.kata-panel {
     width: 100%;
 }
 
-.channel-panel--locked {
+.kata-panel--locked {
     opacity: 0.5;
     text-align: center;
     padding: 1.5rem 1rem;
 }
 
-.channel-panel-locked-desc {
+.kata-panel-locked-desc {
     font-size: 0.875rem;
     color: var(--t-dim);
     margin: 0.5rem 0 0;
 }
 
-.channel-panel-header {
+.kata-panel-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 0.75rem;
 }
 
-.channel-panel-title {
+.kata-panel-title {
     font-size: 0.875rem;
     font-weight: 500;
     color: var(--t-dim);
@@ -431,7 +431,7 @@
     margin: 0;
 }
 
-.channel-create-btn {
+.kata-create-btn {
     font-size: 0.8rem;
     color: var(--t-dim);
     background: transparent;
@@ -442,18 +442,18 @@
     font-family: inherit;
 }
 
-.channel-create-btn:hover {
+.kata-create-btn:hover {
     color: var(--t-text);
     border-color: var(--t-text);
 }
 
-.channel-create-form {
+.kata-create-form {
     display: flex;
     gap: 0.5rem;
     margin-bottom: 0.75rem;
 }
 
-.channel-create-input {
+.kata-create-input {
     flex: 1;
     padding: 0.375rem 0.75rem;
     font-size: 0.875rem;
@@ -465,12 +465,12 @@
     outline: none;
 }
 
-.channel-create-input:focus {
+.kata-create-input:focus {
     border-color: var(--t-text);
 }
 
-.channel-create-confirm,
-.channel-create-cancel {
+.kata-create-confirm,
+.kata-create-cancel {
     padding: 0.375rem 0.625rem;
     font-size: 1rem;
     background: transparent;
@@ -482,7 +482,7 @@
 }
 
 /* Kata items — shared base for "all games" and kata rows */
-.channel-item {
+.kata-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -500,28 +500,28 @@
     transition: background 0.15s ease, border-color 0.15s ease;
 }
 
-.channel-item:hover {
+.kata-item:hover {
     background: var(--t-accent-soft);
 }
 
-.channel-item--active {
+.kata-item--active {
     color: var(--t-text);
     background: var(--t-accent-soft);
     border-color: var(--t-accent-border);
 }
 
-.channel-item-name {
+.kata-item-name {
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
 
-.channel-item-count {
+.kata-item-count {
     font-size: 0.75rem;
     color: var(--t-dim);
 }
 
-.channel-item-badge {
+.kata-item-badge {
     font-size: 0.7rem;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -531,12 +531,12 @@
     flex-shrink: 0;
 }
 
-.channel-item-badge--hidden {
+.kata-item-badge--hidden {
     visibility: hidden;
 }
 
 /* Kata row — select button + actions + badge in one line */
-.channel-group {
+.kata-group {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -549,20 +549,20 @@
     transition: background 0.15s ease, border-color 0.15s ease;
 }
 
-.channel-group:hover {
+.kata-group:hover {
     background: var(--t-accent-soft);
 }
 
-.channel-group--active {
+.kata-group--active {
     background: var(--t-accent-soft);
     border-color: var(--t-accent-border);
 }
 
-.channel-group--empty {
+.kata-group--empty {
     opacity: 0.5;
 }
 
-.channel-select-btn {
+.kata-select-btn {
     flex: 1;
     display: flex;
     align-items: center;
@@ -574,21 +574,21 @@
     padding: 0;
 }
 
-.channel-group--active .channel-select-btn {
+.kata-group--active .kata-select-btn {
     color: var(--t-text);
 }
 
-.channel-item-actions {
+.kata-item-actions {
     display: flex;
     gap: 0.25rem;
     flex-shrink: 0;
 }
 
-.channel-item-actions--placeholder {
+.kata-item-actions--placeholder {
     width: 3.75rem;
 }
 
-.channel-rename-input {
+.kata-rename-input {
     font-size: 0.875rem;
     font-family: inherit;
     color: var(--t-text);
@@ -600,8 +600,8 @@
     width: 8rem;
 }
 
-.channel-expand-btn,
-.channel-delete-btn {
+.kata-expand-btn,
+.kata-delete-btn {
     width: 1.75rem;
     height: 1.75rem;
     font-size: 1rem;
@@ -616,18 +616,18 @@
     font-family: inherit;
 }
 
-.channel-expand-btn:hover,
-.channel-delete-btn:hover {
+.kata-expand-btn:hover,
+.kata-delete-btn:hover {
     border-color: var(--t-dim);
 }
 
-.channel-delete-btn--confirm {
+.kata-delete-btn--confirm {
     color: var(--t-error);
     border-color: var(--t-error);
     font-weight: 700;
 }
 
-.channel-game-list {
+.kata-game-list {
     width: 100%;
     padding: 0.5rem 0 0.5rem 1rem;
     display: flex;
@@ -635,7 +635,7 @@
     gap: 0.375rem;
 }
 
-.channel-game-toggle {
+.kata-game-toggle {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -644,11 +644,11 @@
     cursor: pointer;
 }
 
-.channel-game-toggle input[type="checkbox"] {
+.kata-game-toggle input[type="checkbox"] {
     accent-color: var(--t-accent);
 }
 
-.channel-empty {
+.kata-empty {
     font-size: 0.8125rem;
     color: var(--t-dim);
     margin: 0;

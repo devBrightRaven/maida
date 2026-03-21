@@ -63,8 +63,8 @@ pub fn user_data_default(data_type: &str) -> Value {
         "showcase" => serde_json::json!({
             "games": [],
             "box": [],
-            "channels": [],
-            "activeChannelId": null,
+            "katas": [],
+            "activeKataId": null,
             "exploreHistory": {
                 "lastSessionDate": null,
                 "cardsShownToday": 0
@@ -200,8 +200,8 @@ mod tests {
     fn test_user_data_defaults() {
         let showcase = user_data_default("showcase");
         assert_eq!(showcase["games"], serde_json::json!([]));
-        assert_eq!(showcase["channels"], serde_json::json!([]));
-        assert!(showcase["activeChannelId"].is_null());
+        assert_eq!(showcase["katas"], serde_json::json!([]));
+        assert!(showcase["activeKataId"].is_null());
 
         let config = user_data_default("config");
         assert!(config["license"].is_null());

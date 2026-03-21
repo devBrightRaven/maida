@@ -37,7 +37,7 @@ const bridge = {
     // --- Showcase & Warehouse ---
     getShowcase: async () => {
         const result = await call('get_showcase');
-        return result ?? { games: [], box: [], channels: [], activeChannelId: null, exploreHistory: { lastSessionDate: null, cardsShownToday: 0 } };
+        return result ?? { games: [], box: [], katas: [], activeKataId: null, exploreHistory: { lastSessionDate: null, cardsShownToday: 0 } };
     },
 
     saveShowcase: (data) => call('save_showcase', { data }),

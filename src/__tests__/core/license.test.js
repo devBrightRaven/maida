@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
     validateKeyFormat,
     formatLicenseKey,
-    isChannelsUnlocked,
+    isKataUnlocked,
 } from '../../core/license.js';
 
 describe('validateKeyFormat', () => {
@@ -69,18 +69,18 @@ describe('formatLicenseKey', () => {
     });
 });
 
-describe('isChannelsUnlocked', () => {
+describe('isKataUnlocked', () => {
     it('returns true when licensed', () => {
-        expect(isChannelsUnlocked({ licensed: true })).toBe(true);
+        expect(isKataUnlocked({ licensed: true })).toBe(true);
     });
 
     it('returns false when not licensed', () => {
-        expect(isChannelsUnlocked({ licensed: false })).toBe(false);
+        expect(isKataUnlocked({ licensed: false })).toBe(false);
     });
 
     it('returns false for null/undefined', () => {
-        expect(isChannelsUnlocked(null)).toBe(false);
-        expect(isChannelsUnlocked(undefined)).toBe(false);
-        expect(isChannelsUnlocked({})).toBe(false);
+        expect(isKataUnlocked(null)).toBe(false);
+        expect(isKataUnlocked(undefined)).toBe(false);
+        expect(isKataUnlocked({})).toBe(false);
     });
 });

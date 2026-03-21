@@ -78,14 +78,14 @@
         },
         "license": {
             "title": "Maida Plus",
-            "desc_active": "チャンネル機能が有効です。",
-            "desc_inactive": "ライセンスキーを入力してチャンネルを解除します。",
+            "desc_active": "型機能が有効です。",
+            "desc_inactive": "ライセンスキーを入力して型を解除します。",
             "label": "ライセンスキー",
             "activate": "有効化",
-            "success": "有効化しました！チャンネル機能が利用可能です。",
+            "success": "有効化しました！型機能が利用可能です。",
             "error_format": "キー形式が正しくありません。形式：MAIDA-XXXXX-XXXXX-XXXXX"
         },
-        "channels": {
+        "katas": {
             "title": "型（カタ）",
             "hint": "型を選ぶと、臨がひとつずつ差し出します。",
             "create": "新しい型",

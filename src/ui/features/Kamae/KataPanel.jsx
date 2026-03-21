@@ -10,12 +10,12 @@ import {
 } from '../../../core/katas';
 
 /**
- * ChannelPanel — manage mood-period game groupings.
+ * KataPanel — manage mood-period game groupings.
  * Visible when licensed, disabled (with message) when not.
  */
-export default function ChannelPanel({
-    channels,
-    activeChannelId,
+export default function KataPanel({
+    katas,
+    activeKataId,
     showcaseGames,
     onUpdate,
 }) {
@@ -30,38 +30,38 @@ export default function ChannelPanel({
         const ch = createKata(newName);
         if (!ch) return;
         onUpdate({
-            channels: [...channels, ch],
-            activeChannelId,
+            katas: [...katas, ch],
+            activeKataId,
         });
         setNewName('');
         setCreating(false);
-    }, [newName, channels, activeChannelId, onUpdate]);
+    }, [newName, katas, activeKataId, onUpdate]);
 
-    const handleDelete = useCallback((channelId) => {
-        const next = deleteKata(channels, channelId);
+    const handleDelete = useCallback((kataId) => {
+        const next = deleteKata(katas, kataId);
         onUpdate({
-            channels: next,
-            activeChannelId: activeChannelId === channelId ? null : activeChannelId,
+            katas: next,
+            activeKataId: activeKataId === kataId ? null : activeKataId,
         });
-        if (expandedId === channelId) setExpandedId(null);
-    }, [channels, activeChannelId, expandedId, onUpdate]);
+        if (expandedId === kataId) setExpandedId(null);
+    }, [katas, activeKataId, expandedId, onUpdate]);
 
-    const handleSetActive = useCallback((channelId) => {
+    const handleSetActive = useCallback((kataId) => {
         onUpdate({
-            channels,
-            activeChannelId: activeChannelId === channelId ? null : channelId,
+            katas,
+            activeKataId: activeKataId === kataId ? null : kataId,
         });
-    }, [channels, activeChannelId, onUpdate]);
+    }, [katas, activeKataId, onUpdate]);
 
-    const handleToggleGame = useCallback((channelId, gameId) => {
-        const ch = channels.find(c => c.id === channelId);
+    const handleToggleGame = useCallback((kataId, gameId) => {
+        const ch = katas.find(c => c.id === kataId);
         if (!ch) return;
         const updated = ch.gameIds.includes(gameId)
             ? removeGameFromKata(ch, gameId)
             : addGameToKata(ch, gameId);
-        const nextChannels = channels.map(c => c.id === channelId ? updated : c);
-        onUpdate({ channels: nextChannels, activeChannelId });
-    }, [channels, activeChannelId, onUpdate]);
+        const nextKatas = katas.map(c => c.id === kataId ? updated : c);
+        onUpdate({ katas: nextKatas, activeKataId });
+    }, [katas, activeKataId, onUpdate]);
 
     const handleStartRename = useCallback((ch) => {
         setEditingId(ch.id);
@@ -75,65 +75,65 @@ export default function ChannelPanel({
             setEditingId(null);
             return;
         }
-        const ch = channels.find(c => c.id === editingId);
+        const ch = katas.find(c => c.id === editingId);
         if (!ch) { setEditingId(null); return; }
         const updated = renameKata(ch, trimmed);
-        const nextChannels = channels.map(c => c.id === editingId ? updated : c);
-        onUpdate({ channels: nextChannels, activeChannelId });
+        const nextKatas = katas.map(c => c.id === editingId ? updated : c);
+        onUpdate({ katas: nextKatas, activeKataId });
         setEditingId(null);
-    }, [editingId, editName, channels, activeChannelId, onUpdate]);
+    }, [editingId, editName, katas, activeKataId, onUpdate]);
 
     return (
-        <div className="channel-panel">
-            <div className="channel-panel-header">
+        <div className="kata-panel">
+            <div className="kata-panel-header">
                 <div>
-                    <h3 className="channel-panel-title">{t('ui.channels.title')}</h3>
-                    <p className="channel-panel-hint">{t('ui.channels.hint')}</p>
+                    <h3 className="kata-panel-title">{t('ui.katas.title')}</h3>
+                    <p className="kata-panel-hint">{t('ui.katas.hint')}</p>
                 </div>
-                {channels.length < MAX_KATAS && !creating && (
+                {katas.length < MAX_KATAS && !creating && (
                     <button
                         type="button"
-                        className="channel-create-btn"
+                        className="kata-create-btn"
                         onClick={() => setCreating(true)}
                     >
-                        {t('ui.channels.create')}
+                        {t('ui.katas.create')}
                     </button>
                 )}
             </div>
 
             {creating && (
-                <div className="channel-create-form">
+                <div className="kata-create-form">
                     <input
                         type="text"
-                        className="channel-create-input"
+                        className="kata-create-input"
                         value={newName}
                         onChange={(e) => setNewName(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleCreate()}
-                        placeholder={t('ui.channels.create_placeholder')}
+                        placeholder={t('ui.katas.create_placeholder')}
                         maxLength={30}
                         autoFocus
                     />
-                    <button type="button" className="channel-create-confirm" onClick={handleCreate}>+</button>
-                    <button type="button" className="channel-create-cancel" onClick={() => { setCreating(false); setNewName(''); }}>×</button>
+                    <button type="button" className="kata-create-confirm" onClick={handleCreate}>+</button>
+                    <button type="button" className="kata-create-cancel" onClick={() => { setCreating(false); setNewName(''); }}>×</button>
                 </div>
             )}
 
-            {channels.map(ch => (
+            {katas.map(ch => (
                 <div
                     key={ch.id}
-                    className={`channel-group ${activeChannelId === ch.id ? 'channel-group--active' : ''} ${ch.gameIds.length === 0 ? 'channel-group--empty' : ''}`}
+                    className={`kata-group ${activeKataId === ch.id ? 'kata-group--active' : ''} ${ch.gameIds.length === 0 ? 'kata-group--empty' : ''}`}
                     onClick={() => ch.gameIds.length > 0 && handleSetActive(ch.id)}
                     role="button"
                     tabIndex={0}
                     onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); ch.gameIds.length > 0 && handleSetActive(ch.id); } }}
                     aria-label={`Select ${ch.name}`}
                 >
-                    <span className="channel-select-btn">
-                        <span className="channel-item-name">
+                    <span className="kata-select-btn">
+                        <span className="kata-item-name">
                             {editingId === ch.id ? (
                                 <input
                                     type="text"
-                                    className="channel-rename-input"
+                                    className="kata-rename-input"
                                     value={editName}
                                     onChange={(e) => setEditName(e.target.value)}
                                     onBlur={handleCommitRename}
@@ -150,13 +150,13 @@ export default function ChannelPanel({
                                     {ch.name}
                                 </span>
                             )}
-                            <span className="channel-item-count">({ch.gameIds.length})</span>
+                            <span className="kata-item-count">({ch.gameIds.length})</span>
                         </span>
                     </span>
-                    <div className="channel-item-actions">
+                    <div className="kata-item-actions">
                         <button
                             type="button"
-                            className="channel-expand-btn"
+                            className="kata-expand-btn"
                             onClick={(e) => { e.stopPropagation(); setExpandedId(expandedId === ch.id ? null : ch.id); }}
                             aria-label={`Edit ${ch.name} games`}
                         >
@@ -164,7 +164,7 @@ export default function ChannelPanel({
                         </button>
                         <button
                             type="button"
-                            className={`channel-delete-btn ${confirmDeleteId === ch.id ? 'channel-delete-btn--confirm' : ''}`}
+                            className={`kata-delete-btn ${confirmDeleteId === ch.id ? 'kata-delete-btn--confirm' : ''}`}
                             onClick={(e) => {
                                 e.stopPropagation();
                                 if (confirmDeleteId === ch.id) {
@@ -180,21 +180,21 @@ export default function ChannelPanel({
                             {confirmDeleteId === ch.id ? '?' : '×'}
                         </button>
                     </div>
-                    <span className={`channel-item-badge ${activeChannelId === ch.id ? '' : 'channel-item-badge--hidden'}`}>{t('ui.channels.active')}</span>
+                    <span className={`kata-item-badge ${activeKataId === ch.id ? '' : 'kata-item-badge--hidden'}`}>{t('ui.katas.active')}</span>
 
                     {expandedId === ch.id && (
-                        <div className="channel-game-list">
+                        <div className="kata-game-list">
                             {showcaseGames.length === 0 && (
-                                <p className="channel-empty">{t('ui.channels.empty')}</p>
+                                <p className="kata-empty">{t('ui.katas.empty')}</p>
                             )}
                             {showcaseGames.map(game => {
                                 const gameId = game.id || game.steamAppId;
-                                const inChannel = ch.gameIds.includes(gameId);
+                                const inKata = ch.gameIds.includes(gameId);
                                 return (
-                                    <label key={gameId} className="channel-game-toggle">
+                                    <label key={gameId} className="kata-game-toggle">
                                         <input
                                             type="checkbox"
-                                            checked={inChannel}
+                                            checked={inKata}
                                             onChange={() => handleToggleGame(ch.id, gameId)}
                                         />
                                         <span>{game.title}</span>

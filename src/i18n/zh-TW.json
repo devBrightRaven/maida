@@ -78,14 +78,14 @@
         },
         "license": {
             "title": "Maida Plus",
-            "desc_active": "頻道功能已啟用。",
-            "desc_inactive": "輸入授權碼以解鎖頻道功能。",
+            "desc_active": "型功能已啟用。",
+            "desc_inactive": "輸入授權碼以解鎖型功能。",
             "label": "授權碼",
             "activate": "啟用",
-            "success": "已啟用！頻道功能現在可以使用。",
+            "success": "已啟用！型功能現在可以使用。",
             "error_format": "格式不正確。格式：MAIDA-XXXXX-XXXXX-XXXXX"
         },
-        "channels": {
+        "katas": {
             "title": "型（Kata）",
             "hint": "選一個型，臨會一次一個呈現給你。",
             "create": "新增型",
