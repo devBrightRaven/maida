@@ -93,11 +93,21 @@ function App() {
 
     // Face switching (Rin ↔ Kamae)
     const [face, setFace] = useState('rin');
-    const switchToKamae = useCallback(() => setFace('kamae'), []);
+    const focusMain = useCallback(() => {
+        requestAnimationFrame(() => {
+            const main = document.querySelector('main');
+            if (main) {
+                main.setAttribute('tabindex', '-1');
+                main.focus();
+            }
+        });
+    }, []);
+    const switchToKamae = useCallback(() => { setFace('kamae'); focusMain(); }, [focusMain]);
     const switchToRin = useCallback(() => {
         setFace('rin');
-        reloadShowcase(); // Re-roll with updated showcase
-    }, [reloadShowcase]);
+        reloadShowcase();
+        focusMain();
+    }, [reloadShowcase, focusMain]);
     const toggleFace = useCallback(() => setFace(f => f === 'rin' ? 'kamae' : 'rin'), []);
 
     // L1/R1 gamepad face switching
