@@ -130,12 +130,14 @@ function HoldButton({ onConfirm, label, ariaLabel }) {
  */
 export default function ShowcaseList({ games, onRemove, isKataMode }) {
     return (
-        <ul className="showcase-list" aria-label="Your showcase">
+        <section className="showcase-section" aria-labelledby="showcase-heading">
+            <h3 id="showcase-heading" className="showcase-heading sr-only">{t('ui.kamae.games_heading')}</h3>
             {isKataMode && (
                 <div className="showcase-counter" aria-live="polite">
                     {games.length} / {MAX_KATA_GAMES}
                 </div>
             )}
+            <ul className="showcase-list">
             {games.map(game => {
                 const id = game.id || game.steamAppId;
                 const headerUrl = getSteamHeaderUrl(game.steamAppId);
@@ -161,6 +163,7 @@ export default function ShowcaseList({ games, onRemove, isKataMode }) {
                     </li>
                 );
             })}
-        </ul>
+            </ul>
+        </section>
     );
 }
