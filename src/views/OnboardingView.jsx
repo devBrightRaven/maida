@@ -89,7 +89,7 @@ export default function OnboardingView({ onComplete }) {
                     <CurationPrompt onDone={onComplete} />
                 </section>
                 <div className="bg-glow"></div>
-            </div>
+            </main>
         );
     }
 
