@@ -204,6 +204,7 @@ export default function KamaeView({ onSwitchToRin }) {
                 <button
                     type="button"
                     className={`kata-item ${activeKataId === null ? 'kata-item--active' : ''}`}
+                    aria-pressed={activeKataId === null}
                     onClick={() => handleKataUpdate({ katas: showcaseState.katas || [], activeKataId: null })}
                 >
                     <span className="kata-item-name">{t('ui.katas.all_games')}</span>

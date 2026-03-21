@@ -126,6 +126,7 @@ export default function KataPanel({
                     onClick={() => ch.gameIds.length > 0 && handleSetActive(ch.id)}
                     role="button"
                     tabIndex={0}
+                    aria-pressed={activeKataId === ch.id}
                     onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); ch.gameIds.length > 0 && handleSetActive(ch.id); } }}
                     aria-label={`Select ${ch.name}`}
                 >
