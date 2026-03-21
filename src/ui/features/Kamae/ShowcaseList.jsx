@@ -130,8 +130,8 @@ function HoldButton({ onConfirm, label, ariaLabel }) {
  */
 export default function ShowcaseList({ games, onRemove, isKataMode }) {
     return (
-        <section className="showcase-section" aria-labelledby="showcase-heading">
-            <h3 id="showcase-heading" className="showcase-heading">{t('ui.kamae.games_heading')}</h3>
+        <section className="showcase-section">
+            <h3 className="showcase-heading">{t('ui.kamae.games_heading')}</h3>
             {isKataMode && (
                 <div className="showcase-counter" aria-live="polite">
                     {games.length} / {MAX_KATA_GAMES}

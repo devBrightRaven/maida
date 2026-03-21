@@ -85,7 +85,7 @@ export default function KataPanel({
     }, [editingId, editName, katas, activeKataId, onUpdate]);
 
     return (
-        <section className="kata-panel" aria-label={t('ui.katas.title')}>
+        <section className="kata-panel">
             <header className="kata-panel-header">
                 <div>
                     <h2 className="kata-panel-title">{t('ui.katas.title')}</h2>
