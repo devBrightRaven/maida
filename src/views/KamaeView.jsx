@@ -194,13 +194,15 @@ export default function KamaeView({ onSwitchToRin }) {
 
     return (
         <main className="kamae-view" ref={containerRef}>
-            <h1 className="sr-only" aria-live="polite">{activeKata ? activeKata.name : t('ui.katas.all_games')}</h1>
             <CalligraphyBg char="構" className="kamae-calligraphy-bg" />
             <div className="kamae-title-block" aria-hidden="true">
                 <p className="kamae-title-reading">{t('ui.kamae.reading')}</p>
                 <p className="kamae-title-desc">{t('ui.kamae.desc')}</p>
             </div>
             <div className="kamae-content">
+                <h1 className="kamae-h1" aria-live="polite">
+                    {activeKata ? activeKata.name : t('ui.katas.all_games')}
+                </h1>
                 <button
                     type="button"
                     className={`kata-item ${activeKataId === null ? 'kata-item--active' : ''}`}

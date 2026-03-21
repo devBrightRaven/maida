@@ -185,6 +185,14 @@
     padding-top: 0.25rem;
 }
 
+.kamae-h1 {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--t-dim);
+    letter-spacing: 0.04em;
+    margin: 0;
+}
+
 .sr-only {
     position: absolute;
     width: 1px;
