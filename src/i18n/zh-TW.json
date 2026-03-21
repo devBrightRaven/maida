@@ -44,6 +44,7 @@
             "add": "擺上去",
             "added": "已擺上",
             "put_back": "收回去",
+            "remove_from_kata": "移除",
             "explore_more": "探索"
         },
         "explore": {

@@ -155,13 +155,15 @@ export default function ShowcaseList({ games, onRemove, isKataMode }) {
                             <span className="showcase-item-title">{game.title}</span>
                             {!game.installed && <span className="showcase-item-uninstalled">{t('ui.kamae.not_installed')}</span>}
                         </div>
-                        <div className="showcase-item-actions">
-                            <HoldButton
-                                onConfirm={() => onRemove(id)}
-                                label={t('ui.kamae.put_back')}
-                                ariaLabel={`Hold to put ${game.title} back to shelf`}
-                            />
-                        </div>
+                        {isKataMode && (
+                            <div className="showcase-item-actions">
+                                <HoldButton
+                                    onConfirm={() => onRemove(id)}
+                                    label={t('ui.kamae.remove_from_kata')}
+                                    ariaLabel={`Hold to remove ${game.title}`}
+                                />
+                            </div>
+                        )}
                     </li>
                 );
             })}

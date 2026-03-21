@@ -44,6 +44,7 @@
             "add": "add",
             "added": "added",
             "put_back": "put back",
+            "remove_from_kata": "remove",
             "explore_more": "explore more"
         },
         "explore": {
