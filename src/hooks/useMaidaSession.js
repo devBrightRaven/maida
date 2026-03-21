@@ -215,7 +215,7 @@ export function useMaidaSession() {
             setData(prev => ({ ...prev, games: nextData }));
 
             if (!options.silent && session.game.steamUrl) {
-                open(session.game.steamUrl).catch(() => {});
+                bridge.launchGame(session.game.steamUrl);
             }
 
             // SYSTEM EVENT: COMMITMENT
