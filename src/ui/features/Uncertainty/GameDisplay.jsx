@@ -9,15 +9,12 @@ export default function GameDisplay({ game, prescription: rawPrescription, debug
 
     return (
         <section className="mvp-content">
-            <h2 className="sr-only" id="prescription-heading">{t('ui.rin.prescription_heading')}</h2>
             <div className={`permission-wrapper ${debugMode ? 'debug-ready' : ''}`}>
-                <p className={`permission-text ${debugMode ? 'debug-text' : ''}`}
-                   aria-labelledby="prescription-heading"
-                   aria-live="assertive"
-                   tabIndex={-1}
+                <h2 className={`permission-text ${debugMode ? 'debug-text' : ''}`}
+                    aria-live="assertive"
                 >
                     {prescription.interface}
-                </p>
+                </h2>
 
                 {debugMode && prescription.audit && (
                     <div className="debug-inspector">
