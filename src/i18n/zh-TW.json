@@ -87,7 +87,7 @@
         },
         "channels": {
             "title": "型（Kata）",
-            "hint": "選一個型，臨會從中為你選擇。",
+            "hint": "選一個型，臨會一次一個呈現給你。",
             "create": "新增型",
             "create_placeholder": "型的名稱⋯⋯",
             "active": "啟用中",

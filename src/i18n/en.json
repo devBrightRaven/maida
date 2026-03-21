@@ -87,7 +87,7 @@
         },
         "channels": {
             "title": "Kata",
-            "hint": "Choose a kata. Rin will draw from it.",
+            "hint": "Choose a kata. Rin will present them to you, one at a time.",
             "create": "new kata",
             "create_placeholder": "kata name...",
             "active": "active",
