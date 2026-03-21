@@ -229,8 +229,8 @@ export function useGameInput({
                         aButtonDown = true;
                         aButtonTarget = getFocusedInteractive();
                         if (aButtonTarget) {
-                            const needsLongPress = aButtonTarget.classList.contains('visit');
-                            if (needsLongPress) {
+                            const needsPointer = aButtonTarget.classList.contains('visit') || aButtonTarget.classList.contains('showcase-hold-btn');
+                            if (needsPointer) {
                                 aButtonTarget.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
                             }
                         } else {
@@ -239,11 +239,12 @@ export function useGameInput({
                     } else if (!aPressed && aButtonDown) {
                         aButtonDown = false;
                         if (aButtonTarget) {
-                            const needsLongPress = aButtonTarget.classList.contains('visit');
-                            if (needsLongPress) {
+                            const needsPointer = aButtonTarget.classList.contains('visit') || aButtonTarget.classList.contains('showcase-hold-btn');
+                            if (needsPointer) {
                                 aButtonTarget.dispatchEvent(new PointerEvent('pointerup', { bubbles: true }));
+                            } else {
+                                aButtonTarget.click();
                             }
-                            aButtonTarget.click();
                             aButtonTarget = null;
                         } else {
                             handleEndPress();
