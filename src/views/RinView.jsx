@@ -246,7 +246,7 @@ export default function RinView({
                             <button
                                 ref={btnRefs.visit}
                                 className={`mvp-btn visit ${isAnchored ? 'anchored-btn' : ''} ${focusedBtn === 'visit' ? 'is-focused' : ''}`}
-                                aria-label={isAnchored ? `${t('ui.button.play')} ${game.title}` : `${t('ui.button.try')} ${game.title}`}
+                                aria-label={isAnchored ? t('ui.button.play_aria', { game: game.title }) : t('ui.button.try_aria', { game: game.title })}
                                 // Pointer Events for unified input handling
                                 onPointerDown={handlers.onPressStart}
                                 onPointerUp={handlers.onPressEnd}
@@ -273,7 +273,7 @@ export default function RinView({
                             <button
                                 ref={btnRefs.notToday}
                                 className={`mvp-btn not-today ${focusedBtn === 'notToday' ? 'is-focused' : ''}`}
-                                aria-label={isAnchored ? `${t('ui.button.clear')} ${game.title}` : t('ui.button.not_today')}
+                                aria-label={isAnchored ? t('ui.button.clear_aria', { game: game.title }) : t('ui.button.not_today_aria')}
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     if (isAnchored) onAction('release');
