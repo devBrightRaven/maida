@@ -200,9 +200,7 @@ export default function KamaeView({ onSwitchToRin }) {
                 <p className="kamae-title-desc">{t('ui.kamae.desc')}</p>
             </div>
             <div className="kamae-content">
-                <h1 className="kamae-h1" aria-live="polite">
-                    {activeKata ? activeKata.name : t('ui.katas.all_games')}
-                </h1>
+                <h1 className="kamae-h1">構 Kamae</h1>
                 <button
                     type="button"
                     className={`kata-item ${activeKataId === null ? 'kata-item--active' : ''}`}
