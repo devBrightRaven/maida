@@ -7,6 +7,30 @@ function getSteamHeaderUrl(steamAppId) {
     return `https://cdn.akamai.steamstatic.com/steam/apps/${steamAppId}/header.jpg`;
 }
 
+function GameCover({ steamAppId, title }) {
+    const [failed, setFailed] = useState(false);
+    const url = getSteamHeaderUrl(steamAppId);
+    const initial = (title || '?')[0].toUpperCase();
+
+    if (!url || failed) {
+        return (
+            <div className="showcase-item-img showcase-item-img--fallback">
+                <span>{initial}</span>
+            </div>
+        );
+    }
+
+    return (
+        <img
+            src={url}
+            alt=""
+            className="showcase-item-img"
+            loading="lazy"
+            onError={() => setFailed(true)}
+        />
+    );
+}
+
 const HOLD_DURATION = 3000; // 3 seconds
 
 /**
@@ -127,14 +151,7 @@ export default function ShowcaseList({ games, onRemove, isKataMode }) {
                         className={`showcase-item ${!game.installed ? 'showcase-item--dimmed' : ''}`}
                         role="listitem"
                     >
-                        {headerUrl && (
-                            <img
-                                src={headerUrl}
-                                alt=""
-                                className="showcase-item-img"
-                                loading="lazy"
-                            />
-                        )}
+                        <GameCover steamAppId={game.steamAppId} title={game.title} />
                         <div className="showcase-item-info">
                             <span className="showcase-item-title">{game.title}</span>
                             {!game.installed && <span className="showcase-item-uninstalled">{t('ui.kamae.not_installed')}</span>}

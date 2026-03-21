@@ -223,6 +223,16 @@
     flex-shrink: 0;
 }
 
+.showcase-item-img--fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--t-surface);
+    color: var(--t-dim);
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
 .showcase-item-info {
     display: flex;
     flex-direction: column;
