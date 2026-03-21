@@ -8,12 +8,12 @@ export default function GameDisplay({ game, prescription: rawPrescription, debug
     const prescription = localizePrescription(rawPrescription);
 
     return (
-        <section className="mvp-content" aria-label={t('ui.rin.prescription_heading')}>
-            <h2 className="sr-only">{t('ui.rin.prescription_heading')}</h2>
+        <section className="mvp-content">
             <div className={`permission-wrapper ${debugMode ? 'debug-ready' : ''}`}>
-                <p className={`permission-text ${debugMode ? 'debug-text' : ''}`} role="status">
+                <h2 className={`permission-text ${debugMode ? 'debug-text' : ''}`} role="status">
+                    <span className="sr-only">{t('ui.rin.prescription_heading')}:</span>
                     {prescription.interface}
-                </p>
+                </h2>
 
                 {debugMode && prescription.audit && (
                     <div className="debug-inspector">
