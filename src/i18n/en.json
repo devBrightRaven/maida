@@ -87,7 +87,7 @@
         },
         "channels": {
             "title": "Kata",
-            "hint": "Select one to set what Rin rolls from.",
+            "hint": "Choose a kata. Rin will draw from it.",
             "create": "new kata",
             "create_placeholder": "kata name...",
             "active": "active",
