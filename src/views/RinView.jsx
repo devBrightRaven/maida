@@ -215,9 +215,9 @@ export default function RinView({
             <CalligraphyBg char="臨" className="rin-calligraphy-bg" />
             {game && (
                 <header className="mvp-header" onClick={onSecretTap}>
-                    <span className="game-label">
+                    <h1 className="game-label">
                         {isAnchored ? `(⚓${t('ui.game.anchored_prefix')}) ${game.title}` : game.title}
-                    </span>
+                    </h1>
                     {(() => {
                         const ttb = game.igdb?.timeToBeat?.normally ?? game.hltb?.mainStory ?? null;
                         const display = formatPlaytime(ttb);

@@ -88,7 +88,7 @@ export default function KataPanel({
         <section className="kata-panel" aria-label={t('ui.katas.title')}>
             <header className="kata-panel-header">
                 <div>
-                    <h3 className="kata-panel-title">{t('ui.katas.title')}</h3>
+                    <h2 className="kata-panel-title">{t('ui.katas.title')}</h2>
                     <p className="kata-panel-hint">{t('ui.katas.hint')}</p>
                 </div>
                 {katas.length < MAX_KATAS && !creating && (
