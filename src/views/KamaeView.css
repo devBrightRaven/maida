@@ -483,7 +483,7 @@
     font-family: inherit;
     color: var(--t-dim);
     background: transparent;
-    border: 1px solid var(--t-border-subtle);
+    border: 2px solid var(--t-dim);
     border-radius: 6px;
     cursor: pointer;
     text-align: left;
