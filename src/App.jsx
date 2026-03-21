@@ -320,7 +320,7 @@ function App() {
             <div className="app-root">
                 <KamaeView onSwitchToRin={switchToRin} />
                 {themeToggle}
-                {import.meta.env.DEV && <div aria-hidden="true"><Agentation endpoint="http://localhost:4747" /></div>}
+                {import.meta.env.DEV && import.meta.env.VITE_AGENTATION && <div aria-hidden="true"><Agentation endpoint="http://localhost:4747" /></div>}
             </div>
         );
     }
@@ -365,7 +365,7 @@ function App() {
                     </button>
                 )}
             </div>
-            {import.meta.env.DEV && <div aria-hidden="true"><Agentation endpoint="http://localhost:4747" /></div>}
+            {import.meta.env.DEV && import.meta.env.VITE_AGENTATION && <div aria-hidden="true"><Agentation endpoint="http://localhost:4747" /></div>}
         </div>
     );
 }
