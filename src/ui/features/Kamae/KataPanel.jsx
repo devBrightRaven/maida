@@ -191,11 +191,12 @@ export default function KataPanel({
                                 const gameId = game.id || game.steamAppId;
                                 const inKata = ch.gameIds.includes(gameId);
                                 return (
-                                    <label key={gameId} className="kata-game-toggle">
+                                    <label key={gameId} className="kata-game-toggle" tabIndex={0}>
                                         <input
                                             type="checkbox"
                                             checked={inKata}
                                             onChange={() => handleToggleGame(ch.id, gameId)}
+                                            tabIndex={-1}
                                         />
                                         <span>{game.title}</span>
                                     </label>

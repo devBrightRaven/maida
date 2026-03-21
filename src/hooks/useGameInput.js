@@ -181,13 +181,14 @@ export function useGameInput({
         let lastL1 = false;
         let lastR1 = false;
 
-        // Helper: get focused interactive element (button, checkbox, role=button)
+        // Helper: get focused interactive element
         const getFocusedInteractive = () => {
             const el = document.activeElement;
             if (!el) return null;
             if (el.tagName === 'BUTTON') return el;
             if (el.getAttribute('role') === 'button') return el;
-            if (el.tagName === 'INPUT' && el.type === 'checkbox') return el;
+            if (el.tagName === 'INPUT') return el;
+            if (el.tagName === 'LABEL') return el;
             return null;
         };
 

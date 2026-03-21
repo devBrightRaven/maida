@@ -103,7 +103,7 @@ export default function KamaeView({ onSwitchToRin }) {
         const container = containerRef.current;
         if (!container) return;
         const focusable = Array.from(container.querySelectorAll(
-            'button:not(:disabled), input:not(:disabled), [tabindex]:not([tabindex="-1"]), [role="button"]'
+            'button:not(:disabled), input:not(:disabled), [tabindex]:not([tabindex="-1"]), [role="button"], label.kata-game-toggle'
         ));
         if (focusable.length === 0) return;
         const current = focusable.indexOf(document.activeElement);
@@ -120,10 +120,15 @@ export default function KamaeView({ onSwitchToRin }) {
     const handleMainAction = useCallback(() => {
         const el = document.activeElement;
         if (!el) return;
+        console.log('[Kamae Gamepad A]', el.tagName, el.className, el.type);
         if (el.tagName === 'BUTTON' || el.getAttribute('role') === 'button') {
             el.click();
-        } else if (el.tagName === 'INPUT' && el.type === 'checkbox') {
+        } else if (el.tagName === 'INPUT') {
             el.click();
+        } else if (el.tagName === 'LABEL') {
+            // Click the checkbox inside the label
+            const cb = el.querySelector('input[type="checkbox"]');
+            if (cb) cb.click();
         }
     }, []);
 
