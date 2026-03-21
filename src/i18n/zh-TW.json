@@ -46,6 +46,7 @@
             "mode_prefix": "構模式：",
             "desc": "面臨之前，靜靜準備。",
             "search_placeholder": "搜尋你的遊戲庫⋯⋯",
+            "search_aria": "搜尋遊戲加入 {kata}",
             "searching": "搜尋中⋯⋯",
             "not_installed": "未安裝",
             "add": "擺上去",

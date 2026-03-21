@@ -221,6 +221,7 @@ export default function KamaeView({ onSwitchToRin }) {
                 />
                 <KamaeSearch
                     activeKataGameIds={activeKataGameIds}
+                    activeKataName={activeKata ? activeKata.name : null}
                     onAdd={handleAdd}
                 />
                 <ShowcaseList

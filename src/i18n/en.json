@@ -46,6 +46,7 @@
             "mode_prefix": "Kamae mode: ",
             "desc": "Quiet preparation before you face it.",
             "search_placeholder": "Search your library...",
+            "search_aria": "Search games to add to {kata}",
             "searching": "Searching...",
             "not_installed": "not installed",
             "add": "add",

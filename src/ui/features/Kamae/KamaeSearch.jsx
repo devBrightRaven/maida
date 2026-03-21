@@ -6,7 +6,7 @@ import bridge from '../../../services/bridge';
  * KamaeSearch — search warehouse, add results to showcase.
  * Unlimited search (no daily cap). Results limited to 20 by IPC.
  */
-export default function KamaeSearch({ activeKataGameIds, onAdd }) {
+export default function KamaeSearch({ activeKataGameIds, activeKataName, onAdd }) {
     const [query, setQuery] = useState('');
     const [results, setResults] = useState([]);
     const [searching, setSearching] = useState(false);
@@ -45,7 +45,7 @@ export default function KamaeSearch({ activeKataGameIds, onAdd }) {
 
     return (
         <div className="kamae-search" role="search">
-            <label htmlFor="kamae-search-input" className="sr-only">Search games</label>
+            <label htmlFor="kamae-search-input" className="sr-only">{t('ui.kamae.search_aria', { kata: activeKataName })}</label>
             <input
                 id="kamae-search-input"
                 ref={inputRef}

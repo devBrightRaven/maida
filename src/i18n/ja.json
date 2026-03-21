@@ -46,6 +46,7 @@
             "mode_prefix": "構モード：",
             "desc": "臨む前の、静かな仕度。",
             "search_placeholder": "ライブラリを検索…",
+            "search_aria": "{kata} に追加するゲームを検索",
             "searching": "検索中…",
             "not_installed": "未インストール",
             "add": "載せる",
