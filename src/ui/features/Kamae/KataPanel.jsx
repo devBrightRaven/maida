@@ -123,6 +123,7 @@ export default function KataPanel({
                 <div
                     key={ch.id}
                     className={`kata-group ${activeKataId === ch.id ? 'kata-group--active' : ''} ${ch.gameIds.length === 0 ? 'kata-group--empty' : ''}`}
+                    onKeyDown={(e) => { if (e.key === 'F2') { e.preventDefault(); handleStartRename(ch); } }}
                 >
                     <button
                         type="button"
@@ -130,7 +131,6 @@ export default function KataPanel({
                         aria-pressed={activeKataId === ch.id}
                         aria-label={t('ui.katas.select_aria', { name: ch.name })}
                         onClick={() => ch.gameIds.length > 0 && handleSetActive(ch.id)}
-                        onKeyDown={(e) => { if (e.key === 'F2') { e.preventDefault(); handleStartRename(ch); } }}
                         onDoubleClick={() => handleStartRename(ch)}
                     >
                         {editingId === ch.id ? (
