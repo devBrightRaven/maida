@@ -14,8 +14,8 @@ const FaceSwitchButton = forwardRef(function FaceSwitchButton({ direction, onCli
             type="button"
             className={`face-switch-btn face-switch-${isToKamae ? 'right' : 'left'}`}
             onClick={onClick}
-            aria-label={isToKamae ? 'Switch to Kamae (Ctrl+Tab / RB)' : 'Switch to Rin (Ctrl+Tab / LB)'}
-            title={isToKamae ? 'Kamae 構 (Ctrl+Tab / RB)' : 'Rin 臨 (Ctrl+Tab / LB)'}
+            aria-label={isToKamae ? 'Switch to Kamae (Ctrl+Tab / RB / R1)' : 'Switch to Rin (Ctrl+Tab / LB / L1)'}
+            title={isToKamae ? 'Kamae 構 (Ctrl+Tab / RB / R1)' : 'Rin 臨 (Ctrl+Tab / LB / L1)'}
         >
             <span aria-hidden="true">{isToKamae ? '\u203A' : '\u2039'}</span>
         </button>
