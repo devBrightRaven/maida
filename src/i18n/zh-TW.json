@@ -75,6 +75,7 @@
             "test": "測試",
             "save": "儲存",
             "clear": "清除",
+            "change": "變更",
             "test_success": "連線成功！",
             "test_fail": "連線失敗。請檢查憑證。",
             "back": "返回",

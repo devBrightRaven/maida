@@ -75,6 +75,7 @@
             "test": "test",
             "save": "save",
             "clear": "clear",
+            "change": "change",
             "test_success": "Connected!",
             "test_fail": "Connection failed. Check your credentials.",
             "back": "back",

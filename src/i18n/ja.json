@@ -75,6 +75,7 @@
             "test": "テスト",
             "save": "保存",
             "clear": "クリア",
+            "change": "変更",
             "test_success": "接続成功！",
             "test_fail": "接続失敗。認証情報を確認してください。",
             "back": "戻る",

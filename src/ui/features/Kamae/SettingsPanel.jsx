@@ -106,7 +106,7 @@ export default function SettingsPanel({ onClose }) {
 
             <section className="kamae-settings-section" aria-labelledby="settings-igdb-title">
                 <h2 id="settings-igdb-title" className="kamae-settings-section-title">{t('ui.settings.igdb_title')}</h2>
-                <p className="kamae-settings-section-desc">{t('ui.settings.igdb_desc')}</p>
+                <p id="igdb-desc" className="kamae-settings-section-desc">{t('ui.settings.igdb_desc')}</p>
 
                 <div className="kamae-settings-field">
                     <label htmlFor="igdb-client-id" className="kamae-settings-label">
@@ -119,6 +119,7 @@ export default function SettingsPanel({ onClose }) {
                         value={clientId}
                         onChange={e => setClientId(e.target.value)}
                         autoComplete="off"
+                        aria-describedby="igdb-desc"
                     />
                 </div>
 
@@ -137,13 +138,14 @@ export default function SettingsPanel({ onClose }) {
                                     setClientSecret('');
                                 }}
                             >
-                                change
+                                {t('ui.settings.change')}
                             </button>
                         </div>
                     ) : (
                         <input
                             id="igdb-client-secret"
                             type="password"
+                            aria-describedby="igdb-desc"
                             className="kamae-settings-input"
                             value={clientSecret}
                             onChange={e => setClientSecret(e.target.value)}
