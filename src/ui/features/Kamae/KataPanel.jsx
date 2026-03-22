@@ -127,7 +127,7 @@ export default function KataPanel({
                     role="button"
                     tabIndex={0}
                     aria-pressed={activeKataId === ch.id}
-                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); ch.gameIds.length > 0 && handleSetActive(ch.id); } }}
+                    onKeyDown={(e) => { if ((e.key === 'Enter' || e.key === ' ' || e.key === 'F2') && e.target === e.currentTarget) { e.preventDefault(); if (e.key === 'F2') { handleStartRename(ch); } else { ch.gameIds.length > 0 && handleSetActive(ch.id); } } }}
                     aria-label={t('ui.katas.select_aria', { name: ch.name })}
                 >
                     <span className="kata-select-btn">
