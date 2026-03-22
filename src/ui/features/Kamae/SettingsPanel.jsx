@@ -102,13 +102,6 @@ export default function SettingsPanel({ onClose }) {
         <section className="kamae-settings" aria-label={t('ui.settings.title')}>
             <header className="kamae-settings-header">
                 <h1 className="kamae-settings-title">{t('ui.settings.title')}</h1>
-                <button
-                    type="button"
-                    className="kamae-settings-back-btn"
-                    onClick={onClose}
-                >
-                    {t('ui.settings.back')}
-                </button>
             </header>
 
             <section className="kamae-settings-section" aria-labelledby="settings-igdb-title">
@@ -269,6 +262,14 @@ export default function SettingsPanel({ onClose }) {
                     {t('ui.telemetry.privacy')}
                 </p>
             </section>
+
+            <button
+                type="button"
+                className="kamae-settings-back-btn"
+                onClick={onClose}
+            >
+                {t('ui.settings.back')}
+            </button>
         </section>
     );
 }
