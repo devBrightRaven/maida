@@ -131,8 +131,15 @@ export function useGameInput({
                 return;
             }
 
-            // Back / Cancel / Not Today
+            // Back / Cancel — skip if input/combobox is focused (let it handle Escape)
             if (key === 'Escape') {
+                const active = document.activeElement;
+                const isInput = active && (
+                    active.tagName === 'INPUT' ||
+                    active.tagName === 'TEXTAREA' ||
+                    active.getAttribute('role') === 'combobox'
+                );
+                if (isInput) return;
                 if (callbacksRef.current.onBack) callbacksRef.current.onBack();
                 return;
             }
