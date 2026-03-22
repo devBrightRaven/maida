@@ -22,7 +22,7 @@
         "status": {
             "loading": "Scanning your library.\nNo data leaves your device.",
             "frozen": "MAIDA is paused.",
-            "scanning": "Listening...",
+            "scanning": "Listening",
             "error": "Error"
         },
         "game": {
@@ -46,9 +46,9 @@
             "reading": "構 kamae",
             "mode_prefix": "Kamae mode: ",
             "desc": "Quiet preparation before you face it.",
-            "search_placeholder": "Search your library...",
+            "search_placeholder": "Search your library",
             "search_aria": "Search games to add to {kata}",
-            "searching": "Searching...",
+            "searching": "Searching",
             "not_installed": "not installed",
             "add": "add",
             "add_aria": "Add {game} to kata",
@@ -103,7 +103,7 @@
             "title": "Kata",
             "hint": "Choose a kata. Rin will present them to you, one at a time.",
             "create": "new kata",
-            "create_placeholder": "kata name...",
+            "create_placeholder": "Enter kata name",
             "active": "active",
             "all_games": "All installed games",
             "empty": "no games in this kata",
@@ -118,7 +118,7 @@
         "curation": {
             "first_prompt": "Is there a game you've been wanting to play?",
             "more_prompt": "Any others?",
-            "search_placeholder": "Type a game name...",
+            "search_placeholder": "Type a game name",
             "added_mark": "(added)",
             "done": "done",
             "skip": "skip"

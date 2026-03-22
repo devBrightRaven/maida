@@ -22,7 +22,7 @@
         "status": {
             "loading": "正在掃描你的遊戲庫。\n資料不會離開你的裝置。",
             "frozen": "Maida 已暫停。",
-            "scanning": "正在偵聽⋯⋯",
+            "scanning": "正在偵聽",
             "error": "錯誤"
         },
         "game": {
@@ -46,9 +46,9 @@
             "reading": "構 kamae",
             "mode_prefix": "構模式：",
             "desc": "面臨之前，靜靜準備。",
-            "search_placeholder": "搜尋你的遊戲庫⋯⋯",
+            "search_placeholder": "搜尋你的遊戲庫",
             "search_aria": "搜尋遊戲加入 {kata}",
-            "searching": "搜尋中⋯⋯",
+            "searching": "搜尋中",
             "not_installed": "未安裝",
             "add": "擺上去",
             "add_aria": "將 {game} 加入型",
@@ -103,7 +103,7 @@
             "title": "型（Kata）",
             "hint": "選一個型，臨會一次一個呈現給你。",
             "create": "新增型",
-            "create_placeholder": "型的名稱⋯⋯",
+            "create_placeholder": "請輸入型的名稱",
             "active": "啟用中",
             "all_games": "全部已安裝遊戲",
             "empty": "這個型還沒有遊戲",
@@ -118,7 +118,7 @@
         "curation": {
             "first_prompt": "有沒有一款你一直想玩的遊戲？",
             "more_prompt": "還有嗎？",
-            "search_placeholder": "輸入遊戲名稱⋯⋯",
+            "search_placeholder": "輸入遊戲名稱",
             "added_mark": "（已擺上）",
             "done": "好了",
             "skip": "跳過"

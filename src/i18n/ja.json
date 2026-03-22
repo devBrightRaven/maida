@@ -22,7 +22,7 @@
         "status": {
             "loading": "ライブラリをスキャン中。\nデータはデバイスの外に出ません。",
             "frozen": "Maidaは一時停止中。",
-            "scanning": "リスニング中…",
+            "scanning": "リスニング中",
             "error": "エラー"
         },
         "game": {
@@ -46,9 +46,9 @@
             "reading": "構 kamae",
             "mode_prefix": "構モード：",
             "desc": "臨む前の、静かな仕度。",
-            "search_placeholder": "ライブラリを検索…",
+            "search_placeholder": "ライブラリを検索",
             "search_aria": "{kata} に追加するゲームを検索",
-            "searching": "検索中…",
+            "searching": "検索中",
             "not_installed": "未インストール",
             "add": "載せる",
             "add_aria": "{game} を型に追加",
@@ -103,7 +103,7 @@
             "title": "型（カタ）",
             "hint": "型を選ぶと、臨がひとつずつ差し出します。",
             "create": "新しい型",
-            "create_placeholder": "型の名前…",
+            "create_placeholder": "型の名前を入力",
             "active": "アクティブ",
             "all_games": "インストール済み全ゲーム",
             "empty": "この型にはゲームがありません",
@@ -118,7 +118,7 @@
         "curation": {
             "first_prompt": "ずっとやりたかったゲームはある？",
             "more_prompt": "他にもある？",
-            "search_placeholder": "ゲーム名を入力…",
+            "search_placeholder": "ゲーム名を入力",
             "added_mark": "（載せ済み）",
             "done": "完了",
             "skip": "スキップ"
