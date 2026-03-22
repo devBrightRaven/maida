@@ -117,8 +117,16 @@ export function useGameInput({
             if (disabled) return;
             const key = e.key;
 
-            // Navigation
+            // Navigation — skip if an input/combobox is focused (let it handle arrows)
             if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(key)) {
+                const active = document.activeElement;
+                const isInput = active && (
+                    active.tagName === 'INPUT' ||
+                    active.tagName === 'TEXTAREA' ||
+                    active.tagName === 'SELECT' ||
+                    active.getAttribute('role') === 'combobox'
+                );
+                if (isInput) return;
                 if (callbacksRef.current.onNav) callbacksRef.current.onNav(key.replace('Arrow', '').toLowerCase());
                 return;
             }
