@@ -123,65 +123,64 @@ export default function KataPanel({
                 <div
                     key={ch.id}
                     className={`kata-group ${activeKataId === ch.id ? 'kata-group--active' : ''} ${ch.gameIds.length === 0 ? 'kata-group--empty' : ''}`}
-                    onClick={() => ch.gameIds.length > 0 && handleSetActive(ch.id)}
-                    role="button"
-                    tabIndex={0}
-                    aria-pressed={activeKataId === ch.id}
-                    onKeyDown={(e) => { if ((e.key === 'Enter' || e.key === ' ' || e.key === 'F2') && e.target === e.currentTarget) { e.preventDefault(); if (e.key === 'F2') { handleStartRename(ch); } else { ch.gameIds.length > 0 && handleSetActive(ch.id); } } }}
-                    aria-label={t('ui.katas.select_aria', { name: ch.name })}
                 >
-                    <span className="kata-select-btn">
-                        <span className="kata-item-name">
-                            {editingId === ch.id ? (
-                                <input
-                                    type="text"
-                                    className="kata-rename-input"
-                                    value={editName}
-                                    onChange={(e) => setEditName(e.target.value)}
-                                    onBlur={handleCommitRename}
-                                    onKeyDown={(e) => {
-                                        if (e.key === 'Enter') handleCommitRename();
-                                        if (e.key === 'Escape') setEditingId(null);
-                                    }}
-                                    onClick={(e) => e.stopPropagation()}
-                                    maxLength={30}
-                                    autoFocus
-                                />
-                            ) : (
-                                <span onDoubleClick={(e) => { e.stopPropagation(); handleStartRename(ch); }}>
-                                    {ch.name}
-                                </span>
-                            )}
-                            <span className="kata-item-count">({ch.gameIds.length})</span>
-                        </span>
-                    </span>
-                    <div className="kata-item-actions">
-                        <button
-                            type="button"
-                            className="kata-expand-btn"
-                            onClick={(e) => { e.stopPropagation(); onExpandToggle(expandedId === ch.id ? null : ch.id); }}
-                            aria-label={t('ui.katas.edit_games_aria', { name: ch.name })}
-                        >
-                            {expandedId === ch.id ? '−' : '+'}
-                        </button>
-                        <button
-                            type="button"
-                            className={`kata-delete-btn ${confirmDeleteId === ch.id ? 'kata-delete-btn--confirm' : ''}`}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                if (confirmDeleteId === ch.id) {
-                                    handleDelete(ch.id);
-                                    setConfirmDeleteId(null);
-                                } else {
-                                    setConfirmDeleteId(ch.id);
-                                }
-                            }}
-                            onBlur={() => setConfirmDeleteId(null)}
-                            aria-label={confirmDeleteId === ch.id ? t('ui.katas.confirm_delete_aria', { name: ch.name }) : t('ui.katas.delete_aria', { name: ch.name })}
-                        >
-                            {confirmDeleteId === ch.id ? '?' : '×'}
-                        </button>
-                    </div>
+                    <button
+                        type="button"
+                        className="kata-select-btn"
+                        aria-pressed={activeKataId === ch.id}
+                        aria-label={t('ui.katas.select_aria', { name: ch.name })}
+                        onClick={() => ch.gameIds.length > 0 && handleSetActive(ch.id)}
+                        onKeyDown={(e) => { if (e.key === 'F2') { e.preventDefault(); handleStartRename(ch); } }}
+                        onDoubleClick={() => handleStartRename(ch)}
+                    >
+                        {editingId === ch.id ? (
+                            <input
+                                type="text"
+                                className="kata-rename-input"
+                                value={editName}
+                                onChange={(e) => setEditName(e.target.value)}
+                                onBlur={handleCommitRename}
+                                onKeyDown={(e) => {
+                                    e.stopPropagation();
+                                    if (e.key === 'Enter') handleCommitRename();
+                                    if (e.key === 'Escape') setEditingId(null);
+                                }}
+                                onClick={(e) => e.stopPropagation()}
+                                maxLength={30}
+                                autoFocus
+                            />
+                        ) : (
+                            <span className="kata-item-name">
+                                {ch.name}
+                                <span className="kata-item-count">({ch.gameIds.length})</span>
+                            </span>
+                        )}
+                    </button>
+                    <button
+                        type="button"
+                        className="kata-expand-btn"
+                        onClick={() => onExpandToggle(expandedId === ch.id ? null : ch.id)}
+                        aria-label={t('ui.katas.edit_games_aria', { name: ch.name })}
+                        aria-expanded={expandedId === ch.id}
+                    >
+                        {expandedId === ch.id ? '−' : '+'}
+                    </button>
+                    <button
+                        type="button"
+                        className={`kata-delete-btn ${confirmDeleteId === ch.id ? 'kata-delete-btn--confirm' : ''}`}
+                        onClick={() => {
+                            if (confirmDeleteId === ch.id) {
+                                handleDelete(ch.id);
+                                setConfirmDeleteId(null);
+                            } else {
+                                setConfirmDeleteId(ch.id);
+                            }
+                        }}
+                        onBlur={() => setConfirmDeleteId(null)}
+                        aria-label={confirmDeleteId === ch.id ? t('ui.katas.confirm_delete_aria', { name: ch.name }) : t('ui.katas.delete_aria', { name: ch.name })}
+                    >
+                        {confirmDeleteId === ch.id ? '?' : '×'}
+                    </button>
                     <span className={`kata-item-badge ${activeKataId === ch.id ? '' : 'kata-item-badge--hidden'}`}>{t('ui.katas.active')}</span>
 
                     {expandedId === ch.id && (
