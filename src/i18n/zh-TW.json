@@ -106,7 +106,11 @@
             "empty": "這個型還沒有遊戲",
             "delete_confirm": "移除這個型？",
             "locked_title": "型（Kata）",
-            "locked_desc": "Maida Plus 功能。在設定中輸入授權碼。"
+            "locked_desc": "Maida Plus 功能。在設定中輸入授權碼。",
+            "select_aria": "選擇 {name}",
+            "edit_games_aria": "編輯 {name} 的遊戲",
+            "delete_aria": "刪除 {name}",
+            "confirm_delete_aria": "確認刪除 {name}"
         },
         "curation": {
             "first_prompt": "有沒有一款你一直想玩的遊戲？",

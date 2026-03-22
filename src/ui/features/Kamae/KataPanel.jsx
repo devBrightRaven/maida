@@ -128,7 +128,7 @@ export default function KataPanel({
                     tabIndex={0}
                     aria-pressed={activeKataId === ch.id}
                     onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); ch.gameIds.length > 0 && handleSetActive(ch.id); } }}
-                    aria-label={`Select ${ch.name}`}
+                    aria-label={t('ui.katas.select_aria', { name: ch.name })}
                 >
                     <span className="kata-select-btn">
                         <span className="kata-item-name">
@@ -160,7 +160,7 @@ export default function KataPanel({
                             type="button"
                             className="kata-expand-btn"
                             onClick={(e) => { e.stopPropagation(); onExpandToggle(expandedId === ch.id ? null : ch.id); }}
-                            aria-label={`Edit ${ch.name} games`}
+                            aria-label={t('ui.katas.edit_games_aria', { name: ch.name })}
                         >
                             {expandedId === ch.id ? '−' : '+'}
                         </button>
@@ -177,7 +177,7 @@ export default function KataPanel({
                                 }
                             }}
                             onBlur={() => setConfirmDeleteId(null)}
-                            aria-label={confirmDeleteId === ch.id ? `Confirm delete ${ch.name}` : `Delete ${ch.name}`}
+                            aria-label={confirmDeleteId === ch.id ? t('ui.katas.confirm_delete_aria', { name: ch.name }) : t('ui.katas.delete_aria', { name: ch.name })}
                         >
                             {confirmDeleteId === ch.id ? '?' : '×'}
                         </button>

@@ -99,7 +99,7 @@ export default function SettingsPanel({ onClose }) {
     const secretDisplay = hasExisting && !showSecretInput;
 
     return (
-        <section className="kamae-settings" aria-label={t('ui.settings.title')}>
+        <section className="kamae-settings">
             <header className="kamae-settings-header">
                 <h1 className="kamae-settings-title">{t('ui.settings.title')}</h1>
             </header>

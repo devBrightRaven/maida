@@ -106,7 +106,11 @@
             "empty": "no games in this kata",
             "delete_confirm": "remove this kata?",
             "locked_title": "Kata",
-            "locked_desc": "Available with Maida Plus. Enter your key in settings."
+            "locked_desc": "Available with Maida Plus. Enter your key in settings.",
+            "select_aria": "Select {name}",
+            "edit_games_aria": "Edit {name} games",
+            "delete_aria": "Delete {name}",
+            "confirm_delete_aria": "Confirm delete {name}"
         },
         "curation": {
             "first_prompt": "Is there a game you've been wanting to play?",

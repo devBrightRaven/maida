@@ -106,7 +106,11 @@
             "empty": "この型にはゲームがありません",
             "delete_confirm": "この型を削除しますか？",
             "locked_title": "型（カタ）",
-            "locked_desc": "Maida Plusで利用可能です。設定でキーを入力してください。"
+            "locked_desc": "Maida Plusで利用可能です。設定でキーを入力してください。",
+            "select_aria": "{name} を選択",
+            "edit_games_aria": "{name} のゲームを編集",
+            "delete_aria": "{name} を削除",
+            "confirm_delete_aria": "{name} の削除を確認"
         },
         "curation": {
             "first_prompt": "ずっとやりたかったゲームはある？",
