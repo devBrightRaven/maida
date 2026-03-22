@@ -102,12 +102,8 @@ function App() {
             }
         });
     }, []);
-    const switchToKamae = useCallback(() => { setFace('kamae'); focusMain(); }, [focusMain]);
-    const switchToRin = useCallback(() => {
-        setFace('rin');
-        reloadShowcase();
-        focusMain();
-    }, [reloadShowcase, focusMain]);
+    const switchToKamae = useCallback(() => { setFace(prev => { if (prev === 'kamae') return prev; focusMain(); return 'kamae'; }); }, [focusMain]);
+    const switchToRin = useCallback(() => { setFace(prev => { if (prev === 'rin') return prev; reloadShowcase(); focusMain(); return 'rin'; }); }, [reloadShowcase, focusMain]);
     const toggleFace = useCallback(() => setFace(f => f === 'rin' ? 'kamae' : 'rin'), []);
 
     // L1/R1 gamepad face switching
