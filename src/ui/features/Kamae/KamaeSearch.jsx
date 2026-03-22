@@ -57,7 +57,7 @@ export default function KamaeSearch({ activeKataGameIds, activeKataName, onAdd }
                 autoComplete="off"
             />
             {results.length > 0 && (
-                <ul className="kamae-search-results" role="listbox" aria-label="Search results">
+                <ul className="kamae-search-results" role="listbox">
                     {results.map(game => {
                         const id = game.id || game.steamAppId;
                         const inKata = kataSet.has(id);
@@ -77,7 +77,7 @@ export default function KamaeSearch({ activeKataGameIds, activeKataName, onAdd }
                                     className="kamae-search-add-btn"
                                     onClick={() => handleAdd(id)}
                                     disabled={inKata}
-                                    aria-label={inKata ? `${game.title} already added` : `Add ${game.title}`}
+                                    aria-label={inKata ? t('ui.kamae.added_aria', { game: game.title }) : t('ui.kamae.add_aria', { game: game.title })}
                                 >
                                     {inKata ? t('ui.kamae.added') : t('ui.kamae.add')}
                                 </button>
