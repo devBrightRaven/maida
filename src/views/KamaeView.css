@@ -197,7 +197,7 @@
 /* ── Showcase List ─────────────────────── */
 
 .showcase-heading {
-    font-size: 0.875rem;
+    font-size: 1rem;
     font-weight: 500;
     color: var(--t-dim);
     letter-spacing: 0.06em;
@@ -433,7 +433,7 @@
 }
 
 .kata-panel-title {
-    font-size: 0.875rem;
+    font-size: 1rem;
     font-weight: 500;
     color: var(--t-dim);
     letter-spacing: 0.06em;
