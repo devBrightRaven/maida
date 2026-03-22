@@ -868,7 +868,7 @@
 .kamae-settings-link {
     align-self: center;
     padding: 0.5rem 1.5rem;
-    font-size: 0.75rem;
+    font-size: 1rem;
     font-family: inherit;
     letter-spacing: 0.04em;
     color: var(--t-dim);
