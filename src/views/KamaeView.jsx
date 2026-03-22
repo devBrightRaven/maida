@@ -138,11 +138,11 @@ export default function KamaeView({ onSwitchToRin }) {
         } else if (expandedKataId) {
             setExpandedKataId(null);
         } else {
-            // Focus first kata item
+            // Focus the active kata or all-games button
             const container = containerRef.current;
             if (container) {
-                const firstKata = container.querySelector('[role="button"], .kata-item');
-                if (firstKata) firstKata.focus();
+                const active = container.querySelector('[aria-pressed="true"]');
+                if (active) active.focus();
             }
         }
     }, [exploring, expandedKataId]);
