@@ -3,7 +3,7 @@
         "button": {
             "try": "試試",
             "try_hint": "長按以錨定",
-            "try_aria": "看看 {game}",
+            "try_aria": "試試 {game}",
             "try_hint_aria": "長按鎖定",
             "play": "開打",
             "play_aria": "繼續玩 {game}",
