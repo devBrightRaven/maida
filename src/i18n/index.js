@@ -42,7 +42,7 @@ let currentLocale = detectLocale();
 
 // Sync HTML lang attribute with detected locale for screen readers
 if (typeof document !== 'undefined') {
-    document.documentElement.lang = currentLocale === 'zh-TW' ? 'zh-TW' : currentLocale;
+    document.documentElement.lang = currentLocale.split('-')[0];
 }
 
 /**
@@ -90,7 +90,7 @@ export function setLocale(locale) {
         currentLocale = locale;
         try { localStorage.setItem(LOCALE_STORAGE_KEY, locale); } catch {}
         if (typeof document !== 'undefined') {
-            document.documentElement.lang = locale;
+            document.documentElement.lang = locale.split('-')[0];
         }
     } else {
         console.warn(`[i18n] Locale not found: ${locale}`);

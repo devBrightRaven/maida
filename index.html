@@ -17,7 +17,7 @@
         var base = lang.split('-')[0];
         var match = supported.find(function(l) { return l === lang; }) ||
                     supported.find(function(l) { return l.split('-')[0] === base; }) || 'en';
-        document.documentElement.lang = match;
+        document.documentElement.lang = match.split('-')[0];
       } catch (e) {
         document.documentElement.setAttribute('data-theme', 'dark');
       }
