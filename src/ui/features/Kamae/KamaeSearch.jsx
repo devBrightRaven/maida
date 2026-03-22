@@ -1,23 +1,26 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { t } from '../../../i18n';
 import bridge from '../../../services/bridge';
 
 /**
- * KamaeSearch — search warehouse, add results to showcase.
- * Unlimited search (no daily cap). Results limited to 20 by IPC.
+ * KamaeSearch — search warehouse, add results to kata.
+ * Arrow keys navigate results, Enter adds to kata, Escape returns to input.
  */
 export default function KamaeSearch({ activeKataGameIds, activeKataName, onAdd }) {
     const [query, setQuery] = useState('');
     const [results, setResults] = useState([]);
     const [searching, setSearching] = useState(false);
+    const [activeIndex, setActiveIndex] = useState(-1);
     const debounceRef = useRef(null);
     const inputRef = useRef(null);
+    const listRef = useRef(null);
 
     const kataSet = activeKataGameIds ? new Set(activeKataGameIds) : null;
 
     useEffect(() => {
         if (!query.trim()) {
             setResults([]);
+            setActiveIndex(-1);
             return;
         }
 
@@ -26,22 +29,59 @@ export default function KamaeSearch({ activeKataGameIds, activeKataName, onAdd }
             setSearching(true);
             const res = await bridge.searchWarehouse(query);
             setResults(res || []);
+            setActiveIndex(-1);
             setSearching(false);
         }, 250);
 
         return () => clearTimeout(debounceRef.current);
     }, [query]);
 
-    const handleAdd = (gameId) => {
+    const handleAdd = useCallback((gameId) => {
         onAdd(gameId);
         setQuery('');
         setResults([]);
+        setActiveIndex(-1);
         inputRef.current?.focus();
-    };
+    }, [onAdd]);
+
+    const handleKeyDown = useCallback((e) => {
+        if (results.length === 0) return;
+
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            setActiveIndex(prev => prev < results.length - 1 ? prev + 1 : 0);
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            setActiveIndex(prev => prev > 0 ? prev - 1 : results.length - 1);
+        } else if (e.key === 'Enter' && activeIndex >= 0) {
+            e.preventDefault();
+            const game = results[activeIndex];
+            const id = game.id || game.steamAppId;
+            if (!kataSet?.has(id)) {
+                handleAdd(id);
+            }
+        } else if (e.key === 'Escape') {
+            setResults([]);
+            setActiveIndex(-1);
+            inputRef.current?.focus();
+        }
+    }, [results, activeIndex, kataSet, handleAdd]);
+
+    // Scroll active item into view
+    useEffect(() => {
+        if (activeIndex >= 0 && listRef.current) {
+            const items = listRef.current.querySelectorAll('[role="option"]');
+            items[activeIndex]?.scrollIntoView({ block: 'nearest' });
+        }
+    }, [activeIndex]);
 
     if (!kataSet) {
         return null;
     }
+
+    const activeId = activeIndex >= 0 && results[activeIndex]
+        ? (results[activeIndex].id || results[activeIndex].steamAppId)
+        : undefined;
 
     return (
         <div className="kamae-search" role="search">
@@ -53,34 +93,34 @@ export default function KamaeSearch({ activeKataGameIds, activeKataName, onAdd }
                 className="kamae-search-input"
                 value={query}
                 onChange={e => setQuery(e.target.value)}
+                onKeyDown={handleKeyDown}
                 placeholder={t('ui.kamae.search_placeholder')}
                 autoComplete="off"
+                role="combobox"
+                aria-expanded={results.length > 0}
+                aria-controls="kamae-search-listbox"
+                aria-activedescendant={activeId ? `search-option-${activeId}` : undefined}
             />
             {results.length > 0 && (
-                <ul className="kamae-search-results" role="listbox">
-                    {results.map(game => {
+                <ul id="kamae-search-listbox" ref={listRef} className="kamae-search-results" role="listbox">
+                    {results.map((game, index) => {
                         const id = game.id || game.steamAppId;
                         const inKata = kataSet.has(id);
+                        const isActive = index === activeIndex;
                         return (
                             <li
                                 key={id}
-                                className="kamae-search-result"
+                                id={`search-option-${id}`}
+                                className={`kamae-search-result ${isActive ? 'kamae-search-result--active' : ''}`}
                                 role="option"
-                                aria-selected={inKata}
+                                aria-selected={isActive}
+                                onClick={() => !inKata && handleAdd(id)}
                             >
                                 <span className="kamae-search-result-title">
                                     {game.title}
                                     {!game.installed && <span className="kamae-search-uninstalled"> {t('ui.kamae.not_installed')}</span>}
+                                    {inKata && <span className="kamae-search-added"> {t('ui.kamae.added')}</span>}
                                 </span>
-                                <button
-                                    type="button"
-                                    className="kamae-search-add-btn"
-                                    onClick={() => handleAdd(id)}
-                                    disabled={inKata}
-                                    aria-label={inKata ? t('ui.kamae.added_aria', { game: game.title }) : t('ui.kamae.add_aria', { game: game.title })}
-                                >
-                                    {inKata ? t('ui.kamae.added') : t('ui.kamae.add')}
-                                </button>
                             </li>
                         );
                     })}

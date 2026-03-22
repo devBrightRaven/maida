@@ -140,6 +140,20 @@
     border-top: 1px solid var(--t-border-subtle);
 }
 
+.kamae-search-result--active {
+    background: var(--t-accent-soft);
+}
+
+.kamae-search-result {
+    cursor: pointer;
+}
+
+.kamae-search-added {
+    font-size: 0.75rem;
+    color: var(--t-dim);
+    margin-left: 0.5rem;
+}
+
 .kamae-search-result-title {
     font-size: 1rem;
     color: var(--t-text);
