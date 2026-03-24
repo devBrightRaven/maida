@@ -107,7 +107,8 @@
 }
 
 .kamae-search-input:focus {
-    border-color: var(--t-dim);
+    border-color: var(--t-focus-border);
+    box-shadow: 0 0 0 3px var(--t-focus-border);
 }
 
 .kamae-search-input::placeholder {
@@ -141,7 +142,8 @@
 }
 
 .kamae-search-result--active {
-    background: var(--t-accent-soft);
+    background: var(--t-focus-soft);
+    box-shadow: inset 3px 0 0 var(--t-focus-border);
 }
 
 .kamae-search-result {
@@ -187,8 +189,8 @@
     cursor: default;
 }
 
-.kamae-search-add-btn:focus-visible {
-    outline: 2px solid var(--t-accent);
+.kamae-search-add-btn:focus {
+    outline: 2px solid var(--t-focus-border);
     outline-offset: 2px;
 }
 
@@ -237,6 +239,17 @@
     border: 1px solid var(--t-dim);
     border-radius: 8px;
     gap: 0.75rem;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.showcase-item:hover {
+    border-color: var(--t-text);
+    box-shadow: 0 0 8px var(--t-hover-glow);
+}
+
+.showcase-item:focus-within {
+    border-color: var(--t-focus-border);
+    box-shadow: 0 0 0 3px var(--t-focus-border);
 }
 
 .showcase-item-img {
@@ -319,16 +332,20 @@
     user-select: none;
     -webkit-user-select: none;
     min-width: 160px;
+    transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
 }
 
 .showcase-hold-btn:hover {
-    color: var(--t-text);
-    border-color: var(--t-text);
+    color: var(--t-hover-text);
+    background: var(--t-hover-bg);
+    border-color: var(--t-hover-bg);
 }
 
-.showcase-hold-btn:focus-visible {
-    outline: 2px solid var(--t-accent);
-    outline-offset: 2px;
+.showcase-hold-btn:focus {
+    color: var(--t-hover-text);
+    background: var(--t-hover-bg);
+    border-color: var(--t-hover-bg);
+    outline: none;
 }
 
 .showcase-hold-bg {
@@ -336,8 +353,8 @@
     top: 0;
     left: 0;
     height: 100%;
-    background: var(--t-error);
-    opacity: 0.2;
+    background: #ffaa00;
+    opacity: 0.6;
     pointer-events: none;
     transition: none;
 }
@@ -390,8 +407,8 @@
     border-color: var(--t-dim);
 }
 
-.showcase-empty-explore-btn:focus-visible {
-    outline: 2px solid var(--t-accent);
+.showcase-empty-explore-btn:focus {
+    outline: 2px solid var(--t-focus-border);
     outline-offset: 2px;
 }
 
@@ -416,8 +433,8 @@
     border-color: var(--t-dim);
 }
 
-.kamae-explore-btn:focus-visible {
-    outline: 2px solid var(--t-accent);
+.kamae-explore-btn:focus {
+    outline: 2px solid var(--t-focus-border);
     outline-offset: 2px;
 }
 
@@ -512,8 +529,8 @@
     justify-content: space-between;
     width: 100%;
     padding: 0.5rem 0.75rem;
-    min-height: 2.75rem;
-    font-size: 0.875rem;
+    min-height: 3.5rem;
+    font-size: 1rem;
     font-family: inherit;
     color: var(--t-dim);
     background: transparent;
@@ -525,7 +542,15 @@
 }
 
 .kata-item:hover {
-    background: var(--t-accent-soft);
+    border-color: var(--t-text);
+    color: var(--t-text);
+    box-shadow: 0 0 8px var(--t-hover-glow);
+}
+
+.kata-item:focus {
+    border-color: var(--t-focus-border);
+    background: var(--t-focus-soft);
+    box-shadow: 0 0 0 3px var(--t-focus-border);
 }
 
 .kata-item--active {
@@ -538,20 +563,22 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    flex: 1;
 }
 
 .kata-item-count {
-    font-size: 0.75rem;
+    font-size: 1rem;
     color: var(--t-dim);
 }
 
 .kata-item-badge {
-    font-size: 0.7rem;
+    font-size: 1rem;
+    font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--t-accent);
-    width: 4rem;
-    text-align: right;
+    margin-left: auto;
+    margin-right: 0.5rem;
     flex-shrink: 0;
 }
 
@@ -559,17 +586,29 @@
     visibility: hidden;
 }
 
-/* Kata row — select button + actions + badge in one line */
+/* Kata row — visual container, not focusable */
 .kata-group {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     width: 100%;
     padding: 0.5rem 0.75rem;
-    min-height: 2.75rem;
-    border: 1px solid var(--t-border-subtle);
+    min-height: 3.5rem;
+    border: 2px solid var(--t-dim);
     border-radius: 6px;
+    cursor: pointer;
     transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.kata-group:hover {
+    border-color: var(--t-text);
+    box-shadow: 0 0 8px var(--t-hover-glow);
+}
+
+.kata-group:focus-within {
+    border-color: var(--t-focus-border);
+    background: var(--t-focus-soft);
+    box-shadow: 0 0 0 3px var(--t-focus-border);
 }
 
 .kata-group--active {
@@ -585,12 +624,12 @@
     flex: 1;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    font-size: 0.875rem;
+    font-size: 1rem;
     font-family: inherit;
     color: var(--t-dim);
     text-align: left;
     padding: 0;
+    cursor: pointer;
 }
 
 .kata-group--active .kata-select-btn {
@@ -616,14 +655,15 @@
     border-radius: 4px;
     padding: 0.125rem 0.375rem;
     outline: none;
-    width: 8rem;
+    flex: 1;
+    min-width: 0;
 }
 
 .kata-expand-btn,
 .kata-delete-btn {
-    width: 1.75rem;
-    height: 1.75rem;
-    font-size: 1rem;
+    width: 2rem;
+    height: 2rem;
+    font-size: 1.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -665,6 +705,20 @@
 
 .kata-game-toggle input[type="checkbox"] {
     accent-color: var(--t-accent);
+    width: 1rem;
+    height: 1rem;
+}
+
+.kamae-settings-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.kamae-settings-toggle input[type="checkbox"] {
+    accent-color: var(--t-accent);
+    width: 1rem;
+    height: 1rem;
 }
 
 .kata-empty {
@@ -712,8 +766,8 @@
     border-color: var(--t-dim);
 }
 
-.explore-back-btn:focus-visible {
-    outline: 2px solid var(--t-accent);
+.explore-back-btn:focus {
+    outline: 2px solid var(--t-focus-border);
     outline-offset: 2px;
 }
 
@@ -821,8 +875,8 @@
     background: var(--t-accent-border);
 }
 
-.explore-card-btn:focus-visible {
-    outline: 2px solid var(--t-accent);
+.explore-card-btn:focus {
+    outline: 2px solid var(--t-focus-border);
     outline-offset: 2px;
 }
 
@@ -867,8 +921,8 @@
     color: var(--t-text);
 }
 
-.explore-limit-btn:focus-visible {
-    outline: 2px solid var(--t-accent);
+.explore-limit-btn:focus {
+    outline: 2px solid var(--t-focus-border);
     outline-offset: 2px;
 }
 
@@ -885,17 +939,20 @@
     border: 2px solid var(--t-dim);
     border-radius: 6px;
     cursor: pointer;
-    transition: color 0.15s ease, border-color 0.15s ease;
+    transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
 }
 
 .kamae-settings-link:hover {
-    color: var(--t-text);
-    border-color: var(--t-dim);
+    color: var(--t-hover-text);
+    background: var(--t-hover-bg);
+    border-color: var(--t-hover-bg);
 }
 
-.kamae-settings-link:focus-visible {
-    outline: 2px solid var(--t-accent);
-    outline-offset: 2px;
+.kamae-settings-link:focus {
+    color: var(--t-hover-text);
+    background: var(--t-hover-bg);
+    border-color: var(--t-hover-bg);
+    outline: none;
 }
 
 /* ── Settings Panel ───────────────────── */
@@ -913,7 +970,7 @@
 }
 
 .kamae-settings-title {
-    font-size: 1.125rem;
+    font-size: 1.5rem;
     font-weight: 500;
     color: var(--t-text);
     margin: 0;
@@ -921,7 +978,7 @@
 
 .kamae-settings-back-btn {
     padding: 0.375rem 0.75rem;
-    font-size: 0.875rem;
+    font-size: 1rem;
     font-family: inherit;
     letter-spacing: 0.04em;
     color: var(--t-dim);
@@ -932,13 +989,16 @@
 }
 
 .kamae-settings-back-btn:hover {
-    color: var(--t-text);
-    border-color: var(--t-text);
+    color: var(--t-hover-text);
+    background: var(--t-hover-bg);
+    border-color: var(--t-hover-bg);
 }
 
-.kamae-settings-back-btn:focus-visible {
-    outline: 2px solid var(--t-accent);
-    outline-offset: 2px;
+.kamae-settings-back-btn:focus {
+    color: var(--t-hover-text);
+    background: var(--t-hover-bg);
+    border-color: var(--t-hover-bg);
+    outline: none;
 }
 
 .kamae-settings-section {
@@ -948,14 +1008,14 @@
 }
 
 .kamae-settings-section-title {
-    font-size: 0.875rem;
+    font-size: 1.125rem;
     font-weight: 500;
     color: var(--t-text);
     margin: 0;
 }
 
 .kamae-settings-section-desc {
-    font-size: 0.75rem;
+    font-size: 1rem;
     color: var(--t-dim);
     margin: 0;
     line-height: 1.5;
@@ -968,7 +1028,7 @@
 }
 
 .kamae-settings-label {
-    font-size: 0.75rem;
+    font-size: 1rem;
     color: var(--t-dim);
     letter-spacing: 0.04em;
 }
@@ -989,7 +1049,8 @@
 }
 
 .kamae-settings-input:focus {
-    border-color: var(--t-text);
+    border-color: var(--t-focus-border);
+    box-shadow: 0 0 0 3px var(--t-focus-border);
 }
 
 .kamae-settings-masked {
@@ -1025,8 +1086,8 @@
     border-color: var(--t-text);
 }
 
-.kamae-settings-change-btn:focus-visible {
-    outline: 2px solid var(--t-accent);
+.kamae-settings-change-btn:focus {
+    outline: 2px solid var(--t-focus-border);
     outline-offset: 2px;
 }
 
@@ -1037,7 +1098,7 @@
 
 .kamae-settings-btn {
     padding: 0.5rem 1rem;
-    font-size: 0.875rem;
+    font-size: 1rem;
     font-family: inherit;
     letter-spacing: 0.04em;
     color: var(--t-dim);
@@ -1049,18 +1110,21 @@
 }
 
 .kamae-settings-btn:hover:not(:disabled) {
-    color: var(--t-text);
-    border-color: var(--t-text);
+    color: var(--t-hover-text);
+    background: var(--t-hover-bg);
+    border-color: var(--t-hover-bg);
+}
+
+.kamae-settings-btn:focus:not(:disabled) {
+    color: var(--t-hover-text);
+    background: var(--t-hover-bg);
+    border-color: var(--t-hover-bg);
+    outline: none;
 }
 
 .kamae-settings-btn:disabled {
     opacity: 0.4;
     cursor: default;
-}
-
-.kamae-settings-btn:focus-visible {
-    outline: 2px solid var(--t-accent);
-    outline-offset: 2px;
 }
 
 .kamae-settings-btn--danger:hover:not(:disabled) {

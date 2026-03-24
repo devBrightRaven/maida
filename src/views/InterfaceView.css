@@ -34,6 +34,12 @@
     }
 }
 
+@media (prefers-reduced-motion: reduce) {
+    .interface-glow {
+        animation: none;
+    }
+}
+
 .interface-content {
     z-index: 10;
     display: flex;

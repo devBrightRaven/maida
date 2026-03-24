@@ -45,7 +45,25 @@ export default function KamaeSearch({ activeKataGameIds, activeKataName, onAdd }
     }, [onAdd]);
 
     const handleKeyDown = useCallback((e) => {
-        if (results.length === 0) return;
+        // When no results, navigate to next/prev focusable element outside search
+        if (results.length === 0) {
+            if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                e.stopPropagation();
+                const container = inputRef.current?.closest('.kamae-content');
+                if (!container) return;
+                const focusable = Array.from(container.querySelectorAll(
+                    'button:not(:disabled), input:not(:disabled), [tabindex]:not([tabindex="-1"]), label.kata-game-toggle'
+                ));
+                const idx = focusable.indexOf(inputRef.current);
+                if (idx === -1) return;
+                const next = e.key === 'ArrowDown'
+                    ? focusable[idx + 1] || focusable[0]
+                    : focusable[idx - 1] || focusable[focusable.length - 1];
+                next?.focus();
+            }
+            return;
+        }
 
         if (e.key === 'ArrowDown') {
             e.preventDefault();

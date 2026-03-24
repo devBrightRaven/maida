@@ -134,7 +134,12 @@ export default function ShowcaseList({ games, onRemove, isKataMode }) {
             <h3 className="showcase-heading">{t('ui.kamae.games_heading')}</h3>
             {isKataMode && (
                 <div className="showcase-counter" aria-live="polite">
-                    {games.length} / {MAX_KATA_GAMES}
+                    <span aria-hidden="true">{games.length} / {MAX_KATA_GAMES}</span>
+                    <span className="sr-only">
+                        {games.length >= MAX_KATA_GAMES
+                            ? t('ui.katas.counter_full')
+                            : t('ui.katas.counter_aria', { count: games.length, max: MAX_KATA_GAMES })}
+                    </span>
                 </div>
             )}
             <ul className="showcase-list">
@@ -156,7 +161,7 @@ export default function ShowcaseList({ games, onRemove, isKataMode }) {
                                 <HoldButton
                                     onConfirm={() => onRemove(id)}
                                     label={t('ui.kamae.remove_from_kata')}
-                                    ariaLabel={`Hold to remove ${game.title}`}
+                                    ariaLabel={t('ui.kamae.remove_aria', { title: game.title })}
                                 />
                             </div>
                         )}

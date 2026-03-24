@@ -188,8 +188,12 @@ export function useGameInput({
         const BTN_A = 0, BTN_B = 1, BTN_L1 = 4, BTN_R1 = 5;
         const DPAD_UP = 12, DPAD_DOWN = 13, DPAD_LEFT = 14, DPAD_RIGHT = 15;
 
-        // Debounce state for D-pad (prevent rapid fire)
+        // D-pad state + repeat timing
         const lastDpad = { up: false, down: false, left: false, right: false };
+        const dpadHeldSince = { up: 0, down: 0, left: 0, right: 0 };
+        const dpadLastRepeat = { up: 0, down: 0, left: 0, right: 0 };
+        const DPAD_INITIAL_DELAY = 400; // ms before repeat starts
+        const DPAD_REPEAT_INTERVAL = 100; // ms between repeats
         let aButtonDown = false;
         let aButtonTarget = null;
         let lastB = false;
@@ -231,10 +235,24 @@ export function useGameInput({
                         right: btn(DPAD_RIGHT)
                     };
 
-                    if (dpadState.up && !lastDpad.up) callbacksRef.current.onNav?.('up');
-                    if (dpadState.down && !lastDpad.down) callbacksRef.current.onNav?.('down');
-                    if (dpadState.left && !lastDpad.left) callbacksRef.current.onNav?.('left');
-                    if (dpadState.right && !lastDpad.right) callbacksRef.current.onNav?.('right');
+                    const now = Date.now();
+                    for (const dir of ['up', 'down', 'left', 'right']) {
+                        if (dpadState[dir]) {
+                            if (!lastDpad[dir]) {
+                                // Initial press
+                                callbacksRef.current.onNav?.(dir);
+                                dpadHeldSince[dir] = now;
+                                dpadLastRepeat[dir] = now;
+                            } else if (now - dpadHeldSince[dir] >= DPAD_INITIAL_DELAY
+                                && now - dpadLastRepeat[dir] >= DPAD_REPEAT_INTERVAL) {
+                                // Repeat while held
+                                callbacksRef.current.onNav?.(dir);
+                                dpadLastRepeat[dir] = now;
+                            }
+                        } else {
+                            dpadHeldSince[dir] = 0;
+                        }
+                    }
 
                     Object.assign(lastDpad, dpadState);
 

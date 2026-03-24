@@ -10,6 +10,10 @@ import { addGameToKata, removeGameFromKata } from '../core/katas';
 import { t } from '../i18n';
 import bridge from '../services/bridge';
 import CalligraphyBg from '../ui/CalligraphyBg';
+import Footer from '../ui/Footer';
+import AccessibilityPage from '../ui/pages/AccessibilityPage';
+import PrivacyPage from '../ui/pages/PrivacyPage';
+import TermsPage from '../ui/pages/TermsPage';
 import './KamaeView.css';
 
 /**
@@ -24,6 +28,7 @@ export default function KamaeView({ onSwitchToRin }) {
     const [exploring, setExploring] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
     const [expandedKataId, setExpandedKataId] = useState(null);
+    const [legalPage, setLegalPage] = useState(null);
 
     // Load showcase + all installed games on mount
     useEffect(() => {
@@ -126,7 +131,6 @@ export default function KamaeView({ onSwitchToRin }) {
         } else if (el.tagName === 'INPUT') {
             el.click();
         } else if (el.tagName === 'LABEL') {
-            // Click the checkbox inside the label
             const cb = el.querySelector('input[type="checkbox"]');
             if (cb) cb.click();
         }
@@ -138,10 +142,10 @@ export default function KamaeView({ onSwitchToRin }) {
         } else if (expandedKataId) {
             setExpandedKataId(null);
         } else {
-            // Focus the active kata or all-games button
+            // Focus the active kata row or all-games button
             const container = containerRef.current;
             if (container) {
-                const active = container.querySelector('[aria-pressed="true"]');
+                const active = container.querySelector('.kata-group--active .kata-select-btn, [aria-pressed="true"]');
                 if (active) active.focus();
             }
         }
@@ -171,6 +175,16 @@ export default function KamaeView({ onSwitchToRin }) {
                 </div>
             </main>
         );
+    }
+
+    if (legalPage) {
+        const pages = {
+            accessibility: AccessibilityPage,
+            privacy: PrivacyPage,
+            terms: TermsPage,
+        };
+        const Page = pages[legalPage];
+        return Page ? <Page onClose={() => setLegalPage(null)} /> : null;
     }
 
     if (exploring) {
@@ -207,9 +221,13 @@ export default function KamaeView({ onSwitchToRin }) {
                     aria-pressed={activeKataId === null}
                     onClick={() => handleKataUpdate({ katas: showcaseState.katas || [], activeKataId: null })}
                 >
-                    <span className="kata-item-name">{t('ui.katas.all_games')}</span>
-                    <span className="kata-item-actions kata-item-actions--placeholder" />
+                    <span className="kata-item-name">
+                        {t('ui.katas.all_games')}
+                        <span className="kata-item-count" aria-hidden="true">({allInstalledGames.length})</span>
+                        <span className="sr-only">, {t('ui.katas.game_count_aria', { count: allInstalledGames.length })}</span>
+                    </span>
                     <span className={`kata-item-badge ${activeKataId === null ? '' : 'kata-item-badge--hidden'}`}>{t('ui.katas.active')}</span>
+                    <span className="kata-item-actions kata-item-actions--placeholder" />
                 </button>
                 <KataPanel
                     katas={showcaseState.katas || []}
@@ -244,8 +262,9 @@ export default function KamaeView({ onSwitchToRin }) {
                     className="kamae-settings-link"
                     onClick={() => setShowSettings(true)}
                 >
-                    {t('ui.settings.title').toLowerCase()}
+                    {t('ui.settings.title')}
                 </button>
+                <Footer onNavigate={setLegalPage} />
             </div>
             <FaceSwitchButton direction="to-rin" onClick={onSwitchToRin} />
         </main>

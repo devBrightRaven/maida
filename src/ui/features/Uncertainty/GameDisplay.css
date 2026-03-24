@@ -225,3 +225,9 @@
         transform: translateX(-50%) scale(1);
     }
 }
+
+@media (prefers-reduced-motion: reduce) {
+    .expanded-view {
+        animation: none;
+    }
+}

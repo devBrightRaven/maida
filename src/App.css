@@ -22,7 +22,7 @@
     transform: translate(-50%, -50%);
     width: 100%;
     color: var(--t-text);
-    font-size: 18px;
+    font-size: 1.125rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     text-align: center;
@@ -45,7 +45,7 @@
     padding: 1rem 3rem;
 
     font-family: 'Inter', sans-serif;
-    font-size: 12px;
+    font-size: 0.75rem;
     letter-spacing: 0.15em;
     text-transform: uppercase;
 
@@ -144,7 +144,7 @@
 
 .version-name {
     color: var(--t-text-soft);
-    font-size: 11px;
+    font-size: 0.6875rem;
     font-weight: 500;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -153,13 +153,13 @@
 .version-number {
     color: var(--t-text-ghost);
     font-family: 'Consolas', 'Monaco', monospace;
-    font-size: 10px;
+    font-size: 0.625rem;
     letter-spacing: 0.05em;
 }
 
 .version-link {
     color: var(--t-text-faint);
-    font-size: 10px;
+    font-size: 0.625rem;
     text-decoration: none;
     cursor: pointer;
 }
@@ -167,6 +167,11 @@
 .version-link:hover {
     color: var(--t-text-soft);
     text-decoration: underline;
+}
+
+.version-link:focus-visible {
+    outline: 2px solid var(--t-focus-border);
+    outline-offset: 2px;
 }
 
 /* Transitions could be added here for a smoother "fade to black" */
@@ -182,7 +187,7 @@
     background: transparent;
     border: 1px solid var(--t-dim);
     color: var(--t-dim);
-    font-size: 18px;
+    font-size: 1.125rem;
     cursor: pointer;
     z-index: 60;
     display: flex;

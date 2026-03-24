@@ -6,6 +6,10 @@ import TracePanel from '../ui/features/Trace/TracePanel';
 import FaceSwitchButton from '../ui/FaceSwitchButton';
 import { useGameInput } from '../hooks/useGameInput';
 import CalligraphyBg from '../ui/CalligraphyBg';
+import Footer from '../ui/Footer';
+import AccessibilityPage from '../ui/pages/AccessibilityPage';
+import PrivacyPage from '../ui/pages/PrivacyPage';
+import TermsPage from '../ui/pages/TermsPage';
 import './RinView.css';
 
 /**
@@ -34,6 +38,7 @@ export default function RinView({
 }) {
     const [expanded, setExpanded] = useState(false);
     const [showTrace, setShowTrace] = useState(false);
+    const [legalPage, setLegalPage] = useState(null);
     const [focusedBtn, setFocusedBtn] = useState(null); // 'visit' | 'notToday' | 'back' | 'switchKamae' | null
 
     // Refs for Focus Management
@@ -186,6 +191,16 @@ export default function RinView({
 
     if (!prescription) return null;
 
+    if (legalPage) {
+        const pages = {
+            accessibility: AccessibilityPage,
+            privacy: PrivacyPage,
+            terms: TermsPage,
+        };
+        const Page = pages[legalPage];
+        return Page ? <Page onClose={() => setLegalPage(null)} /> : null;
+    }
+
     const handleContainerClick = (e) => {
         // Prevent focus loss: always re-focus primary button when clicking non-button areas
         if (!e.target.closest('button')) {
@@ -204,7 +219,7 @@ export default function RinView({
 
     return (
         <>
-        <div className="rin-title-block" role="img" aria-label={t('ui.rin.reading')}>
+        <div className="rin-title-block" aria-hidden="true">
             <p className="rin-title-reading">{t('ui.rin.reading')}</p>
             <p className="rin-title-desc">{t('ui.rin.desc')}</p>
         </div>
@@ -214,7 +229,7 @@ export default function RinView({
         >
             <CalligraphyBg char="臨" className="rin-calligraphy-bg" />
             {game && (
-                <header className="mvp-header" onClick={onSecretTap}>
+                <header className="mvp-header" onClick={onSecretTap} role="presentation">
                     <h1 className="game-label">
                         <span className="sr-only">{t('ui.rin.mode_prefix')}</span>
                         {isAnchored ? `(⚓${t('ui.game.anchored_prefix')}) ${game.title}` : game.title}
@@ -247,12 +262,15 @@ export default function RinView({
                                 ref={btnRefs.visit}
                                 className={`mvp-btn visit ${isAnchored ? 'anchored-btn' : ''} ${focusedBtn === 'visit' ? 'is-focused' : ''}`}
                                 aria-label={isAnchored ? t('ui.button.play_aria', { game: game.title }) : t('ui.button.try_aria', { game: game.title })}
+                                onMouseEnter={() => focusBtn('visit')}
                                 // Pointer Events for unified input handling
                                 onPointerDown={handlers.onPressStart}
                                 onPointerUp={handlers.onPressEnd}
-                                onPointerLeave={handlers.onPressCancel} // Cancel press if in progress
-                                onPointerCancel={handlers.onPressCancel} // System cancel
-                                // Prevent default click because we handle action in onPointerUp
+                                onPointerLeave={handlers.onPressCancel}
+                                onPointerCancel={handlers.onPressCancel}
+                                // Keyboard hold for anchor (Enter/Space)
+                                onKeyDown={(e) => { if ((e.key === 'Enter' || e.key === ' ') && !e.repeat) { e.preventDefault(); handlers.onPressStart(); } }}
+                                onKeyUp={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handlers.onPressEnd(); } }}
                                 onClick={(e) => { e.stopPropagation(); }}
                             >
                                 {isAnchored ? t('ui.button.play') : (
@@ -265,6 +283,11 @@ export default function RinView({
                                 {longPressProgress > 0 && !isAnchored && (
                                     <div
                                         className="btn-progress"
+                                        role="progressbar"
+                                        aria-valuenow={Math.round(longPressProgress * 100)}
+                                        aria-valuemin={0}
+                                        aria-valuemax={100}
+                                        aria-label={t('ui.button.try_hint')}
                                         style={{ width: `${longPressProgress * 100}%` }}
                                     ></div>
                                 )}
@@ -273,14 +296,15 @@ export default function RinView({
                             <button
                                 ref={btnRefs.notToday}
                                 className={`mvp-btn not-today ${focusedBtn === 'notToday' ? 'is-focused' : ''}`}
-                                aria-label={isAnchored ? t('ui.button.clear_aria', { game: game.title }) : t('ui.button.not_today_aria')}
+                                aria-label={isAnchored ? t('ui.button.clear_aria', { game: game.title }) : t('ui.button.not_now_aria')}
+                                onMouseEnter={() => focusBtn('notToday')}
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     if (isAnchored) onAction('release');
                                     else onAction('skip');
                                 }}
                             >
-                                {isAnchored ? t('ui.button.clear') : t('ui.button.not_today')}
+                                {isAnchored ? t('ui.button.clear') : t('ui.button.not_now')}
                             </button>
                         </div>
                     )}
@@ -289,6 +313,7 @@ export default function RinView({
                         ref={btnRefs.back}
                         className={`mvp-btn back-link ${(!canUndo || isAnchored) ? 'is-hidden' : ''} ${focusedBtn === 'back' ? 'is-focused' : ''}`}
                         aria-label={t('ui.button.back')}
+                        onMouseEnter={() => focusBtn('back')}
                         onClick={(e) => { e.stopPropagation(); if (canUndo && !isAnchored) onAction('back'); }}
                         disabled={!canUndo || isAnchored}
                         tabIndex={(!canUndo || isAnchored) ? -1 : 0}
@@ -331,6 +356,8 @@ export default function RinView({
             {onSwitchToKamae && (
                 <FaceSwitchButton ref={btnRefs.switchKamae} direction="to-kamae" onClick={onSwitchToKamae} />
             )}
+
+            <Footer onNavigate={setLegalPage} />
         </main>
         </>
     );
