@@ -29,6 +29,7 @@ export default function KamaeView({ onSwitchToRin }) {
     const [showSettings, setShowSettings] = useState(false);
     const [expandedKataId, setExpandedKataId] = useState(null);
     const [legalPage, setLegalPage] = useState(null);
+    const legalReturnRef = useRef(null);
 
     // Load showcase + all installed games on mount
     useEffect(() => {
@@ -161,7 +162,7 @@ export default function KamaeView({ onSwitchToRin }) {
         return (
             <main className="kamae-view" ref={containerRef}>
                 <div className="kamae-content">
-                    <p className="kamae-loading">{t('ui.status.loading')}</p>
+                    <p className="kamae-loading" role="status" aria-live="polite">{t('ui.status.loading')}</p>
                 </div>
             </main>
         );
@@ -184,7 +185,7 @@ export default function KamaeView({ onSwitchToRin }) {
             terms: TermsPage,
         };
         const Page = pages[legalPage];
-        return Page ? <Page onClose={() => setLegalPage(null)} /> : null;
+        return Page ? <Page onClose={() => { setLegalPage(null); requestAnimationFrame(() => legalReturnRef.current?.focus()); }} /> : null;
     }
 
     if (exploring) {
@@ -264,7 +265,7 @@ export default function KamaeView({ onSwitchToRin }) {
                 >
                     {t('ui.settings.title')}
                 </button>
-                <Footer onNavigate={setLegalPage} />
+                <Footer onNavigate={(page) => { legalReturnRef.current = document.activeElement; setLegalPage(page); }} />
             </div>
             <FaceSwitchButton direction="to-rin" onClick={onSwitchToRin} />
         </main>

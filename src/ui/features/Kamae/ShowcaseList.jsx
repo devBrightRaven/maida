@@ -89,16 +89,16 @@ function HoldButton({ onConfirm, label, ariaLabel }) {
         reset();
     }, [reset]);
 
-    // Keyboard hold: Enter/Space down = start, up = end
+    // Keyboard hold: Enter down = start, up = end
     const handleKeyDown = useCallback((e) => {
-        if ((e.key === 'Enter' || e.key === ' ') && !e.repeat) {
+        if (e.key === 'Enter' && !e.repeat) {
             e.preventDefault();
             handleStart();
         }
     }, [handleStart]);
 
     const handleKeyUp = useCallback((e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
+        if (e.key === 'Enter') {
             handleEnd();
         }
     }, [handleEnd]);
@@ -130,8 +130,8 @@ function HoldButton({ onConfirm, label, ariaLabel }) {
  */
 export default function ShowcaseList({ games, onRemove, isKataMode }) {
     return (
-        <section className="showcase-section">
-            <h3 className="showcase-heading">{t('ui.kamae.games_heading')}</h3>
+        <section className="showcase-section" aria-labelledby="showcase-heading">
+            <h3 id="showcase-heading" className="showcase-heading">{t('ui.kamae.games_heading')}</h3>
             {isKataMode && (
                 <div className="showcase-counter" aria-live="polite">
                     <span aria-hidden="true">{games.length} / {MAX_KATA_GAMES}</span>

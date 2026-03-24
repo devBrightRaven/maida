@@ -11,7 +11,7 @@ export default function GameDisplay({ game, prescription: rawPrescription, debug
         <section className="mvp-content">
             <div className={`permission-wrapper ${debugMode ? 'debug-ready' : ''}`}>
                 <h2 className={`permission-text ${debugMode ? 'debug-text' : ''}`}
-                    aria-live="assertive"
+                    aria-live="polite"
                 >
                     {prescription.interface}
                 </h2>

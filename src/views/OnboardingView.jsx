@@ -86,6 +86,7 @@ export default function OnboardingView({ onComplete }) {
         return (
             <main className="onboarding-container">
                 <section className="onboarding-content" aria-label="Onboarding">
+                    <h1 className="sr-only">Maida</h1>
                     <CurationPrompt onDone={onComplete} />
                 </section>
                 <div className="bg-glow"></div>

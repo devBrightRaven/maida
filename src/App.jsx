@@ -23,6 +23,7 @@ loadPrescriptionTranslations();
 function FrozenScreen({ onResume, guardMs = 5000 }) {
     const btnRef = useRef(null);
     const [ready, setReady] = useState(false);
+    const [secondsLeft, setSecondsLeft] = useState(Math.ceil(guardMs / 1000));
 
     // Input guard: delay before accepting input
     useEffect(() => {
@@ -30,7 +31,10 @@ function FrozenScreen({ onResume, guardMs = 5000 }) {
             setReady(true);
             btnRef.current?.focus();
         }, guardMs);
-        return () => clearTimeout(timer);
+        const countdown = setInterval(() => {
+            setSecondsLeft(prev => prev > 0 ? prev - 1 : 0);
+        }, 1000);
+        return () => { clearTimeout(timer); clearInterval(countdown); };
     }, [guardMs]);
 
     // Auto-focus on window refocus (only after guard)
@@ -63,6 +67,9 @@ function FrozenScreen({ onResume, guardMs = 5000 }) {
             >
                 {t('ui.button.im_back')}
             </button>
+            <p className="sr-only" role="status" aria-live="polite">
+                {ready ? t('ui.status.frozen_ready') : t('ui.status.frozen_wait', { seconds: secondsLeft })}
+            </p>
         </main>
     );
 }

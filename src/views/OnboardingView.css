@@ -172,7 +172,8 @@
 }
 
 .curation-prompt-input:focus {
-    border-color: var(--t-text-faint);
+    border-color: var(--t-focus-border);
+    box-shadow: 0 0 0 3px var(--t-focus-border);
 }
 
 .curation-prompt-input::placeholder {

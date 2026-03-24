@@ -39,6 +39,7 @@ export default function RinView({
     const [expanded, setExpanded] = useState(false);
     const [showTrace, setShowTrace] = useState(false);
     const [legalPage, setLegalPage] = useState(null);
+    const legalReturnRef = React.useRef(null);
     const [focusedBtn, setFocusedBtn] = useState(null); // 'visit' | 'notToday' | 'back' | 'switchKamae' | null
 
     // Refs for Focus Management
@@ -58,15 +59,11 @@ export default function RinView({
         }
     };
 
-    // Auto-focus primary button on new game load
+    // Auto-focus NOT NOW — user must actively move to TRY (agency)
     useEffect(() => {
-        // Use setTimeout to ensure button is rendered
         const timer = setTimeout(() => {
-            if (game) {
-                focusBtn('visit');
-            } else {
-                focusBtn('notToday');
-            }
+            focusBtn('notToday');
+
         }, 0);
         return () => clearTimeout(timer);
     }, [game, isAnchored]);
@@ -77,11 +74,7 @@ export default function RinView({
             const current = document.activeElement;
             // If nothing is focused, grab focus to primary button
             if (!current || current === document.body) {
-                if (game) {
-                    focusBtn('visit');
-                } else {
-                    focusBtn('notToday');
-                }
+                focusBtn('notToday');
             }
         };
 
@@ -99,11 +92,7 @@ export default function RinView({
         if (!showTrace) {
             // Small delay to ensure panel is fully unmounted
             requestAnimationFrame(() => {
-                if (game) {
-                    focusBtn('visit');
-                } else {
-                    focusBtn('notToday');
-                }
+                focusBtn('notToday');
             });
         }
     }, [showTrace, game]);
@@ -160,13 +149,9 @@ export default function RinView({
             const isTraceBtn = current?.classList?.contains('debug-trace-btn');
             const isKnownButton = isVisit || isNotToday || isBack || isTraceBtn;
 
-            // Fallback: If focus is lost, on body, or on unknown element, grab primary button
+            // Fallback: If focus is lost, on body, or on unknown element, grab NOT NOW
             if (!current || current === document.body || !isKnownButton) {
-                if (game) {
-                    focusBtn('visit');
-                } else {
-                    focusBtn('notToday');
-                }
+                focusBtn('notToday');
                 return;
             }
 
@@ -198,7 +183,7 @@ export default function RinView({
             terms: TermsPage,
         };
         const Page = pages[legalPage];
-        return Page ? <Page onClose={() => setLegalPage(null)} /> : null;
+        return Page ? <Page onClose={() => { setLegalPage(null); requestAnimationFrame(() => legalReturnRef.current?.focus()); }} /> : null;
     }
 
     const handleContainerClick = (e) => {
@@ -229,7 +214,8 @@ export default function RinView({
         >
             <CalligraphyBg char="臨" className="rin-calligraphy-bg" />
             {game && (
-                <header className="mvp-header" onClick={onSecretTap} role="presentation">
+                <header className="mvp-header">
+                    <div className="mvp-header-tap" onClick={onSecretTap} aria-hidden="true" />
                     <h1 className="game-label">
                         <span className="sr-only">{t('ui.rin.mode_prefix')}</span>
                         {isAnchored ? `(⚓${t('ui.game.anchored_prefix')}) ${game.title}` : game.title}
@@ -262,6 +248,7 @@ export default function RinView({
                                 ref={btnRefs.visit}
                                 className={`mvp-btn visit ${isAnchored ? 'anchored-btn' : ''} ${focusedBtn === 'visit' ? 'is-focused' : ''}`}
                                 aria-label={isAnchored ? t('ui.button.play_aria', { game: game.title }) : t('ui.button.try_aria', { game: game.title })}
+                                aria-describedby={!isAnchored ? 'visit-hint' : undefined}
                                 onMouseEnter={() => focusBtn('visit')}
                                 // Pointer Events for unified input handling
                                 onPointerDown={handlers.onPressStart}
@@ -269,14 +256,14 @@ export default function RinView({
                                 onPointerLeave={handlers.onPressCancel}
                                 onPointerCancel={handlers.onPressCancel}
                                 // Keyboard hold for anchor (Enter/Space)
-                                onKeyDown={(e) => { if ((e.key === 'Enter' || e.key === ' ') && !e.repeat) { e.preventDefault(); handlers.onPressStart(); } }}
-                                onKeyUp={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handlers.onPressEnd(); } }}
+                                onKeyDown={(e) => { if (e.key === 'Enter' && !e.repeat) { e.preventDefault(); handlers.onPressStart(); } }}
+                                onKeyUp={(e) => { if (e.key === 'Enter') { e.preventDefault(); handlers.onPressEnd(); } }}
                                 onClick={(e) => { e.stopPropagation(); }}
                             >
                                 {isAnchored ? t('ui.button.play') : (
                                     <div className="visit-btn-content">
                                         <span className="visit-btn-title">{t('ui.button.try')}</span>
-                                        <span className="visit-btn-subtitle">{t('ui.button.try_hint')}</span>
+                                        <span id="visit-hint" className="visit-btn-subtitle">{t('ui.button.try_hint')}</span>
                                     </div>
                                 )}
                                 {/* Long Press Progress Bar */}
@@ -357,7 +344,7 @@ export default function RinView({
                 <FaceSwitchButton ref={btnRefs.switchKamae} direction="to-kamae" onClick={onSwitchToKamae} />
             )}
 
-            <Footer onNavigate={setLegalPage} />
+            <Footer onNavigate={(page) => { legalReturnRef.current = document.activeElement; setLegalPage(page); }} />
         </main>
         </>
     );

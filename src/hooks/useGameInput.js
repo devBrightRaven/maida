@@ -117,6 +117,15 @@ export function useGameInput({
             if (disabled) return;
             const key = e.key;
 
+            // Block Space on buttons — prevent browser native click, avoid NVDA+Space conflict
+            if (key === ' ') {
+                const active = document.activeElement;
+                if (active && active.tagName === 'BUTTON') {
+                    e.preventDefault();
+                }
+                return;
+            }
+
             // Navigation — skip if an input/combobox is focused (let it handle arrows)
             if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(key)) {
                 const active = document.activeElement;
@@ -147,7 +156,7 @@ export function useGameInput({
             // Main Action (Start Press)
             // If a button or input is focused, let browser handle it natively
             // Only intercept when no interactive element has focus
-            if (key === 'Enter' || key === ' ') {
+            if (key === 'Enter') {
                 const active = document.activeElement;
                 const isInteractive = active && (
                     active.tagName === 'BUTTON' ||
@@ -163,8 +172,16 @@ export function useGameInput({
 
         const handleKeyUp = (e) => {
             const key = e.key;
+            // Block Space on buttons — browser fires click on keyup
+            if (key === ' ') {
+                const active = document.activeElement;
+                if (active && active.tagName === 'BUTTON') {
+                    e.preventDefault();
+                }
+                return;
+            }
             // Main Action (Release) — only if we started the press
-            if (key === 'Enter' || key === ' ') {
+            if (key === 'Enter') {
                 if (pressStartTime.current) handleEndPress();
             }
         };

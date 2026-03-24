@@ -132,6 +132,7 @@ export default function KamaeSearch({ activeKataGameIds, activeKataName, onAdd }
                                 className={`kamae-search-result ${isActive ? 'kamae-search-result--active' : ''}`}
                                 role="option"
                                 aria-selected={isActive}
+                                aria-disabled={inKata || undefined}
                                 onClick={() => !inKata && handleAdd(id)}
                             >
                                 <span className="kamae-search-result-title">

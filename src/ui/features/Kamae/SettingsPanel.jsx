@@ -256,6 +256,7 @@ export default function SettingsPanel({ onClose }) {
                     <label className="kamae-settings-toggle">
                         <input
                             type="checkbox"
+                            role="switch"
                             checked={telemetryEnabled}
                             onChange={async (e) => {
                                 const val = e.target.checked;

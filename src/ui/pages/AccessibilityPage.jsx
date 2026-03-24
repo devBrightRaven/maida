@@ -11,12 +11,30 @@ export default function AccessibilityPage({ onClose }) {
             <h2>{t('ui.legal.a11y_standards_heading')}</h2>
             <p>{t('ui.legal.a11y_standards')}</p>
 
+            <h2>{t('ui.legal.a11y_features_heading')}</h2>
+            <ul>
+                <li>{t('ui.legal.a11y_feature_keyboard')}</li>
+                <li>{t('ui.legal.a11y_feature_gamepad')}</li>
+                <li>{t('ui.legal.a11y_feature_sr')}</li>
+                <li>{t('ui.legal.a11y_feature_focus')}</li>
+                <li>{t('ui.legal.a11y_feature_motion')}</li>
+            </ul>
+
             <h2>{t('ui.legal.a11y_testing_heading')}</h2>
             <p>{t('ui.legal.a11y_testing')}</p>
 
             <h2>{t('ui.legal.a11y_limitations_heading')}</h2>
             <ul>
                 <li>{t('ui.legal.a11y_limitation_gamepad')}</li>
+                <li>{t('ui.legal.a11y_limitation_longpress')}</li>
+                <li>{t('ui.legal.a11y_limitation_contrast')}</li>
+            </ul>
+
+            <h2>{t('ui.legal.a11y_planned_heading')}</h2>
+            <ul>
+                <li>{t('ui.legal.a11y_planned_threshold')}</li>
+                <li>{t('ui.legal.a11y_planned_confirm')}</li>
+                <li>{t('ui.legal.a11y_planned_fontsize')}</li>
             </ul>
 
             <h2>{t('ui.legal.a11y_contact_heading')}</h2>

@@ -75,10 +75,15 @@
 
 /* Header & Idle */
 .mvp-header {
+    position: relative;
     z-index: 10;
     opacity: 1;
-    /* High visibility */
     transition: all 0.3s ease;
+}
+
+.mvp-header-tap {
+    position: absolute;
+    inset: 0;
     cursor: pointer;
     color: var(--t-text);
 }
