@@ -17,7 +17,7 @@ export default function GameDisplay({ game, prescription: rawPrescription, debug
                 </h2>
 
                 {debugMode && prescription.audit && (
-                    <div className="debug-inspector">
+                    <div className="debug-inspector" aria-hidden="true">
                         <span className={`risk-dot ${prescription.audit.risk}`}></span>
                         <div className="inspector-panel">
                             <div className="inspector-header">
@@ -51,7 +51,7 @@ export default function GameDisplay({ game, prescription: rawPrescription, debug
             </div>
 
             {debugMode && isExpanded && (
-                <section className="debug-expanded-details">
+                <section className="debug-expanded-details" aria-hidden="true">
                     <div className="expanded-header">
                         <span className="expanded-title">Diagnostic Deep-Dive</span>
                         <span className="expanded-id">{prescription.id}</span>

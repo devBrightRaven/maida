@@ -112,7 +112,7 @@ export default function KamaeSearch({ activeKataGameIds, activeKataName, onAdd }
                 value={query}
                 onChange={e => setQuery(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder={t('ui.kamae.search_placeholder')}
+                placeholder={t('ui.kamae.search_placeholder', { kata: activeKataName })}
                 autoComplete="off"
                 role="combobox"
                 aria-expanded={results.length > 0}

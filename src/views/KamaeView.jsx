@@ -20,7 +20,7 @@ import './KamaeView.css';
  * Kamae (構) — slow curation face.
  * Kata selector + game list + search + explore entry.
  */
-export default function KamaeView({ onSwitchToRin }) {
+export default function KamaeView({ onSwitchToRin, theme, toggleTheme }) {
     const [showcaseState, setShowcaseState] = useState({ games: [] });
     const [allInstalledGames, setAllInstalledGames] = useState([]);
     const [gameMap, setGameMap] = useState(new Map());
@@ -110,7 +110,7 @@ export default function KamaeView({ onSwitchToRin }) {
         const container = containerRef.current;
         if (!container) return;
         const focusable = Array.from(container.querySelectorAll(
-            'button:not(:disabled), input:not(:disabled), [tabindex]:not([tabindex="-1"]), [role="button"], label.kata-game-toggle'
+            'button:not(:disabled), input:not(:disabled), [tabindex]:not([tabindex="-1"]), [role="button"]'
         ));
         if (focusable.length === 0) return;
         const current = focusable.indexOf(document.activeElement);
@@ -121,6 +121,7 @@ export default function KamaeView({ onSwitchToRin }) {
             next = current > 0 ? current - 1 : focusable.length - 1;
         }
         focusable[next]?.focus();
+        focusable[next]?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
     }, []);
 
     // A button: activate focused element (button click or checkbox toggle)
@@ -138,7 +139,9 @@ export default function KamaeView({ onSwitchToRin }) {
     }, []);
 
     const handleBack = useCallback(() => {
-        if (exploring) {
+        if (showSettings) {
+            setShowSettings(false);
+        } else if (exploring) {
             setExploring(false);
         } else if (expandedKataId) {
             setExpandedKataId(null);
@@ -150,7 +153,7 @@ export default function KamaeView({ onSwitchToRin }) {
                 if (active) active.focus();
             }
         }
-    }, [exploring, expandedKataId]);
+    }, [showSettings, exploring, expandedKataId]);
 
     useGameInput({
         onBack: handleBack,
@@ -172,7 +175,7 @@ export default function KamaeView({ onSwitchToRin }) {
         return (
             <main className="kamae-view" ref={containerRef}>
                 <div className="kamae-content">
-                    <SettingsPanel onClose={() => setShowSettings(false)} />
+                    <SettingsPanel onClose={() => setShowSettings(false)} theme={theme} toggleTheme={toggleTheme} />
                 </div>
             </main>
         );

@@ -163,6 +163,16 @@ export default function RinView({
                 else if (isBack) focusBtn('notToday');
                 else if (isTraceBtn) focusBtn('visit');
                 else if (isSwitchNeri) canUndo ? focusBtn('back') : focusBtn('notToday');
+                else {
+                    // Navigate within footer buttons or back to main
+                    const footerBtns = Array.from(document.querySelectorAll('.app-footer button'));
+                    const idx = footerBtns.indexOf(current);
+                    if (idx > 0) {
+                        footerBtns[idx - 1].focus();
+                    } else if (idx === 0) {
+                        focusBtn('switchKamae');
+                    }
+                }
             }
             // Down / Right = Next (forwards)
             else if (dir === 'right' || dir === 'down') {
@@ -170,6 +180,19 @@ export default function RinView({
                 else if (isNotToday && canUndo) focusBtn('back');
                 else if (isNotToday && !canUndo) focusBtn('switchKamae');
                 else if (isBack) focusBtn('switchKamae');
+                else if (isSwitchNeri) {
+                    const footer = document.querySelector('.app-footer button');
+                    if (footer) footer.focus();
+                } else {
+                    // Navigate within footer buttons
+                    const footerBtns = Array.from(document.querySelectorAll('.app-footer button'));
+                    const idx = footerBtns.indexOf(current);
+                    if (idx >= 0 && idx < footerBtns.length - 1) {
+                        footerBtns[idx + 1].focus();
+                    } else if (idx === footerBtns.length - 1) {
+                        focusBtn('notToday');
+                    }
+                }
             }
         }
     });

@@ -114,7 +114,7 @@ export function useGameInput({
     // ========== KEYBOARD INPUT ==========
     useEffect(() => {
         const handleKeyDown = (e) => {
-            if (disabled) return;
+            if (disabled || !document.hasFocus()) return;
             const key = e.key;
 
             // Block Space on buttons — prevent browser native click, avoid NVDA+Space conflict
@@ -126,29 +126,35 @@ export function useGameInput({
                 return;
             }
 
-            // Navigation — skip if an input/combobox is focused (let it handle arrows)
+            // Navigation — skip if a text input/combobox is focused (let it handle arrows)
+            // Checkboxes don't use arrow keys, so let them through for navigation
             if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(key)) {
                 const active = document.activeElement;
-                const isInput = active && (
-                    active.tagName === 'INPUT' ||
+                const isTextInput = active && (
+                    (active.tagName === 'INPUT' && active.type !== 'checkbox') ||
                     active.tagName === 'TEXTAREA' ||
                     active.tagName === 'SELECT' ||
                     active.getAttribute('role') === 'combobox'
                 );
-                if (isInput) return;
+                if (isTextInput) return;
+                e.preventDefault();
                 if (callbacksRef.current.onNav) callbacksRef.current.onNav(key.replace('Arrow', '').toLowerCase());
                 return;
             }
 
-            // Back / Cancel — skip if input/combobox is focused (let it handle Escape)
+            // Back / Cancel — skip if text input/combobox is focused (let it handle Escape)
+            // Checkboxes don't use Escape, so let them through
             if (key === 'Escape') {
                 const active = document.activeElement;
-                const isInput = active && (
-                    active.tagName === 'INPUT' ||
+                const isTextInput = active && (
+                    (active.tagName === 'INPUT' && active.type !== 'checkbox') ||
                     active.tagName === 'TEXTAREA' ||
                     active.getAttribute('role') === 'combobox'
                 );
-                if (isInput) return;
+                if (isTextInput) {
+                    active.blur();
+                    return;
+                }
                 if (callbacksRef.current.onBack) callbacksRef.current.onBack();
                 return;
             }
@@ -232,7 +238,7 @@ export function useGameInput({
         let isPolling = false;
 
         const pollGamepad = () => {
-            if (!isPolling) return; // Stop if window lost focus
+            if (!isPolling || !document.hasFocus()) return; // Stop if window lost focus
 
             const gamepads = navigator.getGamepads?.() || [];
             const gp = gamepads[0];
@@ -292,6 +298,8 @@ export function useGameInput({
                             const needsPointer = aButtonTarget.classList.contains('visit') || aButtonTarget.classList.contains('showcase-hold-btn');
                             if (needsPointer) {
                                 aButtonTarget.dispatchEvent(new PointerEvent('pointerup', { bubbles: true }));
+                            } else if (aButtonTarget.tagName === 'INPUT') {
+                                aButtonTarget.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
                             } else {
                                 aButtonTarget.click();
                             }

@@ -709,6 +709,11 @@
     height: 1rem;
 }
 
+.kata-game-toggle input[type="checkbox"]:focus {
+    outline: 2px solid var(--t-focus-border);
+    outline-offset: 2px;
+}
+
 .kamae-settings-toggle {
     display: flex;
     align-items: center;
@@ -719,6 +724,11 @@
     accent-color: var(--t-accent);
     width: 1rem;
     height: 1rem;
+}
+
+.kamae-settings-toggle input[type="checkbox"]:focus {
+    outline: 2px solid var(--t-focus-border);
+    outline-offset: 2px;
 }
 
 .kata-empty {

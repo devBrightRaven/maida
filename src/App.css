@@ -228,6 +228,22 @@
     border-radius: 0;
 }
 
+.face-switch-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.face-switch-text {
+    font-size: 1.25rem;
+}
+
+.face-switch-arrow {
+    font-size: 1rem;
+    color: var(--t-dim);
+}
+
 .face-switch-btn:hover,
 .face-switch-btn:focus-visible {
     opacity: 0.85;
@@ -251,8 +267,40 @@
     border-radius: 0 6px 6px 0;
 }
 
+.face-switch-tooltip {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.75rem;
+    color: var(--t-text);
+    background: var(--t-surface);
+    border: 1px solid var(--t-dim);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+}
+
+.face-switch-right .face-switch-tooltip {
+    right: calc(100% + 0.5rem);
+}
+
+.face-switch-left .face-switch-tooltip {
+    left: calc(100% + 0.5rem);
+}
+
+.face-switch-btn:hover .face-switch-tooltip,
+.face-switch-btn:focus .face-switch-tooltip {
+    opacity: 1;
+}
+
 @media (prefers-reduced-motion: reduce) {
     .face-switch-btn {
+        transition: none;
+    }
+    .face-switch-tooltip {
         transition: none;
     }
 }

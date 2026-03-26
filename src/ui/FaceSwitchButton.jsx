@@ -1,9 +1,9 @@
 import { forwardRef } from 'react';
+import { t } from '../i18n';
 
 /**
  * Edge button for switching between Rin and Kamae faces.
  * Right edge in Rin (→ Kamae), left edge in Kamae (← Rin).
- * No tooltip, no label — only aria-label for screen readers.
  */
 const FaceSwitchButton = forwardRef(function FaceSwitchButton({ direction, onClick }, ref) {
     const isToKamae = direction === 'to-kamae';
@@ -14,10 +14,13 @@ const FaceSwitchButton = forwardRef(function FaceSwitchButton({ direction, onCli
             type="button"
             className={`face-switch-btn face-switch-${isToKamae ? 'right' : 'left'}`}
             onClick={onClick}
-            aria-label={isToKamae ? 'Kamae 構' : 'Rin 臨'}
-            title="Ctrl+Tab / RB / R1"
+            aria-label={isToKamae ? t('ui.button.switch_to_kamae_aria') : t('ui.button.switch_to_rin_aria')}
         >
-            <span aria-hidden="true">{isToKamae ? '構 →' : '← 臨'}</span>
+            <span className="face-switch-label" aria-hidden="true">
+                <span className="face-switch-text">{isToKamae ? t('ui.button.switch_to_kamae') : t('ui.button.switch_to_rin')}</span>
+                <span className="face-switch-arrow">{isToKamae ? '→' : '←'}</span>
+            </span>
+            <span className="face-switch-tooltip">{isToKamae ? t('ui.button.switch_tooltip_kamae') : t('ui.button.switch_tooltip_rin')}</span>
         </button>
     );
 });

@@ -168,7 +168,7 @@ button {
     color: var(--t-text);
 }
 
-.app-footer button:focus-visible {
+.app-footer button:focus {
     outline: 2px solid var(--t-focus-border);
     outline-offset: 2px;
 }
@@ -271,7 +271,7 @@ button {
 }
 
 /* Default focus indicator for all buttons (WCAG 2.4.11) */
-button:focus-visible {
+button:focus {
     outline: 2px solid var(--t-focus-border);
     outline-offset: 2px;
 }

@@ -104,13 +104,24 @@ export default function KataPanel({
             </header>
 
             {creating && (
-                <div className="kata-create-form">
+                <div
+                    className="kata-create-form"
+                    onBlur={(e) => {
+                        if (!e.currentTarget.contains(e.relatedTarget)) {
+                            setCreating(false);
+                            setNewName('');
+                        }
+                    }}
+                >
                     <input
                         type="text"
                         className="kata-create-input"
                         value={newName}
                         onChange={(e) => setNewName(e.target.value)}
-                        onKeyDown={(e) => e.key === 'Enter' && handleCreate()}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') handleCreate();
+                            if (e.key === 'Escape') { setCreating(false); setNewName(''); }
+                        }}
                         placeholder={t('ui.katas.create_placeholder')}
                         maxLength={30}
                         autoFocus
@@ -217,6 +228,7 @@ export default function KataPanel({
                                                 type="checkbox"
                                                 checked={inKata}
                                                 onChange={() => handleToggleGame(ch.id, gameId)}
+                                                onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); e.target.click(); } }}
                                                 aria-label={game.title}
                                             />
                                             <span aria-hidden="true">{game.title}</span>

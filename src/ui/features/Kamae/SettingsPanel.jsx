@@ -7,7 +7,7 @@ import bridge from '../../../services/bridge';
  * SettingsPanel — inline panel for IGDB credential management.
  * Renders inside KamaeView when settings is toggled open.
  */
-export default function SettingsPanel({ onClose }) {
+export default function SettingsPanel({ onClose, theme, toggleTheme }) {
     const [clientId, setClientId] = useState('');
     const [clientSecret, setClientSecret] = useState('');
     const [hasExisting, setHasExisting] = useState(false);
@@ -111,9 +111,22 @@ export default function SettingsPanel({ onClose }) {
                 </button>
             </header>
 
+            <section className="kamae-settings-section" aria-labelledby="settings-theme-title">
+                <h2 id="settings-theme-title" className="kamae-settings-section-title">{t('ui.settings.theme_title')}</h2>
+                <button
+                    type="button"
+                    className="kamae-settings-btn"
+                    onClick={toggleTheme}
+                >
+                    {theme === 'dark' ? t('ui.settings.theme_light') : t('ui.settings.theme_dark')}
+                </button>
+            </section>
+
             <section className="kamae-settings-section" aria-labelledby="settings-igdb-title">
                 <h2 id="settings-igdb-title" className="kamae-settings-section-title">{t('ui.settings.igdb_title')}</h2>
                 <p id="igdb-desc" className="kamae-settings-section-desc">{t('ui.settings.igdb_desc')}</p>
+                <p id="igdb-howto" className="kamae-settings-section-desc">{t('ui.settings.igdb_howto')}</p>
+                <p className="kamae-settings-section-desc">{t('ui.settings.igdb_note')}</p>
 
                 <div className="kamae-settings-field">
                     <label htmlFor="igdb-client-id" className="kamae-settings-label">
@@ -126,7 +139,8 @@ export default function SettingsPanel({ onClose }) {
                         value={clientId}
                         onChange={e => setClientId(e.target.value)}
                         autoComplete="off"
-                        aria-describedby="igdb-desc"
+                        placeholder={t('ui.settings.client_id_placeholder')}
+                        aria-describedby="igdb-desc igdb-howto"
                     />
                 </div>
 
@@ -152,9 +166,10 @@ export default function SettingsPanel({ onClose }) {
                         <input
                             id="igdb-client-secret"
                             type="password"
-                            aria-describedby="igdb-desc"
+                            aria-describedby="igdb-desc igdb-howto"
                             className="kamae-settings-input"
                             value={clientSecret}
+                            placeholder={t('ui.settings.client_secret_placeholder')}
                             onChange={e => setClientSecret(e.target.value)}
                             autoComplete="off"
                         />
@@ -167,6 +182,7 @@ export default function SettingsPanel({ onClose }) {
                         className="kamae-settings-btn"
                         onClick={handleTest}
                         disabled={testing || !clientId || (!clientSecret && !hasExisting)}
+                        aria-label={t('ui.settings.test_aria')}
                     >
                         {t('ui.settings.test')}
                     </button>
@@ -175,6 +191,7 @@ export default function SettingsPanel({ onClose }) {
                         className="kamae-settings-btn"
                         onClick={handleSave}
                         disabled={!clientId || !clientSecret}
+                        aria-label={t('ui.settings.save_aria')}
                     >
                         {t('ui.settings.save')}
                     </button>
@@ -183,6 +200,7 @@ export default function SettingsPanel({ onClose }) {
                         className="kamae-settings-btn kamae-settings-btn--danger"
                         onClick={handleClear}
                         disabled={!hasExisting}
+                        aria-label={t('ui.settings.clear_aria')}
                     >
                         {t('ui.settings.clear')}
                     </button>
@@ -258,6 +276,7 @@ export default function SettingsPanel({ onClose }) {
                             type="checkbox"
                             role="switch"
                             checked={telemetryEnabled}
+                            onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); e.target.click(); } }}
                             onChange={async (e) => {
                                 const val = e.target.checked;
                                 setTelemetryEnabled(val);
