@@ -49,6 +49,8 @@ const TOTAL_HOLD = 2500; // 1.5s + 1s
 
 function HoldButton({ onConfirm, label, ariaLabel }) {
     const [progress, setProgress] = useState(0);
+    const [confirming, setConfirming] = useState(false);
+    const confirmStartRef = useRef(0);
     const startRef = useRef(null);
     const frameRef = useRef(null);
     const triggeredRef = useRef(false);
@@ -57,6 +59,7 @@ function HoldButton({ onConfirm, label, ariaLabel }) {
         startRef.current = null;
         triggeredRef.current = false;
         setProgress(0);
+        setConfirming(false);
         if (frameRef.current) {
             cancelAnimationFrame(frameRef.current);
             frameRef.current = null;
@@ -86,40 +89,109 @@ function HoldButton({ onConfirm, label, ariaLabel }) {
     }, [animate]);
 
     const handleEnd = useCallback(() => {
+        if (startRef.current) {
+            const elapsed = Date.now() - startRef.current;
+            if (elapsed < 150) {
+                // Too fast for a real hold — NVDA browse mode click
+                // Switch to two-step confirm instead of auto-progress
+                startRef.current = null;
+                if (frameRef.current) {
+                    cancelAnimationFrame(frameRef.current);
+                    frameRef.current = null;
+                }
+                setProgress(0);
+                setConfirming(true);
+                confirmStartRef.current = Date.now();
+                return;
+            }
+        }
         reset();
     }, [reset]);
 
-    // Keyboard hold: Enter down = start, up = end
-    const handleKeyDown = useCallback((e) => {
-        if (e.key === 'Enter' && !e.repeat) {
-            e.preventDefault();
-            handleStart();
-        }
-    }, [handleStart]);
+    // Keyboard hold: Enter down = start, up = end (focus mode / non-NVDA)
+    const btnRef = useRef(null);
+    useEffect(() => {
+        const el = btnRef.current;
+        if (!el) return;
+        const onDown = (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                if (!e.repeat) {
+                    if (confirming && Date.now() - confirmStartRef.current > 500) {
+                        onConfirm();
+                        reset();
+                    } else if (!confirming) {
+                        handleStart();
+                    }
+                }
+            }
+        };
+        const onUp = (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                if (!confirming) handleEnd();
+            }
+        };
+        el.addEventListener('keydown', onDown);
+        el.addEventListener('keyup', onUp);
+        return () => {
+            el.removeEventListener('keydown', onDown);
+            el.removeEventListener('keyup', onUp);
+        };
+    }, [handleStart, handleEnd, confirming, onConfirm, reset]);
 
-    const handleKeyUp = useCallback((e) => {
-        if (e.key === 'Enter') {
-            handleEnd();
-        }
-    }, [handleEnd]);
+    // Auto-cancel confirm state after 5 seconds
+    useEffect(() => {
+        if (!confirming) return;
+        const timer = setTimeout(() => setConfirming(false), 5000);
+        return () => clearTimeout(timer);
+    }, [confirming]);
 
     useEffect(() => {
         return () => reset();
     }, [reset]);
 
+    const isRunning = progress > 0;
+
     return (
         <button
+            ref={btnRef}
             type="button"
-            className="showcase-hold-btn"
-            onPointerDown={handleStart}
-            onPointerUp={handleEnd}
-            onPointerLeave={handleEnd}
-            onKeyDown={handleKeyDown}
-            onKeyUp={handleKeyUp}
-            aria-label={ariaLabel}
+            className={`showcase-hold-btn ${confirming ? 'showcase-hold-btn--confirm' : ''}`}
+            onPointerDown={() => {
+                if (confirming && Date.now() - confirmStartRef.current > 500) {
+                    onConfirm();
+                    reset();
+                } else if (!confirming) {
+                    handleStart();
+                }
+            }}
+            onPointerUp={() => { if (!confirming) handleEnd(); }}
+            onPointerLeave={() => { if (!confirming) handleEnd(); }}
+            onClick={(e) => {
+                e.stopPropagation();
+                if (confirming && Date.now() - confirmStartRef.current > 500) {
+                    onConfirm();
+                    reset();
+                }
+            }}
+            aria-label={confirming ? t('ui.kamae.remove_confirm_aria') : ariaLabel}
         >
             <span className="showcase-hold-bg" style={{ width: `${progress * 100}%` }} />
-            <span className="showcase-hold-label">{label}</span>
+            <span className="showcase-hold-label">
+                {confirming ? t('ui.kamae.remove_confirm') : label}
+            </span>
+            {confirming && (
+                <span className="sr-only" role="status" aria-live="assertive">
+                    {t('ui.kamae.remove_confirm_aria')}
+                </span>
+            )}
+            {isRunning && (
+                <span className="sr-only" role="status" aria-live="assertive">
+                    {t('ui.kamae.remove_progress_aria')}
+                </span>
+            )}
         </button>
     );
 }

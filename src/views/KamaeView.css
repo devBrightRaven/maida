@@ -348,6 +348,11 @@
     outline: none;
 }
 
+.showcase-hold-btn--confirm {
+    border-color: var(--t-accent);
+    color: var(--t-accent);
+}
+
 .showcase-hold-bg {
     position: absolute;
     top: 0;

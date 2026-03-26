@@ -22,8 +22,14 @@ loadPrescriptionTranslations();
 // Input guard: cooldown on mount to prevent accidental double-tap from TRY
 function FrozenScreen({ onResume, guardMs = 5000 }) {
     const btnRef = useRef(null);
+    const msgRef = useRef(null);
     const [ready, setReady] = useState(false);
-    const [secondsLeft, setSecondsLeft] = useState(Math.ceil(guardMs / 1000));
+    const totalSeconds = Math.ceil(guardMs / 1000);
+
+    // Focus frozen message immediately so SR reads it (not theme toggle)
+    useEffect(() => {
+        msgRef.current?.focus();
+    }, []);
 
     // Input guard: delay before accepting input
     useEffect(() => {
@@ -31,10 +37,7 @@ function FrozenScreen({ onResume, guardMs = 5000 }) {
             setReady(true);
             btnRef.current?.focus();
         }, guardMs);
-        const countdown = setInterval(() => {
-            setSecondsLeft(prev => prev > 0 ? prev - 1 : 0);
-        }, 1000);
-        return () => { clearTimeout(timer); clearInterval(countdown); };
+        return () => clearTimeout(timer);
     }, [guardMs]);
 
     // Auto-focus on window refocus (only after guard)
@@ -57,7 +60,7 @@ function FrozenScreen({ onResume, guardMs = 5000 }) {
 
     return (
         <main className="void-screen">
-            <p className="frozen-message">{t('ui.status.frozen')}</p>
+            <p className="frozen-message" tabIndex={-1} ref={msgRef}>{t('ui.status.frozen')}</p>
             <button
                 ref={btnRef}
                 className="restart-selection-btn"
@@ -67,8 +70,8 @@ function FrozenScreen({ onResume, guardMs = 5000 }) {
             >
                 {t('ui.button.im_back')}
             </button>
-            <p className="sr-only" role="status" aria-live="polite">
-                {ready ? t('ui.status.frozen_ready') : t('ui.status.frozen_wait', { seconds: secondsLeft })}
+            <p className="sr-only" role="status" aria-live="assertive">
+                {ready ? t('ui.status.frozen_ready') : t('ui.status.frozen_wait', { seconds: totalSeconds })}
             </p>
         </main>
     );

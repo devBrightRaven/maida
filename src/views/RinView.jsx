@@ -147,7 +147,9 @@ export default function RinView({
             const isNotToday = current === btnRefs.notToday.current;
             const isBack = current === btnRefs.back.current;
             const isTraceBtn = current?.classList?.contains('debug-trace-btn');
-            const isKnownButton = isVisit || isNotToday || isBack || isTraceBtn;
+            const isSwitchKamae = current === btnRefs.switchKamae.current;
+            const isFooterBtn = current?.closest('.app-footer');
+            const isKnownButton = isVisit || isNotToday || isBack || isTraceBtn || isSwitchKamae || isFooterBtn;
 
             // Fallback: If focus is lost, on body, or on unknown element, grab NOT NOW
             if (!current || current === document.body || !isKnownButton) {
@@ -155,14 +157,12 @@ export default function RinView({
                 return;
             }
 
-            const isSwitchNeri = current === btnRefs.switchKamae.current;
-
             // Up / Left = Previous (backwards)
             if (dir === 'left' || dir === 'up') {
                 if (isNotToday) focusBtn('visit');
                 else if (isBack) focusBtn('notToday');
                 else if (isTraceBtn) focusBtn('visit');
-                else if (isSwitchNeri) canUndo ? focusBtn('back') : focusBtn('notToday');
+                else if (isSwitchKamae) canUndo ? focusBtn('back') : focusBtn('notToday');
                 else {
                     // Navigate within footer buttons or back to main
                     const footerBtns = Array.from(document.querySelectorAll('.app-footer button'));
@@ -180,7 +180,7 @@ export default function RinView({
                 else if (isNotToday && canUndo) focusBtn('back');
                 else if (isNotToday && !canUndo) focusBtn('switchKamae');
                 else if (isBack) focusBtn('switchKamae');
-                else if (isSwitchNeri) {
+                else if (isSwitchKamae) {
                     const footer = document.querySelector('.app-footer button');
                     if (footer) footer.focus();
                 } else {
