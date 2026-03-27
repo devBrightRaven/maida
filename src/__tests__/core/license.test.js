@@ -67,6 +67,14 @@ describe('formatLicenseKey', () => {
         expect(formatLicenseKey(undefined)).toBe('');
         expect(formatLicenseKey('')).toBe('');
     });
+
+    it('returns empty when input is only special characters', () => {
+        expect(formatLicenseKey('---!!!')).toBe('');
+    });
+
+    it('formats input without MAIDA prefix', () => {
+        expect(formatLicenseKey('ABCDE12345FGHIJ')).toBe('MAIDA-ABCDE-12345-FGHIJ');
+    });
 });
 
 describe('isKataUnlocked', () => {

@@ -1,10 +1,12 @@
 import en from './en.json';
 import zhTW from './zh-TW.json';
+import zhCN from './zh-CN.json';
 import ja from './ja.json';
 
 const translations = {
     en,
     'zh-TW': zhTW,
+    'zh-CN': zhCN,
     ja
 };
 
@@ -16,7 +18,7 @@ const LOCALE_STORAGE_KEY = 'maida_locale';
 /**
  * Detect locale: manual override (localStorage) > browser/OS language > default.
  */
-function detectLocale() {
+export function detectLocale() {
     // 1. Manual override from Debug panel
     if (typeof localStorage !== 'undefined') {
         const stored = localStorage.getItem(LOCALE_STORAGE_KEY);

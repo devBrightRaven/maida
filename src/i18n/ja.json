@@ -82,6 +82,7 @@
         },
         "settings": {
             "title": "設定",
+            "language_title": "言語設定",
             "theme_title": "外観",
             "theme_light": "ライトモードに切り替え",
             "theme_dark": "ダークモードに切り替え",
@@ -139,7 +140,7 @@
             "counter_full": "型が満杯です",
             "edit_games_aria": "{name} のゲームを編集",
             "delete_aria": "{name} を削除",
-            "confirm_delete_aria": "{name} の削除を確認"
+            "confirm_delete_aria": "もう一度押すと {name} を削除"
         },
         "curation": {
             "first_prompt": "ずっとやりたかったゲームはある？",

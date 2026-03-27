@@ -8,6 +8,7 @@ import { getLocale } from './index';
 
 const translationModules = {
     'zh-TW': () => import('./prescriptions-zh-TW.json'),
+    'zh-CN': () => import('./prescriptions-zh-CN.json'),
     ja: () => import('./prescriptions-ja.json')
 };
 

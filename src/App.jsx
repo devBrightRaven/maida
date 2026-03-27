@@ -101,6 +101,13 @@ function App() {
     const updateCheck = useUpdateCheck();
     const { theme, toggleTheme } = useTheme();
 
+    // Locale change: increment key to re-render entire tree without reload
+    const [localeVersion, setLocaleVersion] = useState(0);
+    const handleLocaleChange = useCallback(() => {
+        loadPrescriptionTranslations();
+        setLocaleVersion(v => v + 1);
+    }, []);
+
     // Face switching (Rin ↔ Kamae)
     const [face, setFace] = useState('rin');
     const focusMain = useCallback(() => {
@@ -280,7 +287,7 @@ function App() {
     }, [status]);
 
     if (status === 'loading') return (
-        <>
+        <React.Fragment key={localeVersion}>
             <div className="app-loading">
                 {showLoadingText && (
                     <>
@@ -297,11 +304,11 @@ function App() {
                 )}
             </div>
             {themeToggle}
-        </>
+        </React.Fragment>
     );
 
     if (status === 'error') return (
-        <div className="void-screen">
+        <div className="void-screen" key={localeVersion}>
             <p className="frozen-message">
                 {t('voice.error.steam_not_found')}
             </p>
@@ -316,25 +323,25 @@ function App() {
     );
 
     if (status === 'onboarding') return (
-        <>
+        <React.Fragment key={localeVersion}>
             <OnboardingView onComplete={init} />
             {themeToggle}
-        </>
+        </React.Fragment>
     );
 
     if (status === 'frozen') {
         return (
-            <>
+            <React.Fragment key={localeVersion}>
                 <FrozenScreen onResume={() => setStatus('active')} guardMs={resumeGuard} />
                 {themeToggle}
-            </>
+            </React.Fragment>
         );
     }
 
     if (face === 'kamae') {
         return (
-            <div className="app-root">
-                <KamaeView onSwitchToRin={switchToRin} theme={theme} toggleTheme={toggleTheme} />
+            <div className="app-root" key={localeVersion}>
+                <KamaeView onSwitchToRin={switchToRin} theme={theme} toggleTheme={toggleTheme} onLocaleChange={handleLocaleChange} />
                 {themeToggle}
                 {import.meta.env.DEV && import.meta.env.VITE_AGENTATION && <div aria-hidden="true"><Agentation endpoint="http://localhost:4747" /></div>}
             </div>
@@ -342,7 +349,7 @@ function App() {
     }
 
     return (
-        <div className="app-root">
+        <div className="app-root" key={localeVersion}>
             <RinView
                 game={session.game}
                 prescription={session.prescription}

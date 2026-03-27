@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { t } from '../../../i18n';
+import { t, getLocale, setLocale } from '../../../i18n';
 import { validateKeyFormat, formatLicenseKey } from '../../../core/license';
 import bridge from '../../../services/bridge';
 
@@ -7,13 +7,16 @@ import bridge from '../../../services/bridge';
  * SettingsPanel — inline panel for IGDB credential management.
  * Renders inside KamaeView when settings is toggled open.
  */
-export default function SettingsPanel({ onClose, theme, toggleTheme }) {
+export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleChange }) {
     const [clientId, setClientId] = useState('');
     const [clientSecret, setClientSecret] = useState('');
     const [hasExisting, setHasExisting] = useState(false);
     const [showSecretInput, setShowSecretInput] = useState(false);
     const [status, setStatus] = useState(null); // { type: 'success'|'error', message }
     const [testing, setTesting] = useState(false);
+
+    // Language state
+    const [currentLang, setCurrentLang] = useState(getLocale());
 
     // Telemetry state
     const [telemetryEnabled, setTelemetryEnabled] = useState(true);
@@ -110,6 +113,29 @@ export default function SettingsPanel({ onClose, theme, toggleTheme }) {
                     {t('ui.settings.back')}
                 </button>
             </header>
+
+            <section className="kamae-settings-section" aria-labelledby="settings-language-title">
+                <h2 id="settings-language-title" className="kamae-settings-section-title">
+                    {t('ui.settings.language_title')}
+                </h2>
+                <div className="kamae-settings-field">
+                    <select
+                        className="kamae-settings-input"
+                        value={currentLang}
+                        onChange={(e) => {
+                            const locale = e.target.value;
+                            setCurrentLang(locale);
+                            setLocale(locale);
+                            if (onLocaleChange) onLocaleChange();
+                        }}
+                    >
+                        <option value="en">English</option>
+                        <option value="ja">日本語</option>
+                        <option value="zh-CN">简体中文</option>
+                        <option value="zh-TW">繁體中文</option>
+                    </select>
+                </div>
+            </section>
 
             <section className="kamae-settings-section" aria-labelledby="settings-theme-title">
                 <h2 id="settings-theme-title" className="kamae-settings-section-title">{t('ui.settings.theme_title')}</h2>

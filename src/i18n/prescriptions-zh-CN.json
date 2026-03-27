@@ -1,0 +1,283 @@
+{
+    "_meta": {
+        "locale": "zh-CN",
+        "status": "draft",
+        "note": "AI 初译，待人工校对。每条 prescription 的语感必须符合 Behavioral Constraints：只给予许可，不给建议、不鼓励、不评价。"
+    },
+    "entry-permitted": {
+        "kernel": "不需要做决定。",
+        "interface": "你可以在不确定这是否正确的情况下开始。"
+    },
+    "no-optimization": {
+        "kernel": "不需要最优化。",
+        "interface": "这次游玩不需要为自己辩护。"
+    },
+    "safe-exit": {
+        "kernel": "离开永远有效。",
+        "interface": "提早结束不会否定你曾经开始。"
+    },
+    "partial-validity": {
+        "kernel": "片段是被接受的。",
+        "interface": "一段不完整的游玩仍然是一个完整的行动。"
+    },
+    "no-debt": {
+        "kernel": "历史无关。",
+        "interface": "过去的不活跃不会在今天产生债务。"
+    },
+    "observation-mode": {
+        "kernel": "被动进入。",
+        "interface": "只看不玩也是一种有效的参与方式。"
+    },
+    "low-input": {
+        "kernel": "最低能量。",
+        "interface": "你不需要带着全部的精力来这里。"
+    },
+    "objective-optional": {
+        "kernel": "允许漫无目的。",
+        "interface": "你不需要有目标就能进入。"
+    },
+    "latency-allowed": {
+        "kernel": "犹豫是结构性的。",
+        "interface": "犹豫不是错误；慢慢来。"
+    },
+    "silence-valid": {
+        "kernel": "安静的界面。",
+        "interface": "行动之前的沉默是体验的一部分。"
+    },
+    "zero-loss": {
+        "kernel": "状态完整性已保留。",
+        "interface": "等待不会失去任何东西。"
+    },
+    "no-obligation": {
+        "kernel": "拥有资产是中性的。",
+        "interface": "拥有不会产生义务。"
+    },
+    "intent-only": {
+        "kernel": "输入不需要执行。",
+        "interface": "意图就已足够。"
+    },
+    "constant-access": {
+        "kernel": "资源不会衰减。",
+        "interface": "可用性不会随时间递减。"
+    },
+    "time-suspension": {
+        "kernel": "时钟已忽略。",
+        "interface": "系统时间已暂停。"
+    },
+    "static-state": {
+        "kernel": "不需要选择。",
+        "interface": "不做选择是一种稳定的状态。"
+    },
+    "inventory-neutral": {
+        "kernel": "数据库是被动的。",
+        "interface": "游戏库的大小不构成任何要求。"
+    },
+    "wait-cost-zero": {
+        "kernel": "成本为零。",
+        "interface": "等待的成本是零。"
+    },
+    "availability-persistent": {
+        "kernel": "存取是静态的。",
+        "interface": "不互动也不会影响可用性。"
+    },
+    "pause-validity": {
+        "kernel": "暂停生效中。",
+        "interface": "准备好不需要任何信号。"
+    },
+    "muscle-memory": {
+        "kernel": "反射会自动启动。",
+        "interface": "你的手记得该怎么做；思考是可选的。"
+    },
+    "death-loop": {
+        "kernel": "失败是系统状态。",
+        "interface": "死亡只是一个循环，不是对你技术的判决。"
+    },
+    "combat-flow": {
+        "kernel": "攻击是有节奏的。",
+        "interface": "这里的战斗是有节奏的。攻击与等待以相同频率交替。"
+    },
+    "dark-fantasy-step": {
+        "kernel": "进度是渐进的。",
+        "interface": "到达一个存档点是一次有效的游玩边界。"
+    },
+    "2d-combat": {
+        "kernel": "平面是线性的。",
+        "interface": "左或右。移动平面是平坦的；下一个障碍物始终可见。"
+    },
+    "boss-rush": {
+        "kernel": "专注是单一的。",
+        "interface": "只有一个目标。没有其他东西需要你的注意力。"
+    },
+    "factory-wait": {
+        "kernel": "系统会持续运行。",
+        "interface": "工厂在等你；你不需要今天全部修好。"
+    },
+    "one-belt": {
+        "kernel": "接受渐进的输入。",
+        "interface": "放下一条输送带就算是完整的一次游玩。"
+    },
+    "locomotion": {
+        "kernel": "移动就已足够。",
+        "interface": "往前走是唯一的要求。不需要战斗。"
+    },
+    "connection": {
+        "kernel": "孤独是共享的。",
+        "interface": "孤独是这款游戏的状态。其他玩家的痕迹留存于环境中。"
+    },
+    "survival-state": {
+        "kernel": "危机是模拟的。",
+        "interface": "寒冷在屏幕里，不在房间里。危机是模拟的。"
+    },
+    "leadership-pause": {
+        "kernel": "责任已暂停。",
+        "interface": "你可以随时暂停城市的需求。"
+    },
+    "internal-voice": {
+        "kernel": "混乱是可读的。",
+        "interface": "你不需要清醒或聪明。只要读就好。"
+    },
+    "failure-path": {
+        "kernel": "错误是内容。",
+        "interface": "说错话只是另一种玩法。"
+    },
+    "dialogue-choice": {
+        "kernel": "叙事是流动的。",
+        "interface": "叙事依输入推进。选择影响方向，但不构成束缚。"
+    },
+    "southern-gothic": {
+        "kernel": "氛围是首要的。",
+        "interface": "氛围是这里的主要内容。不需要分析。"
+    },
+    "audio-focus": {
+        "kernel": "视觉已暂停。",
+        "interface": "视觉在这里不是主要的输入管道。世界由声音构建。"
+    },
+    "breeze": {
+        "kernel": "引导是风。",
+        "interface": "跟着风走或不走。地图不要求完成。"
+    },
+    "spectacle": {
+        "kernel": "奇观在等待。",
+        "interface": "让屏幕处理规模。你只需要处理按钮。"
+    },
+    "journey": {
+        "kernel": "路径是线性的。",
+        "interface": "前方的路很清楚。你不会迷路。"
+    },
+    "puppet-strings": {
+        "kernel": "精准是有耐心的。",
+        "interface": "精准度没有时间限制。每次尝试的窗口都相同。"
+    },
+    "auto-battle": {
+        "kernel": "行动是即时的。",
+        "interface": "战斗以高速解决。输入需求最低。"
+    },
+    "memory-archive": {
+        "kernel": "氛围是静态的。",
+        "interface": "恐怖的节奏由你的输入控制。没有刻意的行动，什么都不会推进。"
+    },
+    "deep-ocean": {
+        "kernel": "存在主义模式。",
+        "interface": "你在观察一个哲学问题，不是在解决它。"
+    },
+    "crop-cycle": {
+        "kernel": "成长是自动的。",
+        "interface": "作物会没事的。短短一天就够了。"
+    },
+    "dam-control": {
+        "kernel": "水流是受控的。",
+        "interface": "水按你的指令流动。不急。"
+    },
+    "survival-day": {
+        "kernel": "耐久模式。",
+        "interface": "游戏内的每一天是独立的单位。完成一天就足够了。"
+    },
+    "cycle-restart": {
+        "kernel": "循环在等你。",
+        "interface": "死亡是进度的一部分，不是退步。"
+    },
+    "deep-dive": {
+        "kernel": "深度是可调的。",
+        "interface": "一次潜水就是完整的体验。"
+    },
+    "hands-played": {
+        "kernel": "概率就是游玩。",
+        "interface": "打一手牌就好。数学会自己处理。"
+    },
+    "floor-climb": {
+        "kernel": "回合制的安全。",
+        "interface": "敌人会永远等你的回合。"
+    },
+    "mix-drinks": {
+        "kernel": "服务是被动的。",
+        "interface": "音乐在播放。服务是核心机制。高风险不是这里的特色。"
+    },
+    "tunnel-vision": {
+        "kernel": "沉浸感很重。",
+        "interface": "隧道是线性的。环境危害通过装备管理。"
+    },
+    "infinite-space": {
+        "kernel": "目的地是可选的。",
+        "interface": "你可以只是漂流。宇宙大到无法完成。"
+    },
+    "color-flow": {
+        "kernel": "状态是流动的。",
+        "interface": "这里没有失败状态。移动就好。"
+    },
+    "vehicle-maintain": {
+        "kernel": "动力是机械的。",
+        "interface": "引擎是主要的互动。向前移动是结果。"
+    },
+    "gentle-puzzle": {
+        "kernel": "逻辑是柔软的。",
+        "interface": "没有时间限制。谜题会等你。"
+    },
+    "ocean-drift": {
+        "kernel": "浮力托着你。",
+        "interface": "你不会溺水。游就好。"
+    },
+    "history-gen": {
+        "kernel": "失败是有趣的。",
+        "interface": "灾难只是一个故事生成引擎。"
+    },
+    "ecosystem": {
+        "kernel": "掠食是自然的。",
+        "interface": "体型差异是设计的一部分。隐藏是主要机制。"
+    },
+    "physics-puzzle": {
+        "kernel": "物理是可预测的。",
+        "interface": "测试机关。失败只是数据。"
+    },
+    "logic-build": {
+        "kernel": "程序代码是静态的。",
+        "interface": "节点在你下指令之前不会移动。"
+    },
+    "short-burst": {
+        "kernel": "时间有上限。",
+        "interface": "10 分钟或 20 分钟。结束是保证的。"
+    },
+    "horde-clear": {
+        "kernel": "群体控制。",
+        "interface": "敌群密度是主要的变量。反馈是即时的。"
+    },
+    "visual-read": {
+        "kernel": "故事是线性的。",
+        "interface": "每个场景在玩家输入后结束。故事以刻意的节奏推进。"
+    },
+    "cleanup": {
+        "kernel": "从混乱中建立秩序。",
+        "interface": "清理一个角落就是永久的进度。"
+    },
+    "new-world": {
+        "kernel": "探索模式。",
+        "interface": "不需要系列作品的先备知识。世界背景嵌入于叙事之中。"
+    },
+    "generic-action": {
+        "kernel": "输入已接受。",
+        "interface": "这款游戏接受输入，无需事先规划。"
+    },
+    "generic-story": {
+        "kernel": "故事在等待。",
+        "interface": "下一页在你准备好之前不会翻。"
+    }
+}

@@ -351,4 +351,32 @@ describe('getPrescription', () => {
 
         expect(result.text).toBe('default-unlock');
     });
+
+    it('falls back to any catalog entry when no momentum match in catalog', () => {
+        const prescData = makePrescriptionsData({
+            catalog: {
+                'my-game': [
+                    { text: 'catalog-stabilize', momentum: 'stabilize' },
+                ],
+            },
+        });
+        // lastPlayed=Never -> momentum=unlock, but catalog only has stabilize
+        const game = makeGame({ id: 'my-game', lastPlayed: 'Never' });
+        const result = getPrescription(game, prescData);
+
+        expect(result.text).toBe('catalog-stabilize');
+    });
+
+    it('falls back to any default when no momentum match in defaults', () => {
+        const prescData = makePrescriptionsData({
+            default: [
+                { text: 'only-stabilize', momentum: 'stabilize' },
+            ],
+        });
+        // lastPlayed=Never -> momentum=unlock, but defaults only has stabilize
+        const game = makeGame({ id: 'no-catalog', lastPlayed: 'Never' });
+        const result = getPrescription(game, prescData);
+
+        expect(result.text).toBe('only-stabilize');
+    });
 });

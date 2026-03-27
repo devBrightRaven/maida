@@ -104,6 +104,13 @@ describe('removeGameFromKata', () => {
         const result = removeGameFromKata(k, 'g99');
         expect(result.gameIds).toEqual(['g1']);
     });
+
+    it('returns kata unchanged for null/undefined args', () => {
+        const k = { id: 'k-1', name: 'Test', gameIds: ['g1'] };
+        expect(removeGameFromKata(null, 'g1')).toBe(null);
+        expect(removeGameFromKata(k, null)).toBe(k);
+        expect(removeGameFromKata(k, undefined)).toBe(k);
+    });
 });
 
 describe('renameKata', () => {

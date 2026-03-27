@@ -82,6 +82,7 @@
         },
         "settings": {
             "title": "設定",
+            "language_title": "語言設定",
             "theme_title": "外觀",
             "theme_light": "切換為淺色模式",
             "theme_dark": "切換為深色模式",
@@ -139,7 +140,7 @@
             "counter_full": "型已滿",
             "edit_games_aria": "編輯 {name} 的遊戲",
             "delete_aria": "刪除 {name}",
-            "confirm_delete_aria": "確認刪除 {name}"
+            "confirm_delete_aria": "再按一次以刪除 {name}"
         },
         "curation": {
             "first_prompt": "有沒有一款你一直想玩的遊戲？",

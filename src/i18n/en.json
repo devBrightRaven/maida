@@ -82,6 +82,7 @@
         },
         "settings": {
             "title": "Settings",
+            "language_title": "Language Settings",
             "theme_title": "Appearance",
             "theme_light": "Switch to Light Mode",
             "theme_dark": "Switch to Dark Mode",
@@ -139,7 +140,7 @@
             "counter_full": "Kata is full",
             "edit_games_aria": "Edit {name} games",
             "delete_aria": "Delete {name}",
-            "confirm_delete_aria": "Confirm delete {name}"
+            "confirm_delete_aria": "Press again to delete {name}"
         },
         "curation": {
             "first_prompt": "Is there a game you've been wanting to play?",
