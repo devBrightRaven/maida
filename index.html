@@ -13,12 +13,12 @@
         :root {
             --bg: #0a0a0a;
             --bg-soft: #131313;
-            --text: #ede6de;
-            --text-dim: #b5ada5;
-            --text-ghost: #8a8480;
-            --accent: #d4b896;
-            --accent-dim: #9a8b7a;
-            --divider: #736d68;
+            --text: #f0eae2;
+            --text-dim: #c8c0b8;
+            --text-ghost: #9a9490;
+            --accent: #dcc4a0;
+            --accent-dim: #b09878;
+            --divider: #9a9490;
             --font-display: 'Cormorant Garamond', Georgia, serif;
             --font-body: 'DM Sans', system-ui, sans-serif;
             --font-cjk: 'Noto Sans TC', 'Noto Sans JP', sans-serif;
@@ -28,12 +28,12 @@
         [data-theme="light"] {
             --bg: #f5f0eb;
             --bg-soft: #e8e2db;
-            --text: #1a1715;
-            --text-dim: #4a4540;
-            --text-ghost: #756e68;
-            --accent: #7a5f40;
-            --accent-dim: #8a7050;
-            --divider: #b5ada5;
+            --text: #1a1510;
+            --text-dim: #3a3530;
+            --text-ghost: #605a55;
+            --accent: #6a5535;
+            --accent-dim: #7a6545;
+            --divider: #a09890;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -47,7 +47,7 @@
 
         body {
             font-family: var(--font-body);
-            font-weight: 300;
+            font-weight: 400;
             line-height: 1.7;
             overflow-x: hidden;
         }
@@ -167,7 +167,7 @@
 
         .hero-calligraphy {
             font-size: clamp(8rem, 20vw, 14rem);
-            font-family: var(--font-display);
+            font-family: var(--font-cjk), var(--font-display);
             font-weight: 300;
             color: var(--text-ghost);
             opacity: 0.15;
@@ -240,7 +240,7 @@
 
         .concept-kanji {
             font-size: 5rem;
-            font-family: var(--font-display);
+            font-family: var(--font-cjk), var(--font-display);
             font-weight: 300;
             color: var(--accent-dim);
             opacity: 0.3;
