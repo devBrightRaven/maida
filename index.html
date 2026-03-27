@@ -67,7 +67,7 @@
             z-index: 9999;
         }
 
-        /* Skip nav */
+        /* Skip nav — uses lang class, not data-lang, to avoid conflict */
         .skip-link {
             position: absolute;
             top: -100%;
@@ -79,8 +79,12 @@
             font-size: 0.85rem;
             text-decoration: none;
             border-radius: 0 0 4px 4px;
+            display: none !important;
         }
-        .skip-link:focus { top: 0; }
+        .skip-link:focus { top: 0; display: block !important; }
+        html.lang-en .skip-link.skip-en,
+        html.lang-zh .skip-link.skip-zh,
+        html.lang-ja .skip-link.skip-ja { display: revert !important; }
 
         /* Top bar: lang + theme */
         .top-bar {
@@ -381,9 +385,9 @@
 </head>
 <body>
 
-    <a class="skip-link" href="#main" data-lang="en">Skip to content</a>
-    <a class="skip-link" href="#main" data-lang="zh">跳到主要內容</a>
-    <a class="skip-link" href="#main" data-lang="ja">メインコンテンツへ</a>
+    <a class="skip-link skip-en" href="#main">Skip to content</a>
+    <a class="skip-link skip-zh" href="#main">跳到主要內容</a>
+    <a class="skip-link skip-ja" href="#main">メインコンテンツへ</a>
 
     <!-- Top bar -->
     <header class="top-bar">
@@ -650,7 +654,7 @@
     <script>
         // Language switching
         function setLang(lang) {
-            const htmlLangMap = { en: 'en', zh: 'zh-Hant', ja: 'ja' };
+            const htmlLangMap = { en: 'en', zh: 'zh-TW', ja: 'ja' };
             const root = document.documentElement;
             root.lang = htmlLangMap[lang];
             // Swap lang class on <html> — CSS handles visibility
