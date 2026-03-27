@@ -84,6 +84,7 @@
         .skip-link:focus { top: 0; display: block !important; }
         html.lang-en .skip-link.skip-en,
         html.lang-zh .skip-link.skip-zh,
+        html.lang-cn .skip-link.skip-cn,
         html.lang-ja .skip-link.skip-ja { display: revert !important; }
 
         /* Top bar: lang + theme */
@@ -142,6 +143,7 @@
         [data-lang] { display: none !important; }
         html.lang-en [data-lang="en"] { display: revert !important; }
         html.lang-zh [data-lang="zh"] { display: revert !important; }
+        html.lang-cn [data-lang="cn"] { display: revert !important; }
         html.lang-ja [data-lang="ja"] { display: revert !important; }
 
         /* Sections */
@@ -387,16 +389,18 @@
 
     <a class="skip-link skip-en" href="#main">Skip to content</a>
     <a class="skip-link skip-zh" href="#main">跳到主要內容</a>
+    <a class="skip-link skip-cn" href="#main">跳到主要内容</a>
     <a class="skip-link skip-ja" href="#main">メインコンテンツへ</a>
 
     <!-- Top bar -->
     <header class="top-bar">
         <nav class="lang-switch" aria-label="Language">
             <button class="active" data-set-lang="en" aria-pressed="true">EN</button>
-            <button data-set-lang="zh" aria-pressed="false">ZH</button>
+            <button data-set-lang="zh" aria-pressed="false">繁</button>
+            <button data-set-lang="cn" aria-pressed="false">简</button>
             <button data-set-lang="ja" aria-pressed="false">JA</button>
         </nav>
-        <button class="theme-toggle" aria-label="Toggle light/dark theme" title="Toggle theme" data-label-dark-en="Switch to light theme" data-label-light-en="Switch to dark theme" data-label-dark-zh="切換至淺色模式" data-label-light-zh="切換至深色模式" data-label-dark-ja="ライトモードに切替" data-label-light-ja="ダークモードに切替">&#9681;</button>
+        <button class="theme-toggle" aria-label="Toggle light/dark theme" title="Toggle theme" data-label-dark-en="Switch to light theme" data-label-light-en="Switch to dark theme" data-label-dark-zh="切換至淺色模式" data-label-light-zh="切換至深色模式" data-label-dark-cn="切换至浅色模式" data-label-light-cn="切换至深色模式" data-label-dark-ja="ライトモードに切替" data-label-light-ja="ダークモードに切替">&#9681;</button>
     </header>
 
     <main id="main">
@@ -408,6 +412,7 @@
             <h1 id="hero-title" class="fade-in">maida</h1>
             <p class="hero-tagline fade-in" data-lang="en">the space you pass through before you begin</p>
             <p class="hero-tagline fade-in" data-lang="zh">在你開始之前所穿越的空間</p>
+            <p class="hero-tagline fade-in" data-lang="cn">在你开始之前所穿越的空间</p>
             <p class="hero-tagline fade-in" data-lang="ja">始まる前に通り抜ける空間</p>
             <p class="hero-desc fade-in" data-lang="en">
                 One game from your Steam library. You decide: play it now, or see something else.
@@ -418,6 +423,11 @@
                 從你的 Steam 遊戲庫中，每次只顯示一款遊戲。你來決定：現在玩，或者看看別的。
                 沒有推薦。沒有追蹤。沒有演算法告訴你該想要什麼。
                 只是誠實地反映你的選擇傾向。
+            </p>
+            <p class="hero-desc fade-in" data-lang="cn">
+                从你的 Steam 游戏库中，每次只显示一款游戏。你来决定：现在玩，或者看看别的。
+                没有推荐。没有追踪。没有算法告诉你该想要什么。
+                只是诚实地反映你的选择倾向。
             </p>
             <p class="hero-desc fade-in" data-lang="ja">
                 Steamライブラリから1つのゲームを表示。今プレイするか、別のものを見るか。
@@ -433,11 +443,13 @@
         <div class="container">
             <hr class="divider">
             <p class="section-label fade-in" data-lang="en">Two Faces</p>
-            <p class="section-label fade-in" data-lang="zh">两個面</p>
+            <p class="section-label fade-in" data-lang="zh">兩個面</p>
+            <p class="section-label fade-in" data-lang="cn">两个面</p>
             <p class="section-label fade-in" data-lang="ja">二つの面</p>
 
             <h2 class="section-title fade-in" data-lang="en" id="faces-title-en">The names are not decoration</h2>
-            <h2 class="section-title fade-in" data-lang="zh" id="faces-title-zh">名字不是裝飾</h2>
+            <h2 class="section-title fade-in" data-lang="zh" id="faces-title-zh">名字不是装饰</h2>
+            <h2 class="section-title fade-in" data-lang="cn" id="faces-title-cn">名字不是装饰</h2>
             <h2 class="section-title fade-in" data-lang="ja" id="faces-title-ja">名前は飾りではない</h2>
 
             <p class="section-body fade-in" data-lang="en">
@@ -447,6 +459,10 @@
             <p class="section-body fade-in" data-lang="zh">
                 Maida 有兩個面，取自日本武道的語彙。
                 它們的順序是刻意的：你必須先準備，才能面對眼前出現的東西。
+            </p>
+            <p class="section-body fade-in" data-lang="cn">
+                Maida 有两个面，取自日本武道的语汇。
+                它们的顺序是刻意的：你必须先准备，才能面对眼前出现的东西。
             </p>
             <p class="section-body fade-in" data-lang="ja">
                 Maidaには日本武道の語彙から取った二つの面がある。
@@ -458,9 +474,11 @@
                     <span class="concept-kanji" aria-hidden="true">臨</span>
                     <h3 data-lang="en">Rin <span class="reading">臨</span></h3>
                     <h3 data-lang="zh">臨 <span class="reading">Rin</span></h3>
+                    <h3 data-lang="cn">临 <span class="reading">Rin</span></h3>
                     <h3 data-lang="ja">臨 <span class="reading">Rin</span></h3>
                     <p class="reading" data-lang="en">to face what appears</p>
-                    <p class="reading" data-lang="zh">與眼前的，相遇</p>
+                    <p class="reading" data-lang="zh">与眼前的，相遇</p>
+                    <p class="reading" data-lang="cn">与眼前的，相遇</p>
                     <p class="reading" data-lang="ja">現れたものと、向き合う</p>
 
                     <p data-lang="en">
@@ -470,6 +488,10 @@
                     <p data-lang="zh">
                         一款遊戲。試試或現在不要。沒有比較，沒有瀏覽，沒有「下一個會不會更好」。
                         你站在一個世界面前，決定是否進入。
+                    </p>
+                    <p data-lang="cn">
+                        一款游戏。试试或现在不要。没有比较，没有浏览，没有「下一个会不会更好」。
+                        你站在一个世界面前，决定是否进入。
                     </p>
                     <p data-lang="ja">
                         1つのゲーム。やるかパスか。比較なし、ブラウジングなし、「次はもっといいかも」もなし。
@@ -481,8 +503,12 @@
                         -- not thinking, not preparing, just standing in presence.
                     </p>
                     <p class="origin" data-lang="zh">
-                        在劍道中，<em>臨む（nozomu）</em>是面對對手的那個瞬間
-                        -- 不是思考，不是準備，只是站在當下。
+                        在剑道中，<em>臨む（nozomu）</em>是面对对手的那个瞬间
+                        -- 不是思考，不是准备，只是站在当下。
+                    </p>
+                    <p class="origin" data-lang="cn">
+                        在剑道中，<em>临む（nozomu）</em>是面对对手的那个瞬间
+                        -- 不是思考，不是准备，只是站在当下。
                     </p>
                     <p class="origin" data-lang="ja">
                         剣道では、<em>臨む</em>は相手と向き合う瞬間
@@ -494,9 +520,11 @@
                     <span class="concept-kanji" aria-hidden="true">構</span>
                     <h3 data-lang="en">Kamae <span class="reading">構</span></h3>
                     <h3 data-lang="zh">構 <span class="reading">Kamae</span></h3>
+                    <h3 data-lang="cn">构 <span class="reading">Kamae</span></h3>
                     <h3 data-lang="ja">構 <span class="reading">Kamae</span></h3>
                     <p class="reading" data-lang="en">quiet preparation</p>
                     <p class="reading" data-lang="zh">面臨之前，靜靜準備</p>
+                    <p class="reading" data-lang="cn">面临之前，静静准备</p>
                     <p class="reading" data-lang="ja">臨む前の、静かな仕度</p>
 
                     <p data-lang="en">
@@ -506,6 +534,10 @@
                     <p data-lang="zh">
                         整理你的展示櫃。把遊戲分組到稱為「型」的類別中。
                         決定今天哪些世界值得面對。這不是瀏覽 -- 這是準備你的架式。
+                    </p>
+                    <p data-lang="cn">
+                        整理你的展示柜。把游戏分组到称为「型」的类别中。
+                        决定今天哪些世界值得面对。这不是浏览 -- 这是准备你的架式。
                     </p>
                     <p data-lang="ja">
                         棚を整える。ゲームを「型」と呼ぶグループに分ける。
@@ -521,6 +553,11 @@
                         <em>構え</em>是拔刀前的準備架式。在茶道中，
                         是客人到來前對空間的靜靜安排。
                         沒有構え就不能臨む。你必須先準備，才能面對。
+                    </p>
+                    <p class="origin" data-lang="cn">
+                        <em>构え</em>是拔刀前的准备架式。在茶道中，
+                        是客人到来前对空间的静静安排。
+                        没有构え就不能临む。你必须先准备，才能面对。
                     </p>
                     <p class="origin" data-lang="ja">
                         <em>構え</em>は抜刀前の備えの姿勢。茶道では、
@@ -538,10 +575,12 @@
             <hr class="divider">
             <p class="section-label fade-in" data-lang="en">How it works</p>
             <p class="section-label fade-in" data-lang="zh">如何運作</p>
+            <p class="section-label fade-in" data-lang="cn">如何运作</p>
             <p class="section-label fade-in" data-lang="ja">使い方</p>
 
             <h2 class="section-title fade-in" data-lang="en" id="how-title-en">Simpler than you expect</h2>
             <h2 class="section-title fade-in" data-lang="zh" id="how-title-zh">比你想像的簡單</h2>
+            <h2 class="section-title fade-in" data-lang="cn" id="how-title-cn">比你想象的简单</h2>
             <h2 class="section-title fade-in" data-lang="ja" id="how-title-ja">想像より、簡素</h2>
 
             <ol class="steps" data-lang="en">
@@ -558,6 +597,13 @@
                 <li class="fade-in"><span class="step-marker" aria-hidden="true">4</span><div class="step-content"><h4>Maida 消失</h4><p>選擇之後，畫面凍結。沒有「接下來玩什麼」。沒有通知。工具在完成使命的瞬間死去。</p></div></li>
             </ol>
 
+            <ol class="steps" data-lang="cn">
+                <li class="fade-in"><span class="step-marker" aria-hidden="true">1</span><div class="step-content"><h4>打开 Maida</h4><p>扫描你本机已安装的 Steam 游戏。数据不会离开你的设备。</p></div></li>
+                <li class="fade-in"><span class="step-marker" aria-hidden="true">2</span><div class="step-content"><h4>出现一款游戏</h4><p>根据你过去的选择加权随机选出。不是推荐 -- 是反映。</p></div></li>
+                <li class="fade-in"><span class="step-marker" aria-hidden="true">3</span><div class="step-content"><h4>试试或现在不要</h4><p>愿意进入这个世界？试试会启动游戏。不想？现在不要会显示下一个。就这样。</p></div></li>
+                <li class="fade-in"><span class="step-marker" aria-hidden="true">4</span><div class="step-content"><h4>Maida 消失</h4><p>选择之后，画面冻结。没有「接下来玩什么」。没有通知。工具在完成使命的瞬间死去。</p></div></li>
+            </ol>
+
             <ol class="steps" data-lang="ja">
                 <li class="fade-in"><span class="step-marker" aria-hidden="true">1</span><div class="step-content"><h4>Maidaを開く</h4><p>ローカルにインストールされたSteamゲームをスキャン。データはデバイスの外に出ない。</p></div></li>
                 <li class="fade-in"><span class="step-marker" aria-hidden="true">2</span><div class="step-content"><h4>1つのゲームが現れる</h4><p>過去の選択に基づく加重確率で選出。レコメンドではない -- 反映。</p></div></li>
@@ -572,6 +618,7 @@
         <div class="container fade-in">
             <blockquote data-lang="en">Most game launchers help you browse.<br>Browsing creates decision fatigue.<br>Maida removes browsing entirely.<br><br>One game. One choice. Move on.</blockquote>
             <blockquote data-lang="zh">大多數遊戲啟動器幫你瀏覽。<br>瀏覽產生決策疲勞。<br>Maida 完全移除瀏覽。<br><br>一款遊戲。一個選擇。繼續前進。</blockquote>
+            <blockquote data-lang="cn">大多数游戏启动器帮你浏览。<br>浏览产生决策疲劳。<br>Maida 完全移除浏览。<br><br>一款游戏。一个选择。继续前进。</blockquote>
             <blockquote data-lang="ja">ほとんどのランチャーは閲覧を手助けする。<br>閲覧は決定疲労を生む。<br>Maidaは閲覧を完全に排除する。<br><br>1つのゲーム。1つの選択。前に進む。</blockquote>
         </div>
     </section>
@@ -582,10 +629,12 @@
             <hr class="divider">
             <p class="section-label fade-in" data-lang="en">What Maida refuses to do</p>
             <p class="section-label fade-in" data-lang="zh">Maida 拒絕做的事</p>
+            <p class="section-label fade-in" data-lang="cn">Maida 拒绝做的事</p>
             <p class="section-label fade-in" data-lang="ja">Maidaが拒むこと</p>
 
             <h2 class="section-title fade-in" data-lang="en" id="refuse-title-en">The moat is restraint</h2>
             <h2 class="section-title fade-in" data-lang="zh" id="refuse-title-zh">護城河是克制</h2>
+            <h2 class="section-title fade-in" data-lang="cn" id="refuse-title-cn">护城河是克制</h2>
             <h2 class="section-title fade-in" data-lang="ja" id="refuse-title-ja">堀は自制</h2>
 
             <div class="section-body fade-in" data-lang="en">
@@ -595,6 +644,10 @@
             <div class="section-body fade-in" data-lang="zh">
                 <p>沒有推薦。不追蹤遊玩時間。沒有連續登入、成就、或「你今天做得很好」。沒有通知叫你回來。沒有社交功能。資料不會上傳到任何地方。所有行為資料都留在你的裝置上。</p>
                 <p>理想的使用者是有一天不再需要 Maida 的人。如果這個工具變得「很聰明」或「很體貼」，那就是失敗。Maida 的存在不是為了改善你，而是為了不擋在你和你想進入的世界之間。</p>
+            </div>
+            <div class="section-body fade-in" data-lang="cn">
+                <p>没有推荐。不追踪游玩时间。没有连续登录、成就、或「你今天做得很好」。没有通知叫你回来。没有社交功能。数据不会上传到任何地方。所有行为数据都留在你的设备上。</p>
+                <p>理想的用户是有一天不再需要 Maida 的人。如果这个工具变得「很聪明」或「很体贴」，那就是失败。Maida 的存在不是为了改善你，而是为了不挡在你和你想进入的世界之间。</p>
             </div>
             <div class="section-body fade-in" data-lang="ja">
                 <p>レコメンドなし。プレイ時間の追跡なし。連続ログイン、実績、「今日もよく頑張った」なし。呼び戻す通知なし。ソーシャル機能なし。データはどこにもアップロードされない。すべての行動データはあなたのマシン上に留まる。</p>
@@ -609,19 +662,23 @@
             <hr class="divider">
             <p class="section-label fade-in" data-lang="en">Available now</p>
             <p class="section-label fade-in" data-lang="zh">現在可用</p>
+            <p class="section-label fade-in" data-lang="cn">现在可用</p>
             <p class="section-label fade-in" data-lang="ja">今すぐ利用可能</p>
 
             <h2 class="section-title fade-in" data-lang="en" id="dl-title-en">Free. No account required.</h2>
             <h2 class="section-title fade-in" data-lang="zh" id="dl-title-zh">免費。不需要帳號。</h2>
+            <h2 class="section-title fade-in" data-lang="cn" id="dl-title-cn">免费。不需要账号。</h2>
             <h2 class="section-title fade-in" data-lang="ja" id="dl-title-ja">無料。アカウント不要。</h2>
 
-            <p class="section-body fade-in" style="text-align:center;margin-bottom:2rem" data-lang="en">Windows. Handheld-friendly (ROG Ally X, Steam Deck).<br>Screen reader supported (NVDA). Three languages.</p>
-            <p class="section-body fade-in" style="text-align:center;margin-bottom:2rem" data-lang="zh">Windows。手持裝置友善（ROG Ally X, Steam Deck）。<br>螢幕閱讀器支援（NVDA）。三種語言。</p>
+            <p class="section-body fade-in" style="text-align:center;margin-bottom:2rem" data-lang="en">Windows. Handheld-friendly (ROG Ally X, Steam Deck).<br>Screen reader supported (NVDA). Four languages.</p>
+            <p class="section-body fade-in" style="text-align:center;margin-bottom:2rem" data-lang="zh">Windows。手持裝置友善（ROG Ally X, Steam Deck）。<br>螢幕閱讀器支援（NVDA）。四種語言。</p>
+            <p class="section-body fade-in" style="text-align:center;margin-bottom:2rem" data-lang="cn">Windows。掌机友好（ROG Ally X, Steam Deck）。<br>屏幕阅读器支持（NVDA）。四种语言。</p>
             <p class="section-body fade-in" style="text-align:center;margin-bottom:2rem" data-lang="ja">Windows。ハンドヘルド対応（ROG Ally X, Steam Deck）。<br>スクリーンリーダー対応（NVDA）。3言語。</p>
 
             <div class="fade-in">
                 <a href="#" class="download-btn" data-lang="en">Download on itch.io</a>
                 <a href="#" class="download-btn" data-lang="zh">itch.io 下載</a>
+                <a href="#" class="download-btn" data-lang="cn">itch.io 下载</a>
                 <a href="#" class="download-btn" data-lang="ja">itch.io でダウンロード</a>
             </div>
             <nav class="download-links fade-in" data-lang="en" aria-label="Documentation">
@@ -635,6 +692,12 @@
                 <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-14_user-manual-en-md">Manual (EN)</a>
                 <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-15_user-manual-ja-md">マニュアル (JA)</a>
                 <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-12_changelog-md">變更紀錄</a>
+            </nav>
+            <nav class="download-links fade-in" data-lang="cn" aria-label="文档链接">
+                <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-13_user-manual-zh-md">使用手册 (繁中)</a>
+                <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-14_user-manual-en-md">Manual (EN)</a>
+                <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-15_user-manual-ja-md">マニュアル (JA)</a>
+                <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-12_changelog-md">变更记录</a>
             </nav>
             <nav class="download-links fade-in" data-lang="ja" aria-label="ドキュメント">
                 <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-15_user-manual-ja-md">マニュアル (日本語)</a>
@@ -654,11 +717,11 @@
     <script>
         // Language switching
         function setLang(lang) {
-            const htmlLangMap = { en: 'en', zh: 'zh-TW', ja: 'ja' };
+            const htmlLangMap = { en: 'en', zh: 'zh-TW', cn: 'zh-CN', ja: 'ja' };
             const root = document.documentElement;
             root.lang = htmlLangMap[lang];
-            // Swap lang class on <html> — CSS handles visibility
-            root.classList.remove('lang-en', 'lang-zh', 'lang-ja');
+            // Swap lang class on <html> -- CSS handles visibility
+            root.classList.remove('lang-en', 'lang-zh', 'lang-cn', 'lang-ja');
             root.classList.add(`lang-${lang}`);
             document.querySelectorAll('.lang-switch button').forEach(btn => {
                 const active = btn.dataset.setLang === lang;
@@ -713,8 +776,11 @@
         setTheme(savedTheme);
 
         const savedLang = localStorage.getItem('maida-lang');
-        const browserLang = navigator.language.startsWith('ja') ? 'ja'
-            : navigator.language.startsWith('zh') ? 'zh' : 'en';
+        const navLang = navigator.language;
+        const browserLang = navLang.startsWith('ja') ? 'ja'
+            : (navLang === 'zh-TW' || navLang === 'zh-Hant') ? 'zh'
+            : navLang.startsWith('zh') ? 'cn'
+            : 'en';
         setLang(savedLang || browserLang);
 
         setTimeout(() => {
