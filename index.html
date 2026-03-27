@@ -7,18 +7,19 @@
     <meta name="description" content="Maida shows you one game. You decide: play it now, or see something else. No recommendations. No tracking. Just honest reflection.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:wght@300;400;500&family=Noto+Sans+TC:wght@300;400&family=Noto+Sans+JP:wght@300;400&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #0a0a0a;
-            --bg-soft: #111111;
-            --text: #e8e0d8;
-            --text-dim: #8a8480;
-            --text-ghost: #4a4745;
-            --accent: #c4a882;
-            --accent-dim: #7a6b5a;
+            --bg-soft: #131313;
+            --text: #ede6de;
+            --text-dim: #b5ada5;
+            --text-ghost: #736d68;
+            --accent: #d4b896;
+            --accent-dim: #9a8b7a;
             --font-display: 'Cormorant Garamond', Georgia, serif;
             --font-body: 'DM Sans', system-ui, sans-serif;
+            --font-cjk: 'Noto Sans TC', 'Noto Sans JP', sans-serif;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -36,6 +37,11 @@
             overflow-x: hidden;
         }
 
+        /* CJK body font override */
+        [lang="zh-Hant"] body, [lang="ja"] body {
+            font-family: var(--font-cjk), var(--font-body);
+        }
+
         /* Grain overlay */
         body::after {
             content: '';
@@ -46,6 +52,51 @@
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
             z-index: 9999;
         }
+
+        /* Language switcher */
+        .lang-switch {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            z-index: 100;
+            display: flex;
+            gap: 0.15rem;
+        }
+
+        .lang-switch button {
+            background: none;
+            border: 1px solid var(--text-ghost);
+            color: var(--text-ghost);
+            font-family: var(--font-body);
+            font-size: 0.7rem;
+            letter-spacing: 0.08em;
+            padding: 0.35rem 0.6rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .lang-switch button:first-child { border-radius: 3px 0 0 3px; }
+        .lang-switch button:last-child { border-radius: 0 3px 3px 0; }
+
+        .lang-switch button.active {
+            background: var(--accent-dim);
+            border-color: var(--accent-dim);
+            color: var(--bg);
+        }
+
+        .lang-switch button:hover:not(.active) {
+            border-color: var(--text-dim);
+            color: var(--text-dim);
+        }
+
+        .lang-switch button:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        /* i18n: hide non-active lang */
+        [data-lang] { display: none; }
+        [data-lang="en"] { display: revert; }
 
         /* Sections */
         section {
@@ -74,7 +125,7 @@
             font-family: var(--font-display);
             font-weight: 300;
             color: var(--text-ghost);
-            opacity: 0.12;
+            opacity: 0.15;
             position: absolute;
             top: 50%;
             left: 50%;
@@ -160,7 +211,7 @@
             font-family: var(--font-display);
             font-weight: 300;
             color: var(--accent-dim);
-            opacity: 0.25;
+            opacity: 0.3;
             position: absolute;
             top: -1.5rem;
             right: 0;
@@ -179,7 +230,7 @@
 
         .concept-card .reading {
             font-size: 0.8rem;
-            color: var(--accent-dim);
+            color: var(--accent);
             letter-spacing: 0.15em;
             text-transform: uppercase;
             margin-bottom: 1rem;
@@ -195,7 +246,7 @@
             margin-top: 1rem;
             padding-top: 1rem;
             border-top: 1px solid var(--text-ghost);
-            font-size: 0.82rem;
+            font-size: 0.84rem;
             color: var(--text-ghost);
             line-height: 1.7;
         }
@@ -251,7 +302,7 @@
             font-family: var(--font-display);
             font-size: 2rem;
             font-weight: 300;
-            color: var(--accent-dim);
+            color: var(--accent);
             min-width: 2rem;
             text-align: center;
             line-height: 1;
@@ -318,7 +369,7 @@
         }
 
         .kuji p {
-            font-size: 0.82rem;
+            font-size: 0.84rem;
             color: var(--text-ghost);
             max-width: 420px;
             margin: 0 auto;
@@ -335,7 +386,7 @@
         .download-btn {
             display: inline-block;
             padding: 1rem 3rem;
-            border: 1px solid var(--accent-dim);
+            border: 1px solid var(--accent);
             color: var(--text);
             text-decoration: none;
             font-family: var(--font-body);
@@ -348,9 +399,9 @@
         }
 
         .download-btn:hover {
-            background: var(--accent-dim);
+            background: var(--accent);
             color: var(--bg);
-            border-color: var(--accent-dim);
+            border-color: var(--accent);
         }
 
         .download-btn:focus-visible {
@@ -375,7 +426,7 @@
         }
 
         .download-links a:hover {
-            color: var(--text-dim);
+            color: var(--text);
         }
 
         .download-links a:focus-visible {
@@ -420,39 +471,48 @@
                 grid-template-columns: 1fr;
                 gap: 3rem;
             }
-
-            section {
-                padding: 4rem 1.5rem;
-            }
-
-            .concept-kanji {
-                font-size: 3.5rem;
-                top: -1rem;
-            }
+            section { padding: 4rem 1.5rem; }
+            .concept-kanji { font-size: 3.5rem; top: -1rem; }
+            .lang-switch { top: 1rem; right: 1rem; }
         }
 
         @media (prefers-reduced-motion: reduce) {
-            .fade-in {
-                opacity: 1;
-                transform: none;
-                transition: none;
-            }
+            .fade-in { opacity: 1; transform: none; transition: none; }
             .scroll-hint { animation: none; opacity: 0.5; }
         }
     </style>
 </head>
 <body>
 
+    <!-- Language switcher -->
+    <nav class="lang-switch" aria-label="Language">
+        <button class="active" data-set-lang="en" aria-pressed="true">EN</button>
+        <button data-set-lang="zh" aria-pressed="false">ZH</button>
+        <button data-set-lang="ja" aria-pressed="false">JA</button>
+    </nav>
+
     <!-- Hero -->
     <section class="hero">
         <div class="hero-calligraphy" aria-hidden="true">間</div>
         <div class="container">
             <h1 class="fade-in">maida</h1>
-            <p class="hero-tagline fade-in">the space you pass through before you begin</p>
-            <p class="hero-desc fade-in">
+            <p class="hero-tagline fade-in" data-lang="en">the space you pass through before you begin</p>
+            <p class="hero-tagline fade-in" data-lang="zh">在你開始之前所穿越的空間</p>
+            <p class="hero-tagline fade-in" data-lang="ja">始まる前に通り抜ける空間</p>
+            <p class="hero-desc fade-in" data-lang="en">
                 One game from your Steam library. You decide: play it now, or see something else.
                 No recommendations. No tracking. No algorithms telling you what you should want.
                 Just an honest mirror of where your intention is leaning.
+            </p>
+            <p class="hero-desc fade-in" data-lang="zh">
+                從你的 Steam 遊戲庫中，每次只顯示一款遊戲。你來決定：現在玩，或者看看別的。
+                沒有推薦。沒有追蹤。沒有演算法告訴你該想要什麼。
+                只是誠實地反映你的選擇傾向。
+            </p>
+            <p class="hero-desc fade-in" data-lang="ja">
+                Steamライブラリから1つのゲームを表示。今プレイするか、別のものを見るか。
+                レコメンドなし。トラッキングなし。何を望むべきか指示するアルゴリズムもなし。
+                あなたの意図がどこに傾いているか、正直に映すだけ。
             </p>
         </div>
         <div class="scroll-hint" aria-hidden="true">scroll</div>
@@ -462,41 +522,99 @@
     <section class="concept">
         <div class="container">
             <div class="divider"></div>
-            <p class="section-label fade-in">Two Faces</p>
-            <h2 class="section-title fade-in">The names are not decoration</h2>
-            <p class="section-body fade-in">
+            <p class="section-label fade-in" data-lang="en">Two Faces</p>
+            <p class="section-label fade-in" data-lang="zh">二つの面</p>
+            <p class="section-label fade-in" data-lang="ja">二つの面</p>
+
+            <h2 class="section-title fade-in" data-lang="en">The names are not decoration</h2>
+            <h2 class="section-title fade-in" data-lang="zh">名字不是裝飾</h2>
+            <h2 class="section-title fade-in" data-lang="ja">名前は飾りではない</h2>
+
+            <p class="section-body fade-in" data-lang="en">
                 Maida has two modes, drawn from the vocabulary of Japanese martial arts.
                 Their sequence is intentional: you must prepare before you can face what appears.
+            </p>
+            <p class="section-body fade-in" data-lang="zh">
+                Maida 有兩個面，取自日本武道的語彙。
+                它們的順序是刻意的：你必須先準備，才能面對眼前出現的東西。
+            </p>
+            <p class="section-body fade-in" data-lang="ja">
+                Maidaには日本武道の語彙から取った二つの面がある。
+                その順序は意図的だ：現れるものに臨む前に、まず構えなければならない。
             </p>
 
             <div class="concept-grid">
                 <div class="concept-card fade-in">
                     <div class="concept-kanji" aria-hidden="true">臨</div>
                     <h3>Rin</h3>
-                    <div class="reading">to face what appears</div>
-                    <p>
+                    <div class="reading" data-lang="en">to face what appears</div>
+                    <div class="reading" data-lang="zh">與眼前的，相遇</div>
+                    <div class="reading" data-lang="ja">現れたものと、向き合う</div>
+
+                    <p data-lang="en">
                         One game. TRY or NOT NOW. No comparison, no browsing, no "what if the next one is better."
                         You stand before a single world and decide whether to enter.
                     </p>
-                    <div class="origin">
+                    <p data-lang="zh">
+                        一款遊戲。試試或現在不要。沒有比較，沒有瀏覽，沒有「下一個會不會更好」。
+                        你站在一個世界面前，決定是否進入。
+                    </p>
+                    <p data-lang="ja">
+                        1つのゲーム。やるかパスか。比較なし、ブラウジングなし、「次はもっといいかも」もなし。
+                        1つの世界の前に立ち、入るかどうかを決める。
+                    </p>
+
+                    <div class="origin" data-lang="en">
                         In kendo, <em>nozomu</em> is the moment you face your opponent.
                         In the nine-syllable cut (kuji-in), <em>Rin</em> is the first syllable
                         -- representing the strength to confront what is before you.
+                    </div>
+                    <div class="origin" data-lang="zh">
+                        在劍道中，<em>臨む（nozomu）</em>是面對對手的那個瞬間。
+                        在九字切（kuji-in）中，<em>臨</em>是第一個字
+                        -- 代表面對眼前之物的力量。
+                    </div>
+                    <div class="origin" data-lang="ja">
+                        剣道では、<em>臨む</em>は相手と向き合う瞬間。
+                        九字切りでは、<em>臨</em>は最初の一字
+                        -- 目の前のものに立ち向かう力を表す。
                     </div>
                 </div>
 
                 <div class="concept-card fade-in">
                     <div class="concept-kanji" aria-hidden="true">構</div>
                     <h3>Kamae</h3>
-                    <div class="reading">quiet preparation</div>
-                    <p>
+                    <div class="reading" data-lang="en">quiet preparation</div>
+                    <div class="reading" data-lang="zh">面臨之前，靜靜準備</div>
+                    <div class="reading" data-lang="ja">臨む前の、静かな仕度</div>
+
+                    <p data-lang="en">
                         Curate your shelf. Organize games into named groups called Kata.
                         Decide which worlds are worth facing today. This is not browsing -- it is preparing your stance.
                     </p>
-                    <div class="origin">
+                    <p data-lang="zh">
+                        整理你的展示櫃。把遊戲分組到稱為「型」的類別中。
+                        決定今天哪些世界值得面對。這不是瀏覽 -- 這是準備你的架式。
+                    </p>
+                    <p data-lang="ja">
+                        棚を整える。ゲームを「型」と呼ぶグループに分ける。
+                        今日どの世界に臨む価値があるかを決める。ブラウジングではない -- 構えを整えること。
+                    </p>
+
+                    <div class="origin" data-lang="en">
                         <em>Kamae</em> is the ready stance before drawing the sword. In tea ceremony,
                         it is the quiet arrangement of space before the guest arrives.
                         No kamae, no rin. You must prepare before you can face.
+                    </div>
+                    <div class="origin" data-lang="zh">
+                        <em>構え</em>是拔刀前的準備架式。在茶道中，
+                        是客人到來前對空間的靜靜安排。
+                        沒有構え就不能臨む。你必須先準備，才能面對。
+                    </div>
+                    <div class="origin" data-lang="ja">
+                        <em>構え</em>は抜刀前の備えの姿勢。茶道では、
+                        客人が来る前の静かな空間の支度。
+                        構えなくして臨むことはできない。
                     </div>
                 </div>
             </div>
@@ -509,9 +627,17 @@
             <div class="kuji-chars" aria-label="The nine syllables of kuji-in, with Rin highlighted">
                 <span class="active">臨</span>兵闘者皆陣列在前
             </div>
-            <p>
+            <p data-lang="en">
                 The nine-syllable cut. Rin is the first -- the strength to begin.
                 Maida exists in that first syllable: the space between hesitation and entry.
+            </p>
+            <p data-lang="zh">
+                九字切。臨是第一字 -- 開始的力量。
+                Maida 存在於那第一個字裡：猶豫與進入之間的空間。
+            </p>
+            <p data-lang="ja">
+                九字切り。臨は最初の一字 -- 始まりの力。
+                Maidaはその最初の一字に在る：ためらいと踏み出しの間の空間。
             </p>
         </div>
     </section>
@@ -520,10 +646,15 @@
     <section>
         <div class="container">
             <div class="divider"></div>
-            <p class="section-label fade-in">How it works</p>
-            <h2 class="section-title fade-in">Simpler than you expect</h2>
+            <p class="section-label fade-in" data-lang="en">How it works</p>
+            <p class="section-label fade-in" data-lang="zh">如何運作</p>
+            <p class="section-label fade-in" data-lang="ja">使い方</p>
 
-            <div class="steps">
+            <h2 class="section-title fade-in" data-lang="en">Simpler than you expect</h2>
+            <h2 class="section-title fade-in" data-lang="zh">比你想像的簡單</h2>
+            <h2 class="section-title fade-in" data-lang="ja">想像より、簡素</h2>
+
+            <div class="steps" data-lang="en">
                 <div class="step fade-in">
                     <div class="step-marker">1</div>
                     <div class="step-content">
@@ -553,19 +684,94 @@
                     </div>
                 </div>
             </div>
+
+            <div class="steps" data-lang="zh">
+                <div class="step fade-in">
+                    <div class="step-marker">1</div>
+                    <div class="step-content">
+                        <h4>開啟 Maida</h4>
+                        <p>掃描你本機已安裝的 Steam 遊戲。資料不會離開你的裝置。</p>
+                    </div>
+                </div>
+                <div class="step fade-in">
+                    <div class="step-marker">2</div>
+                    <div class="step-content">
+                        <h4>出現一款遊戲</h4>
+                        <p>根據你過去的選擇加權隨機選出。不是推薦 -- 是反映。</p>
+                    </div>
+                </div>
+                <div class="step fade-in">
+                    <div class="step-marker">3</div>
+                    <div class="step-content">
+                        <h4>試試或現在不要</h4>
+                        <p>願意進入這個世界？試試會啟動遊戲。不想？現在不要會顯示下一個。就這樣。</p>
+                    </div>
+                </div>
+                <div class="step fade-in">
+                    <div class="step-marker">4</div>
+                    <div class="step-content">
+                        <h4>Maida 消失</h4>
+                        <p>選擇之後，畫面凍結。沒有「接下來玩什麼」。沒有通知。工具在完成使命的瞬間死去。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="steps" data-lang="ja">
+                <div class="step fade-in">
+                    <div class="step-marker">1</div>
+                    <div class="step-content">
+                        <h4>Maidaを開く</h4>
+                        <p>ローカルにインストールされたSteamゲームをスキャン。データはデバイスの外に出ない。</p>
+                    </div>
+                </div>
+                <div class="step fade-in">
+                    <div class="step-marker">2</div>
+                    <div class="step-content">
+                        <h4>1つのゲームが現れる</h4>
+                        <p>過去の選択に基づく加重確率で選出。レコメンドではない -- 反映。</p>
+                    </div>
+                </div>
+                <div class="step fade-in">
+                    <div class="step-marker">3</div>
+                    <div class="step-content">
+                        <h4>やる、またはパス</h4>
+                        <p>この世界に入る？やるで起動。気分じゃない？パスで次が出る。それだけ。</p>
+                    </div>
+                </div>
+                <div class="step fade-in">
+                    <div class="step-marker">4</div>
+                    <div class="step-content">
+                        <h4>Maidaは消える</h4>
+                        <p>選んだ後、画面はフリーズ。「次は何？」もなし。通知もなし。目的を果たした瞬間、道具は死ぬ。</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- Philosophy -->
     <section class="philosophy">
         <div class="container fade-in">
-            <blockquote>
+            <blockquote data-lang="en">
                 Most game launchers help you browse.<br>
                 Browsing creates decision fatigue.<br>
                 Maida removes browsing entirely.<br>
                 <br>
                 One game. One choice. Move on.
-                <footer>-- Design Constitution, Section 1.13</footer>
+            </blockquote>
+            <blockquote data-lang="zh">
+                大多數遊戲啟動器幫你瀏覽。<br>
+                瀏覽產生決策疲勞。<br>
+                Maida 完全移除瀏覽。<br>
+                <br>
+                一款遊戲。一個選擇。繼續前進。
+            </blockquote>
+            <blockquote data-lang="ja">
+                ほとんどのランチャーは閲覧を手助けする。<br>
+                閲覧は決定疲労を生む。<br>
+                Maidaは閲覧を完全に排除する。<br>
+                <br>
+                1つのゲーム。1つの選択。前に進む。
             </blockquote>
         </div>
     </section>
@@ -574,9 +780,15 @@
     <section>
         <div class="container">
             <div class="divider"></div>
-            <p class="section-label fade-in">What Maida refuses to do</p>
-            <h2 class="section-title fade-in">The moat is restraint</h2>
-            <div class="section-body fade-in">
+            <p class="section-label fade-in" data-lang="en">What Maida refuses to do</p>
+            <p class="section-label fade-in" data-lang="zh">Maida 拒絕做的事</p>
+            <p class="section-label fade-in" data-lang="ja">Maidaが拒むこと</p>
+
+            <h2 class="section-title fade-in" data-lang="en">The moat is restraint</h2>
+            <h2 class="section-title fade-in" data-lang="zh">護城河是克制</h2>
+            <h2 class="section-title fade-in" data-lang="ja">堀は自制</h2>
+
+            <div class="section-body fade-in" data-lang="en">
                 <p>
                     No recommendations. No tracking playtime. No streaks, achievements, or "you did great today."
                     No notifications to bring you back. No social features. No data uploaded anywhere.
@@ -588,6 +800,30 @@
                     Maida exists not to improve you, but to not stand between you and the world you want to enter.
                 </p>
             </div>
+            <div class="section-body fade-in" data-lang="zh">
+                <p>
+                    沒有推薦。不追蹤遊玩時間。沒有連續登入、成就、或「你今天做得很好」。
+                    沒有通知叫你回來。沒有社交功能。資料不會上傳到任何地方。
+                    所有行為資料都留在你的裝置上。
+                </p>
+                <p>
+                    理想的使用者是有一天不再需要 Maida 的人。
+                    如果這個工具變得「很聰明」或「很體貼」，那就是失敗。
+                    Maida 的存在不是為了改善你，而是為了不擋在你和你想進入的世界之間。
+                </p>
+            </div>
+            <div class="section-body fade-in" data-lang="ja">
+                <p>
+                    レコメンドなし。プレイ時間の追跡なし。連続ログイン、実績、「今日もよく頑張った」なし。
+                    呼び戻す通知なし。ソーシャル機能なし。データはどこにもアップロードされない。
+                    すべての行動データはあなたのマシン上に留まる。
+                </p>
+                <p>
+                    理想のユーザーは、いつかMaidaを必要としなくなる人。
+                    もしこの道具が「とても賢く」「とても気が利く」ようになったら、それは失敗。
+                    Maidaは、あなたを良くするためではなく、あなたと入りたい世界の間に立たないために存在する。
+                </p>
+            </div>
         </div>
     </section>
 
@@ -595,14 +831,31 @@
     <section class="download">
         <div class="container">
             <div class="divider"></div>
-            <p class="section-label fade-in">Available now</p>
-            <h2 class="section-title fade-in">Free. No account required.</h2>
-            <p class="section-body fade-in" style="text-align:center; margin-bottom: 2rem;">
+            <p class="section-label fade-in" data-lang="en">Available now</p>
+            <p class="section-label fade-in" data-lang="zh">現在可用</p>
+            <p class="section-label fade-in" data-lang="ja">今すぐ利用可能</p>
+
+            <h2 class="section-title fade-in" data-lang="en">Free. No account required.</h2>
+            <h2 class="section-title fade-in" data-lang="zh">免費。不需要帳號。</h2>
+            <h2 class="section-title fade-in" data-lang="ja">無料。アカウント不要。</h2>
+
+            <p class="section-body fade-in" style="text-align:center; margin-bottom: 2rem;" data-lang="en">
                 Windows. Handheld-friendly (ROG Ally X, Steam Deck).<br>
                 Screen reader supported (NVDA). Three languages.
             </p>
+            <p class="section-body fade-in" style="text-align:center; margin-bottom: 2rem;" data-lang="zh">
+                Windows。手持裝置友善（ROG Ally X, Steam Deck）。<br>
+                螢幕閱讀器支援（NVDA）。三種語言。
+            </p>
+            <p class="section-body fade-in" style="text-align:center; margin-bottom: 2rem;" data-lang="ja">
+                Windows。ハンドヘルド対応（ROG Ally X, Steam Deck）。<br>
+                スクリーンリーダー対応（NVDA）。3言語。
+            </p>
+
             <div class="fade-in">
-                <a href="#" class="download-btn" aria-label="Download Maida from itch.io">Download on itch.io</a>
+                <a href="#" class="download-btn" data-lang="en" aria-label="Download Maida from itch.io">Download on itch.io</a>
+                <a href="#" class="download-btn" data-lang="zh" aria-label="Download Maida from itch.io">itch.io 下載</a>
+                <a href="#" class="download-btn" data-lang="ja" aria-label="Download Maida from itch.io">itch.io でダウンロード</a>
             </div>
             <div class="download-links fade-in">
                 <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-14_user-manual-en-md">Manual (EN)</a>
@@ -623,11 +876,43 @@
     </footer>
 
     <script>
+        // Language switching
+        function setLang(lang) {
+            const map = { en: 'en', zh: 'zh', ja: 'ja' };
+            const htmlLangMap = { en: 'en', zh: 'zh-Hant', ja: 'ja' };
+            document.documentElement.lang = htmlLangMap[lang];
+
+            // Toggle visibility
+            document.querySelectorAll('[data-lang]').forEach(el => {
+                el.style.display = el.dataset.lang === lang ? '' : 'none';
+            });
+
+            // Update buttons
+            document.querySelectorAll('.lang-switch button').forEach(btn => {
+                const isActive = btn.dataset.setLang === lang;
+                btn.classList.toggle('active', isActive);
+                btn.setAttribute('aria-pressed', isActive);
+            });
+
+            // Re-trigger fade-in for newly visible elements
+            document.querySelectorAll(`[data-lang="${lang}"].fade-in:not(.visible)`).forEach(el => {
+                if (el.getBoundingClientRect().top < window.innerHeight) {
+                    el.classList.add('visible');
+                }
+            });
+
+            localStorage.setItem('maida-lang', lang);
+        }
+
+        // Button handlers
+        document.querySelectorAll('.lang-switch button').forEach(btn => {
+            btn.addEventListener('click', () => setLang(btn.dataset.setLang));
+        });
+
         // Intersection Observer for fade-in
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry, i) => {
+            entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    // Stagger siblings
                     const siblings = entry.target.parentElement.querySelectorAll('.fade-in');
                     const index = Array.from(siblings).indexOf(entry.target);
                     entry.target.style.transitionDelay = `${index * 0.12}s`;
@@ -639,11 +924,19 @@
 
         document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-        // Immediate visibility for hero (above fold)
+        // Init: detect language or use saved preference
+        const saved = localStorage.getItem('maida-lang');
+        const browserLang = navigator.language.startsWith('ja') ? 'ja'
+            : navigator.language.startsWith('zh') ? 'zh' : 'en';
+        setLang(saved || browserLang);
+
+        // Hero immediate visibility
         setTimeout(() => {
             document.querySelectorAll('.hero .fade-in').forEach((el, i) => {
-                el.style.transitionDelay = `${0.3 + i * 0.2}s`;
-                el.classList.add('visible');
+                if (el.style.display !== 'none') {
+                    el.style.transitionDelay = `${0.3 + i * 0.2}s`;
+                    el.classList.add('visible');
+                }
             });
         }, 100);
     </script>
