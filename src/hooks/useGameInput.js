@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { vibrate, vibrateProgress } from '../services/haptics';
 
 /**
  * useGameInput
@@ -33,6 +34,7 @@ export function useGameInput({
     const pressStartTime = useRef(null);
     const progressFrame = useRef(null);
     const longPressTriggered = useRef(false); // Track if long press was triggered
+    const lastHapticTime = useRef(0); // Throttle haptic feedback
 
 
     // Clear progress/timers helper
@@ -57,14 +59,20 @@ export function useGameInput({
         if (!pressStartTime.current) return;
         const elapsed = Date.now() - pressStartTime.current;
         const progress = Math.min(elapsed / anchorThreshold, 1);
-        // console.log('[Input] Progress:', progress.toFixed(2));
         setLongPressProgress(progress);
 
         if (progress < 1) {
+            // Haptic pulse every 400ms during hold
+            const now = Date.now();
+            if (now - lastHapticTime.current >= 400) {
+                vibrateProgress(progress);
+                lastHapticTime.current = now;
+            }
             progressFrame.current = requestAnimationFrame(updateProgress);
         } else {
             console.log('[Input] Long Press Complete! Triggering Anchor.');
-            longPressTriggered.current = true; // Lock out short press
+            longPressTriggered.current = true;
+            vibrate('strong');
             resetPress();
             if (!disabled && callbacksRef.current.onAnchor) callbacksRef.current.onAnchor();
         }
@@ -75,6 +83,8 @@ export function useGameInput({
         console.log('[Input] Start Press Called', { disabled, currentRef: pressStartTime.current });
         if (!disabled && !pressStartTime.current) {
             pressStartTime.current = Date.now();
+            lastHapticTime.current = Date.now();
+            vibrate('confirm');
             console.log('[Input] SET pressStartTime:', pressStartTime.current);
             progressFrame.current = requestAnimationFrame(updateProgress);
         } else {

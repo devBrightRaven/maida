@@ -83,6 +83,9 @@
         "settings": {
             "title": "设置",
             "language_title": "语言设置",
+            "haptic_title": "振动反馈",
+            "haptic_off": "关闭",
+            "haptic_intensity": "强度",
             "theme_title": "外观",
             "theme_light": "切换为浅色模式",
             "theme_dark": "切换为深色模式",

@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { t } from '../../../i18n';
 import { MAX_KATA_GAMES } from '../../../core/katas';
+import { vibrate, vibrateProgress } from '../../../services/haptics';
 
 function getSteamHeaderUrl(steamAppId) {
     if (!steamAppId) return null;
@@ -54,6 +55,7 @@ function HoldButton({ onConfirm, label, ariaLabel }) {
     const startRef = useRef(null);
     const frameRef = useRef(null);
     const triggeredRef = useRef(false);
+    const lastHapticRef = useRef(0);
 
     const reset = useCallback(() => {
         startRef.current = null;
@@ -74,9 +76,15 @@ function HoldButton({ onConfirm, label, ariaLabel }) {
 
         if (elapsed >= TOTAL_HOLD && !triggeredRef.current) {
             triggeredRef.current = true;
+            vibrate('strong');
             onConfirm();
             reset();
         } else if (elapsed < TOTAL_HOLD) {
+            const now = Date.now();
+            if (now - lastHapticRef.current >= 400) {
+                vibrateProgress(p);
+                lastHapticRef.current = now;
+            }
             frameRef.current = requestAnimationFrame(animate);
         }
     }, [onConfirm, reset]);
@@ -84,6 +92,8 @@ function HoldButton({ onConfirm, label, ariaLabel }) {
     const handleStart = useCallback(() => {
         if (!startRef.current) {
             startRef.current = Date.now();
+            lastHapticRef.current = Date.now();
+            vibrate('confirm');
             frameRef.current = requestAnimationFrame(animate);
         }
     }, [animate]);
@@ -102,6 +112,7 @@ function HoldButton({ onConfirm, label, ariaLabel }) {
                 setProgress(0);
                 setConfirming(true);
                 confirmStartRef.current = Date.now();
+                vibrate('confirm');
                 return;
             }
         }

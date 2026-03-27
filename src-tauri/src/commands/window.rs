@@ -42,3 +42,26 @@ pub fn launch_game(url: String) -> Result<(), String> {
     }
     Ok(())
 }
+
+#[tauri::command]
+pub fn show_touch_keyboard() {
+    #[cfg(target_os = "windows")]
+    {
+        use std::os::windows::process::CommandExt;
+        let _ = std::process::Command::new(r"C:\Program Files\Common Files\Microsoft Shared\ink\TabTip.exe")
+            .creation_flags(0x08000000)
+            .spawn();
+    }
+}
+
+#[tauri::command]
+pub fn hide_touch_keyboard() {
+    #[cfg(target_os = "windows")]
+    {
+        use std::os::windows::process::CommandExt;
+        let _ = std::process::Command::new("taskkill")
+            .args(["/IM", "TabTip.exe", "/F"])
+            .creation_flags(0x08000000)
+            .spawn();
+    }
+}

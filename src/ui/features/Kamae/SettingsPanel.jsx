@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { t, getLocale, setLocale } from '../../../i18n';
+import { getIntensity, setIntensity, vibrate } from '../../../services/haptics';
 import { validateKeyFormat, formatLicenseKey } from '../../../core/license';
 import bridge from '../../../services/bridge';
 
@@ -17,6 +18,9 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
 
     // Language state
     const [currentLang, setCurrentLang] = useState(getLocale());
+
+    // Haptic state
+    const [hapticLevel, setHapticLevel] = useState(getIntensity());
 
     // Telemetry state
     const [telemetryEnabled, setTelemetryEnabled] = useState(true);
@@ -134,6 +138,32 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
                         <option value="zh-CN">简体中文</option>
                         <option value="zh-TW">繁體中文</option>
                     </select>
+                </div>
+            </section>
+
+            <section className="kamae-settings-section" aria-labelledby="settings-haptic-title">
+                <h2 id="settings-haptic-title" className="kamae-settings-section-title">
+                    {t('ui.settings.haptic_title')}
+                </h2>
+                <div className="kamae-settings-field">
+                    <label htmlFor="haptic-slider" className="kamae-settings-label">
+                        {hapticLevel === 0 ? t('ui.settings.haptic_off') : `${t('ui.settings.haptic_intensity')}: ${hapticLevel}%`}
+                    </label>
+                    <input
+                        id="haptic-slider"
+                        type="range"
+                        min="0"
+                        max="100"
+                        step="10"
+                        value={hapticLevel}
+                        className="kamae-settings-input"
+                        onChange={(e) => {
+                            const val = Number(e.target.value);
+                            setHapticLevel(val);
+                            setIntensity(val);
+                            if (val > 0) vibrate('confirm');
+                        }}
+                    />
                 </div>
             </section>
 

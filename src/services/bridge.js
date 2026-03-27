@@ -59,6 +59,10 @@ const bridge = {
     // --- Game launch ---
     launchGame: (steamUrl) => call('launch_game', { url: steamUrl }),
 
+    // --- Touch keyboard ---
+    showTouchKeyboard: () => call('show_touch_keyboard'),
+    hideTouchKeyboard: () => call('hide_touch_keyboard'),
+
     // --- Window ---
     minimizeWindow: () => call('minimize_window'),
 

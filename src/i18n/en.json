@@ -83,6 +83,9 @@
         "settings": {
             "title": "Settings",
             "language_title": "Language Settings",
+            "haptic_title": "Vibration Feedback",
+            "haptic_off": "Off",
+            "haptic_intensity": "Intensity",
             "theme_title": "Appearance",
             "theme_light": "Switch to Light Mode",
             "theme_dark": "Switch to Dark Mode",

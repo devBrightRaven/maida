@@ -83,6 +83,9 @@
         "settings": {
             "title": "設定",
             "language_title": "言語設定",
+            "haptic_title": "振動フィードバック",
+            "haptic_off": "オフ",
+            "haptic_intensity": "強度",
             "theme_title": "外観",
             "theme_light": "ライトモードに切り替え",
             "theme_dark": "ダークモードに切り替え",
