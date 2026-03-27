@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="lang-en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -134,9 +134,11 @@
             outline-offset: 2px;
         }
 
-        /* i18n: hide non-active lang */
-        [data-lang] { display: none; }
-        [data-lang="en"] { display: revert; }
+        /* i18n: CSS controls initial state (EN), JS takes over after load */
+        [data-lang] { display: none !important; }
+        html.lang-en [data-lang="en"] { display: revert !important; }
+        html.lang-zh [data-lang="zh"] { display: revert !important; }
+        html.lang-ja [data-lang="ja"] { display: revert !important; }
 
         /* Sections */
         section {
@@ -649,15 +651,22 @@
         // Language switching
         function setLang(lang) {
             const htmlLangMap = { en: 'en', zh: 'zh-Hant', ja: 'ja' };
-            document.documentElement.lang = htmlLangMap[lang];
-            document.querySelectorAll('[data-lang]').forEach(el => {
-                el.style.display = el.dataset.lang === lang ? '' : 'none';
-            });
+            const root = document.documentElement;
+            root.lang = htmlLangMap[lang];
+            // Swap lang class on <html> — CSS handles visibility
+            root.classList.remove('lang-en', 'lang-zh', 'lang-ja');
+            root.classList.add(`lang-${lang}`);
             document.querySelectorAll('.lang-switch button').forEach(btn => {
                 const active = btn.dataset.setLang === lang;
                 btn.classList.toggle('active', active);
                 btn.setAttribute('aria-pressed', active);
             });
+            // Update theme toggle aria-label for current language
+            const theme = root.dataset.theme || 'dark';
+            const toggleBtn = document.querySelector('.theme-toggle');
+            const key = `label${theme.charAt(0).toUpperCase()+theme.slice(1)}${lang.charAt(0).toUpperCase()+lang.slice(1)}`;
+            if (toggleBtn.dataset[key]) toggleBtn.setAttribute('aria-label', toggleBtn.dataset[key]);
+            // Re-trigger fade-in for newly visible elements
             document.querySelectorAll(`[data-lang="${lang}"].fade-in:not(.visible)`).forEach(el => {
                 if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('visible');
             });
@@ -672,10 +681,6 @@
         function setTheme(theme) {
             document.documentElement.dataset.theme = theme;
             localStorage.setItem('maida-theme', theme);
-            const btn = document.querySelector('.theme-toggle');
-            const lang = localStorage.getItem('maida-lang') || 'en';
-            const key = theme === 'dark' ? 'dark' : 'light';
-            btn.setAttribute('aria-label', btn.dataset[`label${key.charAt(0).toUpperCase()+key.slice(1)}${lang}`] || `Toggle theme`);
         }
 
         document.querySelector('.theme-toggle').addEventListener('click', () => {
