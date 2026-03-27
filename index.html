@@ -250,6 +250,13 @@
             letter-spacing: 0.05em;
         }
 
+        .concept-card h3 .reading {
+            font-size: 0.85rem;
+            font-weight: 300;
+            color: var(--text-dim);
+            margin-left: 0.5rem;
+        }
+
         .concept-card .reading {
             font-size: 0.8rem;
             color: var(--accent);
@@ -372,7 +379,9 @@
 </head>
 <body>
 
-    <a class="skip-link" href="#main">Skip to content</a>
+    <a class="skip-link" href="#main" data-lang="en">Skip to content</a>
+    <a class="skip-link" href="#main" data-lang="zh">跳到主要內容</a>
+    <a class="skip-link" href="#main" data-lang="ja">メインコンテンツへ</a>
 
     <!-- Top bar -->
     <header class="top-bar">
@@ -381,7 +390,7 @@
             <button data-set-lang="zh" aria-pressed="false">ZH</button>
             <button data-set-lang="ja" aria-pressed="false">JA</button>
         </nav>
-        <button class="theme-toggle" aria-label="Toggle light/dark theme" title="Toggle theme">&#9681;</button>
+        <button class="theme-toggle" aria-label="Toggle light/dark theme" title="Toggle theme" data-label-dark-en="Switch to light theme" data-label-light-en="Switch to dark theme" data-label-dark-zh="切換至淺色模式" data-label-light-zh="切換至深色模式" data-label-dark-ja="ライトモードに切替" data-label-light-ja="ダークモードに切替">&#9681;</button>
     </header>
 
     <main id="main">
@@ -441,7 +450,9 @@
             <div class="concept-grid">
                 <article class="concept-card fade-in">
                     <span class="concept-kanji" aria-hidden="true">臨</span>
-                    <h3>Rin</h3>
+                    <h3 data-lang="en">Rin <span class="reading">臨</span></h3>
+                    <h3 data-lang="zh">臨 <span class="reading">Rin</span></h3>
+                    <h3 data-lang="ja">臨 <span class="reading">Rin</span></h3>
                     <p class="reading" data-lang="en">to face what appears</p>
                     <p class="reading" data-lang="zh">與眼前的，相遇</p>
                     <p class="reading" data-lang="ja">現れたものと、向き合う</p>
@@ -475,7 +486,9 @@
 
                 <article class="concept-card fade-in">
                     <span class="concept-kanji" aria-hidden="true">構</span>
-                    <h3>Kamae</h3>
+                    <h3 data-lang="en">Kamae <span class="reading">構</span></h3>
+                    <h3 data-lang="zh">構 <span class="reading">Kamae</span></h3>
+                    <h3 data-lang="ja">構 <span class="reading">Kamae</span></h3>
                     <p class="reading" data-lang="en">quiet preparation</p>
                     <p class="reading" data-lang="zh">面臨之前，靜靜準備</p>
                     <p class="reading" data-lang="ja">臨む前の、静かな仕度</p>
@@ -605,11 +618,23 @@
                 <a href="#" class="download-btn" data-lang="zh">itch.io 下載</a>
                 <a href="#" class="download-btn" data-lang="ja">itch.io でダウンロード</a>
             </div>
-            <nav class="download-links fade-in" aria-label="Documentation and manuals">
+            <nav class="download-links fade-in" data-lang="en" aria-label="Documentation">
                 <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-14_user-manual-en-md">Manual (EN)</a>
                 <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-13_user-manual-zh-md">Manual (ZH)</a>
                 <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-15_user-manual-ja-md">Manual (JA)</a>
                 <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-12_changelog-md">Changelog</a>
+            </nav>
+            <nav class="download-links fade-in" data-lang="zh" aria-label="文件連結">
+                <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-13_user-manual-zh-md">使用手冊 (繁中)</a>
+                <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-14_user-manual-en-md">Manual (EN)</a>
+                <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-15_user-manual-ja-md">マニュアル (JA)</a>
+                <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-12_changelog-md">變更紀錄</a>
+            </nav>
+            <nav class="download-links fade-in" data-lang="ja" aria-label="ドキュメント">
+                <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-15_user-manual-ja-md">マニュアル (日本語)</a>
+                <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-14_user-manual-en-md">Manual (EN)</a>
+                <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-13_user-manual-zh-md">使用手冊 (ZH)</a>
+                <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-12_changelog-md">変更履歴</a>
             </nav>
         </div>
     </section>
@@ -647,8 +672,10 @@
         function setTheme(theme) {
             document.documentElement.dataset.theme = theme;
             localStorage.setItem('maida-theme', theme);
-            document.querySelector('.theme-toggle').setAttribute('aria-label',
-                theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+            const btn = document.querySelector('.theme-toggle');
+            const lang = localStorage.getItem('maida-lang') || 'en';
+            const key = theme === 'dark' ? 'dark' : 'light';
+            btn.setAttribute('aria-label', btn.dataset[`label${key.charAt(0).toUpperCase()+key.slice(1)}${lang}`] || `Toggle theme`);
         }
 
         document.querySelector('.theme-toggle').addEventListener('click', () => {
