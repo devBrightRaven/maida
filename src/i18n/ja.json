@@ -168,7 +168,7 @@
             "a11y_standards_heading": "準拠基準",
             "a11y_standards": "本アプリケーションは WCAG 2.2 レベル AA への準拠を目指しています。",
             "a11y_testing_heading": "テスト",
-            "a11y_testing": "Windows 上で NVDA スクリーンリーダー、キーボード、ゲームパッドでテスト済みです。フォーカス表示、ページ構造、スクリーンリーダーラベルを確認済みです。自動アクセシビリティスキャンはブロッキングの問題なく合格しました。その他のプラットフォームや支援技術はテストされていません。",
+            "a11y_testing": "Windows で NVDA スクリーンリーダー、キーボード、ゲームパッドでテスト済み。Linux では WebKitGTK のアクセシビリティ制限により、Orca スクリーンリーダーのサポートは限定的です — ボタンは操作可能ですが、見出しやライブ通知が読み上げられない場合があります。",
             "a11y_features_heading": "現在の機能",
             "a11y_feature_keyboard": "キーボードだけで Maida を操作できます。Tab で項目を切り替え、矢印キーで移動、Enter で選択、Escape で戻る、F2 で型の名前を変更。",
             "a11y_feature_gamepad": "ゲームパッドをお使いなら、D-pad で項目間を移動、A/B が Enter/Escape、LB/RB でページを切り替えられます。",

@@ -168,7 +168,7 @@
             "a11y_standards_heading": "標準",
             "a11y_standards": "本應用程式以符合 WCAG 2.2 AA 級為目標。",
             "a11y_testing_heading": "測試",
-            "a11y_testing": "已在 Windows 上使用 NVDA 螢幕閱讀器、鍵盤及手把進行測試。焦點指示、頁面結構及螢幕閱讀器標籤均已檢視。自動化無障礙掃描通過，無阻斷問題。其他平台及輔助技術尚未測試。",
+            "a11y_testing": "已在 Windows 上使用 NVDA 螢幕閱讀器、鍵盤及手把進行測試。Linux 上由於 WebKitGTK 的無障礙限制，Orca 螢幕閱讀器支援有限 — 按鈕可操作，但標題和即時通知可能無法被讀取。",
             "a11y_features_heading": "目前功能",
             "a11y_feature_keyboard": "你可以完全用鍵盤操作 Maida。Tab 切換項目，方向鍵導覽，Enter 選擇，Escape 返回，F2 重新命名型。",
             "a11y_feature_gamepad": "如果你使用手把，D-pad 可以在項目間移動，A/B 按鈕等同 Enter/Escape，LB/RB 切換頁面。",
