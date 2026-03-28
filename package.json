@@ -3,6 +3,7 @@
   "description": "Maida - Daily Focus Psychopomp",
   "author": "Bright Raven",
   "private": true,
+  "packageManager": "pnpm@10.28.2",
   "version": "0.1.0",
   "type": "module",
   "scripts": {
