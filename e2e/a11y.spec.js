@@ -10,8 +10,8 @@ import AxeBuilder from '@axe-core/playwright';
 test.describe('Accessibility (axe-core)', () => {
     test('homepage has no critical or serious a11y violations', async ({ page }) => {
         await page.goto('/');
-        // Wait for app to render (loading state → active state)
-        await page.waitForTimeout(2000);
+        // Wait for app to finish loading (button appears = app is ready)
+        await page.waitForSelector('.mvp-btn, .onboarding-sync-btn, .restart-selection-btn', { timeout: 10000 });
 
         const results = await new AxeBuilder({ page })
             .withTags(['wcag2a', 'wcag2aa', 'wcag22aa'])
@@ -37,7 +37,7 @@ test.describe('Accessibility (axe-core)', () => {
 
     test('page has correct lang attribute', async ({ page }) => {
         await page.goto('/');
-        await page.waitForTimeout(1000);
+        await page.waitForSelector('.mvp-btn, .onboarding-sync-btn, .restart-selection-btn', { timeout: 10000 });
 
         const lang = await page.getAttribute('html', 'lang');
         expect(lang).toBeTruthy();
@@ -46,7 +46,7 @@ test.describe('Accessibility (axe-core)', () => {
 
     test('all interactive elements are keyboard accessible', async ({ page }) => {
         await page.goto('/');
-        await page.waitForTimeout(2000);
+        await page.waitForSelector('.mvp-btn, .onboarding-sync-btn, .restart-selection-btn', { timeout: 10000 });
 
         const results = await new AxeBuilder({ page })
             .withRules(['button-name', 'link-name', 'label', 'aria-required-attr'])

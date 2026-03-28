@@ -173,7 +173,7 @@
             "a11y_feature_sr": "Every button and control has a label that screen readers can read aloud.",
             "a11y_feature_focus": "The currently selected item is always clearly highlighted so you know where you are.",
             "a11y_feature_motion": "Maida is mostly static by design. Where animations exist, they follow your system's reduced motion setting.",
-            "a11y_feature_transparency": "Maida is available in English, Traditional Chinese, and Japanese, including all screen reader text.",
+            "a11y_feature_transparency": "Maida is available in English, Japanese, Simplified Chinese, and Traditional Chinese, including all screen reader text.",
             "a11y_limitations_heading": "What We're Still Working On",
             "a11y_limitation_gamepad": "When using a screen reader, the focus starts on NOT NOW to prevent accidental game launches. Move to TRY with Tab or arrow keys to try a game. The lock feature (hold TRY for 3 seconds) requires screen reader focus mode.",
             "a11y_limitation_longpress": "Some actions require holding a button down for a few seconds. If you cannot hold, you can press once to see a confirmation prompt, then press again to confirm. This works with all input methods including screen readers.",
