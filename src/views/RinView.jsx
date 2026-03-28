@@ -43,6 +43,7 @@ export default function RinView({
     const [focusedBtn, setFocusedBtn] = useState(null); // 'visit' | 'notToday' | 'back' | 'switchKamae' | null
 
     // Refs for Focus Management
+    const titleRef = React.useRef(null);
     const btnRefs = {
         visit: React.useRef(null),
         notToday: React.useRef(null),
@@ -59,11 +60,14 @@ export default function RinView({
         }
     };
 
-    // Auto-focus NOT NOW — user must actively move to TRY (agency)
+    // Auto-focus game title — SR reads game name first, user Tab to buttons
     useEffect(() => {
         const timer = setTimeout(() => {
-            focusBtn('notToday');
-
+            if (titleRef.current) {
+                titleRef.current.focus();
+            } else {
+                focusBtn('notToday');
+            }
         }, 0);
         return () => clearTimeout(timer);
     }, [game, isAnchored]);
@@ -235,11 +239,12 @@ export default function RinView({
             className={`mvp-container ${!game ? 'is-idle' : ''} ${debugMode ? 'debug-mode' : ''} ${expanded ? 'is-expanded' : ''} ${isAnchored ? 'is-anchored' : ''}`}
             onClick={handleContainerClick}
         >
+            <p className="sr-only" role="alert">{t('ui.rin.sr_guide')}</p>
             <CalligraphyBg char="臨" className="rin-calligraphy-bg" />
             {game && (
                 <header className="mvp-header">
                     <div className="mvp-header-tap" onClick={onSecretTap} aria-hidden="true" />
-                    <h1 className="game-label">
+                    <h1 className="game-label" ref={titleRef} tabIndex={-1}>
                         <span className="sr-only">{t('ui.rin.mode_prefix')}</span>
                         {isAnchored ? `(⚓${t('ui.game.anchored_prefix')}) ${game.title}` : game.title}
                     </h1>

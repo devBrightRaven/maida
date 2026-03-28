@@ -80,11 +80,20 @@ pub async fn perform_background_snapshot(app: AppHandle) -> Result<Value, String
         .filter_map(|g| g.get("steamAppId").and_then(|v| v.as_str()).map(|s| s.to_string()))
         .collect();
 
-    // A) Process existing games — detect installs/uninstalls
+    // A) Process existing games — detect installs/uninstalls + update titles
     for (app_id, game) in existing_map.iter_mut() {
         if app_id.is_empty() { continue; }
         let is_installed = scanned_ids.contains(app_id);
         let was_installed = game.get("installed").and_then(|v| v.as_bool()).unwrap_or(false);
+
+        // Update title from latest scan (Steam language may have changed)
+        if is_installed {
+            if let Some(scanned_game) = scanned.iter().find(|s| s.get("steamAppId").and_then(|v| v.as_str()) == Some(app_id.as_str())) {
+                if let Some(new_title) = scanned_game.get("title") {
+                    game["title"] = new_title.clone();
+                }
+            }
+        }
 
         if is_installed && !was_installed {
             // Reinstall

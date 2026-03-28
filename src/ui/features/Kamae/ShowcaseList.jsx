@@ -188,6 +188,12 @@ function HoldButton({ onConfirm, label, ariaLabel }) {
                 }
             }}
             aria-label={confirming ? t('ui.kamae.remove_confirm_aria') : ariaLabel}
+            onKeyDown={(e) => {
+                if (e.key === 'Escape' && confirming) {
+                    e.stopPropagation();
+                    reset();
+                }
+            }}
         >
             <span className="showcase-hold-bg" style={{ width: `${progress * 100}%` }} />
             <span className="showcase-hold-label">

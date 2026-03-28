@@ -101,6 +101,7 @@ function App() {
     const updateCheck = useUpdateCheck();
     const { theme, toggleTheme } = useTheme();
 
+
     // Locale change: increment key to re-render entire tree without reload
     const [localeVersion, setLocaleVersion] = useState(0);
     const handleLocaleChange = useCallback(() => {
@@ -141,6 +142,13 @@ function App() {
         return () => window.removeEventListener('keydown', handler);
     }, [toggleFace]);
 
+    const [updateAlertShown, setUpdateAlertShown] = useState(false);
+    useEffect(() => {
+        if (updateCheck.isUpdateAvailable && !updateAlertShown) {
+            const timer = setTimeout(() => setUpdateAlertShown(true), 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [updateCheck.isUpdateAvailable, updateAlertShown]);
     const [debugMode, setDebugMode] = useState(false);
     const [silentMode, setSilentMode] = useState(false);
     const [tapCount, setTapCount] = useState({ count: 0, lastTap: 0 });
@@ -378,14 +386,21 @@ function App() {
                     {updateCheck.isUpdateAvailable && ` → ${updateCheck.latestVersion}`}
                 </span>
                 {updateCheck.isUpdateAvailable && (
-                    <button
-                        className="version-link"
-                        onClick={updateCheck.installUpdate}
-                        disabled={updateCheck.updating}
-                        aria-label={`Update to ${updateCheck.latestVersion}`}
-                    >
-                        {updateCheck.updating ? 'Updating...' : 'Update'}
-                    </button>
+                    <>
+                        {!updateAlertShown && (
+                            <p className="sr-only" role="alert">
+                                {t('ui.update.available_alert', { version: updateCheck.latestVersion })}
+                            </p>
+                        )}
+                        <button
+                            className="version-link"
+                            onClick={updateCheck.installUpdate}
+                            disabled={updateCheck.updating}
+                            aria-label={t('ui.update.button_aria', { from: __APP_VERSION__, to: updateCheck.latestVersion })}
+                        >
+                            {updateCheck.updating ? t('ui.update.updating') : t('ui.update.button')}
+                        </button>
+                    </>
                 )}
             </div>
             {import.meta.env.DEV && import.meta.env.VITE_AGENTATION && <div aria-hidden="true"><Agentation endpoint="http://localhost:4747" /></div>}

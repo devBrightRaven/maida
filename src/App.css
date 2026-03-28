@@ -158,15 +158,24 @@
 }
 
 .version-link {
-    color: var(--t-text-faint);
-    font-size: 0.625rem;
+    color: var(--t-accent, #c8a84e);
+    font-size: 0.75rem;
+    font-weight: 600;
     text-decoration: none;
     cursor: pointer;
+    background: none;
+    border: 1px solid var(--t-accent, #c8a84e);
+    border-radius: 4px;
+    padding: 2px 8px;
+    margin-top: 2px;
+    align-self: stretch;
+    text-align: center;
 }
 
 .version-link:hover {
-    color: var(--t-text-soft);
-    text-decoration: underline;
+    background: var(--t-accent, #c8a84e);
+    color: var(--t-bg, #1a1a2e);
+    text-decoration: none;
 }
 
 .version-link:focus-visible {

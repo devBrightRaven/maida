@@ -48,7 +48,8 @@
             "prescription_heading": "メッセージ",
             "desc": "現れたものと、向き合う。",
             "empty_showcase": "棚にはまだ何もない。",
-            "empty_showcase_btn": "ゲームを載せる"
+            "empty_showcase_btn": "ゲームを載せる",
+            "sr_guide": "このゲームを試すか、次へスキップ。Ctrl+Tab で構モードに切り替えてライブラリ管理。"
         },
         "kamae": {
             "reading": "構 kamae",
@@ -69,7 +70,8 @@
             "remove_confirm": "確認？",
             "remove_confirm_aria": "もう一度押すと削除を確認。",
             "remove_progress_aria": "削除中。もう一度押すとキャンセル。",
-            "explore_more": "もっと見る"
+            "explore_more": "もっと見る",
+            "sr_guide": "表示するゲームを整理。Ctrl+Tab で臨モードに切り替えてゲームを選ぶ。"
         },
         "explore": {
             "later": "あとで",
@@ -202,6 +204,12 @@
             "terms_changes": "本規約は新バージョンに伴い更新される場合があります。更新後の継続利用は変更への同意を意味します。",
             "copyright_title": "著作権",
             "copyright_text": "\u00a9 2026 Bright Raven World. All rights reserved."
+        },
+        "update": {
+            "available_alert": "Maida {version} が利用可能です。Tab キーで更新ボタンを見つけてください。",
+            "button_aria": "Maida を {from} から {to} に更新",
+            "button": "更新",
+            "updating": "更新中..."
         }
     },
     "voice": {

@@ -48,7 +48,8 @@
             "prescription_heading": "Message",
             "desc": "Meet what appears.",
             "empty_showcase": "Nothing on your shelf yet.",
-            "empty_showcase_btn": "add a few games"
+            "empty_showcase_btn": "add a few games",
+            "sr_guide": "Try this game or skip to the next. Ctrl+Tab to switch to Kamae mode and manage your library."
         },
         "kamae": {
             "reading": "構 kamae",
@@ -69,7 +70,8 @@
             "remove_confirm": "Confirm?",
             "remove_confirm_aria": "Press again to confirm removal.",
             "remove_progress_aria": "Removing. Press again to cancel.",
-            "explore_more": "explore more"
+            "explore_more": "explore more",
+            "sr_guide": "Organize which games appear. Ctrl+Tab to switch to Rin mode and pick a game to play."
         },
         "explore": {
             "later": "later",
@@ -202,6 +204,12 @@
             "terms_changes": "These terms may be updated with new versions. Continued use after an update means you accept the changes.",
             "copyright_title": "Copyright",
             "copyright_text": "\u00a9 2026 Bright Raven World. All rights reserved."
+        },
+        "update": {
+            "available_alert": "Maida {version} is available. Press Tab to find the Update button.",
+            "button_aria": "Update Maida from {from} to {to}",
+            "button": "Update",
+            "updating": "Updating..."
         }
     },
     "voice": {

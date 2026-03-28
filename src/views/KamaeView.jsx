@@ -56,6 +56,15 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
         })();
     }, []);
 
+    // Focus active kata/all-games on mount (after loading)
+    useEffect(() => {
+        if (loading) return;
+        requestAnimationFrame(() => {
+            const active = containerRef.current?.querySelector('.kata-group--active .kata-select-btn, [aria-pressed="true"]');
+            if (active) active.focus();
+        });
+    }, [loading]);
+
     const activeKataId = showcaseState.activeKataId || null;
     const activeKata = useMemo(() => {
         if (!activeKataId) return null;
@@ -212,6 +221,7 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
 
     return (
         <main className="kamae-view" ref={containerRef}>
+            <p className="sr-only" role="alert">{t('ui.kamae.sr_guide')}</p>
             <CalligraphyBg char="構" className="kamae-calligraphy-bg" />
             <div className="kamae-title-block" aria-hidden="true">
                 <p className="kamae-title-reading">{t('ui.kamae.reading')}</p>

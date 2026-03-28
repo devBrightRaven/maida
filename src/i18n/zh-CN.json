@@ -48,7 +48,8 @@
             "prescription_heading": "讯息",
             "desc": "与眼前的，相遇。",
             "empty_showcase": "眼前还没有任何游戏。",
-            "empty_showcase_btn": "摆几款上去"
+            "empty_showcase_btn": "摆几款上去",
+            "sr_guide": "试试这款游戏，或跳到下一款。Ctrl+Tab 切换到构模式，整理游戏库。"
         },
         "kamae": {
             "reading": "构 kamae",
@@ -69,7 +70,8 @@
             "remove_confirm": "确定？",
             "remove_confirm_aria": "再按一次确认移除。",
             "remove_progress_aria": "正在移除，再按一次取消。",
-            "explore_more": "探索"
+            "explore_more": "探索",
+            "sr_guide": "整理你想让哪些游戏出现。Ctrl+Tab 切换到临模式，选择游戏游玩。"
         },
         "explore": {
             "later": "以后再说",
@@ -202,6 +204,12 @@
             "terms_changes": "本条款可能随新版本更新。更新后继续使用即表示接受变更。",
             "copyright_title": "版权",
             "copyright_text": "\u00a9 2026 Bright Raven World. 保留所有权利。"
+        },
+        "update": {
+            "available_alert": "Maida {version} 已可更新。按 Tab 键找到更新按钮。",
+            "button_aria": "将 Maida 从 {from} 更新到 {to}",
+            "button": "更新",
+            "updating": "更新中..."
         }
     },
     "voice": {
