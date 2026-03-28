@@ -1,0 +1,10 @@
+node_modules/
+dist/
+target/
+*.exe
+*.AppImage
+*.deb
+test-results/
+playwright-report/
+.DS_Store
+Thumbs.db
