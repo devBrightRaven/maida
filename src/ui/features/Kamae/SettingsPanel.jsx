@@ -145,26 +145,29 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
                 <h2 id="settings-haptic-title" className="kamae-settings-section-title">
                     {t('ui.settings.haptic_title')}
                 </h2>
-                <div className="kamae-settings-field">
-                    <label htmlFor="haptic-slider" className="kamae-settings-label">
-                        {hapticLevel === 0 ? t('ui.settings.haptic_off') : `${t('ui.settings.haptic_intensity')}: ${hapticLevel}%`}
-                    </label>
-                    <input
-                        id="haptic-slider"
-                        type="range"
-                        min="0"
-                        max="100"
-                        step="10"
-                        value={hapticLevel}
-                        className="kamae-settings-input"
-                        onChange={(e) => {
-                            const val = Number(e.target.value);
-                            setHapticLevel(val);
-                            setIntensity(val);
-                            if (val > 0) vibrate('confirm');
-                        }}
-                    />
-                </div>
+                <fieldset className="kamae-settings-field kamae-settings-radiogroup" role="radiogroup" aria-labelledby="settings-haptic-title">
+                    {[
+                        { value: 0, label: t('ui.settings.haptic_off') },
+                        { value: 30, label: t('ui.settings.haptic_low') },
+                        { value: 60, label: t('ui.settings.haptic_medium') },
+                        { value: 100, label: t('ui.settings.haptic_high') },
+                    ].map(({ value, label }) => (
+                        <label key={value} className="kamae-settings-radio">
+                            <input
+                                type="radio"
+                                name="haptic-level"
+                                value={value}
+                                checked={hapticLevel === value}
+                                onChange={() => {
+                                    setHapticLevel(value);
+                                    setIntensity(value);
+                                    if (value > 0) vibrate('confirm');
+                                }}
+                            />
+                            <span>{label}</span>
+                        </label>
+                    ))}
+                </fieldset>
             </section>
 
             <section className="kamae-settings-section" aria-labelledby="settings-theme-title">
