@@ -2,7 +2,7 @@
     "ui": {
         "button": {
             "try": "TRY",
-            "try_hint": "hold 3s to anchor",
+            "try_hint": "hold 3 seconds to anchor",
             "try_aria": "Try {game}",
             "try_hint_aria": "Hold to lock",
             "play": "PLAY",
