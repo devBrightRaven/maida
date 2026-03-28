@@ -7,7 +7,7 @@
     <meta name="description" content="Maida shows you one game. You decide: play it now, or see something else. No recommendations. No tracking. Just honest reflection.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:wght@300;400;500&family=Noto+Sans+TC:wght@300;400&family=Noto+Sans+JP:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=DM+Sans:wght@300;400;500&family=Noto+Sans+TC:wght@300;400&family=Noto+Sans+JP:wght@300;400&family=Noto+Serif+TC:wght@300;400&family=Noto+Serif+JP:wght@300;400&display=swap" rel="stylesheet">
     <style>
         /* Dark theme (default) */
         :root {
@@ -22,6 +22,7 @@
             --font-display: 'Cormorant Garamond', Georgia, serif;
             --font-body: 'DM Sans', system-ui, sans-serif;
             --font-cjk: 'Noto Sans TC', 'Noto Sans JP', sans-serif;
+            --font-kanji: 'Noto Serif TC', 'Noto Serif JP', 'Cormorant Garamond', serif;
         }
 
         /* Light theme */
@@ -167,7 +168,7 @@
 
         .hero-calligraphy {
             font-size: clamp(8rem, 20vw, 14rem);
-            font-family: var(--font-display);
+            font-family: var(--font-kanji);
             font-weight: 300;
             color: var(--text-ghost);
             opacity: 0.15;
@@ -192,7 +193,6 @@
             font-family: var(--font-display);
             font-size: clamp(1.1rem, 2vw, 1.35rem);
             font-weight: 400;
-            font-style: italic;
             color: var(--text-dim);
             margin-bottom: 3rem;
         }
@@ -240,7 +240,7 @@
 
         .concept-kanji {
             font-size: 5rem;
-            font-family: var(--font-display);
+            font-family: var(--font-kanji);
             font-weight: 300;
             color: var(--accent-dim);
             opacity: 0.3;
@@ -332,7 +332,7 @@
         .philosophy blockquote {
             font-family: var(--font-display);
             font-size: clamp(1.2rem, 2.5vw, 1.6rem);
-            font-weight: 400; font-style: italic;
+            font-weight: 400;
             color: var(--text-dim); line-height: 1.8;
             max-width: 560px; margin: 0 auto;
         }
