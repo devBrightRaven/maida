@@ -136,7 +136,7 @@
 
         .lang-switch button:focus-visible,
         .theme-toggle:focus-visible {
-            outline: 2px solid var(--accent);
+            outline: 3px solid #e8c840;
             outline-offset: 2px;
         }
 
@@ -349,18 +349,28 @@
             transition: all 0.4s; margin-bottom: 2rem;
         }
         .download-btn:hover { background: var(--accent); color: var(--bg); }
-        .download-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+        .download-btn:focus-visible { outline: 3px solid #e8c840; outline-offset: 4px; }
 
         nav.download-links {
             display: flex; justify-content: center; gap: 2rem;
             flex-wrap: wrap; margin-top: 1rem;
         }
         nav.download-links a {
-            font-size: 0.85rem; color: var(--text-dim);
-            text-decoration: none; letter-spacing: 0.05em; transition: color 0.3s;
+            font-size: 0.9rem; color: var(--text-dim);
+            text-decoration: none; letter-spacing: 0.05em;
+            padding: 0.4rem 0.8rem;
+            border: 1px solid transparent;
+            transition: all 0.3s;
         }
-        nav.download-links a:hover { color: var(--text); }
-        nav.download-links a:focus-visible { outline: 1px solid var(--accent); outline-offset: 2px; }
+        nav.download-links a:hover {
+            color: var(--text);
+            border-color: var(--text-ghost);
+        }
+        nav.download-links a:focus-visible {
+            outline: 3px solid #e8c840;
+            outline-offset: 2px;
+            background: rgba(232, 200, 64, 0.08);
+        }
 
         /* Footer */
         footer {
@@ -368,7 +378,8 @@
             font-size: 0.8rem; color: var(--text-dim);
         }
         footer a { color: var(--text-dim); text-decoration: none; transition: color 0.3s; }
-        footer a:hover { color: var(--text-dim); }
+        footer a:hover { color: var(--text); }
+        footer a:focus-visible { outline: 3px solid #e8c840; outline-offset: 2px; }
 
         /* Animations */
         .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.8s ease, transform 0.8s ease; }
@@ -683,28 +694,20 @@
                 <a href="#" class="download-btn" data-lang="ja">itch.io でダウンロード</a>
             </div>
             <nav class="download-links fade-in" data-lang="en" aria-label="Documentation">
-                <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-14_user-manual-en-md">Manual (EN)</a>
-                <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-13_user-manual-zh-md">Manual (ZH)</a>
-                <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-15_user-manual-ja-md">Manual (JA)</a>
+                <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-14_user-manual-en-md">User Manual</a>
                 <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-12_changelog-md">Changelog</a>
             </nav>
-            <nav class="download-links fade-in" data-lang="zh" aria-label="文件連結">
-                <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-13_user-manual-zh-md">使用手冊 (繁中)</a>
-                <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-14_user-manual-en-md">Manual (EN)</a>
-                <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-15_user-manual-ja-md">マニュアル (JA)</a>
-                <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-12_changelog-md">變更紀錄</a>
+            <nav class="download-links fade-in" data-lang="ja" aria-label="ドキュメント">
+                <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-15_user-manual-ja-md">ユーザーマニュアル</a>
+                <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-12_changelog-md">変更履歴</a>
             </nav>
             <nav class="download-links fade-in" data-lang="cn" aria-label="文档链接">
-                <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-13_user-manual-zh-md">使用手册 (繁中)</a>
-                <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-14_user-manual-en-md">Manual (EN)</a>
-                <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-15_user-manual-ja-md">マニュアル (JA)</a>
+                <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-13a_user-manual-zh-cn-md">使用手册</a>
                 <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-12_changelog-md">变更记录</a>
             </nav>
-            <nav class="download-links fade-in" data-lang="ja" aria-label="ドキュメント">
-                <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-15_user-manual-ja-md">マニュアル (日本語)</a>
-                <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-14_user-manual-en-md">Manual (EN)</a>
-                <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-13_user-manual-zh-md">使用手冊 (ZH)</a>
-                <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-12_changelog-md">変更履歴</a>
+            <nav class="download-links fade-in" data-lang="zh" aria-label="文件連結">
+                <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-13_user-manual-zh-md">使用手冊</a>
+                <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-12_changelog-md">變更紀錄</a>
             </nav>
         </div>
     </section>
@@ -712,7 +715,7 @@
     </main>
 
     <footer>
-        <p>Maida v0.1.0 &middot; <a href="mailto:devbrightraven@gmail.com">devbrightraven@gmail.com</a> &middot; Bright Raven</p>
+        <p>&copy; 2026 Bright Raven World &middot; Maida v0.1.0 &middot; <a href="mailto:devbrightraven@gmail.com">devbrightraven@gmail.com</a></p>
     </footer>
 
     <script>
