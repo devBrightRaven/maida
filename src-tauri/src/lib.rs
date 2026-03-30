@@ -1,3 +1,5 @@
+use tauri::Manager;
+
 mod commands;
 mod persistence;
 mod decay;
@@ -25,6 +27,11 @@ pub fn run() {
             tauri::async_runtime::spawn(async move {
                 telemetry::send_launch_ping(&telemetry_base).await;
             });
+
+            // Show window after setup completes (avoids white flash)
+            if let Some(window) = app.get_webview_window("main") {
+                let _ = window.show();
+            }
 
             Ok(())
         })

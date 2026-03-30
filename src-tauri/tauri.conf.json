@@ -20,7 +20,7 @@
         "minHeight": 680,
         "resizable": true,
         "decorations": true,
-        "visible": true
+        "visible": false
       }
     ],
     "security": {

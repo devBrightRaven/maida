@@ -43,6 +43,10 @@ pnpm run test:e2e      # accessibility (axe-core)
 pnpm run tauri:build
 ```
 
+## Contributing
+
+Not accepting contributions at this time.
+
 ## License
 
-Copyright 2026 Bright Raven World. All rights reserved.
+This project is licensed under the [GNU General Public License v3.0](LICENSE).
