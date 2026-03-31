@@ -172,9 +172,11 @@
             font-weight: 300;
             color: var(--accent-dim);
             opacity: 0.3;
-            position: absolute;
-            top: 52vh; left: 50%;
-            transform: translate(-50%, -50%);
+            display: block;
+            text-align: center;
+            position: relative;
+            z-index: -1;
+            margin: 0 auto -2rem;
             pointer-events: none;
             user-select: none;
             letter-spacing: 0.15em;
@@ -422,13 +424,13 @@
 
     <!-- Hero -->
     <section class="hero" aria-labelledby="hero-title">
-        <span class="hero-calligraphy" aria-hidden="true">間</span>
         <div class="container">
             <h1 id="hero-title" class="fade-in">maida</h1>
             <p class="hero-tagline fade-in" data-lang="en">the space you pass through before you begin</p>
             <p class="hero-tagline fade-in" data-lang="zh">在你開始之前所穿越的空間</p>
             <p class="hero-tagline fade-in" data-lang="cn">在你开始之前所穿越的空间</p>
             <p class="hero-tagline fade-in" data-lang="ja">始まる前に通り抜ける空間</p>
+            <span class="hero-calligraphy" aria-hidden="true">間</span>
             <p class="hero-desc fade-in" data-lang="en">
                 One game from your Steam library. You decide: play it now, or see something else.
                 No recommendations. No tracking. No algorithms telling you what you should want.
