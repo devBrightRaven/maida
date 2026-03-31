@@ -301,7 +301,7 @@ export function useGameInput({
                             if (needsPointer) {
                                 aButtonTarget.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
                             }
-                        } else {
+                        } else if (callbacksRef.current.onAnchor) {
                             handleStartPress();
                         }
                     } else if (!aPressed && aButtonDown) {

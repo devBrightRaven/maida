@@ -2,6 +2,7 @@ use tauri::Manager;
 
 mod commands;
 mod persistence;
+mod touch_keyboard;
 mod decay;
 mod steam;
 mod credentials;
@@ -27,6 +28,9 @@ pub fn run() {
             tauri::async_runtime::spawn(async move {
                 telemetry::send_launch_ping(&telemetry_base).await;
             });
+
+            // Enable touch keyboard focus tracking (Windows only)
+            touch_keyboard::enable_focus_tracking();
 
             // Show window after setup completes (avoids white flash)
             if let Some(window) = app.get_webview_window("main") {
@@ -54,8 +58,6 @@ pub fn run() {
             commands::window::close_window,
             commands::window::get_app_version,
             commands::window::launch_game,
-            commands::window::show_touch_keyboard,
-            commands::window::hide_touch_keyboard,
             // Steam
             commands::steam::check_steam_available,
             commands::steam::request_onboarding_sync,

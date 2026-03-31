@@ -112,7 +112,6 @@ export default function KamaeSearch({ activeKataGameIds, activeKataName, onAdd }
                 value={query}
                 onChange={e => setQuery(e.target.value)}
                 onKeyDown={handleKeyDown}
-                onFocus={() => bridge.showTouchKeyboard()}
                 placeholder={t('ui.kamae.search_placeholder', { kata: activeKataName })}
                 autoComplete="off"
                 role="combobox"
