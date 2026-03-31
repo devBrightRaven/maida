@@ -1042,6 +1042,138 @@
     gap: 0.375rem;
 }
 
+.kamae-settings-disclosure {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: inherit;
+}
+
+.kamae-settings-chevron {
+    margin-left: 0.5rem;
+    font-size: 0.75rem;
+}
+
+.kamae-settings-disclosure:focus-visible {
+    outline: 2px solid var(--t-accent, #c8a84e);
+    outline-offset: 2px;
+}
+
+.kamae-settings-lang-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+}
+
+.kamae-settings-lang-btn {
+    text-align: left;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--t-dim);
+    border-radius: 4px;
+    background: none;
+    color: var(--t-primary);
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.kamae-settings-lang-btn--current {
+    border-color: var(--t-accent, #c8a84e);
+    color: var(--t-accent, #c8a84e);
+}
+
+.kamae-settings-lang-btn--pending {
+    border-color: var(--t-accent, #c8a84e);
+    background: var(--t-accent, #c8a84e);
+    color: var(--t-bg, #1a1a2e);
+}
+
+.kamae-settings-lang-confirm {
+    display: block;
+    font-size: 0.75rem;
+    opacity: 0.8;
+    margin-top: 0.125rem;
+}
+
+.kamae-settings-lang-btn:focus-visible {
+    outline: 2px solid var(--t-accent, #c8a84e);
+    outline-offset: 2px;
+}
+
+.kamae-settings-controls {
+    margin-top: 0.5rem;
+}
+
+.kamae-settings-controls h3 {
+    font-size: 0.875rem;
+    color: var(--t-dim);
+    margin: 0.75rem 0 0.25rem;
+}
+
+.kamae-controls-table {
+    width: 100%;
+    font-size: 0.8125rem;
+    border-collapse: collapse;
+}
+
+.kamae-controls-table th {
+    text-align: left;
+    padding: 0.25rem 0.5rem;
+    color: var(--t-dim);
+    font-weight: 500;
+    border-bottom: 1px solid var(--t-dim);
+}
+
+.kamae-controls-table td {
+    padding: 0.25rem 0.5rem;
+    color: var(--t-primary);
+}
+
+.kamae-settings-haptic-bar {
+    display: flex;
+    flex-direction: row;
+    gap: 0;
+    margin-top: 0.5rem;
+}
+
+.kamae-haptic-seg {
+    flex: 1;
+    padding: 0.5rem 0;
+    border: 1px solid var(--t-dim);
+    background: none;
+    color: var(--t-primary);
+    font-size: 0.875rem;
+    cursor: pointer;
+    text-align: center;
+}
+
+.kamae-haptic-seg:first-child {
+    border-radius: 4px 0 0 4px;
+}
+
+.kamae-haptic-seg:last-child {
+    border-radius: 0 4px 4px 0;
+}
+
+.kamae-haptic-seg + .kamae-haptic-seg {
+    border-left: none;
+}
+
+.kamae-haptic-seg--filled {
+    background: var(--t-accent, #c8a84e);
+    color: var(--t-bg, #1a1a2e);
+    border-color: var(--t-accent, #c8a84e);
+}
+
+.kamae-haptic-seg:focus-visible {
+    outline: 2px solid var(--t-accent, #c8a84e);
+    outline-offset: 2px;
+    z-index: 1;
+}
+
 .kamae-settings-radiogroup {
     display: flex;
     flex-direction: row;
@@ -1049,6 +1181,11 @@
     border: none;
     padding: 0;
     margin: 0;
+}
+
+.kamae-settings-radiogroup--vertical {
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
 .kamae-settings-radio {

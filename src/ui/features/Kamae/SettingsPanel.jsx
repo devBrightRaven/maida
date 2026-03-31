@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { t, getLocale, setLocale } from '../../../i18n';
 import { getIntensity, setIntensity, vibrate } from '../../../services/haptics';
 import { validateKeyFormat, formatLicenseKey } from '../../../core/license';
@@ -18,6 +18,10 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
 
     // Language state
     const [currentLang, setCurrentLang] = useState(getLocale());
+    const [pendingLang, setPendingLang] = useState(getLocale());
+    const [langExpanded, setLangExpanded] = useState(false);
+    const [hapticExpanded, setHapticExpanded] = useState(false);
+    const [controlsExpanded, setControlsExpanded] = useState(false);
 
     // Haptic state
     const [hapticLevel, setHapticLevel] = useState(getIntensity());
@@ -105,10 +109,15 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
 
     const secretDisplay = hasExisting && !showSecretInput;
 
+    const titleRef = useRef(null);
+    useEffect(() => {
+        titleRef.current?.focus();
+    }, []);
+
     return (
         <section className="kamae-settings">
             <header className="kamae-settings-header">
-                <h1 className="kamae-settings-title">{t('ui.settings.title')}</h1>
+                <h1 className="kamae-settings-title" ref={titleRef} tabIndex={-1}>{t('ui.settings.title')}</h1>
                 <button
                     type="button"
                     className="kamae-settings-back-btn"
@@ -118,56 +127,148 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
                 </button>
             </header>
 
-            <section className="kamae-settings-section" aria-labelledby="settings-language-title">
-                <h2 id="settings-language-title" className="kamae-settings-section-title">
-                    {t('ui.settings.language_title')}
-                </h2>
-                <div className="kamae-settings-field">
-                    <select
-                        className="kamae-settings-input"
-                        value={currentLang}
-                        onChange={(e) => {
-                            const locale = e.target.value;
-                            setCurrentLang(locale);
-                            setLocale(locale);
-                            if (onLocaleChange) onLocaleChange();
-                        }}
-                    >
-                        <option value="en">English</option>
-                        <option value="ja">日本語</option>
-                        <option value="zh-CN">简体中文</option>
-                        <option value="zh-TW">繁體中文</option>
-                    </select>
-                </div>
+            <section className="kamae-settings-section">
+                <button
+                    type="button"
+                    className="kamae-settings-disclosure"
+                    aria-expanded={langExpanded}
+                    aria-controls="language-options"
+                    onClick={() => {
+                        setLangExpanded(prev => {
+                            if (prev) setPendingLang(currentLang);
+                            return !prev;
+                        });
+                    }}
+                >
+                    <h2 className="kamae-settings-section-title">
+                        {t('ui.settings.language_title', { current: { en: 'English', ja: '日本語', 'zh-CN': '简体中文', 'zh-TW': '繁體中文' }[currentLang] || currentLang })}
+                        <span className="kamae-settings-chevron" aria-hidden="true">{langExpanded ? '▾' : '▸'}</span>
+                    </h2>
+                </button>
+                {langExpanded && (
+                    <div id="language-options" className="kamae-settings-lang-list">
+                        {[
+                            { value: 'en', label: 'English' },
+                            { value: 'ja', label: '日本語' },
+                            { value: 'zh-CN', label: '简体中文' },
+                            { value: 'zh-TW', label: '繁體中文' },
+                        ].map(({ value, label }) => {
+                            const isCurrent = currentLang === value;
+                            const isPending = pendingLang === value && pendingLang !== currentLang;
+                            return (
+                                <button
+                                    key={value}
+                                    type="button"
+                                    className={`kamae-settings-lang-btn ${isCurrent ? 'kamae-settings-lang-btn--current' : ''} ${isPending ? 'kamae-settings-lang-btn--pending' : ''}`}
+                                    aria-pressed={isCurrent}
+                                    onClick={() => {
+                                        if (isPending) {
+                                            setCurrentLang(value);
+                                            setLocale(value);
+                                            if (onLocaleChange) onLocaleChange();
+                                        } else {
+                                            setPendingLang(value);
+                                        }
+                                    }}
+                                >
+                                    <span>{label}</span>
+                                    {isPending && <span className="kamae-settings-lang-confirm">{t('ui.settings.language_confirm')}</span>}
+                                </button>
+                            );
+                        })}
+                    </div>
+                )}
             </section>
 
-            <section className="kamae-settings-section" aria-labelledby="settings-haptic-title">
-                <h2 id="settings-haptic-title" className="kamae-settings-section-title">
-                    {t('ui.settings.haptic_title')}
-                </h2>
-                <fieldset className="kamae-settings-field kamae-settings-radiogroup" role="radiogroup" aria-labelledby="settings-haptic-title">
-                    {[
-                        { value: 0, label: t('ui.settings.haptic_off') },
-                        { value: 30, label: t('ui.settings.haptic_low') },
-                        { value: 60, label: t('ui.settings.haptic_medium') },
-                        { value: 100, label: t('ui.settings.haptic_high') },
-                    ].map(({ value, label }) => (
-                        <label key={value} className="kamae-settings-radio">
-                            <input
-                                type="radio"
-                                name="haptic-level"
-                                value={value}
-                                checked={hapticLevel === value}
-                                onChange={() => {
+            <section className="kamae-settings-section">
+                <button
+                    type="button"
+                    className="kamae-settings-disclosure"
+                    aria-expanded={hapticExpanded}
+                    aria-controls="haptic-options"
+                    onClick={() => setHapticExpanded(prev => !prev)}
+                >
+                    <h2 className="kamae-settings-section-title">
+                        {t('ui.settings.haptic_title', { current: [
+                            { value: 0, label: t('ui.settings.haptic_off') },
+                            { value: 30, label: t('ui.settings.haptic_low') },
+                            { value: 60, label: t('ui.settings.haptic_medium') },
+                            { value: 100, label: t('ui.settings.haptic_high') },
+                        ].find(h => h.value === hapticLevel)?.label || '' })}
+                        <span className="kamae-settings-chevron" aria-hidden="true">{hapticExpanded ? '▾' : '▸'}</span>
+                    </h2>
+                </button>
+                {hapticExpanded && (
+                    <div id="haptic-options" className="kamae-settings-haptic-bar" role="radiogroup" aria-label={t('ui.settings.haptic_title')}>
+                        {[
+                            { value: 0, label: t('ui.settings.haptic_off') },
+                            { value: 30, label: t('ui.settings.haptic_low') },
+                            { value: 60, label: t('ui.settings.haptic_medium') },
+                            { value: 100, label: t('ui.settings.haptic_high') },
+                        ].map(({ value, label }, i) => (
+                            <button
+                                key={value}
+                                type="button"
+                                role="radio"
+                                aria-checked={hapticLevel === value}
+                                className={`kamae-haptic-seg ${value === hapticLevel ? 'kamae-haptic-seg--filled' : ''}`}
+                                onClick={() => {
                                     setHapticLevel(value);
                                     setIntensity(value);
                                     if (value > 0) vibrate('confirm');
                                 }}
-                            />
-                            <span>{label}</span>
-                        </label>
-                    ))}
-                </fieldset>
+                            >
+                                {label}
+                            </button>
+                        ))}
+                    </div>
+                )}
+            </section>
+
+            <section className="kamae-settings-section">
+                <button
+                    type="button"
+                    className="kamae-settings-disclosure"
+                    aria-expanded={controlsExpanded}
+                    aria-controls="controls-content"
+                    onClick={() => setControlsExpanded(prev => !prev)}
+                >
+                    <h2 className="kamae-settings-section-title">
+                        {t('ui.settings.controls_title')}
+                        <span className="kamae-settings-chevron" aria-hidden="true">{controlsExpanded ? '▾' : '▸'}</span>
+                    </h2>
+                </button>
+                {controlsExpanded && (
+                    <div id="controls-content" className="kamae-settings-controls">
+                        <h3>{t('ui.settings.controls_rin')}</h3>
+                        <table className="kamae-controls-table">
+                            <thead><tr><th>{t('ui.settings.controls_action')}</th><th>{t('ui.settings.controls_keyboard')}</th><th>{t('ui.settings.controls_gamepad')}</th></tr></thead>
+                            <tbody>
+                                <tr><td>{t('ui.button.try')}</td><td>Enter</td><td>A</td></tr>
+                                <tr><td>{t('ui.button.not_now')}</td><td>Enter</td><td>A</td></tr>
+                                <tr><td>{t('ui.button.try_hint')}</td><td>Enter (3s)</td><td>A (3s)</td></tr>
+                                <tr><td>{t('ui.button.back')}</td><td>Enter</td><td>A</td></tr>
+                            </tbody>
+                        </table>
+                        <h3>{t('ui.settings.controls_kamae')}</h3>
+                        <table className="kamae-controls-table">
+                            <thead><tr><th>{t('ui.settings.controls_action')}</th><th>{t('ui.settings.controls_keyboard')}</th><th>{t('ui.settings.controls_gamepad')}</th></tr></thead>
+                            <tbody>
+                                <tr><td>{t('ui.katas.title')}</td><td>Enter</td><td>A</td></tr>
+                                <tr><td>{t('ui.katas.controls_hint')}</td><td>F2</td><td>Y</td></tr>
+                                <tr><td>{t('ui.kamae.remove_from_kata')}</td><td>Enter (2.5s) / 2x Enter</td><td>A (2.5s) / 2x A</td></tr>
+                            </tbody>
+                        </table>
+                        <h3>{t('ui.settings.controls_general')}</h3>
+                        <table className="kamae-controls-table">
+                            <thead><tr><th>{t('ui.settings.controls_action')}</th><th>{t('ui.settings.controls_keyboard')}</th><th>{t('ui.settings.controls_gamepad')}</th></tr></thead>
+                            <tbody>
+                                <tr><td>{t('ui.button.switch_to_kamae')}/{t('ui.button.switch_to_rin')}</td><td>Ctrl+Tab</td><td>RB / LB</td></tr>
+                                <tr><td>{t('ui.settings.back')}</td><td>Escape</td><td>B</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                )}
             </section>
 
             <section className="kamae-settings-section" aria-labelledby="settings-theme-title">

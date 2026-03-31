@@ -7,12 +7,12 @@
 const STORAGE_KEY = 'maida_haptic_intensity';
 const DEFAULT_INTENSITY = 100;
 
-// Presets at full intensity (100%). Values are 2x the original baseline.
+// Presets at full intensity (100%). Duration unified at 500ms.
 const PRESETS = {
-    light:    { duration: 80,  weakMagnitude: 0.6, strongMagnitude: 0.0 },
-    medium:   { duration: 120, weakMagnitude: 1.0, strongMagnitude: 0.4 },
-    strong:   { duration: 250, weakMagnitude: 1.0, strongMagnitude: 1.0 },
-    confirm:  { duration: 100, weakMagnitude: 0.8, strongMagnitude: 0.2 },
+    light:    { duration: 500, weakMagnitude: 0.6, strongMagnitude: 0.0 },
+    medium:   { duration: 500, weakMagnitude: 1.0, strongMagnitude: 0.4 },
+    strong:   { duration: 500, weakMagnitude: 1.0, strongMagnitude: 1.0 },
+    confirm:  { duration: 500, weakMagnitude: 0.8, strongMagnitude: 0.2 },
 };
 
 export function getIntensity() {

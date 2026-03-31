@@ -5,7 +5,7 @@ use serde_json::json;
 use tauri::AppHandle;
 use crate::persistence;
 
-const TELEMETRY_URL: &str = "https://maida-telemetry.brightraven.workers.dev/ping";
+const TELEMETRY_URL: &str = "https://maida-telemetry.brightravenworld.workers.dev/ping";
 
 /// Send anonymous launch ping. Fire-and-forget, never blocks.
 pub async fn send_launch_ping(base: &Path) {

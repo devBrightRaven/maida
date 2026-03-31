@@ -116,13 +116,15 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
 
     // D-pad navigation: cycle through all interactive elements
     const handleNav = useCallback((dir) => {
+        const active = document.activeElement;
+
         const container = containerRef.current;
         if (!container) return;
         const focusable = Array.from(container.querySelectorAll(
-            'button:not(:disabled), input:not(:disabled), [tabindex]:not([tabindex="-1"]), [role="button"]'
+            'button:not(:disabled), input:not(:disabled), [tabindex]:not([tabindex="-1"]), [role="button"], .showcase-item[tabindex]'
         ));
         if (focusable.length === 0) return;
-        const current = focusable.indexOf(document.activeElement);
+        const current = focusable.indexOf(active);
         let next;
         if (dir === 'down' || dir === 'right') {
             next = current < focusable.length - 1 ? current + 1 : 0;
@@ -133,7 +135,7 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
         focusable[next]?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
     }, []);
 
-    // A button: activate focused element (button click or checkbox toggle)
+    // A button: activate focused element (button click, checkbox toggle)
     const handleMainAction = useCallback(() => {
         const el = document.activeElement;
         if (!el) return;
@@ -149,6 +151,12 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
 
     const handleBack = useCallback(() => {
         if (showSettings) {
+            // B in settings: focus back button instead of immediately closing
+            const backBtn = containerRef.current?.querySelector('.kamae-settings-back-btn');
+            if (backBtn && document.activeElement !== backBtn) {
+                backBtn.focus();
+                return;
+            }
             setShowSettings(false);
         } else if (exploring) {
             setExploring(false);
@@ -168,6 +176,11 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
         onBack: handleBack,
         onNav: handleNav,
         onMainAction: handleMainAction,
+        onYButton: useCallback(() => {
+            document.activeElement?.dispatchEvent(
+                new KeyboardEvent('keydown', { key: 'F2', bubbles: true })
+            );
+        }, []),
     });
 
     if (loading) {

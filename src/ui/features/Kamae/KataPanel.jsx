@@ -91,6 +91,7 @@ export default function KataPanel({
                 <div>
                     <h2 className="kata-panel-title">{t('ui.katas.title')}</h2>
                     <p className="kata-panel-hint">{t('ui.katas.hint')}</p>
+                    <p className="kata-panel-hint kata-panel-controls">{t('ui.katas.controls_hint')}</p>
                 </div>
                 {katas.length < MAX_KATAS && !creating && (
                     <button

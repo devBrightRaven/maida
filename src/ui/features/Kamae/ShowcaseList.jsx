@@ -239,6 +239,8 @@ export default function ShowcaseList({ games, onRemove, isKataMode }) {
                     <li
                         key={id}
                         className={`showcase-item ${!game.installed ? 'showcase-item--dimmed' : ''}`}
+                        tabIndex={-1}
+                        aria-label={game.title}
                     >
                         <GameCover steamAppId={game.steamAppId} title={game.title} />
                         <div className="showcase-item-info">

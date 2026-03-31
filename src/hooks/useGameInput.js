@@ -26,6 +26,7 @@ export function useGameInput({
     onNav,
     onL1,
     onR1,
+    onYButton,
     disabled = false,
     tapThreshold = 300,
     anchorThreshold = 3000
@@ -49,10 +50,10 @@ export function useGameInput({
     };
 
     // Use refs for callbacks to avoid re-running effect on every render
-    const callbacksRef = useRef({ onMainAction, onAnchor, onBack, onNav, onL1, onR1 });
+    const callbacksRef = useRef({ onMainAction, onAnchor, onBack, onNav, onL1, onR1, onYButton });
     useEffect(() => {
-        callbacksRef.current = { onMainAction, onAnchor, onBack, onNav, onL1, onR1 };
-    }, [onMainAction, onAnchor, onBack, onNav, onL1, onR1]);
+        callbacksRef.current = { onMainAction, onAnchor, onBack, onNav, onL1, onR1, onYButton };
+    }, [onMainAction, onAnchor, onBack, onNav, onL1, onR1, onYButton]);
 
     // Animation Loop for smooth progress bar
     const updateProgress = () => {
@@ -218,7 +219,7 @@ export function useGameInput({
         if (disabled) return;
 
         // Button indices (standard gamepad mapping)
-        const BTN_A = 0, BTN_B = 1, BTN_L1 = 4, BTN_R1 = 5;
+        const BTN_A = 0, BTN_B = 1, BTN_Y = 3, BTN_L1 = 4, BTN_R1 = 5;
         const DPAD_UP = 12, DPAD_DOWN = 13, DPAD_LEFT = 14, DPAD_RIGHT = 15;
 
         // D-pad state + repeat timing
@@ -230,6 +231,7 @@ export function useGameInput({
         let aButtonDown = false;
         let aButtonTarget = null;
         let lastB = false;
+        let lastY = false;
         let lastL1 = false;
         let lastR1 = false;
 
@@ -323,6 +325,11 @@ export function useGameInput({
                     const bPressed = btn(BTN_B);
                     if (bPressed && !lastB) callbacksRef.current.onBack?.();
                     lastB = bPressed;
+
+                    // Y button - secondary action (e.g. rename)
+                    const yPressed = btn(BTN_Y);
+                    if (yPressed && !lastY) callbacksRef.current.onYButton?.();
+                    lastY = yPressed;
                 }
 
                 // L1/R1 - face switching (only when configured)
@@ -355,6 +362,7 @@ export function useGameInput({
             aButtonDown = false;
             aButtonTarget = null;
             lastB = false;
+            lastY = false;
             lastL1 = false;
             lastR1 = false;
             Object.assign(lastDpad, { up: false, down: false, left: false, right: false });
