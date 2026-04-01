@@ -1,7 +1,7 @@
 import { t } from '../../i18n';
 import LegalPage from '../LegalPage';
 
-const EMAIL = 'devbrightraven@gmail.com';
+const EMAIL = 'bertram@brightraven.world';
 
 export default function PrivacyPage({ onClose }) {
     return (

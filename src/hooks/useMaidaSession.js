@@ -331,6 +331,9 @@ export function useMaidaSession() {
 
     // Reload showcase and re-roll (called when switching back from Kamae)
     const reloadShowcase = async () => {
+        // Don't re-roll if a game is anchored
+        if (isAnchored) return;
+
         const showcaseData = await loadShowcase();
         const activeKataId = showcaseData?.activeKataId || null;
         const katas = showcaseData?.katas || [];
