@@ -1,806 +1,182 @@
 <!DOCTYPE html>
 <html lang="en" class="lang-en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maida -- the space you pass through before you begin</title>
-    <meta name="description" content="Maida shows you one game. You decide: play it now, or see something else. No recommendations. No tracking. Just honest reflection.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=DM+Sans:wght@300;400;500&family=Noto+Sans+TC:wght@300;400&family=Noto+Sans+JP:wght@300;400&family=Noto+Serif+TC:wght@300;400&family=Noto+Serif+JP:wght@300;400&display=swap" rel="stylesheet">
-    <style>
-        /* Dark theme (default) */
-        :root {
-            --bg: #0a0a0a;
-            --bg-soft: #131313;
-            --text: #f0eae2;
-            --text-dim: #c8c0b8;
-            --text-ghost: #9a9490;
-            --accent: #dcc4a0;
-            --accent-dim: #b09878;
-            --divider: #9a9490;
-            --font-display: 'Cormorant Garamond', Georgia, serif;
-            --font-body: 'DM Sans', system-ui, sans-serif;
-            --font-cjk: 'Noto Sans TC', 'Noto Sans JP', sans-serif;
-            --font-kanji: 'Noto Serif TC', 'Noto Serif JP', 'Cormorant Garamond', serif;
-        }
-
-        /* Light theme */
-        [data-theme="light"] {
-            --bg: #f5f0eb;
-            --bg-soft: #e8e2db;
-            --text: #1a1510;
-            --text-dim: #3a3530;
-            --text-ghost: #605a55;
-            --accent: #6a5535;
-            --accent-dim: #7a6545;
-            --divider: #a09890;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        html {
-            scroll-behavior: smooth;
-            background: var(--bg);
-            color: var(--text);
-            transition: background 0.4s, color 0.4s;
-        }
-
-        body {
-            font-family: var(--font-body);
-            font-weight: 400;
-            line-height: 1.7;
-            overflow-x: hidden;
-        }
-
-        [lang="zh-Hant"] body, [lang="ja"] body {
-            font-family: var(--font-cjk), var(--font-body);
-        }
-
-        /* Grain overlay */
-        body::after {
-            content: '';
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            opacity: 0.03;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-            z-index: 9999;
-        }
-
-        /* Skip nav — uses lang class, not data-lang, to avoid conflict */
-        .skip-link {
-            position: absolute;
-            top: -100%;
-            left: 1rem;
-            background: var(--accent);
-            color: var(--bg);
-            padding: 0.5rem 1rem;
-            z-index: 200;
-            font-size: 0.85rem;
-            text-decoration: none;
-            border-radius: 0 0 4px 4px;
-            display: none !important;
-        }
-        .skip-link:focus { top: 0; display: block !important; }
-        html.lang-en .skip-link.skip-en,
-        html.lang-zh .skip-link.skip-zh,
-        html.lang-cn .skip-link.skip-cn,
-        html.lang-ja .skip-link.skip-ja { display: revert !important; }
-
-        /* Top bar: lang + theme */
-        .top-bar {
-            position: fixed;
-            top: 0;
-            right: 0;
-            z-index: 100;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 1.25rem 1.5rem;
-        }
-
-        .lang-switch {
-            display: flex;
-            gap: 0.15rem;
-        }
-
-        .lang-switch button,
-        .theme-toggle {
-            background: none;
-            border: 1px solid var(--text-ghost);
-            color: var(--text-ghost);
-            font-family: var(--font-body);
-            font-size: 0.7rem;
-            letter-spacing: 0.08em;
-            padding: 0.35rem 0.6rem;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .lang-switch button:first-child { border-radius: 3px 0 0 3px; }
-        .lang-switch button:last-child { border-radius: 0 3px 3px 0; }
-        .theme-toggle { border-radius: 3px; min-width: 2rem; }
-
-        .lang-switch button.active {
-            background: var(--accent-dim);
-            border-color: var(--accent-dim);
-            color: var(--bg);
-        }
-
-        .lang-switch button:hover:not(.active),
-        .theme-toggle:hover {
-            border-color: var(--text-dim);
-            color: var(--text-dim);
-        }
-
-        .lang-switch button:focus-visible,
-        .theme-toggle:focus-visible {
-            outline: 3px solid #e8c840;
-            outline-offset: 2px;
-        }
-
-        /* i18n: CSS controls initial state (EN), JS takes over after load */
-        [data-lang] { display: none !important; }
-        html.lang-en [data-lang="en"] { display: revert !important; }
-        html.lang-zh [data-lang="zh"] { display: revert !important; }
-        html.lang-cn [data-lang="cn"] { display: revert !important; }
-        html.lang-ja [data-lang="ja"] { display: revert !important; }
-
-        /* Sections */
-        section {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 6rem 2rem;
-            position: relative;
-        }
-
-        .container {
-            max-width: 720px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        /* Hero */
-        .hero { text-align: center; position: relative; }
-
-        .hero-calligraphy {
-            font-size: 5rem;
-            font-family: var(--font-kanji);
-            font-weight: 300;
-            color: var(--accent-dim);
-            opacity: 0.3;
-            display: block;
-            text-align: center;
-            position: relative;
-            z-index: -1;
-            margin: 0 auto -2rem;
-            pointer-events: none;
-            user-select: none;
-            letter-spacing: 0.15em;
-            line-height: 1;
-        }
-
-        .hero h1 {
-            font-family: var(--font-display);
-            font-size: clamp(3rem, 6vw, 4.5rem);
-            font-weight: 400;
-            letter-spacing: 0.08em;
-            margin-bottom: 1.5rem;
-            position: relative;
-        }
-
-        .hero-tagline {
-            font-family: var(--font-display);
-            font-size: clamp(1.1rem, 2vw, 1.35rem);
-            font-weight: 400;
-            color: var(--text-dim);
-            margin-bottom: 7rem;
-        }
-
-        .hero-desc {
-            font-size: 0.95rem;
-            color: var(--text-dim);
-            max-width: 480px;
-            margin: 8rem auto 0;
-            line-height: 1.8;
-        }
-
-        .scroll-hint {
-            position: absolute;
-            bottom: 2rem; left: 50%;
-            transform: translateX(-50%);
-            color: var(--text-ghost);
-            font-size: 0.75rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            animation: breathe 3s ease-in-out infinite;
-        }
-        @keyframes breathe { 0%,100%{opacity:.3} 50%{opacity:.7} }
-
-        /* Divider */
-        hr.divider {
-            border: none;
-            width: 1px;
-            height: 80px;
-            background: linear-gradient(to bottom, transparent, var(--divider), transparent);
-            margin: 0 auto 4rem;
-        }
-
-        /* Concept */
-        .concept { min-height: auto; padding: 4rem 2rem; }
-
-        .concept-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            margin-top: 3rem;
-        }
-
-        .concept-card { position: relative; min-height: 280px; }
-
-        .concept-kanji {
-            font-size: 5rem;
-            font-family: var(--font-kanji);
-            font-weight: 300;
-            color: var(--accent-dim);
-            opacity: 0.3;
-            position: absolute;
-            top: -1.5rem; right: 0;
-            pointer-events: none;
-            line-height: 1;
-            user-select: none;
-        }
-
-        .concept-card h3 {
-            font-family: var(--font-display);
-            font-size: 1.6rem;
-            font-weight: 400;
-            margin-bottom: 0.25rem;
-            letter-spacing: 0.05em;
-        }
-
-        .concept-card h3 .reading {
-            font-size: 0.85rem;
-            font-weight: 400;
-            color: var(--text-dim);
-            margin-left: 0.5rem;
-        }
-
-        .concept-card .reading {
-            font-size: 0.8rem;
-            color: var(--accent);
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            margin-bottom: 1rem;
-        }
-
-        .concept-card p { font-size: 0.9rem; color: var(--text-dim); line-height: 1.8; }
-
-        .concept-card .origin {
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--divider);
-            font-size: 0.88rem;
-            color: var(--text-dim);
-            line-height: 1.7;
-        }
-        .concept-card .origin em { color: var(--text); font-style: normal; font-weight: 500; }
-
-        /* Section titles */
-        .section-label {
-            font-size: 0.75rem; letter-spacing: 0.3em;
-            text-transform: uppercase; color: var(--text-dim);
-            font-weight: 500;
-            margin-bottom: 2rem;
-        }
-
-        .section-title {
-            font-family: var(--font-display);
-            font-size: clamp(1.8rem, 3vw, 2.4rem);
-            font-weight: 400; margin-bottom: 1.5rem;
-        }
-
-        .section-body { font-size: 0.95rem; color: var(--text-dim); line-height: 1.9; }
-        .section-body p + p { margin-top: 1rem; }
-
-        /* Steps (ordered list) */
-        ol.steps {
-            margin-top: 3rem;
-            list-style: none;
-            display: flex; flex-direction: column; gap: 2rem;
-        }
-
-        ol.steps li {
-            display: flex; gap: 1.5rem; align-items: flex-start;
-        }
-
-        .step-marker {
-            font-family: var(--font-display);
-            font-size: 2rem; font-weight: 400;
-            color: var(--accent); min-width: 2rem;
-            text-align: center; line-height: 1; padding-top: 0.15rem;
-        }
-
-        .step-content h4 {
-            font-family: var(--font-display);
-            font-size: 1.15rem; font-weight: 400; margin-bottom: 0.3rem;
-        }
-        .step-content p { font-size: 0.9rem; color: var(--text-dim); line-height: 1.7; }
-
-        /* Philosophy */
-        .philosophy { text-align: center; padding: 8rem 2rem; min-height: auto; }
-
-        .philosophy blockquote {
-            font-family: var(--font-display);
-            font-size: clamp(1.2rem, 2.5vw, 1.6rem);
-            font-weight: 400;
-            color: var(--text-dim); line-height: 1.8;
-            max-width: 560px; margin: 0 auto;
-        }
-
-        /* Download */
-        .download { text-align: center; min-height: auto; padding: 6rem 2rem; }
-
-        .download-btn {
-            display: inline-block; padding: 1rem 3rem;
-            border: 1px solid var(--accent); color: var(--text);
-            text-decoration: none; font-family: var(--font-body);
-            font-size: 0.85rem; font-weight: 400;
-            letter-spacing: 0.15em; text-transform: uppercase;
-            transition: all 0.4s; margin-bottom: 2rem;
-        }
-        .download-btn:hover { background: var(--accent); color: var(--bg); }
-        .download-btn:focus-visible { outline: 3px solid #e8c840; outline-offset: 4px; }
-
-        nav.download-links {
-            display: flex; justify-content: center; gap: 2rem;
-            flex-wrap: wrap; margin-top: 1rem;
-        }
-        nav.download-links a {
-            font-size: 0.9rem; color: var(--text-dim);
-            text-decoration: none; letter-spacing: 0.05em;
-            padding: 0.4rem 0.8rem;
-            border: 1px solid transparent;
-            transition: all 0.3s;
-        }
-        nav.download-links a:hover {
-            color: var(--text);
-            border-color: var(--text-ghost);
-        }
-        nav.download-links a:focus-visible {
-            outline: 3px solid #e8c840;
-            outline-offset: 2px;
-            background: rgba(232, 200, 64, 0.08);
-        }
-
-        /* Footer */
-        footer {
-            text-align: center; padding: 3rem 2rem;
-            font-size: 0.8rem; color: var(--text-dim);
-        }
-        footer a { color: var(--text-dim); text-decoration: none; transition: color 0.3s; }
-        footer a:hover { color: var(--text); }
-        footer a:focus-visible { outline: 3px solid #e8c840; outline-offset: 2px; }
-
-        /* Animations */
-        .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.8s ease, transform 0.8s ease; }
-        .fade-in.visible { opacity: 1; transform: translateY(0); }
-
-        @media (max-width: 640px) {
-            .concept-grid { grid-template-columns: 1fr; gap: 3rem; }
-            section { padding: 4rem 1.5rem; }
-            .concept-kanji { font-size: 3.5rem; top: -1rem; }
-            .concept-card { min-height: auto; }
-            .top-bar { padding: 0.75rem 1rem; gap: 0.5rem; }
-        }
-        @media (prefers-reduced-motion: reduce) {
-            .fade-in { opacity: 1; transform: none; transition: none; }
-            .scroll-hint { animation: none; opacity: 0.5; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maida — the space you pass through before you begin</title>
+  <meta name="description" content="Maida helps you stop staring at your game library and start playing.">
+  <style>
+    :root {
+      --bg:#0b0b0b; --panel:#121212; --text:#f1ebe3; --muted:#d2cbc2; --ghost:#b9b0a5;
+      --accent:#dcc4a0; --line:#2a2622; --focus:#e8c840;
+    }
+    html[data-theme='light'] {
+      --bg:#f5f0eb; --panel:#ebe5de; --text:#1c1712; --muted:#4f4942; --ghost:#6b6258;
+      --accent:#6a5535; --line:#cfc5bb; --focus:#9a6f00;
+    }
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    main{max-width:820px;margin:0 auto;padding:72px 24px 96px} section{padding:48px 0;border-top:1px solid var(--line)} section:first-of-type{border-top:0;padding-top:12px}
+    h1,h2,h3{line-height:1.12;margin:0 0 18px;font-weight:500} h1{font-size:clamp(40px,7vw,72px)} h2{font-size:clamp(28px,4vw,40px)} h3{font-size:22px;margin-bottom:8px}
+    p{margin:0 0 16px;color:var(--muted);font-size:16px} html.lang-en p{font-size:14px} .lead{color:var(--text);font-size:clamp(24px,3vw,32px);line-height:1.35;margin:20px 0 28px} html.lang-en .lead{font-size:clamp(22px,3vw,30px)}
+    .strong{color:var(--text)} .label{color:var(--accent);font-size:16px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px} html.lang-en .label{font-size:14px;letter-spacing:.14em}
+    .kanji{color:rgba(220,196,160,.30);font-size:56px;line-height:1; margin:8px 0 20px} .phase{color:var(--accent);font-size:16px;letter-spacing:.10em;text-transform:uppercase;margin:22px 0 10px} html.lang-en .phase{font-size:14px;letter-spacing:.12em}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}.card{background:var(--panel);border:1px solid var(--line);padding:24px;border-radius:10px}.reading{color:#e0d6ca;font-size:16px;margin-bottom:12px} html.lang-en .reading{font-size:14px}
+    .visual-anchor{background:linear-gradient(180deg,#171717,#101010);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:24px 0}.mock-window{border:1px solid #3b342e;border-radius:10px;padding:18px;background:#0e0e0e}.mock-title{font-size:16px;color:var(--ghost);margin-bottom:12px} html.lang-en .mock-title{font-size:14px}.mock-game{font-size:26px;color:var(--text);margin-bottom:14px}.mock-actions{display:flex;gap:12px}.pill{padding:8px 14px;border:1px solid #4a4239;border-radius:999px;color:var(--muted);font-size:16px} html.lang-en .pill{font-size:14px}
+    .cta{display:inline-block;margin-top:12px;background:var(--accent);color:#111;text-decoration:none;padding:14px 20px;border-radius:6px;font-weight:600;font-size:16px}.cta:hover{filter:brightness(1.04)} .cta:focus-visible{outline:3px solid var(--focus);outline-offset:4px} .cta:active{transform:scale(.98)} html.lang-en .cta{font-size:14px}
+    .skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;text-decoration:none}.skip-link:focus{left:16px;top:16px;width:auto;height:auto;padding:12px 16px;background:var(--accent);color:#111;border-radius:8px;z-index:9999;outline:4px solid var(--focus);outline-offset:3px;box-shadow:0 0 0 6px rgba(0,0,0,.45)}
+    .skip-link[data-lang]{display:none!important}
+    html.lang-en .skip-link[data-lang="en"],html.lang-ja .skip-link[data-lang="ja"],html.lang-zh-tw .skip-link[data-lang="zh-tw"],html.lang-zh-cn .skip-link[data-lang="zh-cn"]{display:block!important}
+    [data-lang]{display:none!important} html.lang-en [data-lang="en"],html.lang-ja [data-lang="ja"],html.lang-zh-tw [data-lang="zh-tw"],html.lang-zh-cn [data-lang="zh-cn"]{display:revert!important}
+    .lang-switch{position:fixed;top:16px;right:16px;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.lang-switch button{background:none;border:1px solid #5b5248;color:#cfc7bd;padding:8px 10px;cursor:pointer;border-radius:6px;min-width:44px;min-height:32px}.lang-switch button.active,.lang-switch button.is-active-theme{background:var(--accent);color:#111;border-color:var(--accent)}.lang-switch button:hover{border-color:var(--accent);color:var(--text)}.lang-switch button:focus-visible{outline:3px solid var(--focus);outline-offset:2px;box-shadow:0 0 0 4px rgba(0,0,0,.35)}#theme-toggle{min-width:132px;text-align:center} html[data-theme='light'] .cta{background:#4a3a20;color:#f5f0eb} html[data-theme='light'] .mock-title{color:#b9b0a5} html[data-theme='light'] .pill{color:#d2cbc2;border-color:#5b5248} @media (prefers-reduced-motion: reduce){.cta:active{transform:none}.cta:hover{filter:none}}
+    .sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}@media (max-width:720px){.grid{grid-template-columns:1fr}.kanji{font-size:44px}}
+  </style>
 </head>
 <body>
-
-    <a class="skip-link skip-en" href="#main">Skip to content</a>
-    <a class="skip-link skip-zh" href="#main">跳到主要內容</a>
-    <a class="skip-link skip-cn" href="#main">跳到主要内容</a>
-    <a class="skip-link skip-ja" href="#main">メインコンテンツへ</a>
-
-    <!-- Top bar -->
-    <header class="top-bar">
-        <nav class="lang-switch" aria-label="Language">
-            <button class="active" data-set-lang="en" aria-pressed="true">EN</button>
-            <button data-set-lang="ja" aria-pressed="false">JA</button>
-            <button data-set-lang="cn" aria-pressed="false">简</button>
-            <button data-set-lang="zh" aria-pressed="false">繁</button>
-        </nav>
-        <button class="theme-toggle" aria-label="Toggle light/dark theme" title="Toggle theme" data-label-dark-en="Switch to light theme" data-label-light-en="Switch to dark theme" data-label-dark-zh="切換至淺色模式" data-label-light-zh="切換至深色模式" data-label-dark-cn="切换至浅色模式" data-label-light-cn="切换至深色模式" data-label-dark-ja="ライトモードに切替" data-label-light-ja="ダークモードに切替">&#9681;</button>
-    </header>
-
-    <main id="main">
-
-    <!-- Hero -->
-    <section class="hero" aria-labelledby="hero-title">
-        <div class="container">
-            <h1 id="hero-title" class="fade-in">maida</h1>
-            <p class="hero-tagline fade-in" data-lang="en">the space you pass through before you begin</p>
-            <p class="hero-tagline fade-in" data-lang="zh">在你開始之前所穿越的空間</p>
-            <p class="hero-tagline fade-in" data-lang="cn">在你开始之前所穿越的空间</p>
-            <p class="hero-tagline fade-in" data-lang="ja">始まる前に通り抜ける空間</p>
-            <span class="hero-calligraphy" aria-hidden="true">間</span>
-            <p class="hero-desc fade-in" data-lang="en">
-                One game from your Steam library. You decide: play it now, or see something else.
-                No recommendations. No tracking. No algorithms telling you what you should want.
-                Just an honest mirror of where your intention is leaning.
-            </p>
-            <p class="hero-desc fade-in" data-lang="zh">
-                從你的 Steam 遊戲庫中，每次只顯示一款遊戲。你來決定：現在玩，或者看看別的。
-                沒有推薦。沒有追蹤。沒有演算法告訴你該想要什麼。
-                只是誠實地反映你的選擇傾向。
-            </p>
-            <p class="hero-desc fade-in" data-lang="cn">
-                从你的 Steam 游戏库中，每次只显示一款游戏。你来决定：现在玩，或者看看别的。
-                没有推荐。没有追踪。没有算法告诉你该想要什么。
-                只是诚实地反映你的选择倾向。
-            </p>
-            <p class="hero-desc fade-in" data-lang="ja">
-                Steamライブラリから1つのゲームを表示。今プレイするか、別のものを見るか。
-                レコメンドなし。トラッキングなし。何を望むべきか指示するアルゴリズムもなし。
-                あなたの意図がどこに傾いているか、正直に映すだけ。
-            </p>
-        </div>
-        <span class="scroll-hint" aria-hidden="true">scroll</span>
+  <a href="#main" class="skip-link skip-en" data-lang="en">Skip to main content</a>
+  <a href="#main" class="skip-link skip-ja" data-lang="ja">メインコンテンツへスキップ</a>
+  <a href="#main" class="skip-link skip-zh-tw" data-lang="zh-tw">跳到主要內容</a>
+  <a href="#main" class="skip-link skip-zh-cn" data-lang="zh-cn">跳到主要内容</a>
+  <nav class="lang-switch" aria-label="Language switcher and theme toggle" role="navigation">
+    <button class="active" data-set-lang="en">EN</button>
+    <button data-set-lang="ja">JA</button>
+    <button data-set-lang="zh-cn">简</button>
+    <button data-set-lang="zh-tw">繁</button>
+    <button id="theme-toggle" aria-label="Theme: follow system">Theme: System</button>
+  </nav>
+  <main id="main">
+    <section aria-labelledby="hero-title">
+      <div class="label">Maida</div>
+      <h1 id="hero-title">
+        <span data-lang="en">You stared at your library for thirty minutes, then closed it.</span>
+        <span data-lang="ja">ライブラリを30分見つめて、閉じた。</span>
+        <span data-lang="zh-tw">你盯著遊戲庫看了三十分鐘，然後把它關掉。</span>
+        <span data-lang="zh-cn">你盯着游戏库看了三十分钟，然后把它关掉。</span>
+      </h1>
+      <div class="kanji" aria-hidden="true">間</div>
+      <p class="lead">
+        <span data-lang="en">You own hundreds of games. Tonight you launched the one you've already finished twice. Not because it's the best. Because choosing was harder than playing.</span>
+        <span data-lang="ja">何百本もある。今夜また、もうクリアしたあのゲームを起動した。一番だからじゃない。選ぶことのほうが、遊ぶことより疲れるから。</span>
+        <span data-lang="zh-tw">你有幾百款遊戲。你今晚又打開了那款已經玩過很多次的。不是因為它最好。是因為選擇本身讓你太累了。</span>
+        <span data-lang="zh-cn">你有几百款游戏。今晚你又打开了那款已经通关过的。不是因为它最好。是因为选择本身让你太累了。</span>
+      </p>
+      <p class="strong">
+        <span data-lang="en">Maida doesn't help you choose better. Maida lets you stop choosing.</span>
+        <span data-lang="ja">Maida はより良い選択を助けない。選ぶことを止めさせる。</span>
+        <span data-lang="zh-tw">Maida 不幫你選得更好。Maida 讓你不用選。</span>
+        <span data-lang="zh-cn">Maida 不帮你选得更好。Maida 让你不用选。</span>
+      </p>
     </section>
 
-    <!-- Two Faces: Rin & Kamae -->
-    <section class="concept" aria-labelledby="faces-title-en faces-title-zh faces-title-ja">
-        <div class="container">
-            <hr class="divider">
-            <p class="section-label fade-in" data-lang="en">Two Faces</p>
-            <p class="section-label fade-in" data-lang="zh">兩個面</p>
-            <p class="section-label fade-in" data-lang="cn">两个面</p>
-            <p class="section-label fade-in" data-lang="ja">二つの面</p>
-
-            <h2 class="section-title fade-in" data-lang="en" id="faces-title-en">The names are not decoration</h2>
-            <h2 class="section-title fade-in" data-lang="zh" id="faces-title-zh">名字不是裝飾</h2>
-            <h2 class="section-title fade-in" data-lang="cn" id="faces-title-cn">名字不是装饰</h2>
-            <h2 class="section-title fade-in" data-lang="ja" id="faces-title-ja">名前は飾りではない</h2>
-
-            <p class="section-body fade-in" data-lang="en">
-                Maida has two modes, drawn from the vocabulary of Japanese martial arts.
-                Their sequence is intentional: you must prepare before you can face what appears.
-            </p>
-            <p class="section-body fade-in" data-lang="zh">
-                Maida 有兩個面，取自日本武道的語彙。
-                它們的順序是刻意的：你必須先準備，才能面對眼前出現的東西。
-            </p>
-            <p class="section-body fade-in" data-lang="cn">
-                Maida 有两个面，取自日本武道的语汇。
-                它们的顺序是刻意的：你必须先准备，才能面对眼前出现的东西。
-            </p>
-            <p class="section-body fade-in" data-lang="ja">
-                Maidaには日本武道の語彙から取った二つの面がある。
-                その順序は意図的だ：現れるものに臨む前に、まず構えなければならない。
-            </p>
-
-            <div class="concept-grid">
-                <article class="concept-card fade-in">
-                    <span class="concept-kanji" aria-hidden="true">臨</span>
-                    <h3 data-lang="en">Rin <span class="reading">臨</span></h3>
-                    <h3 data-lang="zh">臨 <span class="reading">Rin</span></h3>
-                    <h3 data-lang="cn">临 <span class="reading">Rin</span></h3>
-                    <h3 data-lang="ja">臨 <span class="reading">Rin</span></h3>
-                    <p class="reading" data-lang="en">to face what appears</p>
-                    <p class="reading" data-lang="zh">與眼前的，相遇</p>
-                    <p class="reading" data-lang="cn">与眼前的，相遇</p>
-                    <p class="reading" data-lang="ja">現れたものと、向き合う</p>
-
-                    <p data-lang="en">
-                        One game. TRY or NOT NOW. No comparison, no browsing, no "what if the next one is better."
-                        You stand before a single world and decide whether to enter.
-                    </p>
-                    <p data-lang="zh">
-                        一款遊戲。試試或現在不要。沒有比較，沒有瀏覽，沒有「下一個會不會更好」。
-                        你站在一個世界面前，決定是否進入。
-                    </p>
-                    <p data-lang="cn">
-                        一款游戏。试试或现在不要。没有比较，没有浏览，没有「下一个会不会更好」。
-                        你站在一个世界面前，决定是否进入。
-                    </p>
-                    <p data-lang="ja">
-                        1つのゲーム。やるかパスか。比較なし、ブラウジングなし、「次はもっといいかも」もなし。
-                        1つの世界の前に立ち、入るかどうかを決める。
-                    </p>
-
-                    <p class="origin" data-lang="en">
-                        In kendo, <em>nozomu</em> is the moment you face your opponent
-                        -- not thinking, not preparing, just standing in presence.
-                    </p>
-                    <p class="origin" data-lang="zh">
-                        在劍道中，<em>臨む（nozomu）</em>是面對對手的那個瞬間
-                        -- 不是思考，不是準備，只是站在當下。
-                    </p>
-                    <p class="origin" data-lang="cn">
-                        在剑道中，<em>临む（nozomu）</em>是面对对手的那个瞬间
-                        -- 不是思考，不是准备，只是站在当下。
-                    </p>
-                    <p class="origin" data-lang="ja">
-                        剣道では、<em>臨む</em>は相手と向き合う瞬間
-                        -- 考えるでもなく、備えるでもなく、ただそこに在ること。
-                    </p>
-                </article>
-
-                <article class="concept-card fade-in">
-                    <span class="concept-kanji" aria-hidden="true">構</span>
-                    <h3 data-lang="en">Kamae <span class="reading">構</span></h3>
-                    <h3 data-lang="zh">構 <span class="reading">Kamae</span></h3>
-                    <h3 data-lang="cn">构 <span class="reading">Kamae</span></h3>
-                    <h3 data-lang="ja">構 <span class="reading">Kamae</span></h3>
-                    <p class="reading" data-lang="en">quiet preparation</p>
-                    <p class="reading" data-lang="zh">面臨之前，靜靜準備</p>
-                    <p class="reading" data-lang="cn">面临之前，静静准备</p>
-                    <p class="reading" data-lang="ja">臨む前の、静かな仕度</p>
-
-                    <p data-lang="en">
-                        Curate your shelf. Organize games into named groups called Kata.
-                        Decide which worlds are worth facing today. This is not browsing -- it is preparing your stance.
-                    </p>
-                    <p data-lang="zh">
-                        整理你的展示櫃。把遊戲分組到稱為「型」的類別中。
-                        決定今天哪些世界值得面對。這不是瀏覽 -- 這是準備你的架式。
-                    </p>
-                    <p data-lang="cn">
-                        整理你的展示柜。把游戏分组到称为「型」的类别中。
-                        决定今天哪些世界值得面对。这不是浏览 -- 这是准备你的架式。
-                    </p>
-                    <p data-lang="ja">
-                        棚を整える。ゲームを「型」と呼ぶグループに分ける。
-                        今日どの世界に臨む価値があるかを決める。ブラウジングではない -- 構えを整えること。
-                    </p>
-
-                    <p class="origin" data-lang="en">
-                        <em>Kamae</em> is the ready stance before drawing the sword. In tea ceremony,
-                        it is the quiet arrangement of space before the guest arrives.
-                        No kamae, no rin. You must prepare before you can face.
-                    </p>
-                    <p class="origin" data-lang="zh">
-                        <em>構え</em>是拔刀前的準備架式。在茶道中，
-                        是客人到來前對空間的靜靜安排。
-                        沒有構え就不能臨む。你必須先準備，才能面對。
-                    </p>
-                    <p class="origin" data-lang="cn">
-                        <em>构え</em>是拔刀前的准备架式。在茶道中，
-                        是客人到来前对空间的静静安排。
-                        没有构え就不能临む。你必须先准备，才能面对。
-                    </p>
-                    <p class="origin" data-lang="ja">
-                        <em>構え</em>は抜刀前の備えの姿勢。茶道では、
-                        客人が来る前の静かな空間の支度。
-                        構えなくして臨むことはできない。
-                    </p>
-                </article>
-            </div>
-        </div>
+    <section aria-labelledby="problem-title">
+      <div class="label"><span lang="en" data-lang="en">The problem</span><span data-lang="ja">問題の正体</span><span data-lang="zh-tw">問題</span><span data-lang="zh-cn">问题</span></div>
+      <h2 id="problem-title">
+        <span data-lang="en">Your free time shouldn't feel like this.</span>
+        <span data-lang="ja">余暇が、こんなに重いはずがない。</span>
+        <span data-lang="zh-tw">你的休閒時間，不應該有這種壓力。</span>
+        <span data-lang="zh-cn">你的休闲时间，不应该有这种压力。</span>
+      </h2>
+      <p><span data-lang="en">This isn't laziness. It isn't pickiness. It isn't that you don't love games anymore.</span><span data-lang="ja">怠けじゃない。飽きたわけでもない。ゲームが嫌いになったわけでもない。</span><span data-lang="zh-tw">這不是懶惰。不是你變挑。不是你不再愛玩遊戲了。</span><span data-lang="zh-cn">这不是懒惰。不是你变挑了。不是你不爱玩游戏了。</span></p>
+      <p><span data-lang="en">More options doesn't always mean more freedom. Sometimes it just means paralysis.</span><span data-lang="ja">選択肢が多いほど自由とは限らない。ただ麻痺するだけのこともある。</span><span data-lang="zh-tw">選項越多，不一定越自由。有時候只是更麻痺。</span><span data-lang="zh-cn">选项越多，不一定越自由。有时候只是更麻痹。</span></p>
+      <p><span data-lang="en">You don't need more information to decide. You need fewer things to decide between.</span><span data-lang="ja">決めるための情報がもっと必要なんじゃない。決める対象がもっと少なければいい。</span><span data-lang="zh-tw">你不是需要更多資訊來決定。你需要更少東西讓你決定。</span><span data-lang="zh-cn">你不是需要更多信息来做决定。你需要更少的东西让你去选。</span></p>
     </section>
 
-    <!-- How it works -->
-    <section aria-labelledby="how-title-en how-title-zh how-title-ja">
-        <div class="container">
-            <hr class="divider">
-            <p class="section-label fade-in" data-lang="en">How it works</p>
-            <p class="section-label fade-in" data-lang="zh">如何運作</p>
-            <p class="section-label fade-in" data-lang="cn">如何运作</p>
-            <p class="section-label fade-in" data-lang="ja">使い方</p>
-
-            <h2 class="section-title fade-in" data-lang="en" id="how-title-en">Simpler than you expect</h2>
-            <h2 class="section-title fade-in" data-lang="zh" id="how-title-zh">比你想像的簡單</h2>
-            <h2 class="section-title fade-in" data-lang="cn" id="how-title-cn">比你想象的简单</h2>
-            <h2 class="section-title fade-in" data-lang="ja" id="how-title-ja">想像より、簡素</h2>
-
-            <ol class="steps" data-lang="en">
-                <li class="fade-in"><span class="step-marker" aria-hidden="true">1</span><div class="step-content"><h4>Open Maida</h4><p>It scans your locally installed Steam games. Nothing leaves your device.</p></div></li>
-                <li class="fade-in"><span class="step-marker" aria-hidden="true">2</span><div class="step-content"><h4>One game appears</h4><p>Selected by weighted probability based on your past choices. Not a recommendation -- a reflection.</p></div></li>
-                <li class="fade-in"><span class="step-marker" aria-hidden="true">3</span><div class="step-content"><h4>TRY or NOT NOW</h4><p>Willing to enter this world? TRY launches it. Not feeling it? NOT NOW shows you another. That's it.</p></div></li>
-                <li class="fade-in"><span class="step-marker" aria-hidden="true">4</span><div class="step-content"><h4>Maida disappears</h4><p>After you choose, the screen freezes. No "play next." No notifications. The tool dies the moment it fulfills its purpose.</p></div></li>
-            </ol>
-
-            <ol class="steps" data-lang="zh">
-                <li class="fade-in"><span class="step-marker" aria-hidden="true">1</span><div class="step-content"><h4>開啟 Maida</h4><p>掃描你本機已安裝的 Steam 遊戲。資料不會離開你的裝置。</p></div></li>
-                <li class="fade-in"><span class="step-marker" aria-hidden="true">2</span><div class="step-content"><h4>出現一款遊戲</h4><p>根據你過去的選擇加權隨機選出。不是推薦 -- 是反映。</p></div></li>
-                <li class="fade-in"><span class="step-marker" aria-hidden="true">3</span><div class="step-content"><h4>試試或現在不要</h4><p>願意進入這個世界？試試會啟動遊戲。不想？現在不要會顯示下一個。就這樣。</p></div></li>
-                <li class="fade-in"><span class="step-marker" aria-hidden="true">4</span><div class="step-content"><h4>Maida 消失</h4><p>選擇之後，畫面凍結。沒有「接下來玩什麼」。沒有通知。工具在完成使命的瞬間死去。</p></div></li>
-            </ol>
-
-            <ol class="steps" data-lang="cn">
-                <li class="fade-in"><span class="step-marker" aria-hidden="true">1</span><div class="step-content"><h4>打开 Maida</h4><p>扫描你本机已安装的 Steam 游戏。数据不会离开你的设备。</p></div></li>
-                <li class="fade-in"><span class="step-marker" aria-hidden="true">2</span><div class="step-content"><h4>出现一款游戏</h4><p>根据你过去的选择加权随机选出。不是推荐 -- 是反映。</p></div></li>
-                <li class="fade-in"><span class="step-marker" aria-hidden="true">3</span><div class="step-content"><h4>试试或现在不要</h4><p>愿意进入这个世界？试试会启动游戏。不想？现在不要会显示下一个。就这样。</p></div></li>
-                <li class="fade-in"><span class="step-marker" aria-hidden="true">4</span><div class="step-content"><h4>Maida 消失</h4><p>选择之后，画面冻结。没有「接下来玩什么」。没有通知。工具在完成使命的瞬间死去。</p></div></li>
-            </ol>
-
-            <ol class="steps" data-lang="ja">
-                <li class="fade-in"><span class="step-marker" aria-hidden="true">1</span><div class="step-content"><h4>Maidaを開く</h4><p>ローカルにインストールされたSteamゲームをスキャン。データはデバイスの外に出ない。</p></div></li>
-                <li class="fade-in"><span class="step-marker" aria-hidden="true">2</span><div class="step-content"><h4>1つのゲームが現れる</h4><p>過去の選択に基づく加重確率で選出。レコメンドではない -- 反映。</p></div></li>
-                <li class="fade-in"><span class="step-marker" aria-hidden="true">3</span><div class="step-content"><h4>やる、またはパス</h4><p>この世界に入る？やるで起動。気分じゃない？パスで次が出る。それだけ。</p></div></li>
-                <li class="fade-in"><span class="step-marker" aria-hidden="true">4</span><div class="step-content"><h4>Maidaは消える</h4><p>選んだ後、画面はフリーズ。「次は何？」もなし。通知もなし。目的を果たした瞬間、道具は死ぬ。</p></div></li>
-            </ol>
+    <section aria-labelledby="what-title">
+      <div class="label"><span lang="en" data-lang="en">What Maida is</span><span data-lang="ja">Maida とは</span><span data-lang="zh-tw">Maida 是什麼</span><span data-lang="zh-cn">Maida 是什么</span></div>
+      <h2 id="what-title">
+        <span data-lang="en">An entrance to starting, not a system for living.</span>
+        <span data-lang="ja">始めるための入口。生活を管理するシステムではない。</span>
+        <span data-lang="zh-tw">一個讓你開始的入口，不是一套替你生活的系統。</span>
+        <span data-lang="zh-cn">一个让你开始的入口，不是一套替你生活的系统。</span>
+      </h2>
+      <p><span data-lang="en">Maida shows you one game at a time. From what you already have installed. You answer: play it now, or not now.</span><span data-lang="ja">Maida は一度に一本だけ見せる。インストール済みのゲームの中から。答えは二つ：今やる、か、今はやらない。</span><span data-lang="zh-tw">Maida 每次只給你看一款遊戲。從你已經安裝的遊戲中。你回答：現在玩，或現在不要。</span><span data-lang="zh-cn">Maida 每次只给你看一款游戏。从你已经安装的游戏中。你回答：现在玩，或现在不要。</span></p>
+      <p><span data-lang="en">It's not a recommendation engine. Not a backlog tracker. Not a system that pretends to know you better than you know yourself.</span><span data-lang="ja">レコメンドエンジンじゃない。バックログ管理ツールでもない。あなたより「あなたをわかっている」ふりをするシステムでもない。</span><span data-lang="zh-tw">它不是推薦引擎。不是待辦清單。不是一個假裝比你更懂你的系統。</span><span data-lang="zh-cn">它不是推荐引擎。不是待办清单。不是一个假装比你更懂你的系统。</span></p>
+      <div class="visual-anchor" role="img" aria-label="Maida interface mockup">
+        <div class="mock-window">
+          <div class="mock-title"><span data-lang="en">Tonight, one choice</span><span data-lang="ja">今夜は、この一本</span><span data-lang="zh-tw">今晚，只有這一款</span><span data-lang="zh-cn">今晚，只有这一款</span></div>
+          <div class="mock-game">Balatro</div>
+          <div class="mock-actions"><span class="pill"><span data-lang="en">Play now</span><span data-lang="ja">今やる</span><span data-lang="zh-tw">現在玩</span><span data-lang="zh-cn">现在玩</span></span><span class="pill"><span data-lang="en">Not now</span><span data-lang="ja">今はやらない</span><span data-lang="zh-tw">現在不要</span><span data-lang="zh-cn">现在不要</span></span></div>
         </div>
+      </div>
     </section>
 
-    <!-- Philosophy -->
-    <section class="philosophy" aria-label="Design philosophy">
-        <div class="container fade-in">
-            <blockquote data-lang="en">Most game launchers help you browse.<br>Browsing creates decision fatigue.<br>Maida removes browsing entirely.<br><br>One game. One choice. Move on.</blockquote>
-            <blockquote data-lang="zh">大多數遊戲啟動器幫你瀏覽。<br>瀏覽產生決策疲勞。<br>Maida 完全移除瀏覽。<br><br>一款遊戲。一個選擇。繼續前進。</blockquote>
-            <blockquote data-lang="cn">大多数游戏启动器帮你浏览。<br>浏览产生决策疲劳。<br>Maida 完全移除浏览。<br><br>一款游戏。一个选择。继续前进。</blockquote>
-            <blockquote data-lang="ja">ほとんどのランチャーは閲覧を手助けする。<br>閲覧は決定疲労を生む。<br>Maidaは閲覧を完全に排除する。<br><br>1つのゲーム。1つの選択。前に進む。</blockquote>
-        </div>
+    <section aria-labelledby="how-title">
+      <div class="label"><span lang="en" data-lang="en">How it works</span><span data-lang="ja">使い方</span><span data-lang="zh-tw">如何運作</span><span data-lang="zh-cn">如何运作</span></div>
+      <h2 id="how-title"><span data-lang="en">Eighty options become one.</span><span data-lang="ja">80の選択肢が、1つになる。</span><span data-lang="zh-tw">把 80 個選項變成 1 個。</span><span data-lang="zh-cn">把 80 个选项变成 1 个。</span></h2>
+      <div class="phase" aria-hidden="true">構 / kamae</div>
+      <div class="grid" aria-label="Kamae steps">
+        <div class="card"><h3><span aria-hidden="true">1</span><span class="sr-only">Step 1</span></h3><p><span data-lang="en">Open Maida. It reads your locally installed Steam games.</span><span data-lang="ja">Maidaを開く。ローカルのSteamゲームを読み取る。</span><span data-lang="zh-tw">打開 Maida。它讀取你本機已安裝的 Steam 遊戲。</span><span data-lang="zh-cn">打开 Maida。它读取你本机已安装的 Steam 游戏。</span></p></div>
+        <div class="card"><h3><span aria-hidden="true">2</span><span class="sr-only">Step 2</span></h3><p><span data-lang="en">Optionally, narrow the field. Use Kata to face only what you're willing to face today.</span><span data-lang="ja">必要なら場を整える。型で、今日向き合いたいものだけに絞る。</span><span data-lang="zh-tw">如果你想，先整理場域。用型，只面對你今天願意面對的。</span><span data-lang="zh-cn">如果你想，先整理场域。用型，只面对你今天愿意面对的。</span></p></div>
+      </div>
+      <div class="phase" aria-hidden="true">臨 / rin</div>
+      <div class="grid" aria-label="Rin steps">
+        <div class="card"><h3><span aria-hidden="true">3</span><span class="sr-only">Step 3</span></h3><p><span data-lang="en">One game appears. Not a list. Not a comparison. Just one.</span><span data-lang="ja">一本が現れる。リストじゃない。比較表でもない。ただ一本。</span><span data-lang="zh-tw">一款遊戲出現。不是清單。不是比較表。就是一款。</span><span data-lang="zh-cn">一款游戏出现。不是清单。不是比较表。就是一款。</span></p></div>
+        <div class="card"><h3><span aria-hidden="true">4</span><span class="sr-only">Step 4</span></h3><p><span data-lang="en">Then it steps back. A tool that did its job disappears quietly.</span><span data-lang="ja">そして退く。仕事を終えた道具は、静かに消える。</span><span data-lang="zh-tw">然後它退開。完成工作的工具安靜地退下。</span><span data-lang="zh-cn">然后它退开。完成工作的工具安静地退下。</span></p></div>
+      </div>
     </section>
 
-    <!-- What Maida refuses -->
-    <section aria-labelledby="refuse-title-en refuse-title-zh refuse-title-ja">
-        <div class="container">
-            <hr class="divider">
-            <p class="section-label fade-in" data-lang="en">What Maida refuses to do</p>
-            <p class="section-label fade-in" data-lang="zh">Maida 拒絕做的事</p>
-            <p class="section-label fade-in" data-lang="cn">Maida 拒绝做的事</p>
-            <p class="section-label fade-in" data-lang="ja">Maidaが拒むこと</p>
-
-            <h2 class="section-title fade-in" data-lang="en" id="refuse-title-en">The moat is restraint</h2>
-            <h2 class="section-title fade-in" data-lang="zh" id="refuse-title-zh">護城河是克制</h2>
-            <h2 class="section-title fade-in" data-lang="cn" id="refuse-title-cn">护城河是克制</h2>
-            <h2 class="section-title fade-in" data-lang="ja" id="refuse-title-ja">堀は自制</h2>
-
-            <div class="section-body fade-in" data-lang="en">
-                <p>No recommendations. No tracking playtime. No streaks, achievements, or "you did great today." No notifications to bring you back. No social features. No data uploaded anywhere. All behavioral data stays on your machine.</p>
-                <p>The ideal user is someone who, one day, no longer needs Maida. If the tool becomes "very smart" or "very considerate," it has failed. Maida exists not to improve you, but to not stand between you and the world you want to enter.</p>
-            </div>
-            <div class="section-body fade-in" data-lang="zh">
-                <p>沒有推薦。不追蹤遊玩時間。沒有連續登入、成就、或「你今天做得很好」。沒有通知叫你回來。沒有社交功能。資料不會上傳到任何地方。所有行為資料都留在你的裝置上。</p>
-                <p>理想的使用者是有一天不再需要 Maida 的人。如果這個工具變得「很聰明」或「很體貼」，那就是失敗。Maida 的存在不是為了改善你，而是為了不擋在你和你想進入的世界之間。</p>
-            </div>
-            <div class="section-body fade-in" data-lang="cn">
-                <p>没有推荐。不追踪游玩时间。没有连续登录、成就、或「你今天做得很好」。没有通知叫你回来。没有社交功能。数据不会上传到任何地方。所有行为数据都留在你的设备上。</p>
-                <p>理想的用户是有一天不再需要 Maida 的人。如果这个工具变得「很聪明」或「很体贴」，那就是失败。Maida 的存在不是为了改善你，而是为了不挡在你和你想进入的世界之间。</p>
-            </div>
-            <div class="section-body fade-in" data-lang="ja">
-                <p>レコメンドなし。プレイ時間の追跡なし。連続ログイン、実績、「今日もよく頑張った」なし。呼び戻す通知なし。ソーシャル機能なし。データはどこにもアップロードされない。すべての行動データはあなたのマシン上に留まる。</p>
-                <p>理想のユーザーは、いつかMaidaを必要としなくなる人。もしこの道具が「とても賢く」「とても気が利く」ようになったら、それは失敗。Maidaは、あなたを良くするためではなく、あなたと入りたい世界の間に立たないために存在する。</p>
-            </div>
-        </div>
+    <section aria-labelledby="refuse-title">
+      <div class="label"><span lang="en" data-lang="en">What Maida refuses</span><span data-lang="ja">Maidaが拒むこと</span><span data-lang="zh-tw">Maida 拒絕做的事</span><span data-lang="zh-cn">Maida 拒绝做的事</span></div>
+      <h2 id="refuse-title"><span data-lang="en">What it won't do matters as much as what it does.</span><span data-lang="ja">やらないことは、やることと同じだけ重い。</span><span data-lang="zh-tw">它刻意不做的事，和它做的事一樣重要。</span><span data-lang="zh-cn">它刻意不做的事，和它做的事一样重要。</span></h2>
+      <p><span data-lang="en">No recommendations. No tracking. No streaks. No notifications calling you back.</span><span data-lang="ja">レコメンドなし。追跡なし。連続記録なし。呼び戻す通知なし。</span><span data-lang="zh-tw">沒有推薦。沒有追蹤。沒有連續登入。沒有通知叫你回來。</span><span data-lang="zh-cn">没有推荐。没有追踪。没有连续登录。没有通知叫你回来。</span></p>
+      <p class="strong"><span data-lang="en">If one day you no longer need Maida, that means it worked.</span><span data-lang="ja">いつかMaidaが要らなくなったら、それが成功。</span><span data-lang="zh-tw">如果有一天你不再需要 Maida，那就是它成功了。</span><span data-lang="zh-cn">如果有一天你不再需要 Maida，那就是它成功了。</span></p>
     </section>
 
-    <!-- Download -->
-    <section class="download" aria-labelledby="dl-title-en dl-title-zh dl-title-ja">
-        <div class="container">
-            <hr class="divider">
-            <p class="section-label fade-in" data-lang="en">Available now</p>
-            <p class="section-label fade-in" data-lang="zh">現在可用</p>
-            <p class="section-label fade-in" data-lang="cn">现在可用</p>
-            <p class="section-label fade-in" data-lang="ja">今すぐ利用可能</p>
-
-            <h2 class="section-title fade-in" data-lang="en" id="dl-title-en">Free. No account required.</h2>
-            <h2 class="section-title fade-in" data-lang="zh" id="dl-title-zh">免費。不需要帳號。</h2>
-            <h2 class="section-title fade-in" data-lang="cn" id="dl-title-cn">免费。不需要账号。</h2>
-            <h2 class="section-title fade-in" data-lang="ja" id="dl-title-ja">無料。アカウント不要。</h2>
-
-            <p class="section-body fade-in" style="text-align:center;margin-bottom:2rem" data-lang="en">Windows + Linux (AppImage).<br>Handheld-friendly. Screen reader supported.</p>
-            <p class="section-body fade-in" style="text-align:center;margin-bottom:2rem" data-lang="zh">Windows + Linux (AppImage)。<br>手持裝置友善。螢幕閱讀器支援。</p>
-            <p class="section-body fade-in" style="text-align:center;margin-bottom:2rem" data-lang="cn">Windows + Linux (AppImage)。<br>掌机友好。屏幕阅读器支持。</p>
-            <p class="section-body fade-in" style="text-align:center;margin-bottom:2rem" data-lang="ja">Windows + Linux (AppImage)。<br>ハンドヘルド対応。スクリーンリーダー対応。</p>
-
-            <div class="fade-in">
-                <a href="#" class="download-btn" data-lang="en">Download on itch.io</a>
-                <a href="#" class="download-btn" data-lang="zh">itch.io 下載</a>
-                <a href="#" class="download-btn" data-lang="cn">itch.io 下载</a>
-                <a href="#" class="download-btn" data-lang="ja">itch.io でダウンロード</a>
-            </div>
-            <nav class="download-links fade-in" data-lang="en" aria-label="Documentation">
-                <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-14_user-manual-en-md">User Manual</a>
-                <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-12_changelog-md">Changelog</a>
-            </nav>
-            <nav class="download-links fade-in" data-lang="ja" aria-label="ドキュメント">
-                <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-15_user-manual-ja-md">ユーザーマニュアル</a>
-                <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-12_changelog-md">変更履歴</a>
-            </nav>
-            <nav class="download-links fade-in" data-lang="cn" aria-label="文档链接">
-                <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-13a_user-manual-zh-cn-md">使用手册</a>
-                <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-12_changelog-md">变更记录</a>
-            </nav>
-            <nav class="download-links fade-in" data-lang="zh" aria-label="文件連結">
-                <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-13_user-manual-zh-md">使用手冊</a>
-                <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-12_changelog-md">變更紀錄</a>
-            </nav>
-        </div>
+    <section aria-labelledby="cta-title">
+      <div class="label"><span lang="en" data-lang="en">Download</span><span data-lang="ja">ダウンロード</span><span data-lang="zh-tw">下載</span><span data-lang="zh-cn">下载</span></div>
+      <h2 id="cta-title"><span data-lang="en">Tonight, don't just stare at the library.</span><span data-lang="ja">今夜は、ライブラリを眺めるだけで終わらせない。</span><span data-lang="zh-tw">今晚別再盯著庫看了。</span><span data-lang="zh-cn">今晚别再盯着库看了。</span></h2>
+      <p><span data-lang="en">Free. No account. Windows + Linux. Handheld-friendly.</span><span data-lang="ja">無料。アカウント不要。Windows + Linux。ハンドヘルド対応。</span><span data-lang="zh-tw">免費。不需要帳號。Windows / Linux。手持裝置友善。</span><span data-lang="zh-cn">免费。不需要账号。Windows / Linux。掌机友好。</span></p>
+      <a href="https://devbrightraven.itch.io/maida" class="cta"><span data-lang="en">Download from itch.io</span><span data-lang="ja">itch.io からダウンロード</span><span data-lang="zh-tw">從 itch.io 下載</span><span data-lang="zh-cn">从 itch.io 下载</span></a>
+      <p style="margin-top:16px"><a href="https://ko-fi.com/devbrightraven" style="color:var(--accent);text-decoration:none;font-size:14px"><span data-lang="en">Support on Ko-fi</span><span data-lang="ja">Ko-fi で応援</span><span data-lang="zh-tw">在 Ko-fi 上支持</span><span data-lang="zh-cn">在 Ko-fi 上支持</span> ☕</a></p>
     </section>
-
-    </main>
-
-    <footer>
-        <p>&copy; 2026 Bright Raven World &middot; Maida v0.1.0 &middot; <a href="mailto:devbrightraven@gmail.com">devbrightraven@gmail.com</a></p>
+    <footer style="padding:48px 0 0;border-top:1px solid var(--line);text-align:center;color:var(--ghost);font-size:13px">
+      <p>&copy; 2026 Bright Raven World. <a href="https://github.com/devBrightRaven/maida" style="color:var(--accent);text-decoration:none">Source (GPL-3.0)</a> &middot; <a href="mailto:bertram@brightraven.world" style="color:var(--accent);text-decoration:none">bertram@brightraven.world</a></p>
     </footer>
-
-    <script>
-        // Language switching
-        function setLang(lang) {
-            const htmlLangMap = { en: 'en', zh: 'zh-TW', cn: 'zh-CN', ja: 'ja' };
-            const root = document.documentElement;
-            root.lang = htmlLangMap[lang];
-            // Swap lang class on <html> -- CSS handles visibility
-            root.classList.remove('lang-en', 'lang-zh', 'lang-cn', 'lang-ja');
-            root.classList.add(`lang-${lang}`);
-            document.querySelectorAll('.lang-switch button').forEach(btn => {
-                const active = btn.dataset.setLang === lang;
-                btn.classList.toggle('active', active);
-                btn.setAttribute('aria-pressed', active);
-            });
-            // Update theme toggle aria-label for current language
-            const theme = root.dataset.theme || 'dark';
-            const toggleBtn = document.querySelector('.theme-toggle');
-            const key = `label${theme.charAt(0).toUpperCase()+theme.slice(1)}${lang.charAt(0).toUpperCase()+lang.slice(1)}`;
-            if (toggleBtn.dataset[key]) toggleBtn.setAttribute('aria-label', toggleBtn.dataset[key]);
-            // Re-trigger fade-in for newly visible elements
-            document.querySelectorAll(`[data-lang="${lang}"].fade-in:not(.visible)`).forEach(el => {
-                if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('visible');
-            });
-            localStorage.setItem('maida-lang', lang);
-        }
-
-        document.querySelectorAll('.lang-switch button').forEach(btn => {
-            btn.addEventListener('click', () => setLang(btn.dataset.setLang));
-        });
-
-        // Theme toggle
-        function setTheme(theme) {
-            document.documentElement.dataset.theme = theme;
-            localStorage.setItem('maida-theme', theme);
-        }
-
-        document.querySelector('.theme-toggle').addEventListener('click', () => {
-            const current = document.documentElement.dataset.theme || 'dark';
-            setTheme(current === 'dark' ? 'light' : 'dark');
-        });
-
-        // Intersection Observer
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const siblings = entry.target.parentElement.querySelectorAll('.fade-in');
-                    const idx = Array.from(siblings).indexOf(entry.target);
-                    entry.target.style.transitionDelay = `${idx * 0.12}s`;
-                    entry.target.classList.add('visible');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
-
-        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-
-        // Init
-        const savedTheme = localStorage.getItem('maida-theme')
-            || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-        setTheme(savedTheme);
-
-        const savedLang = localStorage.getItem('maida-lang');
-        const navLang = navigator.language;
-        const browserLang = navLang.startsWith('ja') ? 'ja'
-            : (navLang === 'zh-TW' || navLang === 'zh-Hant') ? 'zh'
-            : navLang.startsWith('zh') ? 'cn'
-            : 'en';
-        setLang(savedLang || browserLang);
-
-        setTimeout(() => {
-            document.querySelectorAll('.hero .fade-in').forEach((el, i) => {
-                if (el.style.display !== 'none') {
-                    el.style.transitionDelay = `${0.3 + i * 0.2}s`;
-                    el.classList.add('visible');
-                }
-            });
-        }, 100);
-    </script>
-
+  </main>
+  <script>
+    const map={en:'en',ja:'ja','zh-tw':'zh-TW','zh-cn':'zh-CN'};
+    const root=document.documentElement;
+    const themeBtn=document.getElementById('theme-toggle');
+    const themes=['system','light','dark'];
+    const themeVars={
+      dark:{'--bg':'#0b0b0b','--panel':'#121212','--text':'#f1ebe3','--muted':'#d2cbc2','--ghost':'#b9b0a5','--accent':'#dcc4a0','--line':'#2a2622','--focus':'#e8c840'},
+      light:{'--bg':'#f5f0eb','--panel':'#ebe5de','--text':'#1c1712','--muted':'#4f4942','--ghost':'#6b6258','--accent':'#6a5535','--line':'#cfc5bb','--focus':'#9a6f00'}
+    };
+    const setThemeVars=(mode)=>{const vars=themeVars[mode]||themeVars.dark; Object.entries(vars).forEach(([k,v])=>root.style.setProperty(k,v));};
+    const applyLang=(k)=>{root.className='lang-'+k;root.lang=map[k]||'en';document.querySelectorAll('.lang-switch button[data-set-lang]').forEach(b=>{const on=b.dataset.setLang===k; b.classList.toggle('active',on); b.setAttribute('aria-pressed', on ? 'true' : 'false');}); localStorage.setItem('maida-sample-lang',k);};
+    const applyTheme=(mode)=>{
+      if(mode==='system'){
+        root.removeAttribute('data-theme');
+        const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+        setThemeVars(prefersLight ? 'light' : 'dark');
+        themeBtn.textContent='Theme: System';
+        themeBtn.setAttribute('aria-label','Theme: follow system');
+      } else if(mode==='light'){
+        root.setAttribute('data-theme','light');
+        setThemeVars('light');
+        themeBtn.textContent='Theme: Light';
+        themeBtn.setAttribute('aria-label','Theme: light');
+      } else {
+        root.removeAttribute('data-theme');
+        setThemeVars('dark');
+        themeBtn.textContent='Theme: Dark';
+        themeBtn.setAttribute('aria-label','Theme: dark');
+      }
+      themeBtn.classList.toggle('is-active-theme', mode!=='system');
+      localStorage.setItem('maida-sample-theme',mode);
+      themeBtn.dataset.mode = mode;
+    };
+    document.querySelectorAll('.lang-switch button[data-set-lang]').forEach(btn=>btn.addEventListener('click',()=>applyLang(btn.dataset.setLang)));
+    themeBtn.addEventListener('click',()=>{
+      const current = themeBtn.dataset.mode || 'system';
+      const idx = themes.indexOf(current);
+      const next = themes[(idx+1)%themes.length];
+      applyTheme(next);
+    });
+    const savedLang = localStorage.getItem('maida-sample-lang') || 'en';
+    const savedTheme = localStorage.getItem('maida-sample-theme') || 'system';
+    applyLang(savedLang);
+    applyTheme(savedTheme);
+    window.matchMedia('(prefers-color-scheme: light)').addEventListener?.('change',()=>{ if((themeBtn.dataset.mode||'system')==='system') applyTheme('system'); });
+  </script>
 </body>
 </html>
