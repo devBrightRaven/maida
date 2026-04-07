@@ -8,3 +8,16 @@ test-results/
 playwright-report/
 .DS_Store
 Thumbs.db
+# AI agents
+CLAUDE.md
+.claude/
+.mcp.json
+AGENTS.md
+.codex/
+.gemini/
+.copilot/
+.cursorrules
+.cursor/
+
+# Design
+design/
