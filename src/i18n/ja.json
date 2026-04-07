@@ -13,7 +13,7 @@
             "clear_aria": "{game} のロック解除",
             "back": "元に戻す\n（一回限り）",
             "acknowledge": "了解",
-            "sync": "Maidaに見てもらう",
+            "sync": "Steamライブラリをスキャン",
             "restart_selection": "再開",
             "im_back": "再開",
             "switch_to_kamae": "構",
@@ -35,6 +35,17 @@
         },
         "game": {
             "anchored_prefix": "アンカー"
+        },
+        "tour": {
+            "help_aria": "Maidaの使い方を見る",
+            "aria_label": "ガイドツアー",
+            "sr_hint": "Hキーを押すと操作方法を確認できます。",
+            "step_title": "これはSteamライブラリのゲームです。Maidaが選びました。",
+            "step_try": "TRYを押すとゲームが起動します。3秒長押しで後で遊ぶために保存できます。",
+            "step_not_now": "気分じゃない？NOT NOWを押すと次のゲームが表示されます。",
+            "next": "次へ",
+            "skip": "スキップ",
+            "done": "わかった"
         },
         "debug": {
             "badge": "DBG",
@@ -158,14 +169,6 @@
             "delete_aria": "{name} を削除",
             "confirm_delete_aria": "もう一度押すと {name} を削除"
         },
-        "curation": {
-            "first_prompt": "ずっとやりたかったゲームはある？",
-            "more_prompt": "他にもある？",
-            "search_placeholder": "ゲーム名を入力",
-            "added_mark": "（載せ済み）",
-            "done": "完了",
-            "skip": "スキップ"
-        },
         "legal": {
             "back": "戻る",
             "accessibility": "アクセシビリティ",
@@ -223,8 +226,9 @@
     },
     "voice": {
         "onboarding": {
-            "permission_intro": "Maidaはあなたのゲームを静かに確認できます。準備ができたらどうぞ。",
-            "permission_hint": "——ゲームは起動しません。"
+            "aria_label": "Maidaへようこそ",
+            "permission_intro": "ゲームが多すぎて選べない？Maidaが一つずつ提案します。",
+            "permission_detail": "下のボタンを押すと、インストール済みのSteamゲームをスキャンします。ゲームは起動しません。"
         },
         "error": {
             "steam_not_found": "Steamが検出されません。後でもう一度お試しください。"

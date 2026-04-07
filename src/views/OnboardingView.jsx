@@ -1,12 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { t } from '../i18n';
 import { useGameInput } from '../hooks/useGameInput';
-import CurationPrompt from '../ui/features/Onboarding/CurationPrompt';
 import bridge from '../services/bridge';
 import './OnboardingView.css';
 
 export default function OnboardingView({ onComplete }) {
-    const [state, setState] = useState('idle'); // 'idle' | 'scanning' | 'error' | 'curating'
+    const [state, setState] = useState('idle'); // 'idle' | 'scanning' | 'error'
     const [isFocused, setIsFocused] = useState(false);
     const btnRef = useRef(null);
 
@@ -76,45 +75,34 @@ export default function OnboardingView({ onComplete }) {
         clearTimeout(timer);
 
         if (result?.success) {
-            setState('curating');
+            onComplete();
         } else {
             setState('error');
         }
     };
 
-    if (state === 'curating') {
-        return (
-            <main className="onboarding-container">
-                <section className="onboarding-content" aria-label="Onboarding">
-                    <h1 className="sr-only">Maida</h1>
-                    <CurationPrompt onDone={onComplete} />
-                </section>
-                <div className="bg-glow"></div>
-            </main>
-        );
-    }
-
     return (
         <main className="onboarding-container">
-            <section className="onboarding-content" aria-label="Onboarding">
+            <section className="onboarding-content" aria-label={t('voice.onboarding.aria_label')}>
+                <h1 className="onboarding-title">Maida</h1>
                 <p className="onboarding-voice">
                     {state === 'error'
                         ? t('voice.error.steam_not_found')
                         : t('voice.onboarding.permission_intro')}
                 </p>
+                {state === 'idle' && (
+                    <p className="onboarding-detail">{t('voice.onboarding.permission_detail')}</p>
+                )}
 
                 <div className="onboarding-actions">
                     {state === 'idle' && (
-                        <>
-                            <button
-                                ref={btnRef}
-                                className={`onboarding-link${isFocused ? ' is-focused' : ''}`}
-                                onClick={handleSync}
-                            >
-                                {t('ui.button.sync')}
-                            </button>
-                            <p className="onboarding-hint">{t('voice.onboarding.permission_hint')}</p>
-                        </>
+                        <button
+                            ref={btnRef}
+                            className={`onboarding-link${isFocused ? ' is-focused' : ''}`}
+                            onClick={handleSync}
+                        >
+                            {t('ui.button.sync')}
+                        </button>
                     )}
 
                     {state === 'scanning' && (

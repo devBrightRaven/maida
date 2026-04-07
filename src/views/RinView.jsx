@@ -3,6 +3,7 @@ import { t } from '../i18n';
 import { formatPlaytime } from '../core/format';
 import GameDisplay from '../ui/features/Uncertainty/GameDisplay';
 import TracePanel from '../ui/features/Trace/TracePanel';
+import GuidedTour from '../ui/features/GuidedTour/GuidedTour';
 import FaceSwitchButton from '../ui/FaceSwitchButton';
 import { useGameInput } from '../hooks/useGameInput';
 import CalligraphyBg from '../ui/CalligraphyBg';
@@ -38,9 +39,11 @@ export default function RinView({
 }) {
     const [expanded, setExpanded] = useState(false);
     const [showTrace, setShowTrace] = useState(false);
+    const [showTour, setShowTour] = useState(false);
     const [legalPage, setLegalPage] = useState(null);
     const legalReturnRef = React.useRef(null);
     const [focusedBtn, setFocusedBtn] = useState(null); // 'visit' | 'notToday' | 'back' | 'switchKamae' | null
+    const hasSeenTour = localStorage.getItem('maida-hasSeenTour') === 'true';
 
     // Refs for Focus Management
     const titleRef = React.useRef(null);
@@ -127,9 +130,27 @@ export default function RinView({
         };
     }, []);
 
+    // H key opens guided tour
+    useEffect(() => {
+        const handleKey = (e) => {
+            if (e.key === 'h' && !e.ctrlKey && !e.altKey && !e.metaKey && !showTrace && !showTour) {
+                setShowTour(true);
+            }
+        };
+        window.addEventListener('keydown', handleKey);
+        return () => window.removeEventListener('keydown', handleKey);
+    }, [showTrace, showTour]);
+
+    const closeTour = () => {
+        setShowTour(false);
+        localStorage.setItem('maida-hasSeenTour', 'true');
+        // Return focus to game title
+        setTimeout(() => titleRef.current?.focus(), 100);
+    };
+
     // Input Hook for Gamepad & Keyboard
     const { longPressProgress, handlers } = useGameInput({
-        disabled: !game || showTrace, // Disable when no game OR trace panel is open
+        disabled: !game || showTrace || showTour, // Disable when no game, trace panel, or tour is open
         tapThreshold,
         anchorThreshold,
         onMainAction: () => onAction('visit'), // Short Press A
@@ -240,6 +261,9 @@ export default function RinView({
             onClick={handleContainerClick}
         >
             <p className="sr-only" role="alert">{t('ui.rin.sr_guide')}</p>
+            {!hasSeenTour && (
+                <p className="sr-only" aria-live="polite">{t('ui.tour.sr_hint')}</p>
+            )}
             <CalligraphyBg char="臨" className="rin-calligraphy-bg" />
             {game && (
                 <header className="mvp-header">
@@ -370,6 +394,25 @@ export default function RinView({
 
             {onSwitchToKamae && (
                 <FaceSwitchButton ref={btnRefs.switchKamae} direction="to-kamae" onClick={onSwitchToKamae} />
+            )}
+
+            <button
+                className="help-tour-btn"
+                aria-label={t('ui.tour.help_aria')}
+                onClick={() => setShowTour(true)}
+            >
+                ?
+            </button>
+
+            {showTour && game && (
+                <GuidedTour
+                    steps={[
+                        { targetRef: titleRef, text: t('ui.tour.step_title') },
+                        { targetRef: btnRefs.visit, text: t('ui.tour.step_try') },
+                        { targetRef: btnRefs.notToday, text: t('ui.tour.step_not_now') },
+                    ]}
+                    onClose={closeTour}
+                />
             )}
 
             <Footer onNavigate={(page) => { legalReturnRef.current = document.activeElement; setLegalPage(page); }} />

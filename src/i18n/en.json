@@ -13,7 +13,7 @@
             "clear_aria": "Unlock {game}",
             "back": "Undo\n(One Time Only)",
             "acknowledge": "Acknowledge",
-            "sync": "Let Maida look for you",
+            "sync": "Scan my Steam library",
             "restart_selection": "Restart Selection",
             "im_back": "I'M BACK",
             "switch_to_kamae": "構",
@@ -35,6 +35,17 @@
         },
         "game": {
             "anchored_prefix": "Anchored"
+        },
+        "tour": {
+            "help_aria": "Learn how Maida works",
+            "aria_label": "Guided tour",
+            "sr_hint": "Press H for help to learn the controls.",
+            "step_title": "This is a game from your Steam library. Maida picked it for you.",
+            "step_try": "Press TRY to launch this game. Hold for 3 seconds to save it for later.",
+            "step_not_now": "Not feeling it? Press NOT NOW and Maida will show you another one.",
+            "next": "Next",
+            "skip": "Skip",
+            "done": "Got it"
         },
         "debug": {
             "badge": "DBG",
@@ -158,14 +169,6 @@
             "delete_aria": "Delete {name}",
             "confirm_delete_aria": "Press again to delete {name}"
         },
-        "curation": {
-            "first_prompt": "Is there a game you've been wanting to play?",
-            "more_prompt": "Any others?",
-            "search_placeholder": "Type a game name",
-            "added_mark": "(added)",
-            "done": "done",
-            "skip": "skip"
-        },
         "legal": {
             "back": "Back",
             "accessibility": "Accessibility",
@@ -223,8 +226,9 @@
     },
     "voice": {
         "onboarding": {
-            "permission_intro": "Maida can quietly look at what games you have, whenever you're ready.",
-            "permission_hint": "– nothing will be launched."
+            "aria_label": "Welcome to Maida",
+            "permission_intro": "Too many games, can't pick one? Maida shows you one game at a time.",
+            "permission_detail": "Press the button below to scan your installed Steam games. Nothing will be launched."
         },
         "error": {
             "steam_not_found": "Steam not detected. You can try again later."

@@ -13,7 +13,7 @@
             "clear_aria": "解除鎖定 {game}",
             "back": "復原\n（僅限一次）",
             "acknowledge": "知道了",
-            "sync": "讓 Maida 看看吧",
+            "sync": "掃描 Steam 遊戲庫",
             "restart_selection": "再來一次",
             "im_back": "再來一次",
             "switch_to_kamae": "構",
@@ -35,6 +35,17 @@
         },
         "game": {
             "anchored_prefix": "錨定"
+        },
+        "tour": {
+            "help_aria": "了解 Maida 的使用方式",
+            "aria_label": "操作導覽",
+            "sr_hint": "按 H 鍵可以了解操作方式。",
+            "step_title": "這是你 Steam 遊戲庫裡的一款遊戲，由 Maida 為你挑選。",
+            "step_try": "按 TRY 啟動這款遊戲。長按 3 秒可以將它保留下來。",
+            "step_not_now": "不想玩？按 NOT NOW，Maida 會換一款給你看。",
+            "next": "下一步",
+            "skip": "跳過",
+            "done": "知道了"
         },
         "debug": {
             "badge": "DBG",
@@ -158,14 +169,6 @@
             "delete_aria": "刪除 {name}",
             "confirm_delete_aria": "再按一次以刪除 {name}"
         },
-        "curation": {
-            "first_prompt": "有沒有一款你一直想玩的遊戲？",
-            "more_prompt": "還有嗎？",
-            "search_placeholder": "輸入遊戲名稱",
-            "added_mark": "（已擺上）",
-            "done": "好了",
-            "skip": "跳過"
-        },
         "legal": {
             "back": "返回",
             "accessibility": "無障礙",
@@ -223,8 +226,9 @@
     },
     "voice": {
         "onboarding": {
-            "permission_intro": "Maida 可以安靜地看看你有哪些遊戲，準備好的時候再開始。",
-            "permission_hint": "——不會啟動任何遊戲。"
+            "aria_label": "歡迎使用 Maida",
+            "permission_intro": "遊戲太多，不知道玩哪個？Maida 一次只給你看一款。",
+            "permission_detail": "按下方按鈕掃描已安裝的 Steam 遊戲。不會啟動任何遊戲。"
         },
         "error": {
             "steam_not_found": "未偵測到 Steam。你可以稍後再試。"
