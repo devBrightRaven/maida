@@ -15,12 +15,13 @@ import './GuidedTour.css';
  * - onAdvance: called when user clicks Next (non-interactive steps)
  * - onClose: called when user clicks Skip or presses Escape
  */
-// Wrap keyboard shortcuts (e.g. Ctrl+Tab, RB, LB, NOT NOW, TRY) in <kbd> tags
+// Wrap keyboard shortcuts and quoted button names in <kbd> tags
 function formatHotkeys(text) {
     if (!text) return null;
-    const parts = text.split(/(Ctrl\+Tab|LB|RB|NOT NOW|TRY|PLAY)/g);
+    // Match: Ctrl+Tab, LB, RB, F1, F2, and quoted text like 「やる」
+    const parts = text.split(/(Ctrl\+Tab|LB|RB|F1|F2|「[^」]+」)/g);
     return parts.map((part, i) =>
-        /^(Ctrl\+Tab|LB|RB|NOT NOW|TRY|PLAY)$/.test(part)
+        /^(Ctrl\+Tab|LB|RB|F1|F2|「[^」]+」)$/.test(part)
             ? <kbd key={i} className="guided-tour-kbd">{part}</kbd>
             : part
     );
