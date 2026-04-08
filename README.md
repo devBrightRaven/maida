@@ -55,7 +55,7 @@ Not accepting contributions at this time.
 
 ## License
 
-[GPL-3.0](LICENSE)
+[MIT](LICENSE)
 
 ## Support
 
