@@ -9,6 +9,12 @@ export default defineConfig({
             provider: 'v8',
             reporter: ['text', 'html'],
             include: ['src/core/**'],
+            thresholds: {
+                lines: 80,
+                functions: 80,
+                branches: 70,
+                statements: 80,
+            },
         },
     },
 });

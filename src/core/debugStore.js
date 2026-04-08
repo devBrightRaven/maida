@@ -24,7 +24,7 @@ export const debugStore = {
         console.log(`[Maida DBG] ${event}`, details);
 
         // Persist to session log file (fire-and-forget)
-        const { id, timestamp, ...persistEntry } = entry;
+        const { id: _id, timestamp: _ts, ...persistEntry } = entry;
         bridge.appendSessionLog({ event, ...persistEntry });
     },
 
