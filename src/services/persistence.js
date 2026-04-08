@@ -27,26 +27,10 @@ export async function loadData(type) {
         return USER_DATA_DEFAULTS[type];
     }
 
-    // Fallback for web/dev or first run (only for app data like games/prescriptions)
-    const storeKey = `maida_${type}`;
-    const stored = localStorage.getItem(storeKey);
-    if (stored) {
-        try {
-            return JSON.parse(stored);
-        } catch (e) {
-            console.warn(`[Maida] Corrupt localStorage for ${type}, clearing`);
-            localStorage.removeItem(storeKey);
-        }
-    }
-
-    // Final fallback: try to fetch from local assets in dev (only for app data)
-    try {
-        const resp = await fetch(`/src/data/${type}.json`);
-        return await resp.json();
-    } catch (e) {
-        if (type === 'games') return { games: [] };
-        return { prescriptions: { default: [], catalog: {} } };
-    }
+    // In Tauri, null from backend means no data — return empty defaults
+    if (type === 'games') return { games: [], source: 'uninitialized' };
+    if (type === 'prescriptions') return { prescriptions: { default: [], catalog: {} } };
+    return null;
 }
 
 export async function saveData(type, data) {
