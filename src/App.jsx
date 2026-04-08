@@ -109,6 +109,39 @@ function App() {
         setLocaleVersion(v => v + 1);
     }, []);
 
+    // Guided tour (spans Rin + Kamae)
+    // null = off, number = global step index
+    // Rin steps: 0=title, 1=prescription, 2=try, 3=notNow, 4=faceSwitch(interactive)
+    // Kamae steps: 5=kata, 6=search, 7=gameList, 8=faceSwitchBack(interactive)
+    const TOUR_TOTAL = 9;
+    const [tourStep, setTourStep] = useState(null);
+    const hasSeenTour = localStorage.getItem('maida-hasSeenTour') === 'true';
+
+    const startTour = useCallback(() => setTourStep(0), []);
+    const startKamaeTour = useCallback(() => setTourStep(5), []);
+    const closeTour = useCallback(() => {
+        setTourStep(null);
+        localStorage.setItem('maida-hasSeenTour', 'true');
+    }, []);
+    const prevTour = useCallback(() => {
+        setTourStep(s => {
+            if (s === null || s <= 0) return s;
+            // Don't go back across face boundaries (can't go from Kamae step 5 to Rin step 4)
+            if (s === 5) return s;
+            return s - 1;
+        });
+    }, []);
+    const advanceTour = useCallback(() => {
+        setTourStep(s => {
+            if (s === null) return null;
+            if (s >= TOUR_TOTAL - 1) {
+                localStorage.setItem('maida-hasSeenTour', 'true');
+                return null;
+            }
+            return s + 1;
+        });
+    }, []);
+
     // Face switching (Rin ↔ Kamae)
     const [face, setFace] = useState('rin');
     const focusMain = useCallback(() => {
@@ -120,8 +153,16 @@ function App() {
             }
         });
     }, []);
-    const switchToKamae = useCallback(() => { setFace(prev => { if (prev === 'kamae') return prev; focusMain(); return 'kamae'; }); }, [focusMain]);
-    const switchToRin = useCallback(() => { setFace(prev => { if (prev === 'rin') return prev; reloadShowcase(); focusMain(); return 'rin'; }); }, [reloadShowcase, focusMain]);
+    const switchToKamae = useCallback(() => {
+        setFace(prev => { if (prev === 'kamae') return prev; focusMain(); return 'kamae'; });
+        // Tour step 4 = face switch to Kamae (interactive)
+        if (tourStep === 4) setTourStep(5);
+    }, [focusMain, tourStep]);
+    const switchToRin = useCallback(() => {
+        setFace(prev => { if (prev === 'rin') return prev; reloadShowcase(); focusMain(); return 'rin'; });
+        // Tour step 8 = face switch back to Rin (interactive) → tour ends
+        if (tourStep === 8) { setTourStep(null); localStorage.setItem('maida-hasSeenTour', 'true'); }
+    }, [reloadShowcase, focusMain, tourStep]);
     const toggleFace = useCallback(() => setFace(f => f === 'rin' ? 'kamae' : 'rin'), []);
 
     // L1/R1 gamepad face switching
@@ -164,7 +205,7 @@ function App() {
             className="theme-toggle"
             onClick={toggleTheme}
             aria-label={theme === 'dark' ? t('ui.button.theme_light') : t('ui.button.theme_dark')}
-            title={theme === 'dark' ? t('ui.button.theme_light') : t('ui.button.theme_dark')}
+            data-tooltip={theme === 'dark' ? t('ui.button.theme_light') : t('ui.button.theme_dark')}
         >
             {theme === 'dark' ? '\u2600' : '\u263D'}
         </button>
@@ -349,7 +390,8 @@ function App() {
     if (face === 'kamae') {
         return (
             <div className="app-root" key={localeVersion}>
-                <KamaeView onSwitchToRin={switchToRin} theme={theme} toggleTheme={toggleTheme} onLocaleChange={handleLocaleChange} />
+                <KamaeView onSwitchToRin={switchToRin} theme={theme} toggleTheme={toggleTheme} onLocaleChange={handleLocaleChange}
+                    tourStep={tourStep} tourTotal={TOUR_TOTAL} onTourStart={startKamaeTour} onTourClose={closeTour} onTourAdvance={advanceTour} onTourPrev={prevTour} />
                 {themeToggle}
                 {import.meta.env.DEV && import.meta.env.VITE_AGENTATION && <div aria-hidden="true"><Agentation endpoint="http://localhost:4747" /></div>}
             </div>
@@ -377,6 +419,7 @@ function App() {
                 resumeGuard={resumeGuard}
                 onHideGame={hideGame}
                 onSwitchToKamae={switchToKamae}
+                tourStep={tourStep} tourTotal={TOUR_TOTAL} onTourStart={startTour} onTourClose={closeTour} onTourAdvance={advanceTour} onTourPrev={prevTour} hasSeenTour={hasSeenTour}
             />
             {themeToggle}
             <div className="global-version-tag" role="contentinfo">

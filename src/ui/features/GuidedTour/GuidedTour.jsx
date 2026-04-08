@@ -1,132 +1,156 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { t } from '../../../i18n';
 import { useGameInput } from '../../../hooks/useGameInput';
 import './GuidedTour.css';
 
 /**
- * GuidedTour — opt-in walkthrough of Rin controls.
- * Highlights one element at a time with a tooltip explanation.
- * Fully keyboard/gamepad/SR accessible.
+ * GuidedTour — highlights UI elements with tooltip explanations.
+ * App.jsx owns the global step counter. This component is a pure display.
+ *
+ * Props:
+ * - steps: [{ targetRef, text, interactive? }] — steps for this view
+ * - localIndex: which step within this view's steps array to show
+ * - globalIndex: current step in the full tour (for counter display)
+ * - totalSteps: total steps across all views
+ * - onAdvance: called when user clicks Next (non-interactive steps)
+ * - onClose: called when user clicks Skip or presses Escape
  */
-export default function GuidedTour({ steps, onClose }) {
-    const [currentStep, setCurrentStep] = useState(0);
-    const tooltipRef = useRef(null);
-    const [highlightRect, setHighlightRect] = useState(null);
+// Wrap keyboard shortcuts (e.g. Ctrl+Tab, RB, LB, NOT NOW, TRY) in <kbd> tags
+function formatHotkeys(text) {
+    if (!text) return null;
+    const parts = text.split(/(Ctrl\+Tab|LB|RB|NOT NOW|TRY|PLAY)/g);
+    return parts.map((part, i) =>
+        /^(Ctrl\+Tab|LB|RB|NOT NOW|TRY|PLAY)$/.test(part)
+            ? <kbd key={i} className="guided-tour-kbd">{part}</kbd>
+            : part
+    );
+}
 
-    const step = steps[currentStep];
-    const isLast = currentStep === steps.length - 1;
+export default function GuidedTour({ steps, localIndex, globalIndex, totalSteps, onAdvance, onPrev, onClose }) {
+    const tooltipRef = useRef(null);
+    const highlightRef = useRef(null);
+
+    const step = steps[localIndex];
+    const isLast = globalIndex === totalSteps - 1;
 
     // Measure target element position for clip-path hole
     useEffect(() => {
         if (!step?.targetRef?.current) {
-            setHighlightRect(null);
+            if (highlightRef.current) highlightRef.current.style.clipPath = 'none';
             return;
         }
 
         const measure = () => {
-            const rect = step.targetRef.current.getBoundingClientRect();
+            const el = step.targetRef.current;
+            const overlay = highlightRef.current;
+            if (!el || !overlay) return;
+
+            const rect = el.getBoundingClientRect();
             const padding = 8;
-            setHighlightRect({
-                top: rect.top - padding,
-                left: rect.left - padding,
-                width: rect.width + padding * 2,
-                height: rect.height + padding * 2,
-                // Tooltip position: prefer below, fallback above if near bottom
-                tooltipTop: rect.bottom + 16,
-                tooltipAbove: rect.top - 16,
-                tooltipLeft: Math.max(16, rect.left),
-                useAbove: rect.bottom + 200 > window.innerHeight,
-            });
+            const top = rect.top - padding;
+            const left = rect.left - padding;
+            const width = rect.width + padding * 2;
+            const height = rect.height + padding * 2;
+
+            overlay.style.clipPath = `polygon(
+                0% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%,
+                ${left}px ${top}px,
+                ${left}px ${top + height}px,
+                ${left + width}px ${top + height}px,
+                ${left + width}px ${top}px,
+                ${left}px ${top}px
+            )`;
+
+            // Position tooltip
+            const tooltip = tooltipRef.current;
+            if (!tooltip) return;
+            const maxW = 360;
+            const nearRight = rect.right + 16 > window.innerWidth - maxW;
+            const tLeft = nearRight
+                ? Math.max(16, window.innerWidth - maxW - 16)
+                : Math.max(16, rect.left);
+            const useAbove = rect.bottom + 200 > window.innerHeight;
+
+            tooltip.style.left = `${tLeft}px`;
+            tooltip.style.top = useAbove
+                ? `${rect.top - 16}px`
+                : `${rect.bottom + 16}px`;
+            tooltip.style.transform = useAbove ? 'translateY(-100%)' : 'none';
         };
 
         measure();
         window.addEventListener('resize', measure);
         return () => window.removeEventListener('resize', measure);
-    }, [currentStep, step]);
+    }, [localIndex, step]);
 
-    // Focus tooltip on each step for SR
+    // Interactive step: pulse the target element 3 times then hold glow
+    const pulsedRef = useRef(false);
     useEffect(() => {
-        const timer = setTimeout(() => {
-            tooltipRef.current?.focus();
-        }, 100);
-        return () => clearTimeout(timer);
-    }, [currentStep]);
+        pulsedRef.current = false;
+    }, [localIndex]);
+    useEffect(() => {
+        const el = step?.targetRef?.current;
+        if (!el || !step?.interactive || pulsedRef.current) return;
+        pulsedRef.current = true;
+        el.classList.remove('guided-tour-pulse');
+        // Force reflow so re-adding the class restarts the animation
+        void el.offsetWidth;
+        el.classList.add('guided-tour-pulse');
+        return () => el.classList.remove('guided-tour-pulse');
+    }, [localIndex, step]);
 
-    // Gamepad/keyboard support
+    // Focus tooltip for SR on each step change
+    useEffect(() => {
+        const timer = setTimeout(() => tooltipRef.current?.focus(), 100);
+        return () => clearTimeout(timer);
+    }, [localIndex]);
+
+    // Gamepad/keyboard (non-interactive steps only)
     useGameInput({
-        onMainAction: () => {
-            if (isLast) onClose();
-            else setCurrentStep(s => s + 1);
-        },
+        onMainAction: () => { if (!step?.interactive) onAdvance(); },
         onBack: onClose,
         disabled: false,
     });
 
-    // Keyboard handler for Escape
+    // Escape key
     useEffect(() => {
         const handleKey = (e) => {
-            if (e.key === 'Escape') {
-                e.preventDefault();
-                onClose();
-            }
+            if (e.key === 'Escape') { e.preventDefault(); onClose(); }
         };
         window.addEventListener('keydown', handleKey);
         return () => window.removeEventListener('keydown', handleKey);
     }, [onClose]);
 
-    const clipPath = highlightRect
-        ? `polygon(
-            0% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%,
-            ${highlightRect.left}px ${highlightRect.top}px,
-            ${highlightRect.left}px ${highlightRect.top + highlightRect.height}px,
-            ${highlightRect.left + highlightRect.width}px ${highlightRect.top + highlightRect.height}px,
-            ${highlightRect.left + highlightRect.width}px ${highlightRect.top}px,
-            ${highlightRect.left}px ${highlightRect.top}px
-          )`
-        : 'none';
-
-    const tooltipStyle = highlightRect ? {
-        position: 'fixed',
-        left: `${highlightRect.tooltipLeft}px`,
-        top: highlightRect.useAbove
-            ? `${highlightRect.tooltipAbove}px`
-            : `${highlightRect.tooltipTop}px`,
-        transform: highlightRect.useAbove ? 'translateY(-100%)' : 'none',
-        maxWidth: '360px',
-    } : {};
-
     return (
-        <div className="guided-tour-overlay" style={{ clipPath }}>
+        <div className="guided-tour-overlay" ref={highlightRef}>
             <div
                 ref={tooltipRef}
                 className="guided-tour-tooltip"
-                style={tooltipStyle}
+                style={{ position: 'fixed', maxWidth: '360px' }}
                 role="dialog"
                 aria-label={t('ui.tour.aria_label')}
                 aria-live="polite"
                 tabIndex={-1}
             >
-                <p className="guided-tour-text">{step?.text}</p>
+                <p className="guided-tour-text">{formatHotkeys(step?.text)}</p>
                 <div className="guided-tour-actions">
                     <span className="guided-tour-counter">
-                        {currentStep + 1} / {steps.length}
+                        {globalIndex + 1} / {totalSteps}
                     </span>
                     <div className="guided-tour-buttons">
-                        <button
-                            className="guided-tour-skip"
-                            onClick={onClose}
-                        >
+                        <button className="guided-tour-skip" onClick={onClose}>
                             {t('ui.tour.skip')}
                         </button>
-                        <button
-                            className="guided-tour-next"
-                            onClick={() => {
-                                if (isLast) onClose();
-                                else setCurrentStep(s => s + 1);
-                            }}
-                        >
-                            {isLast ? t('ui.tour.done') : t('ui.tour.next')}
-                        </button>
+                        {localIndex > 0 && onPrev && (
+                            <button className="guided-tour-prev" onClick={onPrev}>
+                                {t('ui.tour.prev')}
+                            </button>
+                        )}
+                        {!step?.interactive && (
+                            <button className="guided-tour-next" onClick={onAdvance}>
+                                {isLast ? t('ui.tour.done') : t('ui.tour.next')}
+                            </button>
+                        )}
                     </div>
                 </div>
             </div>

@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { t } from '../i18n';
 import { useGameInput } from '../hooks/useGameInput';
+import { createKata, addGameToKata } from '../core/katas';
 import bridge from '../services/bridge';
 import './OnboardingView.css';
 
@@ -74,7 +75,30 @@ export default function OnboardingView({ onComplete }) {
         const result = await bridge.requestOnboardingSync();
         clearTimeout(timer);
 
+        console.log('[Maida] Onboarding sync result:', JSON.stringify(result));
         if (result?.success) {
+            // Create a demo kata with 3 random installed games
+            try {
+                const gamesData = await bridge.getData('games');
+                console.log('[Maida] Demo Kata: gamesData keys:', gamesData ? Object.keys(gamesData) : 'null');
+                const installed = (gamesData?.games || []).filter(g => g.installed);
+                console.log('[Maida] Demo Kata: installed count:', installed.length);
+                if (installed.length >= 3) {
+                    const shuffled = [...installed].sort(() => Math.random() - 0.5);
+                    const demoKata = createKata('Demo Kata');
+                    const withGames = shuffled.slice(0, 3).reduce(
+                        (kata, game) => addGameToKata(kata, game.id || game.steamAppId),
+                        demoKata
+                    );
+                    await bridge.saveShowcase({
+                        games: [],
+                        katas: [withGames],
+                        activeKataId: withGames.id,
+                    });
+                }
+            } catch {
+                // Non-critical — proceed without demo kata
+            }
             onComplete();
         } else {
             setState('error');

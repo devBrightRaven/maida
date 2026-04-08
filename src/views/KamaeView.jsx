@@ -5,6 +5,7 @@ import KamaeSearch from '../ui/features/Kamae/KamaeSearch';
 import ExploreView from '../ui/features/Kamae/ExploreView';
 import SettingsPanel from '../ui/features/Kamae/SettingsPanel';
 import KataPanel from '../ui/features/Kamae/KataPanel';
+import GuidedTour from '../ui/features/GuidedTour/GuidedTour';
 import { useGameInput } from '../hooks/useGameInput';
 import { addGameToKata, removeGameFromKata } from '../core/katas';
 import { t } from '../i18n';
@@ -14,13 +15,14 @@ import Footer from '../ui/Footer';
 import AccessibilityPage from '../ui/pages/AccessibilityPage';
 import PrivacyPage from '../ui/pages/PrivacyPage';
 import TermsPage from '../ui/pages/TermsPage';
+import '../ui/features/GuidedTour/GuidedTour.css';
 import './KamaeView.css';
 
 /**
  * Kamae (構) — slow curation face.
  * Kata selector + game list + search + explore entry.
  */
-export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleChange }) {
+export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleChange, tourStep, tourTotal, onTourStart, onTourClose, onTourAdvance, onTourPrev }) {
     const [showcaseState, setShowcaseState] = useState({ games: [] });
     const [allInstalledGames, setAllInstalledGames] = useState([]);
     const [gameMap, setGameMap] = useState(new Map());
@@ -113,6 +115,11 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
     }, [showcaseState]);
 
     const containerRef = useRef(null);
+    const kataPanelRef = useRef(null);
+    const searchRef = useRef(null);
+    const showcaseListRef = useRef(null);
+    const faceSwitchRef = useRef(null);
+    const showTour = tourStep !== null && tourStep >= 5 && tourStep <= 8;
 
     // D-pad navigation: cycle through all interactive elements
     const handleNav = useCallback((dir) => {
@@ -171,6 +178,18 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
             }
         }
     }, [showSettings, exploring, expandedKataId]);
+
+    // F1 opens Kamae tour
+    useEffect(() => {
+        const handleKey = (e) => {
+            if (e.key === 'F1' && !showTour && !showSettings && !exploring) {
+                e.preventDefault();
+                onTourStart();
+            }
+        };
+        window.addEventListener('keydown', handleKey);
+        return () => window.removeEventListener('keydown', handleKey);
+    }, [showTour, showSettings, exploring, onTourStart]);
 
     useGameInput({
         onBack: handleBack,
@@ -256,24 +275,30 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
                     <span className={`kata-item-badge ${activeKataId === null ? '' : 'kata-item-badge--hidden'}`}>{t('ui.katas.active')}</span>
                     <span className="kata-item-actions kata-item-actions--placeholder" />
                 </button>
-                <KataPanel
-                    katas={showcaseState.katas || []}
-                    activeKataId={activeKataId}
-                    showcaseGames={allInstalledGames}
-                    onUpdate={handleKataUpdate}
-                    expandedId={expandedKataId}
-                    onExpandToggle={setExpandedKataId}
-                />
-                <KamaeSearch
-                    activeKataGameIds={activeKataGameIds}
-                    activeKataName={activeKata ? activeKata.name : null}
-                    onAdd={handleAdd}
-                />
-                <ShowcaseList
-                    games={displayedGames}
-                    onRemove={handleRemove}
-                    isKataMode={activeKata !== null}
-                />
+                <div ref={kataPanelRef}>
+                    <KataPanel
+                        katas={showcaseState.katas || []}
+                        activeKataId={activeKataId}
+                        showcaseGames={allInstalledGames}
+                        onUpdate={handleKataUpdate}
+                        expandedId={expandedKataId}
+                        onExpandToggle={setExpandedKataId}
+                    />
+                </div>
+                <div ref={searchRef}>
+                    <KamaeSearch
+                        activeKataGameIds={activeKataGameIds}
+                        activeKataName={activeKata ? activeKata.name : null}
+                        onAdd={handleAdd}
+                    />
+                </div>
+                <div ref={showcaseListRef}>
+                    <ShowcaseList
+                        games={displayedGames}
+                        onRemove={handleRemove}
+                        isKataMode={activeKata !== null}
+                    />
+                </div>
                 {/* Explore hidden for v0.1.0 — kata search replaces it */}
                 {false && activeKataId && (
                     <button
@@ -293,7 +318,35 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
                 </button>
                 <Footer onNavigate={(page) => { legalReturnRef.current = document.activeElement; setLegalPage(page); }} />
             </div>
-            <FaceSwitchButton direction="to-rin" onClick={onSwitchToRin} />
+            <button
+                className="help-tour-btn"
+                aria-label={t('ui.tour.help_aria')}
+                data-tooltip={t('ui.tour.help_tooltip')}
+                onClick={onTourStart}
+            >
+                ?
+            </button>
+            <FaceSwitchButton ref={faceSwitchRef} direction="to-rin" onClick={onSwitchToRin} />
+
+            {showTour && (() => {
+                const kamaeSteps = [
+                    { targetRef: kataPanelRef, text: t('ui.tour.step_kata') },
+                    { targetRef: searchRef, text: activeKata ? t('ui.tour.step_search') : t('ui.tour.step_search_no_kata') },
+                    { targetRef: showcaseListRef, text: activeKata ? t('ui.tour.step_list_kata') : t('ui.tour.step_list_no_kata') },
+                    { targetRef: faceSwitchRef, text: t('ui.tour.step_switch_rin'), interactive: true },
+                ];
+                return (
+                    <GuidedTour
+                        steps={kamaeSteps}
+                        localIndex={tourStep - 5}
+                        globalIndex={tourStep}
+                        totalSteps={tourTotal}
+                        onClose={onTourClose}
+                        onAdvance={onTourAdvance}
+                        onPrev={onTourPrev}
+                    />
+                );
+            })()}
         </main>
     );
 }

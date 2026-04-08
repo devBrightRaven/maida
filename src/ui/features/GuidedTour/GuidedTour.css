@@ -75,14 +75,115 @@
     background: var(--t-accent-soft, rgba(218, 165, 32, 0.25));
 }
 
+.guided-tour-prev {
+    color: var(--t-text-faint, #666);
+    background: transparent;
+}
+
+.guided-tour-prev:hover {
+    color: var(--t-text-soft, #aaa);
+}
+
+.guided-tour-kbd {
+    display: inline-block;
+    padding: 0.125rem 0.375rem;
+    font-size: 0.8125rem;
+    font-family: inherit;
+    color: var(--t-text, #eee);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--t-border-subtle, #444);
+    border-radius: 3px;
+    margin: 0 0.125rem;
+}
+
 .guided-tour-skip:focus-visible,
+.guided-tour-prev:focus-visible,
 .guided-tour-next:focus-visible {
     outline: 2px solid var(--t-accent, goldenrod);
     outline-offset: 2px;
 }
 
+/* Interactive step: pulse the target element 3 times, then hold glow */
+.guided-tour-pulse {
+    animation: tourPulse 0.6s ease-in-out 3 forwards;
+}
+
+@keyframes tourPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(218, 165, 32, 0);
+    }
+    50% {
+        box-shadow: 0 0 20px 6px rgba(218, 165, 32, 0.7);
+    }
+    100% {
+        box-shadow: 0 0 12px 4px rgba(218, 165, 32, 0.4);
+    }
+}
+
+/* ── Help / Tour Button (shared by Rin + Kamae) ── */
+
+.help-tour-btn {
+    position: fixed;
+    top: 8.5rem;
+    right: 20px;
+    /* relative for tooltip pseudo-element -- but fixed takes priority for layout */
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: transparent;
+    border: 1px solid var(--t-dim);
+    color: var(--t-dim);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s, border-color 0.2s;
+    line-height: 1;
+}
+
+.help-tour-btn:hover {
+    color: var(--t-text);
+    border-color: var(--t-text);
+}
+
+.help-tour-btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--t-bg), 0 0 0 4px var(--t-border);
+}
+
+.help-tour-btn::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    right: calc(100% + 8px);
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 0.25rem 0.5rem;
+    font-size: 0.6875rem;
+    font-weight: 400;
+    color: var(--t-text-soft, #aaa);
+    background: var(--t-surface, #1a1a2e);
+    border: 1px solid var(--t-border-subtle, #333);
+    border-radius: 4px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+}
+
+.help-tour-btn:hover::after,
+.help-tour-btn:focus-visible::after {
+    opacity: 1;
+}
+
 @media (prefers-reduced-motion: reduce) {
     .guided-tour-overlay {
         transition: none;
+    }
+    .guided-tour-pulse {
+        animation: none;
+        box-shadow: 0 0 12px 4px rgba(218, 165, 32, 0.5);
     }
 }

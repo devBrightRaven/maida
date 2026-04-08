@@ -35,18 +35,25 @@ export default function RinView({
     anchorThreshold,
     resumeGuard,
     onHideGame,
-    onSwitchToKamae
+    onSwitchToKamae,
+    tourStep,
+    tourTotal,
+    onTourStart,
+    onTourClose,
+    onTourAdvance,
+    onTourPrev,
+    hasSeenTour
 }) {
     const [expanded, setExpanded] = useState(false);
     const [showTrace, setShowTrace] = useState(false);
-    const [showTour, setShowTour] = useState(false);
     const [legalPage, setLegalPage] = useState(null);
     const legalReturnRef = React.useRef(null);
     const [focusedBtn, setFocusedBtn] = useState(null); // 'visit' | 'notToday' | 'back' | 'switchKamae' | null
-    const hasSeenTour = localStorage.getItem('maida-hasSeenTour') === 'true';
+    const showTour = tourStep !== null && tourStep >= 0 && tourStep <= 4;
 
     // Refs for Focus Management
     const titleRef = React.useRef(null);
+    const prescriptionRef = React.useRef(null);
     const btnRefs = {
         visit: React.useRef(null),
         notToday: React.useRef(null),
@@ -130,23 +137,17 @@ export default function RinView({
         };
     }, []);
 
-    // H key opens guided tour
+    // F1 opens guided tour (H conflicts with SR heading navigation)
     useEffect(() => {
         const handleKey = (e) => {
-            if (e.key === 'h' && !e.ctrlKey && !e.altKey && !e.metaKey && !showTrace && !showTour) {
-                setShowTour(true);
+            if (e.key === 'F1' && !showTrace && !showTour) {
+                e.preventDefault();
+                onTourStart();
             }
         };
         window.addEventListener('keydown', handleKey);
         return () => window.removeEventListener('keydown', handleKey);
-    }, [showTrace, showTour]);
-
-    const closeTour = () => {
-        setShowTour(false);
-        localStorage.setItem('maida-hasSeenTour', 'true');
-        // Return focus to game title
-        setTimeout(() => titleRef.current?.focus(), 100);
-    };
+    }, [showTrace, showTour, onTourStart]);
 
     // Input Hook for Gamepad & Keyboard
     const { longPressProgress, handlers } = useGameInput({
@@ -284,13 +285,15 @@ export default function RinView({
                 <div className="idle-debug-trigger" onClick={onSecretTap}></div>
             )}
 
-            <GameDisplay
-                game={game}
-                prescription={prescription}
-                debugMode={debugMode}
-                isExpanded={expanded}
-                onSecretTap={onSecretTap}
-            />
+            <div ref={prescriptionRef}>
+                <GameDisplay
+                    game={game}
+                    prescription={prescription}
+                    debugMode={debugMode}
+                    isExpanded={expanded}
+                    onSecretTap={onSecretTap}
+                />
+            </div>
 
             <footer className="mvp-footer">
                 <div className="action-row">
@@ -399,21 +402,32 @@ export default function RinView({
             <button
                 className="help-tour-btn"
                 aria-label={t('ui.tour.help_aria')}
-                onClick={() => setShowTour(true)}
+                data-tooltip={t('ui.tour.help_tooltip')}
+                onClick={onTourStart}
             >
                 ?
             </button>
 
-            {showTour && game && (
-                <GuidedTour
-                    steps={[
-                        { targetRef: titleRef, text: t('ui.tour.step_title') },
-                        { targetRef: btnRefs.visit, text: t('ui.tour.step_try') },
-                        { targetRef: btnRefs.notToday, text: t('ui.tour.step_not_now') },
-                    ]}
-                    onClose={closeTour}
-                />
-            )}
+            {showTour && game && (() => {
+                const rinSteps = [
+                    { targetRef: titleRef, text: t('ui.tour.step_title') },
+                    { targetRef: prescriptionRef, text: t('ui.tour.step_prescription') },
+                    { targetRef: btnRefs.visit, text: t('ui.tour.step_try') },
+                    { targetRef: btnRefs.notToday, text: t('ui.tour.step_not_now') },
+                    { targetRef: btnRefs.switchKamae, text: t('ui.tour.step_switch_kamae'), interactive: true },
+                ];
+                return (
+                    <GuidedTour
+                        steps={rinSteps}
+                        localIndex={tourStep}
+                        globalIndex={tourStep}
+                        totalSteps={tourTotal}
+                        onClose={onTourClose}
+                        onAdvance={onTourAdvance}
+                        onPrev={onTourPrev}
+                    />
+                );
+            })()}
 
             <Footer onNavigate={(page) => { legalReturnRef.current = document.activeElement; setLegalPage(page); }} />
         </main>

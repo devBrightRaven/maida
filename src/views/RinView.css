@@ -349,36 +349,3 @@
     pointer-events: none;
     z-index: 1;
 }
-
-/* ── Help / Tour Button ─────────────── */
-
-.help-tour-btn {
-    position: fixed;
-    top: 8.5rem;
-    right: 20px;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: transparent;
-    border: 1px solid var(--t-dim);
-    color: var(--t-dim);
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    z-index: 60;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: color 0.2s, border-color 0.2s;
-    line-height: 1;
-}
-
-.help-tour-btn:hover {
-    color: var(--t-text);
-    border-color: var(--t-text);
-}
-
-.help-tour-btn:focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 2px var(--t-bg), 0 0 0 4px var(--t-border);
-}
