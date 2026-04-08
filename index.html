@@ -25,6 +25,7 @@
     .cta{display:inline-block;margin-top:12px;background:var(--accent);color:#111;text-decoration:none;padding:14px 20px;border-radius:6px;font-weight:600;font-size:16px}.cta:hover{filter:brightness(1.04)} .cta:focus-visible{outline:3px solid var(--focus);outline-offset:4px} .cta:active{transform:scale(.98)} html.lang-en .cta{font-size:16px}
     .skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;text-decoration:none}.skip-link:focus{left:16px;top:16px;width:auto;height:auto;padding:12px 16px;background:var(--accent);color:#111;border-radius:8px;z-index:9999;outline:4px solid var(--focus);outline-offset:3px;box-shadow:0 0 0 6px rgba(0,0,0,.45)}
     .skip-link[data-lang]{display:none!important}
+    .back-home{position:fixed;top:16px;left:16px;color:var(--ghost);text-decoration:none;font-size:14px;z-index:10;letter-spacing:.03em;transition:color .2s}.back-home:hover{color:var(--text)}
     html.lang-en .skip-link[data-lang="en"],html.lang-ja .skip-link[data-lang="ja"],html.lang-zh-tw .skip-link[data-lang="zh-tw"],html.lang-zh-cn .skip-link[data-lang="zh-cn"]{display:block!important}
     [data-lang]{display:none!important} html.lang-en [data-lang="en"],html.lang-ja [data-lang="ja"],html.lang-zh-tw [data-lang="zh-tw"],html.lang-zh-cn [data-lang="zh-cn"]{display:revert!important}
     .lang-switch{position:fixed;top:16px;right:16px;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.lang-switch button{background:none;border:1px solid #5b5248;color:#cfc7bd;padding:8px 10px;cursor:pointer;border-radius:6px;min-width:44px;min-height:32px}.lang-switch button.active,.lang-switch button.is-active-theme{background:var(--text);color:var(--bg);border-color:var(--text)}.lang-switch button:hover{border-color:var(--accent);color:var(--text)}.lang-switch button:focus-visible{outline:3px solid var(--focus);outline-offset:2px;box-shadow:0 0 0 4px rgba(0,0,0,.35)}#theme-toggle{min-width:80px;text-align:center} html[data-theme='light'] .cta{background:#4a3a20;color:#f5f0eb} html[data-theme='light'] .mock-title{color:#b9b0a5} html[data-theme='light'] .pill{color:#d2cbc2;border-color:#5b5248} @media (prefers-reduced-motion: reduce){.cta:active{transform:none}.cta:hover{filter:none}}
@@ -36,6 +37,7 @@
   <a href="#main" class="skip-link skip-ja" data-lang="ja">メインコンテンツへスキップ</a>
   <a href="#main" class="skip-link skip-zh-tw" data-lang="zh-tw">跳到主要內容</a>
   <a href="#main" class="skip-link skip-zh-cn" data-lang="zh-cn">跳到主要内容</a>
+  <a href="https://brightraven.world" class="back-home" aria-label="Back to Bright Raven World">&larr; BRW</a>
   <nav class="lang-switch" aria-label="Language switcher and theme toggle" role="navigation">
     <button class="active" data-set-lang="en">EN</button>
     <button data-set-lang="ja">JA</button>
