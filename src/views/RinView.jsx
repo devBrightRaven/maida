@@ -406,7 +406,7 @@ export default function RinView({
 
             <button
                 ref={helpBtnRef}
-                className="help-tour-btn"
+                className={`help-tour-btn ${!hasSeenTour ? 'help-tour-btn--spotlight' : ''}`}
                 aria-label={t('ui.tour.help_aria')}
                 data-tooltip={t('ui.tour.help_tooltip')}
                 onClick={onTourStart}

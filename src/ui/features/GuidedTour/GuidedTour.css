@@ -190,6 +190,22 @@
     opacity: 1;
 }
 
+/* Spotlight: slow pulse on first visit to draw attention */
+.help-tour-btn--spotlight {
+    animation: helpSpotlight 2s ease-in-out 3;
+    border-color: var(--t-accent, goldenrod);
+    color: var(--t-accent, goldenrod);
+}
+
+@keyframes helpSpotlight {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(218, 165, 32, 0);
+    }
+    50% {
+        box-shadow: 0 0 16px 4px rgba(218, 165, 32, 0.5);
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .guided-tour-overlay {
         transition: none;
@@ -197,5 +213,9 @@
     .guided-tour-pulse {
         animation: none;
         box-shadow: 0 0 12px 4px rgba(218, 165, 32, 0.5);
+    }
+    .help-tour-btn--spotlight {
+        animation: none;
+        box-shadow: 0 0 12px 4px rgba(218, 165, 32, 0.4);
     }
 }
