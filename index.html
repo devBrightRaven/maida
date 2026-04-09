@@ -17,17 +17,18 @@
     *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
     main{max-width:820px;margin:0 auto;padding:72px 24px 96px} section{padding:48px 0;border-top:1px solid var(--line)} section:first-of-type{border-top:0;padding-top:12px}
     h1,h2,h3{line-height:1.12;margin:0 0 18px;font-weight:500} h1{font-size:clamp(40px,7vw,72px)} h2{font-size:clamp(28px,4vw,40px)} h3{font-size:22px;margin-bottom:8px}
-    p{margin:0 0 16px;color:var(--muted);font-size:16px} html.lang-en p{font-size:14px} .lead{color:var(--text);font-size:clamp(24px,3vw,32px);line-height:1.35;margin:20px 0 28px} html.lang-en .lead{font-size:clamp(22px,3vw,30px)}
-    .strong{color:var(--text)} .label{color:var(--accent);font-size:16px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px} html.lang-en .label{font-size:14px;letter-spacing:.14em}
-    .kanji{color:rgba(220,196,160,.30);font-size:56px;line-height:1; margin:8px 0 20px} .phase{color:var(--accent);font-size:16px;letter-spacing:.10em;text-transform:uppercase;margin:22px 0 10px} html.lang-en .phase{font-size:14px;letter-spacing:.12em}
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}.card{background:var(--panel);border:1px solid var(--line);padding:24px;border-radius:10px}.reading{color:#e0d6ca;font-size:16px;margin-bottom:12px} html.lang-en .reading{font-size:14px}
-    .visual-anchor{background:linear-gradient(180deg,#171717,#101010);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:24px 0}.mock-window{border:1px solid #3b342e;border-radius:10px;padding:18px;background:#0e0e0e}.mock-title{font-size:16px;color:var(--ghost);margin-bottom:12px} html.lang-en .mock-title{font-size:14px}.mock-game{font-size:26px;color:var(--text);margin-bottom:14px}.mock-actions{display:flex;gap:12px}.pill{padding:8px 14px;border:1px solid #4a4239;border-radius:999px;color:var(--muted);font-size:16px} html.lang-en .pill{font-size:14px}
-    .cta{display:inline-block;margin-top:12px;background:var(--accent);color:#111;text-decoration:none;padding:14px 20px;border-radius:6px;font-weight:600;font-size:16px}.cta:hover{filter:brightness(1.04)} .cta:focus-visible{outline:3px solid var(--focus);outline-offset:4px} .cta:active{transform:scale(.98)} html.lang-en .cta{font-size:14px}
+    p{margin:0 0 16px;color:var(--muted);font-size:16px} html.lang-en p{font-size:16px} .lead{color:var(--text);font-size:clamp(24px,3vw,32px);line-height:1.35;margin:20px 0 28px} html.lang-en .lead{font-size:clamp(24px,3vw,30px)}
+    .strong{color:var(--text)} .label{color:var(--accent);font-size:16px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px} html.lang-en .label{font-size:16px;letter-spacing:.14em}
+    .kanji{color:rgba(220,196,160,.30);font-size:56px;line-height:1; margin:8px 0 20px} .phase{color:var(--accent);font-size:16px;letter-spacing:.10em;text-transform:uppercase;margin:22px 0 10px} html.lang-en .phase{font-size:16px;letter-spacing:.12em}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}.card{background:var(--panel);border:1px solid var(--line);padding:24px;border-radius:10px}.reading{color:#e0d6ca;font-size:16px;margin-bottom:12px} html.lang-en .reading{font-size:16px}
+    .visual-anchor{background:linear-gradient(180deg,#171717,#101010);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:24px 0}.mock-window{border:1px solid #3b342e;border-radius:10px;padding:18px;background:#0e0e0e}.mock-title{font-size:16px;color:var(--ghost);margin-bottom:12px} html.lang-en .mock-title{font-size:16px}.mock-game{font-size:26px;color:var(--text);margin-bottom:14px}.mock-actions{display:flex;gap:12px}.pill{padding:8px 14px;border:1px solid #4a4239;border-radius:999px;color:var(--muted);font-size:16px} html.lang-en .pill{font-size:16px}
+    .cta{display:inline-block;margin-top:12px;background:var(--accent);color:#111;text-decoration:none;padding:14px 20px;border-radius:6px;font-weight:600;font-size:16px}.cta:hover{filter:brightness(1.04)} .cta:focus-visible{outline:3px solid var(--focus);outline-offset:4px} .cta:active{transform:scale(.98)} html.lang-en .cta{font-size:16px}
     .skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;text-decoration:none}.skip-link:focus{left:16px;top:16px;width:auto;height:auto;padding:12px 16px;background:var(--accent);color:#111;border-radius:8px;z-index:9999;outline:4px solid var(--focus);outline-offset:3px;box-shadow:0 0 0 6px rgba(0,0,0,.45)}
     .skip-link[data-lang]{display:none!important}
+    .back-home{position:fixed;top:16px;left:16px;color:var(--ghost);text-decoration:none;font-size:14px;z-index:10;letter-spacing:.03em;transition:color .2s}.back-home:hover{color:var(--text)}
     html.lang-en .skip-link[data-lang="en"],html.lang-ja .skip-link[data-lang="ja"],html.lang-zh-tw .skip-link[data-lang="zh-tw"],html.lang-zh-cn .skip-link[data-lang="zh-cn"]{display:block!important}
     [data-lang]{display:none!important} html.lang-en [data-lang="en"],html.lang-ja [data-lang="ja"],html.lang-zh-tw [data-lang="zh-tw"],html.lang-zh-cn [data-lang="zh-cn"]{display:revert!important}
-    .lang-switch{position:fixed;top:16px;right:16px;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.lang-switch button{background:none;border:1px solid #5b5248;color:#cfc7bd;padding:8px 10px;cursor:pointer;border-radius:6px;min-width:44px;min-height:32px}.lang-switch button.active,.lang-switch button.is-active-theme{background:var(--accent);color:#111;border-color:var(--accent)}.lang-switch button:hover{border-color:var(--accent);color:var(--text)}.lang-switch button:focus-visible{outline:3px solid var(--focus);outline-offset:2px;box-shadow:0 0 0 4px rgba(0,0,0,.35)}#theme-toggle{min-width:132px;text-align:center} html[data-theme='light'] .cta{background:#4a3a20;color:#f5f0eb} html[data-theme='light'] .mock-title{color:#b9b0a5} html[data-theme='light'] .pill{color:#d2cbc2;border-color:#5b5248} @media (prefers-reduced-motion: reduce){.cta:active{transform:none}.cta:hover{filter:none}}
+    .lang-switch{position:fixed;top:16px;right:16px;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.lang-switch button{background:none;border:1px solid #5b5248;color:#cfc7bd;padding:8px 10px;cursor:pointer;border-radius:6px;min-width:44px;min-height:32px}.lang-switch button.active,.lang-switch button.is-active-theme{background:var(--text);color:var(--bg);border-color:var(--text)}.lang-switch button:hover{border-color:var(--text);background:var(--text);color:var(--bg)}.lang-switch button:focus-visible{outline:3px solid var(--focus);outline-offset:2px;box-shadow:0 0 0 4px rgba(0,0,0,.35)}#theme-toggle{min-width:80px;text-align:center} html[data-theme='light'] .cta{background:#4a3a20;color:#f5f0eb} html[data-theme='light'] .mock-title{color:#b9b0a5} html[data-theme='light'] .pill{color:#d2cbc2;border-color:#5b5248} @media (prefers-reduced-motion: reduce){.cta:active{transform:none}.cta:hover{filter:none}}
     .sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}@media (max-width:720px){.grid{grid-template-columns:1fr}.kanji{font-size:44px}}
   </style>
 </head>
@@ -36,12 +37,13 @@
   <a href="#main" class="skip-link skip-ja" data-lang="ja">メインコンテンツへスキップ</a>
   <a href="#main" class="skip-link skip-zh-tw" data-lang="zh-tw">跳到主要內容</a>
   <a href="#main" class="skip-link skip-zh-cn" data-lang="zh-cn">跳到主要内容</a>
+  <a href="https://brightraven.world" class="back-home" aria-label="Back to Bright Raven World">← Back</a>
   <nav class="lang-switch" aria-label="Language switcher and theme toggle" role="navigation">
     <button class="active" data-set-lang="en">EN</button>
     <button data-set-lang="ja">JA</button>
     <button data-set-lang="zh-cn">简</button>
     <button data-set-lang="zh-tw">繁</button>
-    <button id="theme-toggle" aria-label="Theme: follow system">Theme: System</button>
+    <button id="theme-toggle" aria-label="Theme: dark">Dark</button>
   </nav>
   <main id="main">
     <section aria-labelledby="hero-title">
@@ -70,10 +72,10 @@
     <section aria-labelledby="problem-title">
       <div class="label"><span lang="en" data-lang="en">The problem</span><span data-lang="ja">問題の正体</span><span data-lang="zh-tw">問題</span><span data-lang="zh-cn">问题</span></div>
       <h2 id="problem-title">
-        <span data-lang="en">Your free time shouldn't feel like this.</span>
-        <span data-lang="ja">余暇が、こんなに重いはずがない。</span>
-        <span data-lang="zh-tw">你的休閒時間，不應該有這種壓力。</span>
-        <span data-lang="zh-cn">你的休闲时间，不应该有这种压力。</span>
+        <span data-lang="en">Your free time shouldn't be stuck with choices.</span>
+        <span data-lang="ja">余暇が、選択で潰れるなんておかしい。</span>
+        <span data-lang="zh-tw">你的休閒時間，不應該浪費在選擇上。</span>
+        <span data-lang="zh-cn">你的休闲时间，不应该浪费在选择上。</span>
       </h2>
       <p><span data-lang="en">This isn't laziness. It isn't pickiness. It isn't that you don't love games anymore.</span><span data-lang="ja">怠けじゃない。飽きたわけでもない。ゲームが嫌いになったわけでもない。</span><span data-lang="zh-tw">這不是懶惰。不是你變挑。不是你不再愛玩遊戲了。</span><span data-lang="zh-cn">这不是懒惰。不是你变挑了。不是你不爱玩游戏了。</span></p>
       <p><span data-lang="en">More options doesn't always mean more freedom. Sometimes it just means paralysis.</span><span data-lang="ja">選択肢が多いほど自由とは限らない。ただ麻痺するだけのこともある。</span><span data-lang="zh-tw">選項越多，不一定越自由。有時候只是更麻痺。</span><span data-lang="zh-cn">选项越多，不一定越自由。有时候只是更麻痹。</span></p>
@@ -83,10 +85,10 @@
     <section aria-labelledby="what-title">
       <div class="label"><span lang="en" data-lang="en">What Maida is</span><span data-lang="ja">Maida とは</span><span data-lang="zh-tw">Maida 是什麼</span><span data-lang="zh-cn">Maida 是什么</span></div>
       <h2 id="what-title">
-        <span data-lang="en">An entrance to starting, not a system for living.</span>
-        <span data-lang="ja">始めるための入口。生活を管理するシステムではない。</span>
-        <span data-lang="zh-tw">一個讓你開始的入口，不是一套替你生活的系統。</span>
-        <span data-lang="zh-cn">一个让你开始的入口，不是一套替你生活的系统。</span>
+        <span data-lang="en">A space before playing, and a space you shouldn't be for long.</span>
+        <span data-lang="ja">遊び始める前の間。長く留まる場所ではない。</span>
+        <span data-lang="zh-tw">一個讓你開始遊玩的空間，不是讓你盯著遊戲列表發呆的地方。</span>
+        <span data-lang="zh-cn">一个让你开始游玩的空间，不是让你盯着游戏列表发呆的地方。</span>
       </h2>
       <p><span data-lang="en">Maida shows you one game at a time. From what you already have installed. You answer: play it now, or not now.</span><span data-lang="ja">Maida は一度に一本だけ見せる。インストール済みのゲームの中から。答えは二つ：今やる、か、今はやらない。</span><span data-lang="zh-tw">Maida 每次只給你看一款遊戲。從你已經安裝的遊戲中。你回答：現在玩，或現在不要。</span><span data-lang="zh-cn">Maida 每次只给你看一款游戏。从你已经安装的游戏中。你回答：现在玩，或现在不要。</span></p>
       <p><span data-lang="en">It's not a recommendation engine. Not a backlog tracker. Not a system that pretends to know you better than you know yourself.</span><span data-lang="ja">レコメンドエンジンじゃない。バックログ管理ツールでもない。あなたより「あなたをわかっている」ふりをするシステムでもない。</span><span data-lang="zh-tw">它不是推薦引擎。不是待辦清單。不是一個假裝比你更懂你的系統。</span><span data-lang="zh-cn">它不是推荐引擎。不是待办清单。不是一个假装比你更懂你的系统。</span></p>
@@ -126,17 +128,17 @@
       <h2 id="cta-title"><span data-lang="en">Tonight, don't just stare at the library.</span><span data-lang="ja">今夜は、ライブラリを眺めるだけで終わらせない。</span><span data-lang="zh-tw">今晚別再盯著庫看了。</span><span data-lang="zh-cn">今晚别再盯着库看了。</span></h2>
       <p><span data-lang="en">Free. No account. Windows + Linux. Handheld-friendly.</span><span data-lang="ja">無料。アカウント不要。Windows + Linux。ハンドヘルド対応。</span><span data-lang="zh-tw">免費。不需要帳號。Windows / Linux。手持裝置友善。</span><span data-lang="zh-cn">免费。不需要账号。Windows / Linux。掌机友好。</span></p>
       <a href="https://github.com/devBrightRaven/maida/releases/latest" class="cta"><span data-lang="en">Download from GitHub</span><span data-lang="ja">GitHub からダウンロード</span><span data-lang="zh-tw">從 GitHub 下載</span><span data-lang="zh-cn">从 GitHub 下载</span></a>
-      <p style="margin-top:16px"><a href="https://ko-fi.com/devbrightraven" style="color:var(--accent);text-decoration:none;font-size:14px"><span data-lang="en">Support on Ko-fi</span><span data-lang="ja">Ko-fi で応援</span><span data-lang="zh-tw">在 Ko-fi 上支持</span><span data-lang="zh-cn">在 Ko-fi 上支持</span> ☕</a></p>
+      <p style="margin-top:16px"><a href="https://ko-fi.com/devbrightraven" style="color:var(--accent);text-decoration:none;font-size:16px"><span data-lang="en">Support on Ko-fi</span><span data-lang="ja">Ko-fi で応援</span><span data-lang="zh-tw">在 Ko-fi 上支持</span><span data-lang="zh-cn">在 Ko-fi 上支持</span> ☕</a></p>
     </section>
     <footer style="padding:48px 0 0;border-top:1px solid var(--line);text-align:center;color:var(--ghost);font-size:13px">
-      <p>&copy; 2026 Bright Raven World. <a href="https://github.com/devBrightRaven/maida" style="color:var(--accent);text-decoration:none">Source (MIT)</a> &middot; <a href="mailto:bertram@brightraven.world" style="color:var(--accent);text-decoration:none">bertram@brightraven.world</a></p>
+      <p><a href="https://brightraven.world" style="color:var(--accent);text-decoration:none">&larr; Bright Raven World</a></p><p>&copy; 2026 Bright Raven World. <a href="https://github.com/devBrightRaven/maida" style="color:var(--accent);text-decoration:none">Source (MIT)</a> &middot; <a href="mailto:bertram@brightraven.world" style="color:var(--accent);text-decoration:none">bertram@brightraven.world</a></p>
     </footer>
   </main>
   <script>
     const map={en:'en',ja:'ja','zh-tw':'zh-TW','zh-cn':'zh-CN'};
     const root=document.documentElement;
     const themeBtn=document.getElementById('theme-toggle');
-    const themes=['system','light','dark'];
+    const themes=['dark','light'];
     const themeVars={
       dark:{'--bg':'#0b0b0b','--panel':'#121212','--text':'#f1ebe3','--muted':'#d2cbc2','--ghost':'#b9b0a5','--accent':'#dcc4a0','--line':'#2a2622','--focus':'#e8c840'},
       light:{'--bg':'#f5f0eb','--panel':'#ebe5de','--text':'#1c1712','--muted':'#4f4942','--ghost':'#6b6258','--accent':'#6a5535','--line':'#cfc5bb','--focus':'#9a6f00'}
@@ -148,20 +150,20 @@
         root.removeAttribute('data-theme');
         const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
         setThemeVars(prefersLight ? 'light' : 'dark');
-        themeBtn.textContent='Theme: System';
+        themeBtn.textContent='Dark';
         themeBtn.setAttribute('aria-label','Theme: follow system');
       } else if(mode==='light'){
         root.setAttribute('data-theme','light');
         setThemeVars('light');
-        themeBtn.textContent='Theme: Light';
+        themeBtn.textContent='Light';
         themeBtn.setAttribute('aria-label','Theme: light');
       } else {
         root.removeAttribute('data-theme');
         setThemeVars('dark');
-        themeBtn.textContent='Theme: Dark';
+        themeBtn.textContent='Dark';
         themeBtn.setAttribute('aria-label','Theme: dark');
       }
-      themeBtn.classList.toggle('is-active-theme', mode!=='system');
+      themeBtn.classList.toggle('is-active-theme', true);
       localStorage.setItem('maida-sample-theme',mode);
       themeBtn.dataset.mode = mode;
     };
@@ -173,7 +175,7 @@
       applyTheme(next);
     });
     const savedLang = localStorage.getItem('maida-sample-lang') || 'en';
-    const savedTheme = localStorage.getItem('maida-sample-theme') || 'system';
+    const savedTheme = localStorage.getItem('maida-sample-theme') || 'dark';
     applyLang(savedLang);
     applyTheme(savedTheme);
     window.matchMedia('(prefers-color-scheme: light)').addEventListener?.('change',()=>{ if((themeBtn.dataset.mode||'system')==='system') applyTheme('system'); });
