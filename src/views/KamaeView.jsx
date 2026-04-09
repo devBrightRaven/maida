@@ -22,7 +22,7 @@ import './KamaeView.css';
  * Kamae (構) — slow curation face.
  * Kata selector + game list + search + explore entry.
  */
-export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleChange, tourStep, tourTotal, onTourStart, onTourClose, onTourAdvance, onTourPrev, settingsRequested, onSettingsOpened }) {
+export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleChange, tourStep, tourTotal, onTourStart, onTourReplay, onTourClose, onTourAdvance, onTourPrev, settingsRequested, onSettingsOpened }) {
     const [showcaseState, setShowcaseState] = useState({ games: [] });
     const [allInstalledGames, setAllInstalledGames] = useState([]);
     const [gameMap, setGameMap] = useState(new Map());
@@ -224,7 +224,7 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
         return (
             <main className="kamae-view" ref={containerRef}>
                 <div className="kamae-content">
-                    <SettingsPanel onClose={() => setShowSettings(false)} theme={theme} toggleTheme={toggleTheme} onLocaleChange={onLocaleChange} onTourStart={onTourStart} />
+                    <SettingsPanel onClose={() => setShowSettings(false)} theme={theme} toggleTheme={toggleTheme} onLocaleChange={onLocaleChange} onTourStart={onTourReplay} />
                 </div>
             </main>
         );

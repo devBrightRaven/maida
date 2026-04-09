@@ -119,6 +119,10 @@ function App() {
 
     const startTour = useCallback(() => setTourStep(0), []);
     const startKamaeTour = useCallback(() => setTourStep(5), []);
+    const startFullTour = useCallback(() => {
+        setFace('rin');
+        setTourStep(0);
+    }, []);
     const closeTour = useCallback(() => {
         setTourStep(null);
         localStorage.setItem('maida-hasSeenTour', 'true');
@@ -407,7 +411,7 @@ function App() {
         return (
             <div className="app-root" key={localeVersion}>
                 <KamaeView onSwitchToRin={switchToRin} theme={theme} toggleTheme={toggleTheme} onLocaleChange={handleLocaleChange}
-                    tourStep={tourStep} tourTotal={TOUR_TOTAL} onTourStart={startKamaeTour} onTourClose={closeTour} onTourAdvance={advanceTour} onTourPrev={prevTour}
+                    tourStep={tourStep} tourTotal={TOUR_TOTAL} onTourStart={startKamaeTour} onTourReplay={startFullTour} onTourClose={closeTour} onTourAdvance={advanceTour} onTourPrev={prevTour}
                     settingsRequested={settingsRequested} onSettingsOpened={() => setSettingsRequested(false)} />
                 {themeToggle}
                 {import.meta.env.DEV && import.meta.env.VITE_AGENTATION && <div aria-hidden="true"><Agentation endpoint="http://localhost:4747" /></div>}
