@@ -133,16 +133,21 @@ export default function GuidedTour({ steps, localIndex, globalIndex, totalSteps,
         return () => el.classList.remove('guided-tour-pulse');
     }, [localIndex, step]);
 
-    // Focus the primary action button on each step change
+    // Focus management on each step change
     useEffect(() => {
         const timer = setTimeout(() => {
-            const order = getButtonOrder();
-            // Focus Next if available, otherwise Skip
-            const target = order.includes('next') ? 'next' : 'skip';
-            focusButton(target);
+            if (step?.interactive && step?.targetRef?.current) {
+                // Interactive step: focus the target element itself (e.g. face switch button)
+                step.targetRef.current.focus();
+            } else {
+                // Normal step: focus Next button
+                const order = getButtonOrder();
+                const target = order.includes('next') ? 'next' : 'skip';
+                focusButton(target);
+            }
         }, 150);
         return () => clearTimeout(timer);
-    }, [localIndex, getButtonOrder, focusButton]);
+    }, [localIndex, step, getButtonOrder, focusButton]);
 
     // Gamepad: A = activate focused button, B = close, D-pad = navigate buttons
     useGameInput({
