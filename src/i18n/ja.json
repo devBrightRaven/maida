@@ -105,7 +105,8 @@
         },
         "settings": {
             "title": "設定",
-            "tour": "操作ガイド (F1)",
+            "tour_title": "操作ガイド",
+            "tour_replay": "もう一度見る",
             "language_title": "言語：{current}",
             "language_confirm": "もう一度押して適用",
             "haptic_title": "振動：{current}",

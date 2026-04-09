@@ -127,16 +127,20 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
                 </button>
             </header>
 
-            <section className="kamae-settings-section">
-                {onTourStart && (
+            {onTourStart && (
+                <section className="kamae-settings-section" aria-labelledby="settings-tour-title">
+                    <h2 id="settings-tour-title" className="kamae-settings-section-title">{t('ui.settings.tour_title')}</h2>
                     <button
                         type="button"
-                        className="kamae-settings-disclosure"
+                        className="kamae-settings-btn"
                         onClick={() => { onClose(); onTourStart(); }}
                     >
-                        {t('ui.settings.tour')} ▸
+                        {t('ui.settings.tour_replay')}
                     </button>
-                )}
+                </section>
+            )}
+
+            <section className="kamae-settings-section">
                 <button
                     type="button"
                     className="kamae-settings-disclosure"
@@ -274,7 +278,7 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
                             <tbody>
                                 <tr><td>{t('ui.button.switch_to_kamae')}/{t('ui.button.switch_to_rin')}</td><td>Ctrl+Tab</td><td>RB / LB</td></tr>
                                 <tr><td>{t('ui.settings.title')}</td><td>F10</td><td>Menu</td></tr>
-                                <tr><td>{t('ui.tour.help_aria')}</td><td>F1</td><td>Menu → {t('ui.settings.tour')}</td></tr>
+                                <tr><td>{t('ui.settings.tour_title')}</td><td>F1</td><td>Menu → {t('ui.settings.tour_replay')}</td></tr>
                                 <tr><td>{t('ui.settings.back')}</td><td>Escape</td><td>B</td></tr>
                             </tbody>
                         </table>

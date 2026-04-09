@@ -105,7 +105,8 @@
         },
         "settings": {
             "title": "Settings",
-            "tour": "Guided Tour (F1)",
+            "tour_title": "Guided Tour",
+            "tour_replay": "Replay",
             "language_title": "Language: {current}",
             "language_confirm": "Press again to apply",
             "haptic_title": "Vibration: {current}",
