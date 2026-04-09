@@ -8,12 +8,12 @@ source: claude-code
 project: maida
 created: 2025-01-01
 updated: 2026-03-31
-description: "Maida v0.1.0 User Manual (English): covers Rin (fast decision), Kamae (curation), Kata (grouping), anchoring, freeze state, keyboard and gamepad controls, settings."
+description: "Maida v0.1.1 User Manual (English): covers Rin (fast decision), Kamae (curation), Kata (grouping), guided tour, anchoring, freeze state, keyboard and gamepad controls, settings."
 ---
 
 # Maida User Manual
 
-**Version: v0.1.0**
+**Version: v0.1.1**
 
 ---
 
@@ -33,11 +33,25 @@ Maida has two faces:
 
 1. Make sure **Steam is running**
 2. Open Maida
-3. Click **"Let Maida look for you"**
+3. Click **"Scan my Steam library"**
 4. Wait for the scan to complete (no data leaves your device)
-5. Done
+5. Done — Maida creates a "Demo Kata" with 3 random games to get you started
 
 Maida automatically detects your system language (English, Japanese, Simplified Chinese, Traditional Chinese). You can change it later in Settings.
+
+---
+
+## Guided Tour
+
+When you first enter Rin, look for the **?** button in the top-right corner. Press it (or press **F1**) to start a guided tour that walks you through:
+
+- What the game title and prescription mean
+- How TRY and Not Now work
+- How to switch to Kamae mode
+- How to manage katas and games in Kamae
+- How to switch back to Rin
+
+The tour is available any time — press ? or F1 whenever you need a refresher.
 
 ---
 
@@ -70,7 +84,7 @@ What happens:
 
 ## Kamae: Curation
 
-Tap the switch button at the bottom-left of Rin, or press **Ctrl+Tab** / **RB** to enter Kamae.
+Press the switch button on the right edge of Rin, or press **Ctrl+Tab** / **RB** to enter Kamae.
 
 In Kamae you can:
 - Browse games in your showcase
@@ -192,6 +206,7 @@ It's not recommending. It honestly reflects where your intention is leaning.
 | Action | Keyboard | Gamepad |
 |--------|----------|---------|
 | Switch light/dark | Click top-right button | D-pad + A |
+| Help / Tour | F1 or click ? button | — |
 | Back | Escape | B |
 
 NVDA screen reader supported (Windows). On Linux, Orca support is limited due to WebKitGTK constraints.
@@ -207,7 +222,7 @@ In Kamae, tap "Settings". Each section can be expanded by tapping its title.
 - **Controls**: Full list of keyboard and gamepad shortcuts.
 - **Appearance**: Toggle light/dark mode.
 - **IGDB Game Duration**: Optional. Enter Twitch Developer credentials to show estimated play time below game titles.
-- **Anonymous Usage Data**: Maida sends one anonymous ping per launch. Toggle off anytime.
+- **Anonymous Usage Data**: Each launch sends a small anonymous signal (random ID + install day count + version). Toggle off anytime.
 
 ---
 
@@ -255,5 +270,5 @@ Maida removes browsing entirely. One game. One choice. Move on.
 
 Contact: bertram@brightraven.world
 
-App Version: v0.1.0 | Manual Version: v0.1.0
-Last updated: 2026-03-31
+App Version: v0.1.1 | Manual Version: v0.1.1
+Last updated: 2026-04-09
