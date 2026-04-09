@@ -139,6 +139,9 @@ export default function KataPanel({
                     <div
                         key={ch.id}
                         className={`kata-group ${isActive ? 'kata-group--active' : ''} ${ch.gameIds.length === 0 ? 'kata-group--empty' : ''}`}
+                        tabIndex={0}
+                        role="group"
+                        aria-label={ch.name}
                         onKeyDown={(e) => { if (e.key === 'F2') { e.preventDefault(); handleStartRename(ch); } }}
                         onClick={(e) => {
                             if (isEditing) return;
