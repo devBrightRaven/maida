@@ -46,7 +46,7 @@
             "step_try": "Press 「TRY」 to launch this game. Hold for 3 seconds to save it for later.",
             "step_not_now": "Not feeling it? Press 「Not Now」 and Maida will show you another one.",
             "step_switch_kamae": "This button switches to Kamae mode, where you manage your game groups. Click it, press Ctrl+Tab, or RB on your gamepad.",
-            "step_kata": "Katas are mood-based game groups. Create one and add games you feel like playing.",
+            "step_kata": "Katas are mood-based game groups. Press + to create one, x to delete. Press F2 or gamepad Y to rename. In Rin, only games from the active kata will appear.",
             "step_search": "Search your installed games here and add them to the active kata.",
             "step_search_no_kata": "Search your installed games here. Create a kata first to start adding games.",
             "step_list_kata": "Your kata games are listed here. To remove: hold for 3 seconds, or press the remove button twice to confirm.",
