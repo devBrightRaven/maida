@@ -1,6 +1,6 @@
 [package]
 name = "maida"
-version = "0.1.0"
+version = "0.1.1"
 description = "Maida - Daily Focus Psychopomp"
 authors = ["Bright Raven"]
 edition = "2021"
