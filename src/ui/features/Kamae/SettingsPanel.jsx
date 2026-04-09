@@ -127,19 +127,16 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
                 </button>
             </header>
 
-            {onTourStart && (
-                <section className="kamae-settings-section">
+            <section className="kamae-settings-section">
+                {onTourStart && (
                     <button
                         type="button"
-                        className="kamae-settings-tour-btn"
+                        className="kamae-settings-disclosure"
                         onClick={() => { onClose(); onTourStart(); }}
                     >
-                        {t('ui.settings.tour')}
+                        {t('ui.settings.tour')} ▸
                     </button>
-                </section>
-            )}
-
-            <section className="kamae-settings-section">
+                )}
                 <button
                     type="button"
                     className="kamae-settings-disclosure"
