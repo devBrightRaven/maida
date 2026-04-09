@@ -45,6 +45,7 @@
 }
 
 .guided-tour-skip,
+.guided-tour-prev,
 .guided-tour-next {
     padding: 0.375rem 0.875rem;
     font-size: 0.75rem;
@@ -98,7 +99,10 @@
 
 .guided-tour-skip:focus-visible,
 .guided-tour-prev:focus-visible,
-.guided-tour-next:focus-visible {
+.guided-tour-next:focus-visible,
+.guided-tour-skip.is-focused,
+.guided-tour-prev.is-focused,
+.guided-tour-next.is-focused {
     outline: 2px solid var(--t-accent, goldenrod);
     outline-offset: 2px;
 }

@@ -54,6 +54,7 @@ export default function RinView({
     // Refs for Focus Management
     const titleRef = React.useRef(null);
     const prescriptionRef = React.useRef(null);
+    const helpBtnRef = React.useRef(null);
     const btnRefs = {
         visit: React.useRef(null),
         notToday: React.useRef(null),
@@ -174,8 +175,9 @@ export default function RinView({
             const isBack = current === btnRefs.back.current;
             const isTraceBtn = current?.classList?.contains('debug-trace-btn');
             const isSwitchKamae = current === btnRefs.switchKamae.current;
+            const isHelpBtn = current === helpBtnRef.current;
             const isFooterBtn = current?.closest('.app-footer');
-            const isKnownButton = isVisit || isNotToday || isBack || isTraceBtn || isSwitchKamae || isFooterBtn;
+            const isKnownButton = isVisit || isNotToday || isBack || isTraceBtn || isSwitchKamae || isHelpBtn || isFooterBtn;
 
             // Fallback: If focus is lost, on body, or on unknown element, grab NOT NOW
             if (!current || current === document.body || !isKnownButton) {
@@ -188,6 +190,7 @@ export default function RinView({
                 if (isNotToday) focusBtn('visit');
                 else if (isBack) focusBtn('notToday');
                 else if (isTraceBtn) focusBtn('visit');
+                else if (isHelpBtn) focusBtn('switchKamae');
                 else if (isSwitchKamae) canUndo ? focusBtn('back') : focusBtn('notToday');
                 else {
                     // Navigate within footer buttons or back to main
@@ -196,7 +199,7 @@ export default function RinView({
                     if (idx > 0) {
                         footerBtns[idx - 1].focus();
                     } else if (idx === 0) {
-                        focusBtn('switchKamae');
+                        helpBtnRef.current?.focus();
                     }
                 }
             }
@@ -207,6 +210,8 @@ export default function RinView({
                 else if (isNotToday && !canUndo) focusBtn('switchKamae');
                 else if (isBack) focusBtn('switchKamae');
                 else if (isSwitchKamae) {
+                    helpBtnRef.current?.focus();
+                } else if (isHelpBtn) {
                     const footer = document.querySelector('.app-footer button');
                     if (footer) footer.focus();
                 } else {
@@ -400,6 +405,7 @@ export default function RinView({
             )}
 
             <button
+                ref={helpBtnRef}
                 className="help-tour-btn"
                 aria-label={t('ui.tour.help_aria')}
                 data-tooltip={t('ui.tour.help_tooltip')}

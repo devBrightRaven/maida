@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { t } from '../../../i18n';
 import { useGameInput } from '../../../hooks/useGameInput';
 import './GuidedTour.css';
@@ -7,18 +7,16 @@ import './GuidedTour.css';
  * GuidedTour — highlights UI elements with tooltip explanations.
  * App.jsx owns the global step counter. This component is a pure display.
  *
- * Props:
- * - steps: [{ targetRef, text, interactive? }] — steps for this view
- * - localIndex: which step within this view's steps array to show
- * - globalIndex: current step in the full tour (for counter display)
- * - totalSteps: total steps across all views
- * - onAdvance: called when user clicks Next (non-interactive steps)
- * - onClose: called when user clicks Skip or presses Escape
+ * Gamepad support:
+ * - A button: advance (Next/Done) on non-interactive steps
+ * - B button: close tour (Skip)
+ * - D-pad left/right: navigate between Skip / Prev / Next buttons
+ * - D-pad focuses buttons so A confirms the focused action
  */
+
 // Wrap keyboard shortcuts and quoted button names in <kbd> tags
 function formatHotkeys(text) {
     if (!text) return null;
-    // Match: Ctrl+Tab, LB, RB, F1, F2, and quoted text like 「やる」
     const parts = text.split(/(Ctrl\+Tab|LB|RB|F1|F2|「[^」]+」)/g);
     return parts.map((part, i) =>
         /^(Ctrl\+Tab|LB|RB|F1|F2|「[^」]+」)$/.test(part)
@@ -28,11 +26,33 @@ function formatHotkeys(text) {
 }
 
 export default function GuidedTour({ steps, localIndex, globalIndex, totalSteps, onAdvance, onPrev, onClose }) {
-    const tooltipRef = useRef(null);
     const highlightRef = useRef(null);
+    const skipRef = useRef(null);
+    const prevRef = useRef(null);
+    const nextRef = useRef(null);
+    const [focusedBtn, setFocusedBtn] = useState('next'); // 'skip' | 'prev' | 'next'
 
     const step = steps[localIndex];
     const isLast = globalIndex === totalSteps - 1;
+    const hasPrev = localIndex > 0 && onPrev;
+
+    // Get the list of available buttons for d-pad navigation
+    const getButtonOrder = useCallback(() => {
+        const order = ['skip'];
+        if (hasPrev) order.push('prev');
+        if (!step?.interactive) order.push('next');
+        return order;
+    }, [hasPrev, step]);
+
+    // Focus the appropriate button
+    const focusButton = useCallback((name) => {
+        const refs = { skip: skipRef, prev: prevRef, next: nextRef };
+        const ref = refs[name];
+        if (ref?.current) {
+            ref.current.focus();
+            setFocusedBtn(name);
+        }
+    }, []);
 
     // Measure target element position for clip-path hole
     useEffect(() => {
@@ -61,10 +81,24 @@ export default function GuidedTour({ steps, localIndex, globalIndex, totalSteps,
                 ${left + width}px ${top}px,
                 ${left}px ${top}px
             )`;
+        };
 
-            // Position tooltip
-            const tooltip = tooltipRef.current;
+        measure();
+        window.addEventListener('resize', measure);
+        return () => window.removeEventListener('resize', measure);
+    }, [localIndex, step]);
+
+    // Position tooltip relative to target
+    useEffect(() => {
+        if (!step?.targetRef?.current) return;
+
+        const position = () => {
+            const el = step.targetRef.current;
+            if (!el) return;
+            const rect = el.getBoundingClientRect();
+            const tooltip = skipRef.current?.closest('.guided-tour-tooltip');
             if (!tooltip) return;
+
             const maxW = 360;
             const nearRight = rect.right + 16 > window.innerWidth - maxW;
             const tLeft = nearRight
@@ -79,9 +113,9 @@ export default function GuidedTour({ steps, localIndex, globalIndex, totalSteps,
             tooltip.style.transform = useAbove ? 'translateY(-100%)' : 'none';
         };
 
-        measure();
-        window.addEventListener('resize', measure);
-        return () => window.removeEventListener('resize', measure);
+        position();
+        window.addEventListener('resize', position);
+        return () => window.removeEventListener('resize', position);
     }, [localIndex, step]);
 
     // Interactive step: pulse the target element 3 times then hold glow
@@ -94,22 +128,42 @@ export default function GuidedTour({ steps, localIndex, globalIndex, totalSteps,
         if (!el || !step?.interactive || pulsedRef.current) return;
         pulsedRef.current = true;
         el.classList.remove('guided-tour-pulse');
-        // Force reflow so re-adding the class restarts the animation
         void el.offsetWidth;
         el.classList.add('guided-tour-pulse');
         return () => el.classList.remove('guided-tour-pulse');
     }, [localIndex, step]);
 
-    // Focus tooltip for SR on each step change
+    // Focus the primary action button on each step change
     useEffect(() => {
-        const timer = setTimeout(() => tooltipRef.current?.focus(), 100);
+        const timer = setTimeout(() => {
+            const order = getButtonOrder();
+            // Focus Next if available, otherwise Skip
+            const target = order.includes('next') ? 'next' : 'skip';
+            focusButton(target);
+        }, 150);
         return () => clearTimeout(timer);
-    }, [localIndex]);
+    }, [localIndex, getButtonOrder, focusButton]);
 
-    // Gamepad/keyboard (non-interactive steps only)
+    // Gamepad: A = activate focused button, B = close, D-pad = navigate buttons
     useGameInput({
-        onMainAction: () => { if (!step?.interactive) onAdvance(); },
+        onMainAction: () => {
+            // A button: activate whichever button has focus
+            if (focusedBtn === 'next' && !step?.interactive) onAdvance();
+            else if (focusedBtn === 'prev' && hasPrev) onPrev();
+            else if (focusedBtn === 'skip') onClose();
+        },
         onBack: onClose,
+        onNav: (dir) => {
+            const order = getButtonOrder();
+            const idx = order.indexOf(focusedBtn);
+            if (dir === 'right' || dir === 'down') {
+                const next = order[(idx + 1) % order.length];
+                focusButton(next);
+            } else if (dir === 'left' || dir === 'up') {
+                const prev = order[(idx - 1 + order.length) % order.length];
+                focusButton(prev);
+            }
+        },
         disabled: false,
     });
 
@@ -125,13 +179,11 @@ export default function GuidedTour({ steps, localIndex, globalIndex, totalSteps,
     return (
         <div className="guided-tour-overlay" ref={highlightRef}>
             <div
-                ref={tooltipRef}
                 className="guided-tour-tooltip"
                 style={{ position: 'fixed', maxWidth: '360px' }}
                 role="dialog"
                 aria-label={t('ui.tour.aria_label')}
                 aria-live="polite"
-                tabIndex={-1}
             >
                 <p className="guided-tour-text">{formatHotkeys(step?.text)}</p>
                 <div className="guided-tour-actions">
@@ -139,16 +191,28 @@ export default function GuidedTour({ steps, localIndex, globalIndex, totalSteps,
                         {globalIndex + 1} / {totalSteps}
                     </span>
                     <div className="guided-tour-buttons">
-                        <button className="guided-tour-skip" onClick={onClose}>
+                        <button
+                            ref={skipRef}
+                            className={`guided-tour-skip ${focusedBtn === 'skip' ? 'is-focused' : ''}`}
+                            onClick={onClose}
+                        >
                             {t('ui.tour.skip')}
                         </button>
-                        {localIndex > 0 && onPrev && (
-                            <button className="guided-tour-prev" onClick={onPrev}>
+                        {hasPrev && (
+                            <button
+                                ref={prevRef}
+                                className={`guided-tour-prev ${focusedBtn === 'prev' ? 'is-focused' : ''}`}
+                                onClick={onPrev}
+                            >
                                 {t('ui.tour.prev')}
                             </button>
                         )}
                         {!step?.interactive && (
-                            <button className="guided-tour-next" onClick={onAdvance}>
+                            <button
+                                ref={nextRef}
+                                className={`guided-tour-next ${focusedBtn === 'next' ? 'is-focused' : ''}`}
+                                onClick={onAdvance}
+                            >
                                 {isLast ? t('ui.tour.done') : t('ui.tour.next')}
                             </button>
                         )}
