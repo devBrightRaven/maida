@@ -203,16 +203,18 @@ export default function GuidedTour({ steps, localIndex, globalIndex, totalSteps,
                     <div className="guided-tour-buttons">
                         <button
                             ref={skipRef}
-                            className={`guided-tour-skip ${focusedBtn === 'skip' ? 'is-focused' : ''}`}
+                            className="guided-tour-skip"
                             onClick={onClose}
+                            onMouseEnter={() => { setFocusedBtn('skip'); skipRef.current?.focus(); }}
                         >
                             {t('ui.tour.skip')}
                         </button>
                         {hasPrev && (
                             <button
                                 ref={prevRef}
-                                className={`guided-tour-prev ${focusedBtn === 'prev' ? 'is-focused' : ''}`}
+                                className="guided-tour-prev"
                                 onClick={onPrev}
+                                onMouseEnter={() => { setFocusedBtn('prev'); prevRef.current?.focus(); }}
                             >
                                 {t('ui.tour.prev')}
                             </button>
@@ -220,8 +222,9 @@ export default function GuidedTour({ steps, localIndex, globalIndex, totalSteps,
                         {!step?.interactive && (
                             <button
                                 ref={nextRef}
-                                className={`guided-tour-next ${focusedBtn === 'next' ? 'is-focused' : ''}`}
+                                className="guided-tour-next"
                                 onClick={onAdvance}
+                                onMouseEnter={() => { setFocusedBtn('next'); nextRef.current?.focus(); }}
                             >
                                 {isLast ? t('ui.tour.done') : t('ui.tour.next')}
                             </button>
