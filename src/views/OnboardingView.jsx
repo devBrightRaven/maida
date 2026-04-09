@@ -77,6 +77,8 @@ export default function OnboardingView({ onComplete }) {
 
         if (result?.success) {
             // Create a demo kata with 3 random installed games
+            // Small delay to ensure Rust atomic write completes
+            await new Promise(r => setTimeout(r, 300));
             try {
                 const gamesData = await bridge.getData('games');
                 const installed = (gamesData?.games || []).filter(g => g.installed);
