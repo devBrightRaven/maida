@@ -41,6 +41,7 @@
             "help_tooltip": "Help (F1)",
             "aria_label": "Guided tour",
             "sr_hint": "Press F1 for help to learn the controls.",
+            "spotlight_hint": "Press here or F1 for a quick tour",
             "step_title": "This is a game from your Steam library. Maida picked it for you.",
             "step_prescription": "Each game comes with a short message to help you decide. Don't overthink it.",
             "step_try": "Press 「TRY」 to launch this game. Hold for 3 seconds to save it for later.",

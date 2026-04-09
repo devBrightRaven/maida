@@ -46,6 +46,7 @@ export default function RinView({
 }) {
     const [expanded, setExpanded] = useState(false);
     const [showTrace, setShowTrace] = useState(false);
+    const [showSpotlight, setShowSpotlight] = useState(!hasSeenTour);
     const [legalPage, setLegalPage] = useState(null);
     const legalReturnRef = React.useRef(null);
     const [focusedBtn, setFocusedBtn] = useState(null); // 'visit' | 'notToday' | 'back' | 'switchKamae' | null
@@ -137,6 +138,13 @@ export default function RinView({
             document.removeEventListener('focusout', handleFocusOut);
         };
     }, []);
+
+    // Auto-dismiss spotlight after 8 seconds
+    useEffect(() => {
+        if (!showSpotlight) return;
+        const timer = setTimeout(() => setShowSpotlight(false), 8000);
+        return () => clearTimeout(timer);
+    }, [showSpotlight]);
 
     // F1 opens guided tour (H conflicts with SR heading navigation)
     useEffect(() => {
@@ -406,13 +414,26 @@ export default function RinView({
 
             <button
                 ref={helpBtnRef}
-                className={`help-tour-btn ${!hasSeenTour ? 'help-tour-btn--spotlight' : ''}`}
+                className={`help-tour-btn ${showSpotlight ? 'help-tour-btn--spotlight' : ''}`}
                 aria-label={t('ui.tour.help_aria')}
                 data-tooltip={t('ui.tour.help_tooltip')}
-                onClick={onTourStart}
+                onClick={() => { setShowSpotlight(false); onTourStart(); }}
             >
                 ?
             </button>
+
+            {showSpotlight && game && !showTour && (
+                <div
+                    className="help-spotlight-overlay"
+                    onClick={() => setShowSpotlight(false)}
+                    aria-hidden="true"
+                >
+                    <div className="help-spotlight-hint">
+                        <span className="help-spotlight-arrow">&#x2191;</span>
+                        <span>{t('ui.tour.spotlight_hint')}</span>
+                    </div>
+                </div>
+            )}
 
             {showTour && game && (() => {
                 const rinSteps = [

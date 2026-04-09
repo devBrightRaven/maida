@@ -206,6 +206,47 @@
     }
 }
 
+/* ── Help Spotlight Overlay (first-time attention grabber) ── */
+
+.help-spotlight-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 55;
+    cursor: pointer;
+    animation: spotlightFadeIn 0.5s ease;
+}
+
+.help-spotlight-hint {
+    position: fixed;
+    top: 10.5rem;
+    right: 68px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--t-accent, goldenrod);
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    animation: spotlightHintPulse 2s ease-in-out infinite;
+}
+
+.help-spotlight-arrow {
+    font-size: 1.5rem;
+    transform: rotate(45deg);
+    display: inline-block;
+}
+
+@keyframes spotlightFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes spotlightHintPulse {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .guided-tour-overlay {
         transition: none;
@@ -217,5 +258,12 @@
     .help-tour-btn--spotlight {
         animation: none;
         box-shadow: 0 0 12px 4px rgba(218, 165, 32, 0.4);
+    }
+    .help-spotlight-overlay {
+        animation: none;
+    }
+    .help-spotlight-hint {
+        animation: none;
+        opacity: 1;
     }
 }

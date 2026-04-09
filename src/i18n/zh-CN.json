@@ -41,6 +41,7 @@
             "help_tooltip": "帮助 (F1)",
             "aria_label": "操作导览",
             "sr_hint": "按 F1 键可以了解操作方式。",
+            "spotlight_hint": "按这里或 F1 开始导览",
             "step_title": "这是你 Steam 游戏库里的一款游戏，由 Maida 为你挑选。",
             "step_prescription": "每款游戏都附有一段短语，帮助你做决定。不用想太多。",
             "step_try": "按「试试」启动这款游戏。长按 3 秒可以将它保留下来。",
