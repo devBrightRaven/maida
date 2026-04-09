@@ -199,7 +199,7 @@
             "a11y_feature_motion": "Maida 的設計以靜態為主。如果有動畫，會遵循你系統的減少動態效果設定。",
             "a11y_feature_transparency": "Maida 支援英文、日文、簡體中文和繁體中文，包含所有螢幕閱讀器文字。",
             "a11y_limitations_heading": "我們仍在改進的部分",
-            "a11y_limitation_gamepad": "使用螢幕閱讀器時，焦點預設在「現在不要」上，防止意外啟動遊戲。用 Tab 或方向鍵移到 TRY 即可試玩。鎖定功能（長按 TRY 三秒）需要螢幕閱讀器的焦點模式。",
+            "a11y_limitation_gamepad": "使用螢幕閱讀器時，焦點從遊戲標題開始，讓你先聽到遊戲名稱。按 Tab 移到按鈕進行操作。鎖定功能（長按 3 秒）需要螢幕閱讀器的焦點模式。",
             "a11y_limitation_longpress": "部分操作需要按住按鈕幾秒鐘。如果無法長按，你可以按一次看到確認提示，再按一次確認執行。所有輸入方式包括螢幕閱讀器都支援此操作。",
             "a11y_planned_heading": "未來計畫",
             "a11y_planned_threshold": "可以自行調整需要按住按鈕多久。",

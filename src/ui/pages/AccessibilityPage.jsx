@@ -18,6 +18,7 @@ export default function AccessibilityPage({ onClose }) {
                 <li>{t('ui.legal.a11y_feature_sr')}</li>
                 <li>{t('ui.legal.a11y_feature_focus')}</li>
                 <li>{t('ui.legal.a11y_feature_motion')}</li>
+                <li>{t('ui.legal.a11y_feature_transparency')}</li>
             </ul>
 
             <h2>{t('ui.legal.a11y_testing_heading')}</h2>
