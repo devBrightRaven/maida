@@ -130,15 +130,20 @@ export default function GuidedTour({ steps, localIndex, globalIndex, totalSteps,
         el.classList.remove('guided-tour-pulse');
         void el.offsetWidth;
         el.classList.add('guided-tour-pulse');
-        return () => el.classList.remove('guided-tour-pulse');
+        return () => {
+            el.classList.remove('guided-tour-pulse');
+            el.classList.remove('guided-tour-target-focus');
+        };
     }, [localIndex, step]);
 
     // Focus management on each step change
     useEffect(() => {
         const timer = setTimeout(() => {
             if (step?.interactive && step?.targetRef?.current) {
-                // Interactive step: focus the target element itself (e.g. face switch button)
-                step.targetRef.current.focus();
+                // Interactive step: focus the target element and add visible focus indicator
+                const el = step.targetRef.current;
+                el.classList.add('guided-tour-target-focus');
+                el.focus();
             } else {
                 // Normal step: focus Next button
                 const order = getButtonOrder();

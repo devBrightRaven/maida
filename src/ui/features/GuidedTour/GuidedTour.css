@@ -107,6 +107,12 @@
     outline-offset: 2px;
 }
 
+/* Interactive step: force focus border on target element (programmatic focus) */
+.guided-tour-target-focus {
+    outline: 3px solid var(--t-accent, goldenrod) !important;
+    outline-offset: 2px !important;
+}
+
 /* Interactive step: pulse the target element 3 times, then hold glow */
 .guided-tour-pulse {
     animation: tourPulse 0.6s ease-in-out 3 forwards;
