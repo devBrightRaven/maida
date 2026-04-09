@@ -22,7 +22,7 @@ import './KamaeView.css';
  * Kamae (構) — slow curation face.
  * Kata selector + game list + search + explore entry.
  */
-export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleChange, tourStep, tourTotal, onTourStart, onTourClose, onTourAdvance, onTourPrev }) {
+export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleChange, tourStep, tourTotal, onTourStart, onTourClose, onTourAdvance, onTourPrev, settingsRequested, onSettingsOpened }) {
     const [showcaseState, setShowcaseState] = useState({ games: [] });
     const [allInstalledGames, setAllInstalledGames] = useState([]);
     const [gameMap, setGameMap] = useState(new Map());
@@ -66,6 +66,14 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
             if (active) active.focus();
         });
     }, [loading]);
+
+    // Auto-open settings when requested via F10/Menu button
+    useEffect(() => {
+        if (settingsRequested && !loading) {
+            setShowSettings(true);
+            onSettingsOpened?.();
+        }
+    }, [settingsRequested, loading, onSettingsOpened]);
 
     const activeKataId = showcaseState.activeKataId || null;
     const activeKata = useMemo(() => {
@@ -216,7 +224,7 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
         return (
             <main className="kamae-view" ref={containerRef}>
                 <div className="kamae-content">
-                    <SettingsPanel onClose={() => setShowSettings(false)} theme={theme} toggleTheme={toggleTheme} onLocaleChange={onLocaleChange} />
+                    <SettingsPanel onClose={() => setShowSettings(false)} theme={theme} toggleTheme={toggleTheme} onLocaleChange={onLocaleChange} onTourStart={onTourStart} />
                 </div>
             </main>
         );

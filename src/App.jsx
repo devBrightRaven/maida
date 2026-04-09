@@ -165,10 +165,22 @@ function App() {
     }, [reloadShowcase, focusMain, tourStep]);
     const toggleFace = useCallback(() => setFace(f => f === 'rin' ? 'kamae' : 'rin'), []);
 
-    // L1/R1 gamepad face switching
+    // Open settings: from Rin → switch to Kamae settings, from Kamae → open settings panel
+    const [settingsRequested, setSettingsRequested] = useState(false);
+    const openSettings = useCallback(() => {
+        if (face === 'rin') {
+            setSettingsRequested(true);
+            switchToKamae();
+        } else {
+            setSettingsRequested(true);
+        }
+    }, [face, switchToKamae]);
+
+    // L1/R1 gamepad face switching + Menu button
     useGameInput({
         onL1: switchToRin,
         onR1: switchToKamae,
+        onMenu: openSettings,
     });
 
     // Ctrl+Tab keyboard shortcut (undocumented)
@@ -178,10 +190,14 @@ function App() {
                 e.preventDefault();
                 toggleFace();
             }
+            if (e.key === 'F10') {
+                e.preventDefault();
+                openSettings();
+            }
         };
         window.addEventListener('keydown', handler);
         return () => window.removeEventListener('keydown', handler);
-    }, [toggleFace]);
+    }, [toggleFace, openSettings]);
 
     const [updateAlertShown, setUpdateAlertShown] = useState(false);
     useEffect(() => {
@@ -391,7 +407,8 @@ function App() {
         return (
             <div className="app-root" key={localeVersion}>
                 <KamaeView onSwitchToRin={switchToRin} theme={theme} toggleTheme={toggleTheme} onLocaleChange={handleLocaleChange}
-                    tourStep={tourStep} tourTotal={TOUR_TOTAL} onTourStart={startKamaeTour} onTourClose={closeTour} onTourAdvance={advanceTour} onTourPrev={prevTour} />
+                    tourStep={tourStep} tourTotal={TOUR_TOTAL} onTourStart={startKamaeTour} onTourClose={closeTour} onTourAdvance={advanceTour} onTourPrev={prevTour}
+                    settingsRequested={settingsRequested} onSettingsOpened={() => setSettingsRequested(false)} />
                 {themeToggle}
                 {import.meta.env.DEV && import.meta.env.VITE_AGENTATION && <div aria-hidden="true"><Agentation endpoint="http://localhost:4747" /></div>}
             </div>

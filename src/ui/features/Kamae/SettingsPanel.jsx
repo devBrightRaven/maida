@@ -8,7 +8,7 @@ import bridge from '../../../services/bridge';
  * SettingsPanel — inline panel for IGDB credential management.
  * Renders inside KamaeView when settings is toggled open.
  */
-export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleChange }) {
+export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleChange, onTourStart }) {
     const [clientId, setClientId] = useState('');
     const [clientSecret, setClientSecret] = useState('');
     const [hasExisting, setHasExisting] = useState(false);
@@ -126,6 +126,18 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
                     {t('ui.settings.back')}
                 </button>
             </header>
+
+            {onTourStart && (
+                <section className="kamae-settings-section">
+                    <button
+                        type="button"
+                        className="kamae-settings-tour-btn"
+                        onClick={() => { onClose(); onTourStart(); }}
+                    >
+                        {t('ui.settings.tour')}
+                    </button>
+                </section>
+            )}
 
             <section className="kamae-settings-section">
                 <button
@@ -264,6 +276,8 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
                             <thead><tr><th>{t('ui.settings.controls_action')}</th><th>{t('ui.settings.controls_keyboard')}</th><th>{t('ui.settings.controls_gamepad')}</th></tr></thead>
                             <tbody>
                                 <tr><td>{t('ui.button.switch_to_kamae')}/{t('ui.button.switch_to_rin')}</td><td>Ctrl+Tab</td><td>RB / LB</td></tr>
+                                <tr><td>{t('ui.settings.title')}</td><td>F10</td><td>Menu</td></tr>
+                                <tr><td>{t('ui.tour.help_aria')}</td><td>F1</td><td>Menu → {t('ui.settings.tour')}</td></tr>
                                 <tr><td>{t('ui.settings.back')}</td><td>Escape</td><td>B</td></tr>
                             </tbody>
                         </table>

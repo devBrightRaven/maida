@@ -105,6 +105,7 @@
         },
         "settings": {
             "title": "設定",
+            "tour": "操作導覽 (F1)",
             "language_title": "語言：{current}",
             "language_confirm": "再按一次以套用",
             "haptic_title": "振動：{current}",

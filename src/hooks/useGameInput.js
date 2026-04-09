@@ -17,6 +17,7 @@ import { vibrate, vibrateProgress } from '../services/haptics';
  * @param {Function} config.onNav - D-pad / Arrow Keys (up, down, left, right)
  * @param {Function} config.onL1 - L1/LB (button 4) — face switch
  * @param {Function} config.onR1 - R1/RB (button 5) — face switch
+ * @param {Function} config.onMenu - Menu/Start (button 9) — open settings
  * @param {boolean} config.disabled - Disable input processing
  */
 export function useGameInput({
@@ -27,6 +28,7 @@ export function useGameInput({
     onL1,
     onR1,
     onYButton,
+    onMenu,
     disabled = false,
     tapThreshold = 300,
     anchorThreshold = 3000
@@ -50,10 +52,10 @@ export function useGameInput({
     };
 
     // Use refs for callbacks to avoid re-running effect on every render
-    const callbacksRef = useRef({ onMainAction, onAnchor, onBack, onNav, onL1, onR1, onYButton });
+    const callbacksRef = useRef({ onMainAction, onAnchor, onBack, onNav, onL1, onR1, onYButton, onMenu });
     useEffect(() => {
-        callbacksRef.current = { onMainAction, onAnchor, onBack, onNav, onL1, onR1, onYButton };
-    }, [onMainAction, onAnchor, onBack, onNav, onL1, onR1, onYButton]);
+        callbacksRef.current = { onMainAction, onAnchor, onBack, onNav, onL1, onR1, onYButton, onMenu };
+    }, [onMainAction, onAnchor, onBack, onNav, onL1, onR1, onYButton, onMenu]);
 
     // Animation Loop for smooth progress bar
     const updateProgress = () => {
@@ -219,7 +221,7 @@ export function useGameInput({
         if (disabled) return;
 
         // Button indices (standard gamepad mapping)
-        const BTN_A = 0, BTN_B = 1, BTN_Y = 3, BTN_L1 = 4, BTN_R1 = 5;
+        const BTN_A = 0, BTN_B = 1, BTN_Y = 3, BTN_L1 = 4, BTN_R1 = 5, BTN_MENU = 9;
         const DPAD_UP = 12, DPAD_DOWN = 13, DPAD_LEFT = 14, DPAD_RIGHT = 15;
 
         // D-pad state + repeat timing
@@ -234,6 +236,7 @@ export function useGameInput({
         let lastY = false;
         let lastL1 = false;
         let lastR1 = false;
+        let lastMenu = false;
 
         // Helper: get focused interactive element
         const getFocusedInteractive = () => {
@@ -340,6 +343,11 @@ export function useGameInput({
                 const r1Pressed = btn(BTN_R1);
                 if (r1Pressed && !lastR1) callbacksRef.current.onR1?.();
                 lastR1 = r1Pressed;
+
+                // Menu/Start button — settings
+                const menuPressed = btn(BTN_MENU);
+                if (menuPressed && !lastMenu) callbacksRef.current.onMenu?.();
+                lastMenu = menuPressed;
             }
 
             animFrame = requestAnimationFrame(pollGamepad);
