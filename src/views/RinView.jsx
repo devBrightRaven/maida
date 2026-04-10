@@ -171,6 +171,7 @@ export default function RinView({
         onBack: () => {
             if (showSpotlight) {
                 setShowSpotlight(false);
+                localStorage.setItem('maida-hasSeenTour', 'true');
                 return;
             }
             if (isAnchored) {
@@ -431,16 +432,16 @@ export default function RinView({
                 <div
                     className="help-spotlight-overlay"
                     onClick={(e) => {
-                        // Click on ? button starts tour (handled by button's own onClick)
-                        // Click anywhere else dismisses spotlight
                         if (!e.target.closest('.help-tour-btn')) {
                             setShowSpotlight(false);
+                            localStorage.setItem('maida-hasSeenTour', 'true');
                         }
                     }}
                     onKeyDown={(e) => {
                         if (e.key === 'Escape') {
                             e.preventDefault();
                             setShowSpotlight(false);
+                            localStorage.setItem('maida-hasSeenTour', 'true');
                         }
                     }}
                     role="presentation"

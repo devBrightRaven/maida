@@ -970,6 +970,12 @@
     outline: none;
 }
 
+.kamae-settings-shortcut {
+    font-size: 0.6875rem;
+    color: var(--t-text-faint);
+    margin-left: 0.5rem;
+}
+
 /* ── Settings Panel ───────────────────── */
 
 .kamae-settings {

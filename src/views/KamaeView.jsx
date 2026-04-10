@@ -322,7 +322,7 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
                     className="kamae-settings-link"
                     onClick={() => setShowSettings(true)}
                 >
-                    {t('ui.settings.title')}
+                    {t('ui.settings.title')} <span className="kamae-settings-shortcut">F10 / Options</span>
                 </button>
                 <Footer onNavigate={(page) => { legalReturnRef.current = document.activeElement; setLegalPage(page); }} />
             </div>
