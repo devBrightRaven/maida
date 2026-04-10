@@ -139,12 +139,13 @@ export default function RinView({
         };
     }, []);
 
-    // Auto-dismiss spotlight after 8 seconds
+    // Focus ? button when spotlight is showing
     useEffect(() => {
-        if (!showSpotlight) return;
-        const timer = setTimeout(() => setShowSpotlight(false), 8000);
-        return () => clearTimeout(timer);
-    }, [showSpotlight]);
+        if (showSpotlight && game && helpBtnRef.current) {
+            const timer = setTimeout(() => helpBtnRef.current?.focus(), 200);
+            return () => clearTimeout(timer);
+        }
+    }, [showSpotlight, game]);
 
     // F1 opens guided tour (H conflicts with SR heading navigation)
     useEffect(() => {
@@ -168,6 +169,10 @@ export default function RinView({
             if (!isAnchored) onAction('anchor'); // Long Press A (3s)
         },
         onBack: () => {
+            if (showSpotlight) {
+                setShowSpotlight(false);
+                return;
+            }
             if (isAnchored) {
                 onAction('release'); // B -> Clear Anchor
             } else {
@@ -425,8 +430,20 @@ export default function RinView({
             {showSpotlight && game && !showTour && (
                 <div
                     className="help-spotlight-overlay"
-                    onClick={() => setShowSpotlight(false)}
-                    aria-hidden="true"
+                    onClick={(e) => {
+                        // Click on ? button starts tour (handled by button's own onClick)
+                        // Click anywhere else dismisses spotlight
+                        if (!e.target.closest('.help-tour-btn')) {
+                            setShowSpotlight(false);
+                        }
+                    }}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Escape') {
+                            e.preventDefault();
+                            setShowSpotlight(false);
+                        }
+                    }}
+                    role="presentation"
                 >
                     <div className="help-spotlight-hint">
                         <span className="help-spotlight-arrow">&#x2191;</span>

@@ -192,9 +192,10 @@
 
 /* Spotlight: slow pulse on first visit to draw attention */
 .help-tour-btn--spotlight {
-    animation: helpSpotlight 2s ease-in-out 3;
+    animation: helpSpotlight 2s ease-in-out infinite;
     border-color: var(--t-accent, goldenrod);
     color: var(--t-accent, goldenrod);
+    z-index: 56;
 }
 
 @keyframes helpSpotlight {
