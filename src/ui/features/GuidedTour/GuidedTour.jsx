@@ -31,6 +31,11 @@ export default function GuidedTour({ steps, localIndex, globalIndex, totalSteps,
     const prevRef = useRef(null);
     const nextRef = useRef(null);
     const [focusedBtn, setFocusedBtn] = useState('next'); // 'skip' | 'prev' | 'next'
+    const focusedBtnRef = useRef('next');
+    const updateFocusedBtn = useCallback((name) => {
+        setFocusedBtn(name);
+        focusedBtnRef.current = name;
+    }, []);
 
     const step = steps[localIndex];
     const isLast = globalIndex === totalSteps - 1;
@@ -50,9 +55,9 @@ export default function GuidedTour({ steps, localIndex, globalIndex, totalSteps,
         const ref = refs[name];
         if (ref?.current) {
             ref.current.focus();
-            setFocusedBtn(name);
+            updateFocusedBtn(name);
         }
-    }, []);
+    }, [updateFocusedBtn]);
 
     // Measure target element position for clip-path hole
     useEffect(() => {
@@ -151,21 +156,27 @@ export default function GuidedTour({ steps, localIndex, globalIndex, totalSteps,
                 focusButton(target);
             }
         }, 150);
-        return () => clearTimeout(timer);
+        return () => {
+            clearTimeout(timer);
+            // Clean up focus indicator from previous interactive step
+            if (step?.interactive && step?.targetRef?.current) {
+                step.targetRef.current.classList.remove('guided-tour-target-focus');
+            }
+        };
     }, [localIndex, step, getButtonOrder, focusButton]);
 
     // Gamepad: A = activate focused button, B = close, D-pad = navigate buttons
     useGameInput({
         onMainAction: () => {
-            // A button: activate whichever button has focus
-            if (focusedBtn === 'next' && !step?.interactive) onAdvance();
-            else if (focusedBtn === 'prev' && hasPrev) onPrev();
-            else if (focusedBtn === 'skip') onClose();
+            const btn = focusedBtnRef.current;
+            if (btn === 'next' && !step?.interactive) onAdvance();
+            else if (btn === 'prev' && hasPrev) onPrev();
+            else if (btn === 'skip') onClose();
         },
         onBack: onClose,
         onNav: (dir) => {
             const order = getButtonOrder();
-            const idx = order.indexOf(focusedBtn);
+            const idx = order.indexOf(focusedBtnRef.current);
             if (dir === 'right' || dir === 'down') {
                 const next = order[(idx + 1) % order.length];
                 focusButton(next);
@@ -205,7 +216,7 @@ export default function GuidedTour({ steps, localIndex, globalIndex, totalSteps,
                             ref={skipRef}
                             className="guided-tour-skip"
                             onClick={onClose}
-                            onMouseEnter={() => { setFocusedBtn('skip'); skipRef.current?.focus(); }}
+                            onMouseEnter={() => updateFocusedBtn('skip')}
                         >
                             {t('ui.tour.skip')}
                         </button>
@@ -214,7 +225,7 @@ export default function GuidedTour({ steps, localIndex, globalIndex, totalSteps,
                                 ref={prevRef}
                                 className="guided-tour-prev"
                                 onClick={onPrev}
-                                onMouseEnter={() => { setFocusedBtn('prev'); prevRef.current?.focus(); }}
+                                onMouseEnter={() => updateFocusedBtn('prev')}
                             >
                                 {t('ui.tour.prev')}
                             </button>
@@ -224,7 +235,7 @@ export default function GuidedTour({ steps, localIndex, globalIndex, totalSteps,
                                 ref={nextRef}
                                 className="guided-tour-next"
                                 onClick={onAdvance}
-                                onMouseEnter={() => { setFocusedBtn('next'); nextRef.current?.focus(); }}
+                                onMouseEnter={() => updateFocusedBtn('next')}
                             >
                                 {isLast ? t('ui.tour.done') : t('ui.tour.next')}
                             </button>

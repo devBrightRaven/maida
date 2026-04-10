@@ -4,6 +4,7 @@
     background: rgba(0, 0, 0, 0.7);
     z-index: 9000;
     transition: clip-path 0.3s ease;
+    pointer-events: none;
 }
 
 .guided-tour-tooltip {
@@ -14,6 +15,7 @@
     padding: 1rem 1.25rem;
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
     outline: none;
+    pointer-events: auto;
 }
 
 .guided-tour-tooltip:focus {
