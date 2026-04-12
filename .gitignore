@@ -23,3 +23,7 @@ AGENTS.md
 design/
 coverage/
 *.docx
+
+# SignPath OSS form (personal, not for repo)
+OSSRequestForm*.xlsx
+~$*
