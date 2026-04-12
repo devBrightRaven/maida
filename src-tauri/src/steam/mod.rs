@@ -1,11 +1,11 @@
 pub mod vdf;
 
+use chrono::Utc;
+use regex::Regex;
+use serde_json::{json, Value};
 use std::collections::HashSet;
 use std::fs;
-use std::path::{Path, PathBuf};
-use regex::Regex;
-use chrono::Utc;
-use serde_json::{json, Value};
+use std::path::PathBuf;
 
 const NON_GAME_PATTERNS: &[&str] = &[
     r"(?i)redistributable",
@@ -75,17 +75,24 @@ fn get_platform_candidates() -> Vec<PathBuf> {
             PathBuf::from(format!("{}/.steam/steam", home)),
             PathBuf::from(format!("{}/.local/share/Steam", home)),
             // Flatpak Steam
-            PathBuf::from(format!("{}/.var/app/com.valvesoftware.Steam/.steam/steam", home)),
-            PathBuf::from(format!("{}/.var/app/com.valvesoftware.Steam/.local/share/Steam", home)),
+            PathBuf::from(format!(
+                "{}/.var/app/com.valvesoftware.Steam/.steam/steam",
+                home
+            )),
+            PathBuf::from(format!(
+                "{}/.var/app/com.valvesoftware.Steam/.local/share/Steam",
+                home
+            )),
         ]
     }
 
     #[cfg(target_os = "macos")]
     {
         let home = std::env::var("HOME").unwrap_or_default();
-        vec![
-            PathBuf::from(format!("{}/Library/Application Support/Steam", home)),
-        ]
+        vec![PathBuf::from(format!(
+            "{}/Library/Application Support/Steam",
+            home
+        ))]
     }
 }
 
@@ -118,7 +125,8 @@ pub fn scan_steam_library() -> Result<Vec<Value>, String> {
         }
     }
 
-    let non_game_regexes: Vec<Regex> = NON_GAME_PATTERNS.iter()
+    let non_game_regexes: Vec<Regex> = NON_GAME_PATTERNS
+        .iter()
         .map(|p| Regex::new(p).unwrap())
         .collect();
     let exclude_set: HashSet<&str> = ALWAYS_EXCLUDE_APPIDS.iter().copied().collect();
@@ -172,7 +180,8 @@ pub fn scan_steam_library() -> Result<Vec<Value>, String> {
                 continue;
             }
 
-            let id = name.to_lowercase()
+            let id = name
+                .to_lowercase()
                 .chars()
                 .map(|c| if c.is_alphanumeric() { c } else { '-' })
                 .collect::<String>();
@@ -206,14 +215,19 @@ mod tests {
 
     #[test]
     fn test_non_game_filter_patterns() {
-        let regexes: Vec<Regex> = NON_GAME_PATTERNS.iter()
+        let regexes: Vec<Regex> = NON_GAME_PATTERNS
+            .iter()
             .map(|p| Regex::new(p).unwrap())
             .collect();
 
-        assert!(regexes.iter().any(|r| r.is_match("Steamworks Common Redistributables")));
+        assert!(regexes
+            .iter()
+            .any(|r| r.is_match("Steamworks Common Redistributables")));
         assert!(regexes.iter().any(|r| r.is_match("Visual C++ Runtime")));
         assert!(regexes.iter().any(|r| r.is_match("Proton 8.0")));
-        assert!(regexes.iter().any(|r| r.is_match("Counter-Strike Dedicated Server")));
+        assert!(regexes
+            .iter()
+            .any(|r| r.is_match("Counter-Strike Dedicated Server")));
         assert!(!regexes.iter().any(|r| r.is_match("Elden Ring")));
         assert!(!regexes.iter().any(|r| r.is_match("Stardew Valley")));
     }

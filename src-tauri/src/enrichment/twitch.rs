@@ -95,5 +95,7 @@ pub fn clear_cache() {
 
 fn urlencoded(s: &str) -> String {
     // Minimal URL encoding for client credentials
-    s.replace('&', "%26").replace('=', "%3D").replace('+', "%2B")
+    s.replace('&', "%26")
+        .replace('=', "%3D")
+        .replace('+', "%2B")
 }

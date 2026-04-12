@@ -1,9 +1,9 @@
-use std::path::Path;
-use uuid::Uuid;
+use crate::persistence;
 use chrono::Utc;
 use serde_json::json;
+use std::path::Path;
 use tauri::AppHandle;
-use crate::persistence;
+use uuid::Uuid;
 
 const TELEMETRY_URL: &str = "https://maida-telemetry.brightravenworld.workers.dev/ping";
 
@@ -14,12 +14,21 @@ pub async fn send_launch_ping(base: &Path) {
         .unwrap_or_else(|| persistence::user_data_default("config"));
 
     // Check opt-out
-    if config.get("telemetry").and_then(|t| t.get("enabled")).and_then(|v| v.as_bool()) == Some(false) {
+    if config
+        .get("telemetry")
+        .and_then(|t| t.get("enabled"))
+        .and_then(|v| v.as_bool())
+        == Some(false)
+    {
         return;
     }
 
     // Get or create anonymous ID
-    let anon_id = match config.get("telemetry").and_then(|t| t.get("id")).and_then(|v| v.as_str()) {
+    let anon_id = match config
+        .get("telemetry")
+        .and_then(|t| t.get("id"))
+        .and_then(|v| v.as_str())
+    {
         Some(id) => id.to_string(),
         None => {
             let id = Uuid::new_v4().to_string();
@@ -35,7 +44,8 @@ pub async fn send_launch_ping(base: &Path) {
     };
 
     // Calculate days since first launch
-    let days = config.get("telemetry")
+    let days = config
+        .get("telemetry")
         .and_then(|t| t.get("firstLaunch"))
         .and_then(|v| v.as_str())
         .and_then(|s| chrono::DateTime::parse_from_rfc3339(s).ok())
@@ -49,7 +59,8 @@ pub async fn send_launch_ping(base: &Path) {
     });
 
     let client = reqwest::Client::new();
-    let _ = client.post(TELEMETRY_URL)
+    let _ = client
+        .post(TELEMETRY_URL)
         .json(&body)
         .timeout(std::time::Duration::from_secs(5))
         .send()

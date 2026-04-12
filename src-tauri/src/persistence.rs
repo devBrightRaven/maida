@@ -1,12 +1,14 @@
+use serde_json::Value;
 use std::fs;
 use std::io::Write;
 use std::path::{Path, PathBuf};
-use serde_json::Value;
 use tauri::{AppHandle, Manager};
 
 /// Resolve the app data directory (equivalent to Electron's app.getPath('userData')).
 pub fn app_data_dir(app: &AppHandle) -> PathBuf {
-    app.path().app_data_dir().expect("failed to resolve app data dir")
+    app.path()
+        .app_data_dir()
+        .expect("failed to resolve app data dir")
 }
 
 /// Ensure the app data directory exists.
@@ -31,7 +33,8 @@ pub fn write_json(path: &Path, data: &Value) -> Result<(), String> {
     let json = serde_json::to_string_pretty(data).map_err(|e| e.to_string())?;
 
     let mut file = fs::File::create(&tmp).map_err(|e| format!("create tmp: {}", e))?;
-    file.write_all(json.as_bytes()).map_err(|e| format!("write tmp: {}", e))?;
+    file.write_all(json.as_bytes())
+        .map_err(|e| format!("write tmp: {}", e))?;
     file.sync_all().map_err(|e| format!("sync tmp: {}", e))?;
     drop(file);
 
@@ -82,7 +85,10 @@ pub fn user_data_default(data_type: &str) -> Value {
 
 /// Check if a data type uses user defaults (as opposed to app data with fallback chain).
 pub fn is_user_data(data_type: &str) -> bool {
-    matches!(data_type, "anchor" | "returnPenalties" | "constraints" | "showcase" | "config")
+    matches!(
+        data_type,
+        "anchor" | "returnPenalties" | "constraints" | "showcase" | "config"
+    )
 }
 
 /// Session log path.
@@ -144,7 +150,11 @@ pub fn migrate_from_electron(tauri_dir: &Path) {
         }
     }
 
-    log::info!("[Migration] Complete. {} files copied from {:?}", copied, electron_dir);
+    log::info!(
+        "[Migration] Complete. {} files copied from {:?}",
+        copied,
+        electron_dir
+    );
 
     // Write flag to prevent re-migration
     let _ = fs::write(&flag, format!("migrated-{}-files", copied));
@@ -192,8 +202,14 @@ mod tests {
     fn test_data_path_mapping() {
         let base = Path::new("/data");
         assert_eq!(data_path(base, "games"), PathBuf::from("/data/games.json"));
-        assert_eq!(data_path(base, "showcase"), PathBuf::from("/data/showcase.json"));
-        assert_eq!(data_path(base, "config"), PathBuf::from("/data/config.json"));
+        assert_eq!(
+            data_path(base, "showcase"),
+            PathBuf::from("/data/showcase.json")
+        );
+        assert_eq!(
+            data_path(base, "config"),
+            PathBuf::from("/data/config.json")
+        );
     }
 
     #[test]

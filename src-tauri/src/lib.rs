@@ -1,13 +1,13 @@
 use tauri::Manager;
 
 mod commands;
-mod persistence;
-mod touch_keyboard;
-mod decay;
-mod steam;
 mod credentials;
+mod decay;
 mod enrichment;
+mod persistence;
+mod steam;
 mod telemetry;
+mod touch_keyboard;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -18,7 +18,7 @@ pub fn run() {
         .plugin(tauri_plugin_store::Builder::default().build())
         .plugin(tauri_plugin_updater::Builder::new().build())
         .setup(|app| {
-            let base = persistence::app_data_dir(&app.handle());
+            let base = persistence::app_data_dir(app.handle());
             persistence::ensure_dir(&base);
             persistence::migrate_from_electron(&base);
             commands::session_log::prune_session_log(&base);

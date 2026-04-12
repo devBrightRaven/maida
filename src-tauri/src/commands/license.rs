@@ -1,6 +1,6 @@
+use regex::Regex;
 use serde_json::{json, Value};
 use tauri::AppHandle;
-use regex::Regex;
 
 use crate::persistence;
 
@@ -21,8 +21,8 @@ pub fn save_license_key(app: AppHandle, key: String) -> Value {
     let base = persistence::app_data_dir(&app);
     let path = persistence::data_path(&base, "config");
 
-    let mut config = persistence::read_json(&path)
-        .unwrap_or_else(|| persistence::user_data_default("config"));
+    let mut config =
+        persistence::read_json(&path).unwrap_or_else(|| persistence::user_data_default("config"));
 
     config["license"] = json!(normalized);
 
@@ -37,8 +37,8 @@ pub fn load_license_key(app: AppHandle) -> Value {
     let base = persistence::app_data_dir(&app);
     let path = persistence::data_path(&base, "config");
 
-    let config = persistence::read_json(&path)
-        .unwrap_or_else(|| persistence::user_data_default("config"));
+    let config =
+        persistence::read_json(&path).unwrap_or_else(|| persistence::user_data_default("config"));
 
     match config.get("license").and_then(|v| v.as_str()) {
         Some(key) => json!(key),
@@ -51,12 +51,13 @@ pub fn check_license(app: AppHandle) -> Value {
     let base = persistence::app_data_dir(&app);
     let path = persistence::data_path(&base, "config");
 
-    let config = persistence::read_json(&path)
-        .unwrap_or_else(|| persistence::user_data_default("config"));
+    let config =
+        persistence::read_json(&path).unwrap_or_else(|| persistence::user_data_default("config"));
 
-    let licensed = config.get("license")
+    let licensed = config
+        .get("license")
         .and_then(|v| v.as_str())
-        .map(|k| validate_format(k))
+        .map(validate_format)
         .unwrap_or(false);
 
     json!({ "licensed": licensed })

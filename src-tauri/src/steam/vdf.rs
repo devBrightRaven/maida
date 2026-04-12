@@ -37,7 +37,10 @@ mod tests {
     #[test]
     fn test_extract_unicode_name() {
         let acf = "\"appid\"\t\"999\"\n\"name\"\t\"嗜血印 Bloody Spell\"";
-        assert_eq!(extract_field(acf, "name"), Some("嗜血印 Bloody Spell".to_string()));
+        assert_eq!(
+            extract_field(acf, "name"),
+            Some("嗜血印 Bloody Spell".to_string())
+        );
     }
 
     #[test]
@@ -61,6 +64,9 @@ mod tests {
     }
 }
 "#;
-        assert_eq!(extract_field(vdf, "path"), Some("C:\\\\Program Files (x86)\\\\Steam".to_string()));
+        assert_eq!(
+            extract_field(vdf, "path"),
+            Some("C:\\\\Program Files (x86)\\\\Steam".to_string())
+        );
     }
 }

@@ -17,7 +17,12 @@ async fn rate_limit() {
 }
 
 /// POST to IGDB API with Apicalypse query.
-async fn igdb_post(endpoint: &str, body: &str, client_id: &str, access_token: &str) -> Option<Vec<Value>> {
+async fn igdb_post(
+    endpoint: &str,
+    body: &str,
+    client_id: &str,
+    access_token: &str,
+) -> Option<Vec<Value>> {
     rate_limit().await;
 
     let url = format!("https://api.igdb.com/v4/{}", endpoint);
@@ -129,16 +134,16 @@ const MAX_ENRICH_PER_CYCLE: usize = 10;
 /// Enrich a list of games with IGDB time-to-beat data.
 /// Only enriches installed games that don't already have IGDB data.
 /// Caps at MAX_ENRICH_PER_CYCLE per startup to avoid 429 rate limiting.
-pub async fn enrich_games(
-    games: &mut Vec<Value>,
-    client_id: &str,
-    access_token: &str,
-) {
+pub async fn enrich_games(games: &mut Vec<Value>, client_id: &str, access_token: &str) {
     // Collect indices of games that need enrichment (installed + no igdb data)
-    let needs_enrichment: Vec<usize> = games.iter().enumerate()
+    let needs_enrichment: Vec<usize> = games
+        .iter()
+        .enumerate()
         .filter(|(_, g)| {
             g.get("igdb").is_none()
-                && g.get("installed").and_then(|v| v.as_bool()).unwrap_or(false)
+                && g.get("installed")
+                    .and_then(|v| v.as_bool())
+                    .unwrap_or(false)
         })
         .map(|(i, _)| i)
         .take(MAX_ENRICH_PER_CYCLE)
@@ -149,17 +154,20 @@ pub async fn enrich_games(
         return;
     }
 
-    log::info!("[IGDB] Enriching {} of {} total games", needs_enrichment.len(), games.len());
+    log::info!(
+        "[IGDB] Enriching {} of {} total games",
+        needs_enrichment.len(),
+        games.len()
+    );
 
     let mut enriched = 0;
     for idx in needs_enrichment {
         let game = &games[idx];
-        let steam_app_id = game.get("steamAppId")
+        let steam_app_id = game
+            .get("steamAppId")
             .and_then(|v| v.as_str())
             .unwrap_or("");
-        let title = game.get("title")
-            .and_then(|v| v.as_str())
-            .unwrap_or("");
+        let title = game.get("title").and_then(|v| v.as_str()).unwrap_or("");
 
         if steam_app_id.is_empty() && title.is_empty() {
             continue;
@@ -174,5 +182,9 @@ pub async fn enrich_games(
         }
     }
 
-    log::info!("[IGDB] Enrichment complete. {}/{} enriched.", enriched, games.len());
+    log::info!(
+        "[IGDB] Enrichment complete. {}/{} enriched.",
+        enriched,
+        games.len()
+    );
 }

@@ -9,11 +9,9 @@
 
 #[cfg(target_os = "windows")]
 pub fn enable_focus_tracking() {
-    use windows::Win32::System::Com::{
-        CoInitializeEx, COINIT_APARTMENTTHREADED,
-    };
-    use windows::core::{GUID, Interface};
     use std::ffi::c_void;
+    use windows::core::{Interface, GUID};
+    use windows::Win32::System::Com::{CoInitializeEx, COINIT_APARTMENTTHREADED};
 
     // IInputPanelConfiguration
     // CLSID: {2853ADD3-F096-4C63-A78F-7FA3EA837FB7}
@@ -58,7 +56,9 @@ pub fn enable_focus_tracking() {
                         std::mem::transmute(*vtable.add(2));
                     release(obj);
                 } else {
-                    log::warn!("[TouchKeyboard] QueryInterface for IInputPanelConfiguration failed");
+                    log::warn!(
+                        "[TouchKeyboard] QueryInterface for IInputPanelConfiguration failed"
+                    );
                 }
             }
             Err(e) => {

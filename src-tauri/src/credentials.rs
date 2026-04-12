@@ -24,9 +24,10 @@ pub fn save(client_id: &str, client_secret: &str) -> Result<(), String> {
 
     let json = serde_json::to_string(&creds).map_err(|e| e.to_string())?;
 
-    let entry = keyring::Entry::new(SERVICE_NAME, USERNAME)
-        .map_err(|e| format!("keyring init: {}", e))?;
-    entry.set_password(&json)
+    let entry =
+        keyring::Entry::new(SERVICE_NAME, USERNAME).map_err(|e| format!("keyring init: {}", e))?;
+    entry
+        .set_password(&json)
         .map_err(|e| format!("keyring save: {}", e))?;
 
     log::info!("[Credentials] Saved to system keyring");
@@ -42,8 +43,8 @@ pub fn load() -> Option<IgdbCredentials> {
 
 /// Clear stored IGDB credentials.
 pub fn clear() -> Result<(), String> {
-    let entry = keyring::Entry::new(SERVICE_NAME, USERNAME)
-        .map_err(|e| format!("keyring init: {}", e))?;
+    let entry =
+        keyring::Entry::new(SERVICE_NAME, USERNAME).map_err(|e| format!("keyring init: {}", e))?;
     match entry.delete_credential() {
         Ok(_) => {
             log::info!("[Credentials] Cleared from system keyring");

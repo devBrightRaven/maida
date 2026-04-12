@@ -8,7 +8,8 @@ const DECAY_RATE: f64 = 0.8;
 pub fn apply_daily_decay(data: &mut Value) -> bool {
     let today = Local::now().format("%Y-%m-%d").to_string();
 
-    let last_decay = data.get("lastDecayAt")
+    let last_decay = data
+        .get("lastDecayAt")
         .and_then(|v| v.as_str())
         .unwrap_or("");
 
@@ -50,9 +51,9 @@ mod tests {
         assert!(applied);
 
         let games = data["games"].as_array().unwrap();
-        assert_eq!(games[0]["score"].as_f64().unwrap(), 8.0);  // 10 * 0.8
-        assert_eq!(games[1]["score"].as_f64().unwrap(), 4.0);  // 5 * 0.8
-        assert_eq!(games[2]["score"].as_f64().unwrap(), 0.8);  // 1 * 0.8
+        assert_eq!(games[0]["score"].as_f64().unwrap(), 8.0); // 10 * 0.8
+        assert_eq!(games[1]["score"].as_f64().unwrap(), 4.0); // 5 * 0.8
+        assert_eq!(games[2]["score"].as_f64().unwrap(), 0.8); // 1 * 0.8
     }
 
     #[test]
@@ -61,8 +62,8 @@ mod tests {
         apply_daily_decay(&mut data);
 
         let games = data["games"].as_array().unwrap();
-        assert_eq!(games[0]["score"].as_f64().unwrap(), -4.0);  // -5 * 0.8
-        assert_eq!(games[1]["score"].as_f64().unwrap(), -1.6);  // -2 * 0.8
+        assert_eq!(games[0]["score"].as_f64().unwrap(), -4.0); // -5 * 0.8
+        assert_eq!(games[1]["score"].as_f64().unwrap(), -1.6); // -2 * 0.8
     }
 
     #[test]

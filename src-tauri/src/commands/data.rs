@@ -1,16 +1,24 @@
 use serde_json::Value;
 use tauri::AppHandle;
 
-use crate::persistence;
 use crate::decay;
+use crate::persistence;
 
 const ALLOWED_DATA_TYPES: &[&str] = &[
-    "games", "prescriptions", "anchor", "returnPenalties",
-    "constraints", "showcase", "config",
+    "games",
+    "prescriptions",
+    "anchor",
+    "returnPenalties",
+    "constraints",
+    "showcase",
+    "config",
 ];
 
 #[tauri::command]
-pub fn get_data(app: AppHandle, #[allow(non_snake_case)] dataType: String) -> Result<Value, String> {
+pub fn get_data(
+    app: AppHandle,
+    #[allow(non_snake_case)] dataType: String,
+) -> Result<Value, String> {
     let data_type = dataType;
     if !ALLOWED_DATA_TYPES.contains(&data_type.as_str()) {
         return Err(format!("Unknown data type: {}", data_type));
@@ -41,7 +49,11 @@ pub fn get_data(app: AppHandle, #[allow(non_snake_case)] dataType: String) -> Re
 }
 
 #[tauri::command]
-pub fn save_data(app: AppHandle, #[allow(non_snake_case)] dataType: String, data: Value) -> Result<(), String> {
+pub fn save_data(
+    app: AppHandle,
+    #[allow(non_snake_case)] dataType: String,
+    data: Value,
+) -> Result<(), String> {
     let data_type = dataType;
     if !ALLOWED_DATA_TYPES.contains(&data_type.as_str()) {
         return Err(format!("Unknown data type: {}", data_type));

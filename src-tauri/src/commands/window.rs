@@ -42,4 +42,3 @@ pub fn launch_game(url: String) -> Result<(), String> {
     }
     Ok(())
 }
-

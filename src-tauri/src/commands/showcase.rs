@@ -1,6 +1,6 @@
+use rand::prelude::IndexedRandom;
 use serde_json::{json, Value};
 use tauri::AppHandle;
-use rand::prelude::IndexedRandom;
 
 use crate::persistence;
 
@@ -9,8 +9,7 @@ pub fn get_showcase(app: AppHandle) -> Result<Value, String> {
     let base = persistence::app_data_dir(&app);
     let path = persistence::data_path(&base, "showcase");
 
-    Ok(persistence::read_json(&path)
-        .unwrap_or_else(|| persistence::user_data_default("showcase")))
+    Ok(persistence::read_json(&path).unwrap_or_else(|| persistence::user_data_default("showcase")))
 }
 
 #[tauri::command]
@@ -36,7 +35,8 @@ pub fn search_warehouse(app: AppHandle, query: String) -> Result<Value, String> 
     };
 
     let q = query.to_lowercase();
-    let results: Vec<&Value> = games.iter()
+    let results: Vec<&Value> = games
+        .iter()
         .filter(|g| {
             g.get("title")
                 .and_then(|t| t.as_str())
@@ -50,7 +50,10 @@ pub fn search_warehouse(app: AppHandle, query: String) -> Result<Value, String> 
 }
 
 #[tauri::command]
-pub fn sample_warehouse(app: AppHandle, #[allow(non_snake_case)] excludeIds: Vec<String>) -> Result<Value, String> {
+pub fn sample_warehouse(
+    app: AppHandle,
+    #[allow(non_snake_case)] excludeIds: Vec<String>,
+) -> Result<Value, String> {
     let exclude_ids = excludeIds;
     let base = persistence::app_data_dir(&app);
     let games_path = persistence::data_path(&base, "games");
@@ -68,9 +71,13 @@ pub fn sample_warehouse(app: AppHandle, #[allow(non_snake_case)] excludeIds: Vec
     let exclude_set: std::collections::HashSet<&str> =
         exclude_ids.iter().map(|s| s.as_str()).collect();
 
-    let candidates: Vec<&Value> = games.iter()
+    let candidates: Vec<&Value> = games
+        .iter()
         .filter(|g| {
-            let installed = g.get("installed").and_then(|i| i.as_bool()).unwrap_or(false);
+            let installed = g
+                .get("installed")
+                .and_then(|i| i.as_bool())
+                .unwrap_or(false);
             let id = g.get("id").and_then(|i| i.as_str()).unwrap_or("");
             installed && !exclude_set.contains(id)
         })
@@ -90,8 +97,8 @@ pub fn reset_explore_limit(app: AppHandle) -> Result<(), String> {
     let base = persistence::app_data_dir(&app);
     let path = persistence::data_path(&base, "showcase");
 
-    let mut showcase = persistence::read_json(&path)
-        .unwrap_or_else(|| persistence::user_data_default("showcase"));
+    let mut showcase =
+        persistence::read_json(&path).unwrap_or_else(|| persistence::user_data_default("showcase"));
 
     showcase["exploreHistory"] = json!({
         "lastSessionDate": null,
