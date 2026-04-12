@@ -8,7 +8,9 @@ Over time, your choices shape what Maida suggests -- games you keep trying appea
 
 ## Download
 
-**[Download Maida v0.1.0](https://github.com/devBrightRaven/maida/releases/tag/v0.1.0)** -- Windows (.exe) and Linux (.deb, .AppImage)
+**[Download Maida](https://github.com/devBrightRaven/maida/releases/latest)** -- Windows (.exe) and Linux (.deb, .AppImage)
+
+![Rin mode](screenshot/trimmed/rinView.png)
 
 ## How It Works
 
@@ -26,9 +28,19 @@ Over time, your choices shape what Maida suggests -- games you keep trying appea
 - **Screen reader support** -- tested with NVDA on Windows
 - **Auto-updates** -- future versions install automatically
 
-<!-- ## Screenshots
+## Screenshots
 
-TODO: add screenshots -->
+### Rin mode (quick decisions)
+
+![Rin mode light theme](screenshot/trimmed/rinView_l.png)
+
+### Kamae mode (organize games into katas)
+
+![Kamae mode](screenshot/trimmed/kamaeView.png)
+
+### Settings
+
+![Settings](screenshot/trimmed/setting1.png)
 
 ## Privacy
 
