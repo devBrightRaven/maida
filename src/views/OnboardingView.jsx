@@ -9,6 +9,7 @@ export default function OnboardingView({ onComplete }) {
     const [state, setState] = useState('idle'); // 'idle' | 'scanning' | 'error'
     const [isFocused, setIsFocused] = useState(false);
     const btnRef = useRef(null);
+    const titleRef = useRef(null);
 
     // Helper to focus button and update state
     const focusButton = () => {
@@ -18,17 +19,23 @@ export default function OnboardingView({ onComplete }) {
         }
     };
 
-    // Auto-focus on mount and window focus
+    // On mount: focus h1 so SR reads title + description first.
+    // On error / window re-focus: focus the action button.
     useEffect(() => {
-        // Use setTimeout to ensure button is rendered before focusing
-        const timer = setTimeout(focusButton, 0);
+        const timer = setTimeout(() => {
+            if (state === 'idle' && titleRef.current) {
+                titleRef.current.focus();
+            } else {
+                focusButton();
+            }
+        }, 0);
         const handleWindowFocus = () => focusButton();
         window.addEventListener('focus', handleWindowFocus);
         return () => {
             clearTimeout(timer);
             window.removeEventListener('focus', handleWindowFocus);
         };
-    }, [state]); // Re-focus when state changes (idle <-> error)
+    }, [state]);
 
     // Track focus changes via document-level listeners
     useEffect(() => {
@@ -105,10 +112,10 @@ export default function OnboardingView({ onComplete }) {
     };
 
     return (
-        <main className="onboarding-container">
-            <section className="onboarding-content" aria-label={t('voice.onboarding.aria_label')}>
-                <h1 className="onboarding-title">Maida</h1>
-                <p className="onboarding-voice">
+        <main className="onboarding-container" aria-labelledby="onboarding-title">
+            <section className="onboarding-content">
+                <h1 id="onboarding-title" ref={titleRef} className="onboarding-title" tabIndex={-1}>Maida</h1>
+                <p className="onboarding-voice" aria-live="polite">
                     {state === 'error'
                         ? t('voice.error.steam_not_found')
                         : t('voice.onboarding.permission_intro')}
