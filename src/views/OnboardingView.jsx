@@ -115,13 +115,13 @@ export default function OnboardingView({ onComplete }) {
         <main className="onboarding-container" aria-labelledby="onboarding-title">
             <section className="onboarding-content">
                 <h1 id="onboarding-title" ref={titleRef} className="onboarding-title" tabIndex={-1}>Maida</h1>
-                <p className="onboarding-voice" aria-live="polite">
+                <p className="onboarding-voice" aria-live="polite" tabIndex={0}>
                     {state === 'error'
                         ? t('voice.error.steam_not_found')
                         : t('voice.onboarding.permission_intro')}
                 </p>
                 {state === 'idle' && (
-                    <p className="onboarding-detail">{t('voice.onboarding.permission_detail')}</p>
+                    <p className="onboarding-detail" tabIndex={0}>{t('voice.onboarding.permission_detail')}</p>
                 )}
 
                 <div className="onboarding-actions">

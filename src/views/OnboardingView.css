@@ -25,6 +25,19 @@
     color: var(--t-text);
 }
 
+.onboarding-title:focus-visible {
+    outline: 2px solid var(--t-accent);
+    outline-offset: 8px;
+    border-radius: 4px;
+}
+
+.onboarding-voice:focus-visible,
+.onboarding-detail:focus-visible {
+    outline: 2px solid var(--t-accent);
+    outline-offset: 4px;
+    border-radius: 4px;
+}
+
 .onboarding-voice {
     font-size: 1.25rem;
     font-weight: 300;
