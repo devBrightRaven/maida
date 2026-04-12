@@ -245,7 +245,8 @@
     top: 50%;
     transform: translateY(-50%);
     width: 3rem;
-    height: 40vh;
+    height: 30vh;
+    max-height: 360px;
     border: 2px solid var(--t-dim);
     background: var(--t-surface);
     color: var(--t-text);
