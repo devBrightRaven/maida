@@ -30,6 +30,12 @@
     [data-lang]{display:none!important} html.lang-en [data-lang="en"],html.lang-ja [data-lang="ja"],html.lang-zh-tw [data-lang="zh-tw"],html.lang-zh-cn [data-lang="zh-cn"]{display:revert!important}
     .lang-switch{position:fixed;top:16px;right:16px;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.lang-switch button{background:none;border:1px solid #5b5248;color:#cfc7bd;padding:8px 10px;cursor:pointer;border-radius:6px;min-width:44px;min-height:32px}.lang-switch button.active,.lang-switch button.is-active-theme{background:var(--text);color:var(--bg);border-color:var(--text)}.lang-switch button:hover{border-color:var(--text);background:var(--text);color:var(--bg)}.lang-switch button:focus-visible{outline:3px solid var(--focus);outline-offset:2px;box-shadow:0 0 0 4px rgba(0,0,0,.35)}#theme-toggle{min-width:80px;text-align:center} html[data-theme='light'] .cta{background:#4a3a20;color:#f5f0eb} html[data-theme='light'] .mock-title{color:#b9b0a5} html[data-theme='light'] .pill{color:#d2cbc2;border-color:#5b5248} @media (prefers-reduced-motion: reduce){.cta:active{transform:none}.cta:hover{filter:none}}
     .sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}@media (max-width:720px){.grid{grid-template-columns:1fr}.kanji{font-size:44px}}
+    .screenshot{margin:24px 0;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:var(--panel)}
+    .screenshot img{width:100%;height:auto;display:block}
+    .shot-light{display:none}
+    html[data-theme='light'] .shot-dark{display:none}
+    html[data-theme='light'] .shot-light{display:block}
+    .screenshot-caption{font-size:14px;color:var(--ghost);margin-top:8px;text-align:center;font-style:italic}
   </style>
 </head>
 <body>
@@ -92,13 +98,10 @@
       </h2>
       <p><span data-lang="en">Maida shows you one game at a time. From what you already have installed. You answer: play it now, or not now.</span><span data-lang="ja">Maida は一度に一本だけ見せる。インストール済みのゲームの中から。答えは二つ：今やる、か、今はやらない。</span><span data-lang="zh-tw">Maida 每次只給你看一款遊戲。從你已經安裝的遊戲中。你回答：現在玩，或現在不要。</span><span data-lang="zh-cn">Maida 每次只给你看一款游戏。从你已经安装的游戏中。你回答：现在玩，或现在不要。</span></p>
       <p><span data-lang="en">It's not a recommendation engine. Not a backlog tracker. Not a system that pretends to know you better than you know yourself.</span><span data-lang="ja">レコメンドエンジンじゃない。バックログ管理ツールでもない。あなたより「あなたをわかっている」ふりをするシステムでもない。</span><span data-lang="zh-tw">它不是推薦引擎。不是待辦清單。不是一個假裝比你更懂你的系統。</span><span data-lang="zh-cn">它不是推荐引擎。不是待办清单。不是一个假装比你更懂你的系统。</span></p>
-      <div class="visual-anchor" role="img" aria-label="Maida interface mockup">
-        <div class="mock-window">
-          <div class="mock-title"><span data-lang="en">Tonight, one choice</span><span data-lang="ja">今夜は、この一本</span><span data-lang="zh-tw">今晚，只有這一款</span><span data-lang="zh-cn">今晚，只有这一款</span></div>
-          <div class="mock-game">Balatro</div>
-          <div class="mock-actions"><span class="pill"><span data-lang="en">Play now</span><span data-lang="ja">今やる</span><span data-lang="zh-tw">現在玩</span><span data-lang="zh-cn">现在玩</span></span><span class="pill"><span data-lang="en">Not now</span><span data-lang="ja">今はやらない</span><span data-lang="zh-tw">現在不要</span><span data-lang="zh-cn">现在不要</span></span></div>
-        </div>
-      </div>
+      <figure class="screenshot">
+        <img src="screenshots/rinView.png" alt="Maida Rin view showing one game at a time with Play and Not Now options" class="shot-dark">
+        <img src="screenshots/rinView_l.png" alt="Maida Rin view showing one game at a time with Play and Not Now options" class="shot-light">
+      </figure>
     </section>
 
     <section aria-labelledby="how-title">
@@ -109,6 +112,10 @@
         <div class="card"><h3><span aria-hidden="true">1</span><span class="sr-only">Step 1</span></h3><p><span data-lang="en">Open Maida. It reads your locally installed Steam games.</span><span data-lang="ja">Maidaを開く。ローカルのSteamゲームを読み取る。</span><span data-lang="zh-tw">打開 Maida。它讀取你本機已安裝的 Steam 遊戲。</span><span data-lang="zh-cn">打开 Maida。它读取你本机已安装的 Steam 游戏。</span></p></div>
         <div class="card"><h3><span aria-hidden="true">2</span><span class="sr-only">Step 2</span></h3><p><span data-lang="en">Optionally, narrow the field. Use Kata to face only what you're willing to face today.</span><span data-lang="ja">必要なら場を整える。型で、今日向き合いたいものだけに絞る。</span><span data-lang="zh-tw">如果你想，先整理場域。用型，只面對你今天願意面對的。</span><span data-lang="zh-cn">如果你想，先整理场域。用型，只面对你今天愿意面对的。</span></p></div>
       </div>
+      <figure class="screenshot">
+        <img src="screenshots/kamaeView.png" alt="Maida Kamae view showing Kata groupings and game library" class="shot-dark">
+        <img src="screenshots/kamaeView_l.png" alt="Maida Kamae view showing Kata groupings and game library" class="shot-light">
+      </figure>
       <div class="phase" aria-hidden="true">臨 / rin</div>
       <div class="grid" aria-label="Rin steps">
         <div class="card"><h3><span aria-hidden="true">3</span><span class="sr-only">Step 3</span></h3><p><span data-lang="en">One game appears. Not a list. Not a comparison. Just one.</span><span data-lang="ja">一本が現れる。リストじゃない。比較表でもない。ただ一本。</span><span data-lang="zh-tw">一款遊戲出現。不是清單。不是比較表。就是一款。</span><span data-lang="zh-cn">一款游戏出现。不是清单。不是比较表。就是一款。</span></p></div>
@@ -131,7 +138,7 @@
       <p style="margin-top:16px"><a href="https://ko-fi.com/devbrightraven" style="color:var(--accent);text-decoration:none;font-size:16px"><span data-lang="en">Support on Ko-fi</span><span data-lang="ja">Ko-fi で応援</span><span data-lang="zh-tw">在 Ko-fi 上支持</span><span data-lang="zh-cn">在 Ko-fi 上支持</span> ☕</a></p>
     </section>
     <footer style="padding:48px 0 0;border-top:1px solid var(--line);text-align:center;color:var(--ghost);font-size:13px">
-      <p><a href="https://brightraven.world" style="color:var(--accent);text-decoration:none">&larr; Bright Raven World</a></p><p>&copy; 2026 Bright Raven World. <a href="https://github.com/devBrightRaven/maida" style="color:var(--accent);text-decoration:none">Source (MIT)</a> &middot; <a href="mailto:bertram@brightraven.world" style="color:var(--accent);text-decoration:none">bertram@brightraven.world</a></p>
+      <p><a href="https://brightraven.world" style="color:var(--accent);text-decoration:none">&larr; Bright Raven World</a></p><p>&copy; 2026 Bright Raven World. <a href="manual/" style="color:var(--accent);text-decoration:none">User Manual</a> &middot; <a href="https://github.com/devBrightRaven/maida" style="color:var(--accent);text-decoration:none">Source (MIT)</a> &middot; <a href="mailto:bertram@brightraven.world" style="color:var(--accent);text-decoration:none">bertram@brightraven.world</a></p>
     </footer>
   </main>
   <script>
