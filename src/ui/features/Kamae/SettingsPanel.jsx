@@ -8,7 +8,7 @@ import bridge from '../../../services/bridge';
  * SettingsPanel — inline panel for IGDB credential management.
  * Renders inside KamaeView when settings is toggled open.
  */
-export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleChange, onTourStart, onNavigateLegal }) {
+export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleChange, onTourStart, onNavigateLegal, replayTourBtnRef }) {
     const [clientId, setClientId] = useState('');
     const [clientSecret, setClientSecret] = useState('');
     const [hasExisting, setHasExisting] = useState(false);
@@ -131,6 +131,7 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
                 <section className="kamae-settings-section" aria-labelledby="settings-tour-title">
                     <h2 id="settings-tour-title" className="kamae-settings-section-title">{t('ui.settings.tour_title')}</h2>
                     <button
+                        ref={replayTourBtnRef}
                         type="button"
                         className="kamae-settings-btn"
                         onClick={() => { onClose(); onTourStart(); }}

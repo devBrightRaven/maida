@@ -111,9 +111,9 @@ function App() {
 
     // Guided tour (spans Rin + Kamae)
     // null = off, number = global step index
-    // Rin steps: 0=title, 1=prescription, 2=try, 3=notNow, 4=faceSwitch(interactive)
-    // Kamae steps: 5=kata, 6=search, 7=gameList, 8=faceSwitchBack(interactive)
-    const TOUR_TOTAL = 9;
+    // Rin steps:   0=title, 1=prescription, 2=try, 3=notNow, 4=faceSwitch(interactive)
+    // Kamae steps: 5=kata, 6=search, 7=gameList, 8=settingsReplay, 9=faceSwitchBack(interactive)
+    const TOUR_TOTAL = 10;
     const [tourStep, setTourStep] = useState(null);
     const hasSeenTour = localStorage.getItem('maida-hasSeenTour') === 'true';
 
@@ -165,7 +165,7 @@ function App() {
     const switchToRin = useCallback(() => {
         setFace(prev => { if (prev === 'rin') return prev; reloadShowcase(); focusMain(); return 'rin'; });
         // Tour step 8 = face switch back to Rin (interactive) → tour ends
-        if (tourStep === 8) { setTourStep(null); localStorage.setItem('maida-hasSeenTour', 'true'); }
+        if (tourStep === 9) { setTourStep(null); localStorage.setItem('maida-hasSeenTour', 'true'); }
     }, [reloadShowcase, focusMain, tourStep]);
     const toggleFace = useCallback(() => setFace(f => f === 'rin' ? 'kamae' : 'rin'), []);
 
@@ -412,8 +412,8 @@ function App() {
             <div className="app-root" key={localeVersion}>
                 <KamaeView onSwitchToRin={switchToRin} theme={theme} toggleTheme={toggleTheme} onLocaleChange={handleLocaleChange}
                     tourStep={tourStep} tourTotal={TOUR_TOTAL} onTourStart={startKamaeTour} onTourReplay={startFullTour} onTourClose={closeTour} onTourAdvance={advanceTour} onTourPrev={prevTour}
-                    settingsRequested={settingsRequested} onSettingsOpened={() => setSettingsRequested(false)} />
-                {themeToggle}
+                    settingsRequested={settingsRequested} onSettingsOpened={() => setSettingsRequested(false)}
+                    themeToggle={themeToggle} />
                 {import.meta.env.DEV && import.meta.env.VITE_AGENTATION && <div aria-hidden="true"><Agentation endpoint="http://localhost:4747" /></div>}
             </div>
         );
@@ -441,8 +441,8 @@ function App() {
                 onHideGame={hideGame}
                 onSwitchToKamae={switchToKamae}
                 tourStep={tourStep} tourTotal={TOUR_TOTAL} onTourStart={startTour} onTourClose={closeTour} onTourAdvance={advanceTour} onTourPrev={prevTour} hasSeenTour={hasSeenTour}
+                themeToggle={themeToggle}
             />
-            {themeToggle}
             {/* No landmark role here — the <footer> inside RinView/KamaeView
                 already carries role=contentinfo. Two contentinfo landmarks
                 would confuse SR landmark navigation. */}

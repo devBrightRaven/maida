@@ -22,7 +22,7 @@ import './KamaeView.css';
  * Kamae (構) — slow curation face.
  * Kata selector + game list + search + explore entry.
  */
-export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleChange, tourStep, tourTotal, onTourStart, onTourReplay, onTourClose, onTourAdvance, onTourPrev, settingsRequested, onSettingsOpened }) {
+export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleChange, tourStep, tourTotal, onTourStart, onTourReplay, onTourClose, onTourAdvance, onTourPrev, settingsRequested, onSettingsOpened, themeToggle }) {
     // SR guide announces once per install, gated by localStorage to avoid
     // re-announcement on every re-render / face switch. See RinView for same pattern.
     const [showSrGuide] = useState(() => localStorage.getItem('maida-hasHeardKamaeGuide') !== 'true');
@@ -138,7 +138,15 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
     const searchRef = useRef(null);
     const showcaseListRef = useRef(null);
     const faceSwitchRef = useRef(null);
-    const showTour = tourStep !== null && tourStep >= 5 && tourStep <= 8;
+    const replayTourBtnRef = useRef(null);
+    const showTour = tourStep !== null && tourStep >= 5 && tourStep <= 9;
+
+    // Tour step 8 highlights the Replay-tour button inside Settings panel.
+    // Auto-open Settings on entering step 8, auto-close on advancing to step 9.
+    useEffect(() => {
+        if (tourStep === 8) setShowSettings(true);
+        else if (tourStep === 9) setShowSettings(false);
+    }, [tourStep]);
 
     // D-pad navigation: cycle through all interactive elements
     const handleNav = useCallback((dir) => {
@@ -247,8 +255,23 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
                         onLocaleChange={onLocaleChange}
                         onTourStart={onTourReplay}
                         onNavigateLegal={(page) => { legalReturnRef.current = document.activeElement; setLegalPage(page); }}
+                        replayTourBtnRef={replayTourBtnRef}
                     />
                 </div>
+                {/* Tour step 8 highlights the Replay-tour button inside Settings.
+                    Standalone GuidedTour rendered here because main render path
+                    is replaced by SettingsPanel. */}
+                {showTour && tourStep === 8 && (
+                    <GuidedTour
+                        steps={[{ targetRef: replayTourBtnRef, text: t('ui.tour.step_settings_replay') }]}
+                        localIndex={0}
+                        globalIndex={tourStep}
+                        totalSteps={tourTotal}
+                        onClose={onTourClose}
+                        onAdvance={onTourAdvance}
+                        onPrev={onTourPrev}
+                    />
+                )}
             </main>
         );
     }
@@ -349,29 +372,40 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
                 >
                     {t('ui.settings.title')} <span className="kamae-settings-shortcut">(F10 / Menu)</span>
                 </button>
+                {/* Face switch + Help + Theme placed inside .kamae-content,
+                    BEFORE Footer, so Tab order matches Rin: ... → face → help
+                    → theme → footer. Both buttons are absolute-positioned via
+                    CSS so visual layout is unchanged by DOM placement. */}
+                <FaceSwitchButton ref={faceSwitchRef} direction="to-rin" onClick={onSwitchToRin} />
+                <button
+                    className="help-tour-btn"
+                    aria-label={t('ui.tour.help_aria')}
+                    data-tooltip={t('ui.tour.help_tooltip')}
+                    onClick={onTourStart}
+                >
+                    ?
+                </button>
+                {themeToggle}
                 <Footer onNavigate={(page) => { legalReturnRef.current = document.activeElement; setLegalPage(page); }} />
             </div>
-            <button
-                className="help-tour-btn"
-                aria-label={t('ui.tour.help_aria')}
-                data-tooltip={t('ui.tour.help_tooltip')}
-                onClick={onTourStart}
-            >
-                ?
-            </button>
-            <FaceSwitchButton ref={faceSwitchRef} direction="to-rin" onClick={onSwitchToRin} />
 
-            {showTour && (() => {
+            {/* Tour main render covers steps 5,6,7,9. Step 8 (Settings replay)
+                is rendered in the showSettings branch above because Settings
+                replaces this main view entirely. */}
+            {showTour && tourStep !== 8 && (() => {
                 const kamaeSteps = [
                     { targetRef: kataPanelRef, text: t('ui.tour.step_kata') },
                     { targetRef: searchRef, text: activeKata ? t('ui.tour.step_search') : t('ui.tour.step_search_no_kata') },
                     { targetRef: showcaseListRef, text: activeKata ? t('ui.tour.step_list_kata') : t('ui.tour.step_list_no_kata') },
                     { targetRef: faceSwitchRef, text: t('ui.tour.step_switch_rin'), interactive: true },
                 ];
+                // tourStep 5,6,7 → localIndex 0,1,2 (kata/search/list)
+                // tourStep 9 → localIndex 3 (face switch); step 8 handled in showSettings branch
+                const localIndex = tourStep === 9 ? 3 : tourStep - 5;
                 return (
                     <GuidedTour
                         steps={kamaeSteps}
-                        localIndex={tourStep - 5}
+                        localIndex={localIndex}
                         globalIndex={tourStep}
                         totalSteps={tourTotal}
                         onClose={onTourClose}

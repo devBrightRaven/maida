@@ -28,6 +28,9 @@ export default function AccessibilityPage({ onClose }) {
             <ul>
                 <li>{t('ui.legal.a11y_limitation_gamepad')}</li>
                 <li>{t('ui.legal.a11y_limitation_longpress')}</li>
+                <li>{t('ui.legal.a11y_limitation_space_key')}</li>
+                <li>{t('ui.legal.a11y_limitation_settings_in_kamae')}</li>
+                <li>{t('ui.legal.a11y_limitation_screen_reader_browse')}</li>
             </ul>
 
             <h2>{t('ui.legal.a11y_planned_heading')}</h2>

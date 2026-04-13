@@ -42,7 +42,8 @@ export default function RinView({
     onTourClose,
     onTourAdvance,
     onTourPrev,
-    hasSeenTour
+    hasSeenTour,
+    themeToggle
 }) {
     const [expanded, setExpanded] = useState(false);
     const [showTrace, setShowTrace] = useState(false);
@@ -508,6 +509,10 @@ export default function RinView({
                 );
             })()}
 
+            {/* themeToggle rendered here (inside main) so Tab order is:
+                ...help → theme → footer. Frequency-driven order — help and
+                theme are both L4 rare-use, footer is L5. */}
+            {themeToggle}
             <Footer onNavigate={(page) => { legalReturnRef.current = document.activeElement; setLegalPage(page); }} />
         </main>
         </>
