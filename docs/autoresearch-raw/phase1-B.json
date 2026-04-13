@@ -1,0 +1,187 @@
+[
+  {
+    "id": "zero-loss",
+    "analysis": {
+      "mechanism": "Loss aversion: potential losses loom larger than equivalent gains, so explicitly framing waiting as lossless reduces pressure to act (Kahneman & Tversky, 1979).",
+      "mechanism_source": "Kahneman, D., & Tversky, A. (1979). Prospect theory: An analysis of decision under risk. Econometrica, 47(2), 263-291.",
+      "current_issue": "EN and all three translations preserve the same loss-neutral permission: waiting does not forfeit anything.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "no-obligation",
+    "analysis": {
+      "mechanism": "Sunk-cost pressure: ownership can create a felt need to justify prior acquisition, so separating possession from obligation reduces backlog debt (Arkes & Blumer, 1985).",
+      "mechanism_source": "Arkes, H. R., & Blumer, C. (1985). The psychology of sunk cost. Organizational Behavior and Human Decision Processes, 35(1), 124-140.",
+      "current_issue": "EN and all three translations consistently detach ownership from duty. The permission remains pure and nonjudgmental.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "intent-only",
+    "analysis": {
+      "mechanism": "Intention-superiority effect: unfulfilled intentions stay cognitively active, so permission works best when intention is decoupled from execution rather than from generic 'input' (Goschke & Kuhl, 1993).",
+      "mechanism_source": "Goschke, T., & Kuhl, J. (1993). Representation of intentions: Persisting activation in memory. Journal of Experimental Psychology: Learning, Memory, and Cognition, 19(5), 1211-1226.",
+      "current_issue": "EN kernel/interface shift from intention to 'input' and 'execution,' which weakens the target mechanism. All translations inherit that mismatch.",
+      "severity": "major"
+    },
+    "revisions": {
+      "en": {
+        "kernel": "Intention remains sufficient.",
+        "interface": "You may intend to play without acting on it."
+      },
+      "zh-TW": {
+        "kernel": "意圖本身已足夠。",
+        "interface": "你想玩，不需要立刻採取行動。"
+      },
+      "zh-CN": {
+        "kernel": "意图本身已足够。",
+        "interface": "你想玩，不需要立刻采取行动。"
+      },
+      "ja": {
+        "kernel": "意図だけで十分です。",
+        "interface": "遊びたいと思うだけで、行動は不要です。"
+      }
+    }
+  },
+  {
+    "id": "constant-access",
+    "analysis": {
+      "mechanism": "FOMO and scarcity salience: perceived diminishing availability increases pressure to act, so stating that availability does not decay reduces urgency (Przybylski et al., 2013).",
+      "mechanism_source": "Przybylski, A. K., Murayama, K., DeHaan, C. R., & Gladwell, V. (2013). Motivational, emotional, and behavioral correlates of fear of missing out. Computers in Human Behavior, 29(4), 1841-1848.",
+      "current_issue": "EN and all three translations preserve the same anti-scarcity meaning: waiting does not reduce availability.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "time-suspension",
+    "analysis": {
+      "mechanism": "Temporal scarcity: when time feels scarce, attention narrows and pressure increases, so permission should neutralize urgency cues rather than imply literal system-time suspension (Shah et al., 2012).",
+      "mechanism_source": "Shah, A. K., Mullainathan, S., & Shafir, E. (2012). Some consequences of having too little. Science, 338(6107), 682-685.",
+      "current_issue": "EN overstates the claim with 'System time is suspended,' and all translations mirror that literal, implausible framing. The mechanism is reduced time pressure, not paused clock time.",
+      "severity": "major"
+    },
+    "revisions": {
+      "en": {
+        "kernel": "Time pressure is inactive.",
+        "interface": "No time is running out on you while you wait."
+      },
+      "zh-TW": {
+        "kernel": "時間壓力未啟動。",
+        "interface": "你等待時，沒有任何時間正在耗盡。"
+      },
+      "zh-CN": {
+        "kernel": "时间压力未启动。",
+        "interface": "你等待时，没有任何时间正在耗尽。"
+      },
+      "ja": {
+        "kernel": "時間圧は作動していません。",
+        "interface": "待っているあいだ、あなたの時間は減っていません。"
+      }
+    }
+  },
+  {
+    "id": "static-state",
+    "analysis": {
+      "mechanism": "Status quo bias: maintaining a non-choice default is psychologically easier than selecting an option, so validating non-selection as stable reduces action pressure (Samuelson & Zeckhauser, 1988).",
+      "mechanism_source": "Samuelson, W., & Zeckhauser, R. (1988). Status quo bias in decision making. Journal of Risk and Uncertainty, 1(1), 7-59.",
+      "current_issue": "EN and all three translations clearly validate non-selection as an acceptable stable state. Mechanism alignment is strong.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "inventory-neutral",
+    "analysis": {
+      "mechanism": "Choice overload and assortment pressure: larger sets can increase decision difficulty and felt burden, so permission should neutralize the library's demand signal directly (Iyengar & Lepper, 2000).",
+      "mechanism_source": "Iyengar, S. S., & Lepper, M. R. (2000). When choice is demotivating: Can one desire too much of a good thing? Journal of Personality and Social Psychology, 79(6), 995-1006.",
+      "current_issue": "EN kernel 'Database is passive' is too technical and indirect; it weakens the backlog/library mechanism. All translations follow that abstraction, though the interface lines are closer.",
+      "severity": "major"
+    },
+    "revisions": {
+      "en": {
+        "kernel": "Library size is neutral.",
+        "interface": "Your library is not asking anything of you."
+      },
+      "zh-TW": {
+        "kernel": "遊戲庫規模是中性的。",
+        "interface": "你的遊戲庫不會對你提出任何要求。"
+      },
+      "zh-CN": {
+        "kernel": "游戏库规模是中性的。",
+        "interface": "你的游戏库不会对你提出任何要求。"
+      },
+      "ja": {
+        "kernel": "ライブラリの規模は中立です。",
+        "interface": "あなたのライブラリは、何も求めていません。"
+      }
+    }
+  },
+  {
+    "id": "wait-cost-zero",
+    "analysis": {
+      "mechanism": "Opportunity-cost salience: when waiting feels costly, pressure to choose rises, so explicitly zeroing the perceived cost protects inaction (Frederick et al., 2009).",
+      "mechanism_source": "Frederick, S., Novemsky, N., Wang, J., Dhar, R., & Nowlis, S. (2009). Opportunity cost neglect. Journal of Consumer Research, 36(4), 553-561.",
+      "current_issue": "EN and all three translations keep the intended meaning intact: waiting carries no penalty. The framing stays administrative rather than advisory.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "availability-persistent",
+    "analysis": {
+      "mechanism": "Scarcity/FOMO reduction: stable future availability lowers urgency, but the kernel should name availability directly rather than abstract 'access' as static (Przybylski et al., 2013).",
+      "mechanism_source": "Przybylski, A. K., Murayama, K., DeHaan, C. R., & Gladwell, V. (2013). Motivational, emotional, and behavioral correlates of fear of missing out. Computers in Human Behavior, 29(4), 1841-1848.",
+      "current_issue": "EN kernel 'Access is static' is semantically stiff and the zh-TW/zh-CN kernels sound unnatural. The interface meaning is mostly correct, but all four can align more directly to persistent availability.",
+      "severity": "minor"
+    },
+    "revisions": {
+      "en": {
+        "kernel": "Availability remains unchanged.",
+        "interface": "What is available to you stays available."
+      },
+      "zh-TW": {
+        "kernel": "可用性維持不變。",
+        "interface": "現在可用的，之後也仍然可用。"
+      },
+      "zh-CN": {
+        "kernel": "可用性保持不变。",
+        "interface": "现在可用的，之后也仍然可用。"
+      },
+      "ja": {
+        "kernel": "利用可能性は変化しません。",
+        "interface": "今使えるものは、そのまま使えます。"
+      }
+    }
+  },
+  {
+    "id": "pause-validity",
+    "analysis": {
+      "mechanism": "Action bias: people often feel pressure to signal movement or readiness, so permission should legitimize continued pause without requiring proof of readiness (Patt & Zeckhauser, 2000).",
+      "mechanism_source": "Patt, A., & Zeckhauser, R. (2000). Action bias and environmental decisions. Journal of Risk and Uncertainty, 21(1), 45-72.",
+      "current_issue": "EN kernel/interface are conceptually close but phrased opaquely; all translations inherit that opacity. The mechanism is clearer when the pause itself is validated and readiness-signaling is explicitly unnecessary.",
+      "severity": "minor"
+    },
+    "revisions": {
+      "en": {
+        "kernel": "Pause remains valid.",
+        "interface": "You do not need to signal readiness."
+      },
+      "zh-TW": {
+        "kernel": "暫停狀態仍然有效。",
+        "interface": "你不需要發出任何準備好的訊號。"
+      },
+      "zh-CN": {
+        "kernel": "暂停状态仍然有效。",
+        "interface": "你不需要发出任何准备好的信号。"
+      },
+      "ja": {
+        "kernel": "一時停止は有効なままです。",
+        "interface": "準備ができたことを示す必要はありません。"
+      }
+    }
+  }
+]

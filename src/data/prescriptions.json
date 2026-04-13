@@ -10,8 +10,8 @@
             {
                 "id": "entry-permitted",
                 "tier": 0,
-                "kernel": "Decision not required.",
-                "interface": "You may begin without knowing if this is the right choice.",
+                "kernel": "Decision is unnecessary.",
+                "interface": "You may enter without knowing whether it is the right choice.",
                 "momentum": "unlock",
                 "audit": {
                     "permission_effect": "lower_obligation",
@@ -70,8 +70,8 @@
             {
                 "id": "observation-mode",
                 "tier": 0,
-                "kernel": "Passive entry.",
-                "interface": "Looking without playing is a valid form of participation.",
+                "kernel": "Observation is participation.",
+                "interface": "You may look without playing, and that still counts.",
                 "momentum": "stabilize",
                 "audit": {
                     "permission_effect": "lower_obligation",
@@ -82,8 +82,8 @@
             {
                 "id": "low-input",
                 "tier": 0,
-                "kernel": "Minimum energy.",
-                "interface": "You do not need to bring your full energy here.",
+                "kernel": "Full energy is unnecessary.",
+                "interface": "You may arrive with only the energy you have.",
                 "momentum": "unlock",
                 "audit": {
                     "permission_effect": "lower_obligation",
@@ -94,8 +94,8 @@
             {
                 "id": "objective-optional",
                 "tier": 0,
-                "kernel": "Aimlessness permitted.",
-                "interface": "You do not need an objective to enter.",
+                "kernel": "An objective is optional.",
+                "interface": "You may enter without having a goal.",
                 "momentum": "unlock",
                 "audit": {
                     "permission_effect": "lower_obligation",
@@ -106,8 +106,8 @@
             {
                 "id": "latency-allowed",
                 "tier": 0,
-                "kernel": "Hesitation is structural.",
-                "interface": "Hesitation is not an error; take your time.",
+                "kernel": "Hesitation is allowed.",
+                "interface": "You may hesitate; that does not make this an error.",
                 "momentum": "stabilize",
                 "audit": {
                     "permission_effect": "lower_obligation",
@@ -118,8 +118,8 @@
             {
                 "id": "silence-valid",
                 "tier": 0,
-                "kernel": "Quiet interface.",
-                "interface": "Silence before action is part of the experience.",
+                "kernel": "Silence is included.",
+                "interface": "You may be quiet before acting.",
                 "momentum": "stabilize",
                 "audit": {
                     "permission_effect": "lower_obligation",
@@ -156,8 +156,8 @@
             {
                 "id": "intent-only",
                 "tier": 0,
-                "kernel": "Input requires no execution.",
-                "interface": "Intent is sufficient.",
+                "kernel": "Intention remains sufficient.",
+                "interface": "You may intend to play without acting on it.",
                 "momentum": "stabilize",
                 "audit": {
                     "permission_effect": "lower_obligation",
@@ -180,8 +180,8 @@
             {
                 "id": "time-suspension",
                 "tier": 0,
-                "kernel": "Clock ignored.",
-                "interface": "System time is suspended.",
+                "kernel": "Time pressure is inactive.",
+                "interface": "No time is running out on you while you wait.",
                 "momentum": "stabilize",
                 "audit": {
                     "permission_effect": "lower_obligation",
@@ -204,8 +204,8 @@
             {
                 "id": "inventory-neutral",
                 "tier": 0,
-                "kernel": "Database is passive.",
-                "interface": "Library size implies no demand.",
+                "kernel": "Library size is neutral.",
+                "interface": "Your library is not asking anything of you.",
                 "momentum": "release",
                 "audit": {
                     "permission_effect": "lower_obligation",
@@ -228,8 +228,8 @@
             {
                 "id": "availability-persistent",
                 "tier": 0,
-                "kernel": "Access is static.",
-                "interface": "Access remains constant without interaction.",
+                "kernel": "Availability remains unchanged.",
+                "interface": "What is available to you stays available.",
                 "momentum": "stabilize",
                 "audit": {
                     "permission_effect": "lower_obligation",
@@ -240,8 +240,8 @@
             {
                 "id": "pause-validity",
                 "tier": 0,
-                "kernel": "Suspension active.",
-                "interface": "Readiness requires no signal.",
+                "kernel": "Pause remains valid.",
+                "interface": "You do not need to signal readiness.",
                 "momentum": "stabilize",
                 "audit": {
                     "permission_effect": "lower_obligation",
@@ -337,8 +337,8 @@
                 {
                     "id": "factory-wait",
                     "tier": 2,
-                    "kernel": "The system persists.",
-                    "interface": "The factory waits for you; you do not need to fix it all today.",
+                    "kernel": "The factory persists.",
+                    "interface": "You can leave it unfinished and return with the current state intact.",
                     "momentum": "stabilize",
                     "audit": {
                         "permission_effect": "lower_obligation",
@@ -415,8 +415,8 @@
                 {
                     "id": "internal-voice",
                     "tier": 2,
-                    "kernel": "Chaos is readable.",
-                    "interface": "You don't need to be sober or smart here. Just read.",
+                    "kernel": "Dialogue is readable.",
+                    "interface": "You can move through it one line, thought, or check at a time.",
                     "momentum": "unlock",
                     "audit": {
                         "permission_effect": "lower_obligation",
@@ -427,8 +427,8 @@
                 {
                     "id": "failure-path",
                     "tier": 2,
-                    "kernel": "Errors are content.",
-                    "interface": "Saying the wrong thing is just another way to play.",
+                    "kernel": "Failure remains content.",
+                    "interface": "A missed check still opens a valid path through the scene.",
                     "momentum": "stabilize",
                     "audit": {
                         "permission_effect": "lower_obligation",
@@ -497,8 +497,8 @@
                 {
                     "id": "spectacle",
                     "tier": 2,
-                    "kernel": "Spectacle awaits.",
-                    "interface": "Let the screen handle the scale. You just handle the buttons.",
+                    "kernel": "Scale is rendered.",
+                    "interface": "You can handle the inputs while the screen carries the spectacle.",
                     "momentum": "unlock",
                     "audit": {
                         "permission_effect": "lower_obligation",
@@ -582,7 +582,7 @@
                     "id": "crop-cycle",
                     "tier": 2,
                     "kernel": "Growth is automated.",
-                    "interface": "The crops will be fine. A short day is enough.",
+                    "interface": "Crops continue on their own. You can stop after a short in-game day.",
                     "momentum": "release",
                     "audit": {
                         "permission_effect": "lower_obligation",
@@ -596,7 +596,7 @@
                     "id": "dam-control",
                     "tier": 2,
                     "kernel": "Flow is managed.",
-                    "interface": "The water flows at your command. No rush.",
+                    "interface": "Water systems respond slowly. You can leave them running without constant input.",
                     "momentum": "stabilize",
                     "audit": {
                         "permission_effect": "lower_obligation",
@@ -623,8 +623,8 @@
                 {
                     "id": "cycle-restart",
                     "tier": 2,
-                    "kernel": "The cycle expects you.",
-                    "interface": "Dying is part of the progress, not a setback.",
+                    "kernel": "Cycle is expected.",
+                    "interface": "Death is part of progress here. You are entering a reset loop, not a skill loss.",
                     "momentum": "unlock",
                     "audit": {
                         "permission_effect": "lower_obligation",
@@ -651,8 +651,8 @@
                 {
                     "id": "hands-played",
                     "tier": 2,
-                    "kernel": "Probability is play.",
-                    "interface": "Just play one hand. The math handles itself.",
+                    "kernel": "One hand can suffice.",
+                    "interface": "You can play a single hand and let the scoring resolve it.",
                     "momentum": "unlock",
                     "audit": {
                         "permission_effect": "lower_obligation",
@@ -722,7 +722,7 @@
                     "id": "color-flow",
                     "tier": 2,
                     "kernel": "State is fluid.",
-                    "interface": "There is no fail state here. Just move.",
+                    "interface": "There is no fail state here. You can keep moving without penalty.",
                     "momentum": "unlock",
                     "audit": {
                         "permission_effect": "lower_obligation",
@@ -750,7 +750,7 @@
                     "id": "gentle-puzzle",
                     "tier": 2,
                     "kernel": "Logic is soft.",
-                    "interface": "There is no time limit. The puzzle will wait.",
+                    "interface": "There is no time limit here. You can stay with one puzzle as long as you want.",
                     "momentum": "stabilize",
                     "audit": {
                         "permission_effect": "lower_obligation",
@@ -763,8 +763,8 @@
                 {
                     "id": "ocean-drift",
                     "tier": 2,
-                    "kernel": "Buoyancy holds you.",
-                    "interface": "You cannot drown. Just swim.",
+                    "kernel": "Drowning is disabled.",
+                    "interface": "You stay afloat here. Underwater movement is not a drowning timer.",
                     "momentum": "stabilize",
                     "audit": {
                         "permission_effect": "lower_obligation",
@@ -777,8 +777,8 @@
                 {
                     "id": "history-gen",
                     "tier": 2,
-                    "kernel": "Losing is fun.",
-                    "interface": "Disaster is just a story generation engine.",
+                    "kernel": "Collapse remains history.",
+                    "interface": "A fallen fortress still produces events, records, and aftermath.",
                     "momentum": "unlock",
                     "audit": {
                         "permission_effect": "lower_obligation",
@@ -805,8 +805,8 @@
                 {
                     "id": "physics-puzzle",
                     "tier": 2,
-                    "kernel": "Physics are predictable.",
-                    "interface": "Test the mechanism. Failure is just data.",
+                    "kernel": "Mechanics are testable.",
+                    "interface": "You can run a trial, observe the result, and reset for another attempt.",
                     "momentum": "unlock",
                     "audit": {
                         "permission_effect": "lower_obligation",
@@ -927,6 +927,350 @@
                     }
                 }
             ]
-        }
+        },
+        "time-of-day": [
+            {
+                "id": "dawn-entry",
+                "tier": 1,
+                "kernel": "Wakefulness may be partial.",
+                "interface": "You may enter before the mind has reached full speed.",
+                "momentum": "stabilize",
+                "audit": {
+                    "permission_effect": "normalize_state",
+                    "risk": "safe",
+                    "notes": "Mechanism: normalizes sleep inertia and partial readiness after waking; source: Wertz et al., 'Effects of sleep inertia on cognition,' JAMA (2006), doi:10.1001/jama.295.2.163."
+                },
+                "trigger": {
+                    "type": "time-of-day",
+                    "hours": [
+                        4,
+                        5,
+                        6
+                    ]
+                }
+            },
+            {
+                "id": "morning-entry",
+                "tier": 1,
+                "kernel": "Morning pace is variable.",
+                "interface": "You may open this without turning the first hour into a test.",
+                "momentum": "unlock",
+                "audit": {
+                    "permission_effect": "lower_obligation",
+                    "risk": "safe",
+                    "notes": "Mechanism: lowers self-judgment around imperfect starts using self-compassion/common-humanity framing; source: Neff, 'Self-Compassion: An Alternative Conceptualization of a Healthy Attitude Toward Oneself' (2003), doi:10.1080/15298860309032."
+                },
+                "trigger": {
+                    "type": "time-of-day",
+                    "hours": [
+                        7,
+                        8,
+                        9,
+                        10,
+                        11
+                    ]
+                }
+            },
+            {
+                "id": "afternoon-entry",
+                "tier": 1,
+                "kernel": "Sharpness naturally dips.",
+                "interface": "You may use a lower-focus hour without treating it as a failure.",
+                "momentum": "stabilize",
+                "audit": {
+                    "permission_effect": "normalize_state",
+                    "risk": "safe",
+                    "notes": "Mechanism: normalizes the midafternoon drop in alertness as circadian rather than personal failure; source: Monk, 'The post-lunch dip in performance,' Clin Sports Med (2005), doi:10.1016/j.csm.2004.12.002."
+                },
+                "trigger": {
+                    "type": "time-of-day",
+                    "hours": [
+                        12,
+                        13,
+                        14,
+                        15,
+                        16,
+                        17
+                    ]
+                }
+            },
+            {
+                "id": "evening-entry",
+                "tier": 1,
+                "kernel": "Closure may remain pending.",
+                "interface": "You may enter without closing every loop the day left behind.",
+                "momentum": "release",
+                "audit": {
+                    "permission_effect": "lower_obligation",
+                    "risk": "safe",
+                    "notes": "Mechanism: lowers completion pressure at the work-to-leisure boundary using psychological detachment framing; source: Sonnentag and Bayer, 'Switching off mentally: predictors and consequences of psychological detachment from work during off-job time' (2005), doi:10.1037/1076-8998.10.4.393."
+                },
+                "trigger": {
+                    "type": "time-of-day",
+                    "hours": [
+                        18,
+                        19,
+                        20,
+                        21
+                    ]
+                }
+            },
+            {
+                "id": "late-night-entry",
+                "tier": 1,
+                "kernel": "A brief visit is whole.",
+                "interface": "You may open the launcher without owing the night a full session.",
+                "momentum": "release",
+                "audit": {
+                    "permission_effect": "lower_stakes",
+                    "risk": "safe",
+                    "notes": "Mechanism: reduces all-or-nothing commitment pressure in the time window associated with bedtime procrastination and self-regulation conflict; source: Kroese et al., 'Bedtime procrastination: introducing a new area of procrastination,' Front Psychol (2014), doi:10.3389/fpsyg.2014.00611."
+                },
+                "trigger": {
+                    "type": "time-of-day",
+                    "hours": [
+                        22,
+                        23,
+                        0,
+                        1,
+                        2,
+                        3
+                    ]
+                }
+            }
+        ],
+        "emotional-states": [
+            {
+                "id": "frustrated-unresolved-valid",
+                "tier": 1,
+                "kernel": "Resolution is not required.",
+                "interface": "You may leave this unresolved; repeated skips do not create a duty to force closure.",
+                "momentum": "release",
+                "audit": {
+                    "permission_effect": "lower_obligation",
+                    "risk": "safe",
+                    "notes": "Mechanism: after setbacks, pressure and self-blame can amplify rumination and negative affect; permission reduces closure pressure rather than demanding persistence. Source: Semenchuk et al., 2018, J Sport Exerc Psychol, PMID:29580155; Emmerich et al., 2020, Eur J Pain, PMID:33448520."
+                },
+                "trigger": {
+                    "type": "emotional-states",
+                    "proxy": "skip-streak-3"
+                }
+            },
+            {
+                "id": "tired-partial-capacity",
+                "tier": 1,
+                "kernel": "Full capacity is not required.",
+                "interface": "You may meet this with partial attention; late hours do not create a higher standard.",
+                "momentum": "stabilize",
+                "audit": {
+                    "permission_effect": "lower_obligation",
+                    "risk": "safe",
+                    "notes": "Mechanism: sleep loss commonly impairs feedback-based updating and decision-making, so lowering the performance demand fits the state. Source: Whitney et al., 2015, Sleep, PMID:25515105; Saini et al., 2025, scoping review, PMCID:PMC12189852."
+                },
+                "trigger": {
+                    "type": "emotional-states",
+                    "proxy": "late-night-with-skip"
+                }
+            },
+            {
+                "id": "numb-neutral-return",
+                "tier": 1,
+                "kernel": "Feeling is not required.",
+                "interface": "You may return without warmth, curiosity, or urgency; contact may remain neutral.",
+                "momentum": "unlock",
+                "audit": {
+                    "permission_effect": "lower_obligation",
+                    "risk": "safe",
+                    "notes": "Mechanism: emotional numbing/blunting is associated with reduced emotional reactivity, so requiring felt enthusiasm would misread the state. Source: Jin et al., 2015, Int J Psychophysiol, PMID:25931112; Dewe et al., 2016, Cogn Neuropsychiatry, PMID:27466978."
+                },
+                "trigger": {
+                    "type": "emotional-states",
+                    "proxy": "long-absence-return"
+                }
+            },
+            {
+                "id": "content-no-escalation",
+                "tier": 1,
+                "kernel": "Escalation is not required.",
+                "interface": "You may leave this exactly as it is; satisfaction does not create a next step.",
+                "momentum": "release",
+                "audit": {
+                    "permission_effect": "lower_obligation",
+                    "risk": "safe",
+                    "notes": "Mechanism: contentment is a low-arousal positive state linked in theory to safety, certainty, low effort, and even doing nothing, so the permission blocks needless escalation. Source: Fredrickson, 2001, Am Psychol, PMCID:PMC3156001."
+                },
+                "trigger": {
+                    "type": "emotional-states",
+                    "proxy": "just-anchored"
+                }
+            },
+            {
+                "id": "restless-unsettled-valid",
+                "tier": 1,
+                "kernel": "Settling is not required.",
+                "interface": "You may pass through briefly; unfinishedness may remain unfinished.",
+                "momentum": "stabilize",
+                "audit": {
+                    "permission_effect": "lower_obligation",
+                    "risk": "safe",
+                    "notes": "Mechanism: restlessness is classically described as an urge to move or inability to stay still, so demanding settled focus would add friction. Source: Tan and Ondo, 2001, Int J Clin Pract, PMID:11452680."
+                },
+                "trigger": {
+                    "type": "emotional-states",
+                    "proxy": "return-penalty-accumulated"
+                }
+            },
+            {
+                "id": "still-here-no-explanation",
+                "tier": 1,
+                "kernel": "Resumption needs no explanation.",
+                "interface": "You may continue after the freeze without accounting for the gap.",
+                "momentum": "unlock",
+                "audit": {
+                    "permission_effect": "lower_obligation",
+                    "risk": "safe",
+                    "notes": "Mechanism: freezing is a defensive state tied to temporary immobility, and adaptive coping includes timely termination when threat is gone or action is needed; the permission removes explanatory debt at re-entry. Source: Niermann et al., 2017, Psychoneuroendocrinology, PMID:28511048; Rosler and Gamer, 2019, Sci Rep, doi:10.1038/s41598-019-53683-4."
+                },
+                "trigger": {
+                    "type": "emotional-states",
+                    "proxy": "post-freeze-resume"
+                }
+            },
+            {
+                "id": "overwhelmed-selection-optional",
+                "tier": 1,
+                "kernel": "Selection is not required.",
+                "interface": "You may look without choosing; multiple open options do not need to collapse into one.",
+                "momentum": "unlock",
+                "audit": {
+                    "permission_effect": "lower_obligation",
+                    "risk": "safe",
+                    "notes": "Mechanism: larger option sets can, under some conditions, reduce motivation to choose or satisfaction, so removing the demand to collapse options can lower pressure. Source: Scheibehenne et al., 2010, J Consum Res, doi:10.1086/651235."
+                },
+                "trigger": {
+                    "type": "emotional-states",
+                    "proxy": "selection-churn-5"
+                }
+            }
+        ],
+        "return-after-absence": [
+            {
+                "id": "return-after-week",
+                "tier": 1,
+                "kernel": "Continuity has not expired.",
+                "interface": "After a short gap, you may re-enter without restoring the previous rhythm.",
+                "momentum": "stabilize",
+                "audit": {
+                    "permission_effect": "lower_obligation",
+                    "risk": "safe",
+                    "notes": "Mechanism: brief absence weakens cue-driven automaticity, so immediate smoothness should not be required. Source: Stojanovic et al., Front Psychol 2022, PMCID: PMC9226889."
+                },
+                "trigger": {
+                    "type": "return-after-absence",
+                    "min_days": 7,
+                    "max_days": 14
+                }
+            },
+            {
+                "id": "return-after-month",
+                "tier": 1,
+                "kernel": "Recall may be partial.",
+                "interface": "After a month-scale gap, you may return without proving memory, skill, or narrative continuity.",
+                "momentum": "unlock",
+                "audit": {
+                    "permission_effect": "lower_obligation",
+                    "risk": "safe",
+                    "notes": "Mechanism: disrupted context weakens habitual responding, so recall friction is normal rather than disqualifying. Source: Thomas et al., PLoS One 2016, PMCID: PMC4847906."
+                },
+                "trigger": {
+                    "type": "return-after-absence",
+                    "min_days": 14,
+                    "max_days": 60
+                }
+            },
+            {
+                "id": "return-after-quarter",
+                "tier": 1,
+                "kernel": "Re-entry may be fresh.",
+                "interface": "After several months away, you may treat this as a new contact instead of a resumed streak.",
+                "momentum": "unlock",
+                "audit": {
+                    "permission_effect": "lower_obligation",
+                    "risk": "safe",
+                    "notes": "Mechanism: longer context discontinuity breaks old cue chains, making a fresh-contact frame more accurate than seamless continuation. Source: Thomas et al., PLoS One 2016, PMCID: PMC4847906."
+                },
+                "trigger": {
+                    "type": "return-after-absence",
+                    "min_days": 60,
+                    "max_days": 120
+                }
+            },
+            {
+                "id": "return-after-half-year",
+                "tier": 1,
+                "kernel": "Previous pace is released.",
+                "interface": "After half a year away, you may enter without matching the tempo, plans, or competence from before.",
+                "momentum": "release",
+                "audit": {
+                    "permission_effect": "lower_obligation",
+                    "risk": "safe",
+                    "notes": "Mechanism: old automaticity and contextual fluency decay across long gaps; lowering restart pressure also avoids guilt-reactivity after lapses. Sources: Stojanovic et al., Front Psychol 2022, PMCID: PMC9226889; Thogersen-Ntoumani et al., Br J Health Psychol 2021, PMCID: PMC8451927."
+                },
+                "trigger": {
+                    "type": "return-after-absence",
+                    "min_days": 120,
+                    "max_days": 240
+                }
+            },
+            {
+                "id": "return-after-year",
+                "tier": 1,
+                "kernel": "Former identity is optional.",
+                "interface": "After a year or more, you may approach this title without inheriting the standards of your earlier self.",
+                "momentum": "release",
+                "audit": {
+                    "permission_effect": "lower_obligation",
+                    "risk": "safe",
+                    "notes": "Mechanism: extended discontinuity weakens old habit-context links enough that identity continuity should not be assumed. Source: Thomas et al., PLoS One 2016, PMCID: PMC4847906."
+                },
+                "trigger": {
+                    "type": "return-after-absence",
+                    "min_days": 240
+                }
+            },
+            {
+                "id": "new-device-start",
+                "tier": 1,
+                "kernel": "Continuity record may be absent.",
+                "interface": "When no last-played record exists, you may begin without reconstructing history, sequence, or proof of prior use.",
+                "momentum": "unlock",
+                "audit": {
+                    "permission_effect": "lower_obligation",
+                    "risk": "safe",
+                    "notes": "Mechanism: missing telemetry functions like context discontinuity, so proof of continuity should not be demanded. Sources: Stojanovic et al., Front Psychol 2022, PMCID: PMC9226889; Thomas et al., PLoS One 2016, PMCID: PMC4847906."
+                },
+                "trigger": {
+                    "type": "return-after-absence",
+                    "criterion": "no-last-played"
+                }
+            },
+            {
+                "id": "post-burnout-return",
+                "tier": 1,
+                "kernel": "Intensity need not recur.",
+                "interface": "After a once-anchored period ended in long absence, you may return without reactivating the old level of investment.",
+                "momentum": "release",
+                "audit": {
+                    "permission_effect": "lower_obligation",
+                    "risk": "safe",
+                    "notes": "Mechanism: burnout is marked by exhaustion, distance, and reduced efficacy; permission removes pressure to resume prior intensity, while self-compassion is inversely associated with burnout. Sources: WHO ICD-11 burn-out FAQ; Hashem & Zeinoun, Mindfulness 2020, PMCID: PMC7481342."
+                },
+                "trigger": {
+                    "type": "return-after-absence",
+                    "criterion": "post-anchor-gap"
+                }
+            }
+        ],
+        "socialstates": []
     }
 }

@@ -1,0 +1,317 @@
+[
+  {
+    "id": "journey",
+    "analysis": {
+      "mechanism": "Reduces navigation uncertainty by making the path legible, which lowers cognitive load and action paralysis.",
+      "mechanism_source": "Sweller, 1988, Cognitive Load During Problem Solving",
+      "current_issue": "EN and all translations preserve descriptive permission semantics; no advice, encouragement, or judgment drift.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "color-flow",
+    "analysis": {
+      "mechanism": "Removes performance pressure by stating that movement is penalty-free, supporting autonomy under low threat.",
+      "mechanism_source": "Deci & Ryan, 2000, Self-Determination Theory",
+      "current_issue": "EN, zh-TW, zh-CN, and ja all add a directive equivalent to 'Just move,' which drifts from permission into advice.",
+      "severity": "major"
+    },
+    "revisions": {
+      "en": {
+        "kernel": "State is fluid.",
+        "interface": "There is no fail state here. You can keep moving without penalty."
+      },
+      "zh-TW": {
+        "kernel": "狀態是流動的。",
+        "interface": "這裡沒有失敗狀態。你可以持續移動而不受懲罰。"
+      },
+      "zh-CN": {
+        "kernel": "状态是流动的。",
+        "interface": "这里没有失败状态。你可以持续移动而不受惩罚。"
+      },
+      "ja": {
+        "kernel": "状態は流動的です。",
+        "interface": "ここに失敗状態はありません。ペナルティなく動き続けられます。"
+      }
+    }
+  },
+  {
+    "id": "puppet-strings",
+    "analysis": {
+      "mechanism": "Stable timing contingencies increase perceived control by making success conditions predictable across attempts.",
+      "mechanism_source": "Skinner, 1996, A Guide to Constructs of Control",
+      "current_issue": "EN and all translations preserve descriptive permission semantics; no advice, encouragement, or judgment drift.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "dark-fantasy-step",
+    "analysis": {
+      "mechanism": "Defines a valid stopping boundary, using manageable subgoals to reduce session burden and support perceived progress.",
+      "mechanism_source": "Amabile & Kramer, 2011, The Progress Principle",
+      "current_issue": "EN and all translations preserve descriptive permission semantics; no advice, encouragement, or judgment drift.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "horde-clear",
+    "analysis": {
+      "mechanism": "Immediate feedback strengthens action-outcome mapping, which supports perceived competence and rapid calibration.",
+      "mechanism_source": "Bandura, 1997, Self-Efficacy",
+      "current_issue": "EN and all translations preserve descriptive permission semantics; no advice, encouragement, or judgment drift.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "tunnel-vision",
+    "analysis": {
+      "mechanism": "Constrains the problem space and names the control tool, lowering cognitive load under environmental threat.",
+      "mechanism_source": "Sweller, 1988, Cognitive Load During Problem Solving",
+      "current_issue": "EN and all translations preserve descriptive permission semantics; no advice, encouragement, or judgment drift.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "dialogue-choice",
+    "analysis": {
+      "mechanism": "Frames choices as directional rather than binding, preserving autonomy while reducing commitment pressure.",
+      "mechanism_source": "Deci & Ryan, 2000, Self-Determination Theory",
+      "current_issue": "EN and all translations preserve descriptive permission semantics; no advice, encouragement, or judgment drift.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "infinite-space",
+    "analysis": {
+      "mechanism": "De-emphasizes completion goals, reducing completionist pressure by making open-ended wandering valid.",
+      "mechanism_source": "Deci & Ryan, 2000, Self-Determination Theory",
+      "current_issue": "EN and all translations preserve permission semantics; the wording remains optional rather than directive.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "southern-gothic",
+    "analysis": {
+      "mechanism": "Reframes the task from analysis to observation, lowering evaluative load and cognitive demand.",
+      "mechanism_source": "Sweller, 1988, Cognitive Load During Problem Solving",
+      "current_issue": "EN and all translations preserve descriptive permission semantics; no advice, encouragement, or judgment drift.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "ecosystem",
+    "analysis": {
+      "mechanism": "Normalizes concealment as core play, shifting threat appraisal from personal inadequacy to environmental design.",
+      "mechanism_source": "Lazarus & Folkman, 1984, Stress, Appraisal, and Coping",
+      "current_issue": "EN and all translations preserve descriptive permission semantics; no advice, encouragement, or judgment drift.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "cycle-restart",
+    "analysis": {
+      "mechanism": "Reframes death as systemic progression rather than personal failure, reducing self-evaluative threat.",
+      "mechanism_source": "Dweck, 2006, Mindset",
+      "current_issue": "EN kernel anthropomorphizes the loop as expecting the player, and zh-TW/zh-CN use 退步 for setback/skill regression; all four can be made more purely descriptive.",
+      "severity": "major"
+    },
+    "revisions": {
+      "en": {
+        "kernel": "Cycle is expected.",
+        "interface": "Death is part of progress here. You are entering a reset loop, not a skill loss."
+      },
+      "zh-TW": {
+        "kernel": "循環是預期狀態。",
+        "interface": "死亡是進度的一部分。你進入的是重置循環，不是能力損失。"
+      },
+      "zh-CN": {
+        "kernel": "循环是预期状态。",
+        "interface": "死亡是进度的一部分。你进入的是重置循环，不是能力损失。"
+      },
+      "ja": {
+        "kernel": "サイクルは想定内です。",
+        "interface": "死は進行の一部です。あなたが入るのはリセットのループであり、能力の損失ではありません。"
+      }
+    }
+  },
+  {
+    "id": "muscle-memory",
+    "analysis": {
+      "mechanism": "Invokes automaticity, reducing working-memory demands by shifting control to practiced sensorimotor routines.",
+      "mechanism_source": "Schneider & Shiffrin, 1977, Controlled and Automatic Human Information Processing",
+      "current_issue": "EN and all translations preserve descriptive permission semantics; no advice, encouragement, or judgment drift.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "death-loop",
+    "analysis": {
+      "mechanism": "Separates defeat from identity evaluation, reducing ego threat and protecting persistence after failure.",
+      "mechanism_source": "Dweck, 2006, Mindset",
+      "current_issue": "EN and all translations preserve descriptive permission semantics; no advice, encouragement, or judgment drift.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "floor-climb",
+    "analysis": {
+      "mechanism": "Eliminates time pressure, increasing self-pacing and reducing urgency-driven cognitive strain.",
+      "mechanism_source": "Sweller, 1988, Cognitive Load During Problem Solving",
+      "current_issue": "EN and all translations preserve descriptive permission semantics; no advice, encouragement, or judgment drift.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "deep-ocean",
+    "analysis": {
+      "mechanism": "Observer framing reduces problem-solving obligation by shifting the role from solver to witness.",
+      "mechanism_source": "Sweller, 1988, Cognitive Load During Problem Solving",
+      "current_issue": "EN and all translations preserve descriptive permission semantics; no advice, encouragement, or judgment drift.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "crop-cycle",
+    "analysis": {
+      "mechanism": "Offloads maintenance to an automated system, reducing felt obligation and permitting shorter engagement windows.",
+      "mechanism_source": "Parasuraman, Sheridan, & Wickens, 2000, A Model for Types and Levels of Human Interaction with Automation",
+      "current_issue": "EN and all translations use reassurance ('will be fine') and sufficiency language ('enough'), which drifts from descriptive permission into comfort/advice.",
+      "severity": "major"
+    },
+    "revisions": {
+      "en": {
+        "kernel": "Growth is automated.",
+        "interface": "Crops continue on their own. You can stop after a short in-game day."
+      },
+      "zh-TW": {
+        "kernel": "成長是自動的。",
+        "interface": "作物會自行生長。你可以在短短一天後結束。"
+      },
+      "zh-CN": {
+        "kernel": "成长是自动的。",
+        "interface": "作物会自行生长。你可以在短短一天后结束。"
+      },
+      "ja": {
+        "kernel": "成長は自動です。",
+        "interface": "作物は自動で育ちます。ゲーム内の一日が短くても、そこで止められます。"
+      }
+    }
+  },
+  {
+    "id": "combat-flow",
+    "analysis": {
+      "mechanism": "Rhythmic alternation increases temporal predictability, supporting perceived control in high-intensity combat.",
+      "mechanism_source": "Skinner, 1996, A Guide to Constructs of Control",
+      "current_issue": "EN and all translations preserve descriptive permission semantics; no advice, encouragement, or judgment drift.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "gentle-puzzle",
+    "analysis": {
+      "mechanism": "Removing time limits reduces threat appraisal and allows self-paced problem engagement.",
+      "mechanism_source": "Lazarus & Folkman, 1984, Stress, Appraisal, and Coping",
+      "current_issue": "EN and all translations personify the puzzle as waiting, which adds reassurance rather than staying purely descriptive.",
+      "severity": "minor"
+    },
+    "revisions": {
+      "en": {
+        "kernel": "Logic is soft.",
+        "interface": "There is no time limit here. You can stay with one puzzle as long as you want."
+      },
+      "zh-TW": {
+        "kernel": "邏輯是柔軟的。",
+        "interface": "這裡沒有時間限制。你可以在同一個謎題前停留多久都可以。"
+      },
+      "zh-CN": {
+        "kernel": "逻辑是柔软的。",
+        "interface": "这里没有时间限制。你可以在同一个谜题前停留多久都可以。"
+      },
+      "ja": {
+        "kernel": "論理は柔らかいです。",
+        "interface": "ここに時間制限はありません。同じパズルにいくらでも留まれます。"
+      }
+    }
+  },
+  {
+    "id": "audio-focus",
+    "analysis": {
+      "mechanism": "Narrows the active sensory channel, reducing cross-modal competition and simplifying attention allocation.",
+      "mechanism_source": "Sweller, 1988, Cognitive Load During Problem Solving",
+      "current_issue": "EN and all translations preserve descriptive permission semantics; no advice, encouragement, or judgment drift.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "survival-day",
+    "analysis": {
+      "mechanism": "Defines a discrete unit of progress, which reduces burden by making survival measurable one day at a time.",
+      "mechanism_source": "Amabile & Kramer, 2011, The Progress Principle",
+      "current_issue": "EN and all translations preserve descriptive permission semantics; no advice, encouragement, or judgment drift.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "dam-control",
+    "analysis": {
+      "mechanism": "Slow, controllable systems reduce urgency and support low-pressure monitoring through perceived control.",
+      "mechanism_source": "Skinner, 1996, A Guide to Constructs of Control",
+      "current_issue": "EN and all translations add advisory/reassuring language ('No rush') and a commanding formulation ('at your command' / 按你的指令), which is less purely descriptive.",
+      "severity": "major"
+    },
+    "revisions": {
+      "en": {
+        "kernel": "Flow is managed.",
+        "interface": "Water systems respond slowly. You can leave them running without constant input."
+      },
+      "zh-TW": {
+        "kernel": "水流是受控的。",
+        "interface": "水系統的反應偏慢。你可以讓它持續運作，不必一直輸入。"
+      },
+      "zh-CN": {
+        "kernel": "水流是受控的。",
+        "interface": "水系统的反应偏慢。你可以让它持续运作，不必一直操作。"
+      },
+      "ja": {
+        "kernel": "水流は制御下です。",
+        "interface": "水系の反応は緩やかです。常時入力しなくても、そのまま動かせます。"
+      }
+    }
+  },
+  {
+    "id": "mix-drinks",
+    "analysis": {
+      "mechanism": "Low-stakes framing reduces evaluative anxiety by describing service as the core loop without added pressure.",
+      "mechanism_source": "Lazarus & Folkman, 1984, Stress, Appraisal, and Coping",
+      "current_issue": "EN and all translations preserve descriptive permission semantics; no advice, encouragement, or judgment drift.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "cleanup",
+    "analysis": {
+      "mechanism": "Permanent local gains leverage the progress principle, making small actions feel cumulatively meaningful.",
+      "mechanism_source": "Amabile & Kramer, 2011, The Progress Principle",
+      "current_issue": "EN and all translations preserve descriptive permission semantics; no advice, encouragement, or judgment drift.",
+      "severity": "pass"
+    },
+    "revisions": null
+  }
+]

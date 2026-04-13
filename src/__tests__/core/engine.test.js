@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, afterEach } from 'vitest';
-import { calculateTraceWeights, getActiveGame, getPrescription } from '../../core/engine';
+import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
+import { calculateTraceWeights, getActiveGame, getPrescription, __internal } from '../../core/engine';
 import { debugStore } from '../../core/debugStore';
 
 // ---------------------------------------------------------------------------
@@ -378,5 +378,195 @@ describe('getPrescription', () => {
         const result = getPrescription(game, prescData);
 
         expect(result.text).toBe('only-stabilize');
+    });
+});
+
+// ---------------------------------------------------------------------------
+// Contextual triggers (time-of-day / emotional-states / return-after-absence)
+// Added in v0.3.0 autoresearch expansion. Injection rate is 30% so tests
+// force Math.random to deterministic values via vi.spyOn.
+// ---------------------------------------------------------------------------
+
+function makeContextualPrescData(extras = {}) {
+    return {
+        prescriptions: {
+            default: [{ id: 'd1', text: 'default-unlock', momentum: 'unlock' }],
+            idle_state: [{ id: 'i1', text: 'idle' }],
+            catalog: {},
+            'time-of-day': extras['time-of-day'] || [],
+            'emotional-states': extras['emotional-states'] || [],
+            'return-after-absence': extras['return-after-absence'] || [],
+        },
+    };
+}
+
+describe('getPrescription — contextual triggers', () => {
+    let randomSpy;
+
+    beforeEach(() => {
+        randomSpy = vi.spyOn(Math, 'random');
+    });
+
+    afterEach(() => {
+        randomSpy?.mockRestore();
+        vi.useRealTimers();
+    });
+
+    it('injects time-of-day prescription when hour matches and injection roll passes', () => {
+        const prescData = makeContextualPrescData({
+            'time-of-day': [{
+                id: 'late-night-entry',
+                text: 'night',
+                momentum: 'release',
+                trigger: { type: 'time-of-day', hours: [22, 23, 0, 1, 2, 3] },
+            }],
+        });
+        // Force hour = 23
+        vi.useFakeTimers();
+        vi.setSystemTime(new Date(2026, 3, 12, 23, 30, 0));
+        // First Math.random (injection roll) < 0.3 so it fires. Second (pool pick) anything.
+        randomSpy.mockReturnValueOnce(0.1).mockReturnValue(0);
+
+        const result = getPrescription(makeGame({ id: 'g', lastPlayed: 'Today' }), prescData);
+        expect(result.id).toBe('late-night-entry');
+    });
+
+    it('skips contextual pool when injection roll fails (>= 0.3)', () => {
+        const prescData = makeContextualPrescData({
+            'time-of-day': [{
+                id: 'late-night-entry',
+                text: 'night',
+                momentum: 'release',
+                trigger: { type: 'time-of-day', hours: [23] },
+            }],
+        });
+        vi.useFakeTimers();
+        vi.setSystemTime(new Date(2026, 3, 12, 23, 30, 0));
+        randomSpy.mockReturnValueOnce(0.5).mockReturnValue(0); // injection fails, fall through
+
+        const result = getPrescription(makeGame({ id: 'g', lastPlayed: 'Today' }), prescData);
+        expect(result.text).toBe('default-unlock'); // falls to default
+    });
+
+    it('return-after-absence fires when gap in window', () => {
+        const prescData = makeContextualPrescData({
+            'return-after-absence': [{
+                id: 'return-after-month',
+                text: 'month',
+                momentum: 'unlock',
+                trigger: { type: 'return-after-absence', min_days: 14, max_days: 60 },
+            }],
+        });
+        // lastPlayed 30 days ago
+        const pastDate = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+        randomSpy.mockReturnValueOnce(0.1).mockReturnValue(0);
+
+        const result = getPrescription(makeGame({ id: 'g', lastPlayed: pastDate }), prescData);
+        expect(result.id).toBe('return-after-month');
+    });
+
+    it('return-after-absence with no-last-played criterion fires for Never', () => {
+        const prescData = makeContextualPrescData({
+            'return-after-absence': [{
+                id: 'new-device-start',
+                text: 'new',
+                momentum: 'unlock',
+                trigger: { type: 'return-after-absence', criterion: 'no-last-played' },
+            }],
+        });
+        randomSpy.mockReturnValueOnce(0.1).mockReturnValue(0);
+
+        const result = getPrescription(makeGame({ id: 'g', lastPlayed: 'Never' }), prescData);
+        expect(result.id).toBe('new-device-start');
+    });
+
+    it('emotional-states skip-streak-3 fires when session skipped >= 3', () => {
+        const prescData = makeContextualPrescData({
+            'emotional-states': [{
+                id: 'frustrated',
+                text: 'frustrated',
+                momentum: 'release',
+                trigger: { type: 'emotional-states', proxy: 'skip-streak-3' },
+            }],
+        });
+        randomSpy.mockReturnValueOnce(0.1).mockReturnValue(0);
+
+        const result = getPrescription(
+            makeGame({ id: 'g', lastPlayed: 'Today' }),
+            prescData,
+            { sessionSkippedSet: new Set(['a', 'b', 'c']) }
+        );
+        expect(result.id).toBe('frustrated');
+    });
+
+    it('emotional-states skip-streak-3 does NOT fire when fewer than 3 skipped', () => {
+        const prescData = makeContextualPrescData({
+            'emotional-states': [{
+                id: 'frustrated',
+                text: 'frustrated',
+                momentum: 'release',
+                trigger: { type: 'emotional-states', proxy: 'skip-streak-3' },
+            }],
+        });
+        randomSpy.mockReturnValueOnce(0.1).mockReturnValue(0);
+
+        const result = getPrescription(
+            makeGame({ id: 'g', lastPlayed: 'Today' }),
+            prescData,
+            { sessionSkippedSet: new Set(['a']) }
+        );
+        // no contextual match — fall through to default
+        expect(result.text).toBe('default-unlock');
+    });
+
+    it('just-anchored proxy matches when context.isAnchored is true', () => {
+        const prescData = makeContextualPrescData({
+            'emotional-states': [{
+                id: 'content',
+                text: 'content',
+                momentum: 'release',
+                trigger: { type: 'emotional-states', proxy: 'just-anchored' },
+            }],
+        });
+        randomSpy.mockReturnValueOnce(0.1).mockReturnValue(0);
+
+        const result = getPrescription(
+            makeGame({ id: 'g', lastPlayed: 'Today' }),
+            prescData,
+            { isAnchored: true }
+        );
+        expect(result.id).toBe('content');
+    });
+
+    it('backwards-compat: no context arg still works', () => {
+        const prescData = makeContextualPrescData({
+            'emotional-states': [{
+                id: 'frustrated',
+                text: 'x',
+                momentum: 'release',
+                trigger: { type: 'emotional-states', proxy: 'skip-streak-3' },
+            }],
+        });
+        // Without context, no proxy can match; falls through.
+        randomSpy.mockReturnValueOnce(0.1).mockReturnValue(0);
+        const result = getPrescription(makeGame({ id: 'g', lastPlayed: 'Today' }), prescData);
+        expect(result.text).toBe('default-unlock');
+    });
+});
+
+describe('engine __internal helpers', () => {
+    it('daysSinceLastPlayed handles all input forms', () => {
+        expect(__internal.daysSinceLastPlayed('Never')).toBeNull();
+        expect(__internal.daysSinceLastPlayed(null)).toBeNull();
+        expect(__internal.daysSinceLastPlayed('Today')).toBe(0);
+        expect(__internal.daysSinceLastPlayed('Yesterday')).toBe(1);
+        expect(__internal.daysSinceLastPlayed('not-a-date')).toBeNull();
+        const recent = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+        expect(__internal.daysSinceLastPlayed(recent)).toBeGreaterThan(6.9);
+        expect(__internal.daysSinceLastPlayed(recent)).toBeLessThan(7.1);
+    });
+
+    it('matchEmotionalProxy returns false for unknown proxy', () => {
+        expect(__internal.matchEmotionalProxy('nonsense', {}, {})).toBe(false);
     });
 });

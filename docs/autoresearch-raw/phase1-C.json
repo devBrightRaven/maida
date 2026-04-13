@@ -1,0 +1,398 @@
+[
+  {
+    "id": "short-burst",
+    "analysis": {
+      "mechanism": "Bounded-session framing lowers initiation cost by making the task finite and proximal.",
+      "mechanism_source": "Bandura & Schunk, 1981",
+      "current_issue": "EN and all three translations preserve the same permission: the run has a known endpoint and a fixed duration.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "ocean-drift",
+    "analysis": {
+      "mechanism": "Clear safety affordances reduce threat appraisal and support approach behavior.",
+      "mechanism_source": "Gibson, 1979; Lazarus & Folkman, 1984",
+      "current_issue": "EN interface uses advice/imperative framing ('Just swim') instead of pure permission. zh-TW, zh-CN, and ja all mirror that advisory meaning rather than stating the no-drowning affordance directly.",
+      "severity": "major"
+    },
+    "revisions": {
+      "en": {
+        "kernel": "Drowning is disabled.",
+        "interface": "You stay afloat here. Underwater movement is not a drowning timer."
+      },
+      "zh-TW": {
+        "kernel": "沒有溺水狀態。",
+        "interface": "你在這裡會保持漂浮。水下移動不是溺水倒數。"
+      },
+      "zh-CN": {
+        "kernel": "没有溺水状态。",
+        "interface": "你在这里会保持漂浮。水下移动不是溺水倒计时。"
+      },
+      "ja": {
+        "kernel": "溺水状態はありません。",
+        "interface": "ここでは浮力が保たれます。水中移動は溺水までのカウントではありません。"
+      }
+    }
+  },
+  {
+    "id": "auto-battle",
+    "analysis": {
+      "mechanism": "Automation reduces action-selection load by shifting execution from continuous control to system handling.",
+      "mechanism_source": "Parasuraman, Sheridan, & Wickens, 2000",
+      "current_issue": "EN and all translations stay within permission semantics: combat resolves quickly and demands little input.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "logic-build",
+    "analysis": {
+      "mechanism": "Static external representations reduce working-memory burden and support deliberate control.",
+      "mechanism_source": "Zhang & Norman, 1994",
+      "current_issue": "EN and all translations align with the mechanism: nothing changes until the player explicitly acts.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "hands-played",
+    "analysis": {
+      "mechanism": "Reducing a session to one proximal unit lowers activation energy while preserving completion.",
+      "mechanism_source": "Bandura & Schunk, 1981; Fogg, 2009",
+      "current_issue": "EN interface is advisory ('Just play one hand') and personifies the system ('The math handles itself'). zh-TW, zh-CN, and ja closely copy the same non-permission framing.",
+      "severity": "major"
+    },
+    "revisions": {
+      "en": {
+        "kernel": "One hand can suffice.",
+        "interface": "You can play a single hand and let the scoring resolve it."
+      },
+      "zh-TW": {
+        "kernel": "一手也可以成立。",
+        "interface": "你可以只打一手牌，剩下的由計分系統結算。"
+      },
+      "zh-CN": {
+        "kernel": "一手也可以成立。",
+        "interface": "你可以只打一手牌，剩下的由计分系统结算。"
+      },
+      "ja": {
+        "kernel": "一手でも成立します。",
+        "interface": "一手だけ出して、あとは得点計算に任せられます。"
+      }
+    }
+  },
+  {
+    "id": "physics-puzzle",
+    "analysis": {
+      "mechanism": "Predictable contingencies support exploratory learning through test-observe-repeat cycles.",
+      "mechanism_source": "Rescorla & Wagner, 1972; Norman, 1988",
+      "current_issue": "EN interface shifts into interpretive reframing ('Failure is just data') instead of pure permission. zh-TW, zh-CN, and ja preserve the same evaluative gloss.",
+      "severity": "major"
+    },
+    "revisions": {
+      "en": {
+        "kernel": "Mechanics are testable.",
+        "interface": "You can run a trial, observe the result, and reset for another attempt."
+      },
+      "zh-TW": {
+        "kernel": "機制可以測試。",
+        "interface": "你可以先試一次、看結果，再重來一次。"
+      },
+      "zh-CN": {
+        "kernel": "机制可以测试。",
+        "interface": "你可以先试一次、看结果，再重来一次。"
+      },
+      "ja": {
+        "kernel": "仕組みは試せます。",
+        "interface": "一度試して結果を見て、もう一度やり直せます。"
+      }
+    }
+  },
+  {
+    "id": "visual-read",
+    "analysis": {
+      "mechanism": "Self-paced progression increases perceived control by tying advancement to explicit input.",
+      "mechanism_source": "Skinner, 1996",
+      "current_issue": "EN and all translations maintain the same permission: scenes wait for input and the story advances only when triggered.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "new-world",
+    "analysis": {
+      "mechanism": "Embedding context in the experience reduces prerequisite knowledge demands and extraneous load.",
+      "mechanism_source": "Sweller, 1988",
+      "current_issue": "EN and all translations cleanly express the same permission: no prior series background is required.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "deep-dive",
+    "analysis": {
+      "mechanism": "A self-contained episode supports task chunking and lowers pressure to sustain a long session.",
+      "mechanism_source": "Bandura & Schunk, 1981",
+      "current_issue": "EN and all translations preserve the intended permission that one dive can stand as a complete play unit.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "locomotion",
+    "analysis": {
+      "mechanism": "Reducing the goal to one dominant action lowers choice complexity and narrows task demands.",
+      "mechanism_source": "Hick, 1952",
+      "current_issue": "EN and all translations align with the mechanism: forward movement is sufficient and combat is not required.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "connection",
+    "analysis": {
+      "mechanism": "Ambient traces of others create social presence without requiring direct interaction.",
+      "mechanism_source": "Short, Williams, & Christie, 1976",
+      "current_issue": "EN and all translations preserve the same permission: solitude is part of the game state, but signs of others remain available.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "generic-action",
+    "analysis": {
+      "mechanism": "Lowering the response threshold supports initiation without extensive preparatory cognition.",
+      "mechanism_source": "Fogg, 2009",
+      "current_issue": "EN and all translations remain within permission semantics: input can begin without prior planning.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "generic-story",
+    "analysis": {
+      "mechanism": "Self-pacing supports perceived control by making progression contingent on readiness.",
+      "mechanism_source": "Skinner, 1996",
+      "current_issue": "EN and all translations align with the mechanism: the next page waits until the player advances it.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "memory-archive",
+    "analysis": {
+      "mechanism": "Control over pacing reduces the intensity of aversive exposure by tying progression to deliberate action.",
+      "mechanism_source": "Skinner, 1996",
+      "current_issue": "EN and all translations keep the permission intact: the atmosphere is fixed and nothing advances without input.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "internal-voice",
+    "analysis": {
+      "mechanism": "Breaking narrative processing into small readable units lowers cognitive load and self-evaluative pressure.",
+      "mechanism_source": "Sweller, 1988; Bandura, 1997",
+      "current_issue": "EN interface introduces judgment-laden reassurance ('You don't need to be sober or smart') rather than permission semantics. zh-TW, zh-CN, and ja all preserve that judgmental framing.",
+      "severity": "major"
+    },
+    "revisions": {
+      "en": {
+        "kernel": "Dialogue is readable.",
+        "interface": "You can move through it one line, thought, or check at a time."
+      },
+      "zh-TW": {
+        "kernel": "對話可以逐步讀。",
+        "interface": "你可以一次只看一行、一個想法或一次檢定。"
+      },
+      "zh-CN": {
+        "kernel": "对话可以逐步读。",
+        "interface": "你可以一次只看一行、一个想法或一次检定。"
+      },
+      "ja": {
+        "kernel": "対話は少しずつ読めます。",
+        "interface": "一行ずつ、一つの思考ずつ、または一回の判定ずつ進められます。"
+      }
+    }
+  },
+  {
+    "id": "failure-path",
+    "analysis": {
+      "mechanism": "Error-tolerant systems preserve exploration by keeping failure states productive rather than terminal.",
+      "mechanism_source": "Kapur, 2008; Juul, 2013",
+      "current_issue": "The core meaning is close, but EN labels the choice as 'wrong' and uses casual reframing ('just another way to play'). zh-TW, zh-CN, and ja mirror the same slightly non-permission tone.",
+      "severity": "minor"
+    },
+    "revisions": {
+      "en": {
+        "kernel": "Failure remains content.",
+        "interface": "A missed check still opens a valid path through the scene."
+      },
+      "zh-TW": {
+        "kernel": "失敗仍然有內容。",
+        "interface": "檢定失敗後，場景仍會沿著有效路線繼續。"
+      },
+      "zh-CN": {
+        "kernel": "失败仍然有内容。",
+        "interface": "检定失败后，场景仍会沿着有效路线继续。"
+      },
+      "ja": {
+        "kernel": "失敗にも内容があります。",
+        "interface": "判定に失敗しても、その場面は有効な経路として進みます。"
+      }
+    }
+  },
+  {
+    "id": "history-gen",
+    "analysis": {
+      "mechanism": "Failure tolerance is preserved when negative outcomes still generate meaningful state and narrative continuation.",
+      "mechanism_source": "Juul, 2013",
+      "current_issue": "EN kernel uses evaluative slogan language ('Losing is fun') rather than permission. zh-TW, zh-CN, and ja reproduce the same judgmental framing.",
+      "severity": "major"
+    },
+    "revisions": {
+      "en": {
+        "kernel": "Collapse remains history.",
+        "interface": "A fallen fortress still produces events, records, and aftermath."
+      },
+      "zh-TW": {
+        "kernel": "崩解仍是歷史。",
+        "interface": "堡壘倒下後，仍會留下事件、記錄與後續。"
+      },
+      "zh-CN": {
+        "kernel": "崩溃仍是历史。",
+        "interface": "堡垒倒下后，仍会留下事件、记录与后续。"
+      },
+      "ja": {
+        "kernel": "崩壊も歴史です。",
+        "interface": "要塞が崩れても、出来事と記録と余波は残ります。"
+      }
+    }
+  },
+  {
+    "id": "2d-combat",
+    "analysis": {
+      "mechanism": "Constraining movement to one plane reduces spatial search and narrows attentional demands.",
+      "mechanism_source": "Hick, 1952; Kahneman, 1973",
+      "current_issue": "EN and all translations preserve the same permission: navigation is limited to a visible left-right plane.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "boss-rush",
+    "analysis": {
+      "mechanism": "A single salient target reduces attentional competition and simplifies task prioritization.",
+      "mechanism_source": "Kahneman, 1973",
+      "current_issue": "EN and all translations align with the mechanism: one target is foregrounded and competing demands are minimized.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "factory-wait",
+    "analysis": {
+      "mechanism": "Persistent external state reduces pressure to complete everything in one sitting because work remains resumable.",
+      "mechanism_source": "Zhang & Norman, 1994",
+      "current_issue": "The main permission is present, but EN adds reassurance/advice ('you do not need to fix it all today'). zh-TW, zh-CN, and ja preserve the same non-permission framing.",
+      "severity": "minor"
+    },
+    "revisions": {
+      "en": {
+        "kernel": "The factory persists.",
+        "interface": "You can leave it unfinished and return with the current state intact."
+      },
+      "zh-TW": {
+        "kernel": "工廠會持續存在。",
+        "interface": "你可以先放著沒做完，之後再回來接著目前的狀態。"
+      },
+      "zh-CN": {
+        "kernel": "工厂会持续存在。",
+        "interface": "你可以先放着没做完，之后再回来接着目前的状态。"
+      },
+      "ja": {
+        "kernel": "工場は持続します。",
+        "interface": "未完のまま離れて、今の状態から戻れます。"
+      }
+    }
+  },
+  {
+    "id": "one-belt",
+    "analysis": {
+      "mechanism": "Defining completion at a very small unit lowers activation energy and supports re-entry.",
+      "mechanism_source": "Fogg, 2009; Bandura & Schunk, 1981",
+      "current_issue": "EN and all translations preserve the permission that one incremental action can stand as a complete session.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "vehicle-maintain",
+    "analysis": {
+      "mechanism": "A simple causal chain reduces demand by centering interaction on one primary system.",
+      "mechanism_source": "Gibson, 1979; Norman, 1988",
+      "current_issue": "EN and all translations align with the mechanism: engine maintenance is the main interaction and forward motion follows from it.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "spectacle",
+    "analysis": {
+      "mechanism": "Perceptual offloading reduces control demand by assigning scale to the display and input to the player.",
+      "mechanism_source": "Norman, 1993",
+      "current_issue": "EN interface uses directive phrasing ('Let the screen handle... You just handle...') rather than pure permission. zh-TW, zh-CN, and ja all mirror that advisory structure.",
+      "severity": "major"
+    },
+    "revisions": {
+      "en": {
+        "kernel": "Scale is rendered.",
+        "interface": "You can handle the inputs while the screen carries the spectacle."
+      },
+      "zh-TW": {
+        "kernel": "規模由螢幕呈現。",
+        "interface": "你可以只提供輸入，讓螢幕承載場面的規模。"
+      },
+      "zh-CN": {
+        "kernel": "规模由屏幕呈现。",
+        "interface": "你可以只提供输入，让屏幕承载场面的规模。"
+      },
+      "ja": {
+        "kernel": "壮大さは画面が担います。",
+        "interface": "あなたは入力だけ行えます。壮観さは画面が担います。"
+      }
+    }
+  },
+  {
+    "id": "survival-state",
+    "analysis": {
+      "mechanism": "Psychological distancing reduces immediate threat by marking the crisis as simulated and screen-bound.",
+      "mechanism_source": "Trope & Liberman, 2010",
+      "current_issue": "EN and all translations keep the intended permission: the cold and crisis are represented, not physically present.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "leadership-pause",
+    "analysis": {
+      "mechanism": "Pause control increases perceived control by allowing demand suspension at will.",
+      "mechanism_source": "Skinner, 1996",
+      "current_issue": "EN and all translations align with the mechanism: the city's demands can be halted whenever needed.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "breeze",
+    "analysis": {
+      "mechanism": "Optional guidance preserves autonomy by providing direction without compulsory completion pressure.",
+      "mechanism_source": "Deci & Ryan, 2000",
+      "current_issue": "EN and all translations preserve the same permission: guidance is available, but completion is not demanded.",
+      "severity": "pass"
+    },
+    "revisions": null
+  }
+]

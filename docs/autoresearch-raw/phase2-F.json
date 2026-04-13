@@ -1,0 +1,219 @@
+[
+  {
+    "id": "frustrated-unresolved-valid",
+    "tier": 1,
+    "kernel": "Resolution is not required.",
+    "interface": "You may leave this unresolved; repeated skips do not create a duty to force closure.",
+    "momentum": "release",
+    "audit": {
+      "permission_effect": "lower_obligation",
+      "risk": "safe",
+      "notes": "Mechanism: after setbacks, pressure and self-blame can amplify rumination and negative affect; permission reduces closure pressure rather than demanding persistence. Source: Semenchuk et al., 2018, J Sport Exerc Psychol, PMID:29580155; Emmerich et al., 2020, Eur J Pain, PMID:33448520."
+    },
+    "trigger": {
+      "type": "emotional-states",
+      "proxy": "skip-streak-3"
+    },
+    "translations": {
+      "zh-TW": {
+        "kernel": "不需要解決。",
+        "interface": "你可以先把它留著不解；連續跳過也不構成必須收尾的義務。"
+      },
+      "zh-CN": {
+        "kernel": "不需要解决。",
+        "interface": "你可以先把它留着不解；连续跳过也不构成必须收尾的义务。"
+      },
+      "ja": {
+        "kernel": "解決は不要です。",
+        "interface": "未解決のまま離れてもかまいません。連続で飛ばしたことは、無理に締める義務になりません。"
+      }
+    },
+    "design_rationale": "Gap: existing entries permit hesitation and incompletion, but not the specific pressure to finally make progress after repeated skips. Research on setbacks shows more self-compassion is linked to lower rumination and negative affect and better reengagement, so the design removes forced-resolution pressure instead of pushing effort (Semenchuk et al., 2018, PMID:29580155; Emmerich et al., 2020, PMID:33448520)."
+  },
+  {
+    "id": "tired-partial-capacity",
+    "tier": 1,
+    "kernel": "Full capacity is not required.",
+    "interface": "You may meet this with partial attention; late hours do not create a higher standard.",
+    "momentum": "stabilize",
+    "audit": {
+      "permission_effect": "lower_obligation",
+      "risk": "safe",
+      "notes": "Mechanism: sleep loss commonly impairs feedback-based updating and decision-making, so lowering the performance demand fits the state. Source: Whitney et al., 2015, Sleep, PMID:25515105; Saini et al., 2025, scoping review, PMCID:PMC12189852."
+    },
+    "trigger": {
+      "type": "emotional-states",
+      "proxy": "late-night-with-skip"
+    },
+    "translations": {
+      "zh-TW": {
+        "kernel": "不需要完整狀態。",
+        "interface": "你可以只帶部分注意力來；深夜不會把標準提高。"
+      },
+      "zh-CN": {
+        "kernel": "不需要完整状态。",
+        "interface": "你可以只带部分注意力来；深夜不会把标准提高。"
+      },
+      "ja": {
+        "kernel": "万全である必要はありません。",
+        "interface": "一部の注意だけで触れてもかまいません。深夜であることは基準を上げません。"
+      }
+    },
+    "design_rationale": "Gap: the set includes low-energy permission in general, but not the sharper late-night condition where skipping has already signaled friction. Sleep-deprivation literature supports lowering obligation because decision updating is less reliable under fatigue; the line therefore permits partial capacity without coaching or warning (Whitney et al., 2015, PMID:25515105; Saini et al., 2025, PMCID:PMC12189852)."
+  },
+  {
+    "id": "numb-neutral-return",
+    "tier": 1,
+    "kernel": "Feeling is not required.",
+    "interface": "You may return without warmth, curiosity, or urgency; contact may remain neutral.",
+    "momentum": "unlock",
+    "audit": {
+      "permission_effect": "lower_obligation",
+      "risk": "safe",
+      "notes": "Mechanism: emotional numbing/blunting is associated with reduced emotional reactivity, so requiring felt enthusiasm would misread the state. Source: Jin et al., 2015, Int J Psychophysiol, PMID:25931112; Dewe et al., 2016, Cogn Neuropsychiatry, PMID:27466978."
+    },
+    "trigger": {
+      "type": "emotional-states",
+      "proxy": "long-absence-return"
+    },
+    "translations": {
+      "zh-TW": {
+        "kernel": "不需要感覺。",
+        "interface": "你可以在沒有暖意、好奇或急迫感時回來；接觸可以保持中性。"
+      },
+      "zh-CN": {
+        "kernel": "不需要感觉。",
+        "interface": "你可以在没有暖意、好奇或急迫感时回来；接触可以保持中性。"
+      },
+      "ja": {
+        "kernel": "何かを感じる必要はありません。",
+        "interface": "温かさや好奇心や切迫感がなくても戻れます。戻ることは中立のままでかまいません。"
+      }
+    },
+    "design_rationale": "Gap: existing entries allow low effort, but not emotionally flat re-entry after a long absence. Research on emotional blunting supports a permission that removes the requirement to feel ready or interested. The proxy is plausible but low-specificity, so this rationale treats it as a tentative behavioral signal rather than a diagnosis (Jin et al., 2015, PMID:25931112; Dewe et al., 2016, PMID:27466978)."
+  },
+  {
+    "id": "content-no-escalation",
+    "tier": 1,
+    "kernel": "Escalation is not required.",
+    "interface": "You may leave this exactly as it is; satisfaction does not create a next step.",
+    "momentum": "release",
+    "audit": {
+      "permission_effect": "lower_obligation",
+      "risk": "safe",
+      "notes": "Mechanism: contentment is a low-arousal positive state linked in theory to safety, certainty, low effort, and even doing nothing, so the permission blocks needless escalation. Source: Fredrickson, 2001, Am Psychol, PMCID:PMC3156001."
+    },
+    "trigger": {
+      "type": "emotional-states",
+      "proxy": "just-anchored"
+    },
+    "translations": {
+      "zh-TW": {
+        "kernel": "不需要升級。",
+        "interface": "你可以讓它維持原樣；滿足感不會產生下一步的義務。"
+      },
+      "zh-CN": {
+        "kernel": "不需要升级。",
+        "interface": "你可以让它维持原样；满足感不会产生下一步的义务。"
+      },
+      "ja": {
+        "kernel": "エスカレーションは不要です。",
+        "interface": "このままにしておいてかまいません。満ち足りていることは次の一手の義務を生みません。"
+      }
+    },
+    "design_rationale": "Gap: Maida has many entries for resistance, hesitation, and backlog, but not for the softer problem of turning a settled state into fresh obligation. Theory on contentment describes it as low-effort, safe, and close to inactivity, which supports a prescription against unnecessary continuation pressure (Fredrickson, 2001, PMCID:PMC3156001)."
+  },
+  {
+    "id": "restless-unsettled-valid",
+    "tier": 1,
+    "kernel": "Settling is not required.",
+    "interface": "You may pass through briefly; unfinishedness may remain unfinished.",
+    "momentum": "stabilize",
+    "audit": {
+      "permission_effect": "lower_obligation",
+      "risk": "safe",
+      "notes": "Mechanism: restlessness is classically described as an urge to move or inability to stay still, so demanding settled focus would add friction. Source: Tan and Ondo, 2001, Int J Clin Pract, PMID:11452680."
+    },
+    "trigger": {
+      "type": "emotional-states",
+      "proxy": "return-penalty-accumulated"
+    },
+    "translations": {
+      "zh-TW": {
+        "kernel": "不需要安定下來。",
+        "interface": "你可以只是短暫經過；未完成的狀態可以先維持未完成。"
+      },
+      "zh-CN": {
+        "kernel": "不需要安定下来。",
+        "interface": "你可以只是短暂经过；未完成的状态可以先维持未完成。"
+      },
+      "ja": {
+        "kernel": "落ち着く必要はありません。",
+        "interface": "短く触れて離れてもかまいません。未完了は未完了のままで置いておけます。"
+      }
+    },
+    "design_rationale": "Gap: current prescriptions validate pausing and short sessions, but not the specific agitation of repeated return-penalty accumulation, where the user may keep circling without settling. Because restlessness centrally involves an urge to move, the permission validates brief contact without imposing completion or composure (Tan and Ondo, 2001, PMID:11452680)."
+  },
+  {
+    "id": "still-here-no-explanation",
+    "tier": 1,
+    "kernel": "Resumption needs no explanation.",
+    "interface": "You may continue after the freeze without accounting for the gap.",
+    "momentum": "unlock",
+    "audit": {
+      "permission_effect": "lower_obligation",
+      "risk": "safe",
+      "notes": "Mechanism: freezing is a defensive state tied to temporary immobility, and adaptive coping includes timely termination when threat is gone or action is needed; the permission removes explanatory debt at re-entry. Source: Niermann et al., 2017, Psychoneuroendocrinology, PMID:28511048; Rosler and Gamer, 2019, Sci Rep, doi:10.1038/s41598-019-53683-4."
+    },
+    "trigger": {
+      "type": "emotional-states",
+      "proxy": "post-freeze-resume"
+    },
+    "translations": {
+      "zh-TW": {
+        "kernel": "恢復不需要解釋。",
+        "interface": "你可以在停住之後直接繼續；那段空白不需要交代。"
+      },
+      "zh-CN": {
+        "kernel": "恢复不需要解释。",
+        "interface": "你可以在停住之后直接继续；那段空白不需要交代。"
+      },
+      "ja": {
+        "kernel": "再開に説明は要りません。",
+        "interface": "止まっていた後から、そのまま続けてかまいません。空白の説明は不要です。"
+      }
+    },
+    "design_rationale": "Gap: existing debt-clearing lines address inactivity broadly, but not the narrower return moment after a frozen state, where users may feel they owe a reason for the interruption. Freeze research frames immobility as a defensive state with termination and action resumption as part of adaptive responding; this permission removes the social-accounting layer from re-entry (Niermann et al., 2017, PMID:28511048; Rosler and Gamer, 2019, doi:10.1038/s41598-019-53683-4)."
+  },
+  {
+    "id": "overwhelmed-selection-optional",
+    "tier": 1,
+    "kernel": "Selection is not required.",
+    "interface": "You may look without choosing; multiple open options do not need to collapse into one.",
+    "momentum": "unlock",
+    "audit": {
+      "permission_effect": "lower_obligation",
+      "risk": "safe",
+      "notes": "Mechanism: larger option sets can, under some conditions, reduce motivation to choose or satisfaction, so removing the demand to collapse options can lower pressure. Source: Scheibehenne et al., 2010, J Consum Res, doi:10.1086/651235."
+    },
+    "trigger": {
+      "type": "emotional-states",
+      "proxy": "selection-churn-5"
+    },
+    "translations": {
+      "zh-TW": {
+        "kernel": "不需要選定。",
+        "interface": "你可以只看不選；同時開著的多個選項不需要收斂成一個。"
+      },
+      "zh-CN": {
+        "kernel": "不需要选定。",
+        "interface": "你可以只看不选；同时开着的多个选项不需要收敛成一个。"
+      },
+      "ja": {
+        "kernel": "選定は不要です。",
+        "interface": "見るだけで選ばなくてもかまいません。開いた選択肢を一つに絞る義務はありません。"
+      }
+    },
+    "design_rationale": "Gap: the current set lowers obligation around starting and stopping, but not around over-selection friction. I chose overwhelmed as the seventh state, with proxy selection-churn-5 meaning five or more kata previews in one session without starting. The proxy is intentionally narrow and still non-diagnostic because choice overload is context-dependent, but it is more defensible than inferring overwhelm from a single hesitation event (Scheibehenne et al., 2010, doi:10.1086/651235)."
+  }
+]

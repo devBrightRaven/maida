@@ -1,0 +1,204 @@
+[
+  {
+    "id": "entry-permitted",
+    "analysis": {
+      "mechanism": "SDT autonomy",
+      "mechanism_source": "Deci & Ryan 2000",
+      "current_issue": "EN fits autonomy well by removing correctness pressure, but the kernel is an elliptical label rather than a clear declarative rule. zh-TW, zh-CN, and ja are faithful and permission-voiced, but they inherit the same structural looseness.",
+      "severity": "minor"
+    },
+    "revisions": {
+      "en": {
+        "kernel": "Decision is unnecessary.",
+        "interface": "You may enter without knowing whether it is the right choice."
+      },
+      "zh-TW": {
+        "kernel": "決定並非必要。",
+        "interface": "你可以先進入，不必先知道這是不是正確選擇。"
+      },
+      "zh-CN": {
+        "kernel": "决定并非必要。",
+        "interface": "你可以先进入，不必先知道这是不是正确选择。"
+      },
+      "ja": {
+        "kernel": "決定は必須ではありません。",
+        "interface": "これが正しい選択か分からなくても、始められます。"
+      }
+    }
+  },
+  {
+    "id": "no-optimization",
+    "analysis": {
+      "mechanism": "ACT defusion/acceptance",
+      "mechanism_source": "Hayes et al. 2011",
+      "current_issue": "EN embodies defusion from productivity and self-justification demands. zh-TW, zh-CN, and ja are faithful and keep permission-voice.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "safe-exit",
+    "analysis": {
+      "mechanism": "psychological safety",
+      "mechanism_source": "Edmondson 1999",
+      "current_issue": "EN clearly lowers commitment pressure by preserving the validity of stopping. zh-TW, zh-CN, and ja are faithful and remain permission-voiced.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "partial-validity",
+    "analysis": {
+      "mechanism": "behavioral activation",
+      "mechanism_source": "Martell et al. 2010",
+      "current_issue": "EN supports graded engagement by validating partial completion as sufficient action. zh-TW, zh-CN, and ja are faithful and keep the permission stance.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "no-debt",
+    "analysis": {
+      "mechanism": "CBT cognitive restructuring",
+      "mechanism_source": "Beck 1976",
+      "current_issue": "EN directly counters backlog-guilt and debt framing. zh-TW, zh-CN, and ja are faithful and preserve permission-voice.",
+      "severity": "pass"
+    },
+    "revisions": null
+  },
+  {
+    "id": "observation-mode",
+    "analysis": {
+      "mechanism": "behavioral activation",
+      "mechanism_source": "Martell et al. 2010",
+      "current_issue": "EN matches low-threshold engagement, but the kernel is a noun phrase and the interface can be made more direct as permission. zh-TW, zh-CN, and ja are faithful, though their kernels are similarly label-like rather than declarative.",
+      "severity": "minor"
+    },
+    "revisions": {
+      "en": {
+        "kernel": "Observation is participation.",
+        "interface": "You may look without playing, and that still counts."
+      },
+      "zh-TW": {
+        "kernel": "觀看也是參與。",
+        "interface": "你可以只看不玩，那仍然算是一種參與。"
+      },
+      "zh-CN": {
+        "kernel": "观看也是参与。",
+        "interface": "你可以只看不玩，那仍然算是一种参与。"
+      },
+      "ja": {
+        "kernel": "見ることも参加です。",
+        "interface": "遊ばずに見るだけでも、それは参加に含まれます。"
+      }
+    }
+  },
+  {
+    "id": "low-input",
+    "analysis": {
+      "mechanism": "ACT acceptance",
+      "mechanism_source": "Hayes et al. 2011",
+      "current_issue": "EN embodies acceptance of low-energy states, but the kernel is a compressed label rather than a rule. zh-TW, zh-CN, and ja are faithful and permission-voiced, but all three kernels sound nominal and less natural than the interface.",
+      "severity": "minor"
+    },
+    "revisions": {
+      "en": {
+        "kernel": "Full energy is unnecessary.",
+        "interface": "You may arrive with only the energy you have."
+      },
+      "zh-TW": {
+        "kernel": "不必帶來全力。",
+        "interface": "你可以只帶著現在有的精力來。"
+      },
+      "zh-CN": {
+        "kernel": "不必带来全力。",
+        "interface": "你可以只带着现在有的精力来。"
+      },
+      "ja": {
+        "kernel": "全力は必要ありません。",
+        "interface": "今ある気力だけで来てもかまいません。"
+      }
+    }
+  },
+  {
+    "id": "objective-optional",
+    "analysis": {
+      "mechanism": "SDT autonomy",
+      "mechanism_source": "Deci & Ryan 2000",
+      "current_issue": "EN captures autonomy by removing goal-pressure, but the kernel is phrased as a permission tag rather than a declarative rule. zh-TW, zh-CN, and ja are faithful and permission-voiced, though the kernel form is similarly label-like.",
+      "severity": "minor"
+    },
+    "revisions": {
+      "en": {
+        "kernel": "An objective is optional.",
+        "interface": "You may enter without having a goal."
+      },
+      "zh-TW": {
+        "kernel": "目標並非必要。",
+        "interface": "你可以沒有目標就進入。"
+      },
+      "zh-CN": {
+        "kernel": "目标并非必要。",
+        "interface": "你可以没有目标就进入。"
+      },
+      "ja": {
+        "kernel": "目標は必須ではありません。",
+        "interface": "目標がなくても入れます。"
+      }
+    }
+  },
+  {
+    "id": "latency-allowed",
+    "analysis": {
+      "mechanism": "mindfulness non-attachment",
+      "mechanism_source": "Kabat-Zinn 1990",
+      "current_issue": "EN generally fits nonjudgment toward hesitation, but 'take your time' shifts into advice rather than pure permission. zh-TW, zh-CN, and ja are faithful to EN, yet they preserve the same advisory drift.",
+      "severity": "major"
+    },
+    "revisions": {
+      "en": {
+        "kernel": "Hesitation is allowed.",
+        "interface": "You may hesitate; that does not make this an error."
+      },
+      "zh-TW": {
+        "kernel": "猶豫是被允許的。",
+        "interface": "你可以猶豫，這不算錯誤。"
+      },
+      "zh-CN": {
+        "kernel": "犹豫是被允许的。",
+        "interface": "你可以犹豫，这不算错误。"
+      },
+      "ja": {
+        "kernel": "ためらいは許容されます。",
+        "interface": "ためらっていても、誤りにはなりません。"
+      }
+    }
+  },
+  {
+    "id": "silence-valid",
+    "analysis": {
+      "mechanism": "mindfulness non-attachment",
+      "mechanism_source": "Kabat-Zinn 1990",
+      "current_issue": "EN points in the right direction, but the kernel reads as UI description rather than a behavioral rule, and the interface is more observational than permissive. zh-TW, zh-CN, and ja are faithful, but they inherit the same descriptive distance.",
+      "severity": "minor"
+    },
+    "revisions": {
+      "en": {
+        "kernel": "Silence is included.",
+        "interface": "You may be quiet before acting."
+      },
+      "zh-TW": {
+        "kernel": "沉默也被包含。",
+        "interface": "你可以先沉默，再決定是否行動。"
+      },
+      "zh-CN": {
+        "kernel": "沉默也被包含。",
+        "interface": "你可以先沉默，再决定是否行动。"
+      },
+      "ja": {
+        "kernel": "沈黙も含まれます。",
+        "interface": "行動する前に黙っていてもかまいません。"
+      }
+    }
+  }
+]

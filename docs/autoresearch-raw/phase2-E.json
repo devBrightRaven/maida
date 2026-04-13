@@ -1,0 +1,186 @@
+[
+  {
+    "id": "dawn-entry",
+    "tier": 1,
+    "kernel": "Wakefulness may be partial.",
+    "interface": "You may enter before the mind has reached full speed.",
+    "momentum": "stabilize",
+    "audit": {
+      "permission_effect": "normalize_state",
+      "risk": "safe",
+      "notes": "Mechanism: normalizes sleep inertia and partial readiness after waking; source: Wertz et al., 'Effects of sleep inertia on cognition,' JAMA (2006), doi:10.1001/jama.295.2.163."
+    },
+    "trigger": {
+      "type": "time-of-day",
+      "hours": [
+        4,
+        5,
+        6
+      ]
+    },
+    "translations": {
+      "zh-TW": {
+        "kernel": "清醒可以不完整。",
+        "interface": "你可以在腦袋還沒全速之前進入。"
+      },
+      "zh-CN": {
+        "kernel": "清醒可以不完整。",
+        "interface": "你可以在脑子还没全速之前进入。"
+      },
+      "ja": {
+        "kernel": "覚醒は部分的でもよいです。",
+        "interface": "頭がまだ全速でなくても入れます。"
+      }
+    },
+    "design_rationale": "Gap filled: pre-morning entries currently do not cover groggy threshold states. Research basis: sleep inertia temporarily reduces cognition after waking, so the permission reframes partial readiness as normal rather than deficient. Expected app context: user opens Maida very early, feels not-ready, and benefits from a low-demand entry condition."
+  },
+  {
+    "id": "morning-entry",
+    "tier": 1,
+    "kernel": "Morning pace is variable.",
+    "interface": "You may open this without turning the first hour into a test.",
+    "momentum": "unlock",
+    "audit": {
+      "permission_effect": "lower_obligation",
+      "risk": "safe",
+      "notes": "Mechanism: lowers self-judgment around imperfect starts using self-compassion/common-humanity framing; source: Neff, 'Self-Compassion: An Alternative Conceptualization of a Healthy Attitude Toward Oneself' (2003), doi:10.1080/15298860309032."
+    },
+    "trigger": {
+      "type": "time-of-day",
+      "hours": [
+        7,
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    "translations": {
+      "zh-TW": {
+        "kernel": "晨間步調可變。",
+        "interface": "你可以在不把第一個小時變成測驗的情況下打開。"
+      },
+      "zh-CN": {
+        "kernel": "晨间步调可变。",
+        "interface": "你可以在不把第一个小时变成测验的情况下打开。"
+      },
+      "ja": {
+        "kernel": "朝の速度は可変です。",
+        "interface": "最初の一時間をテストにしなくても開けます。"
+      }
+    },
+    "design_rationale": "Gap filled: existing entries reduce generic obligation but not morning ambition pressure. Research basis: self-compassion reduces harsh self-evaluation after imperfect performance, so the copy removes the sense that the day must start correctly. Expected app context: user opens the launcher in a productivity-charged morning and needs permission not to treat leisure entry as a verdict on the day."
+  },
+  {
+    "id": "afternoon-entry",
+    "tier": 1,
+    "kernel": "Sharpness naturally dips.",
+    "interface": "You may use a lower-focus hour without treating it as a failure.",
+    "momentum": "stabilize",
+    "audit": {
+      "permission_effect": "normalize_state",
+      "risk": "safe",
+      "notes": "Mechanism: normalizes the midafternoon drop in alertness as circadian rather than personal failure; source: Monk, 'The post-lunch dip in performance,' Clin Sports Med (2005), doi:10.1016/j.csm.2004.12.002."
+    },
+    "trigger": {
+      "type": "time-of-day",
+      "hours": [
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ]
+    },
+    "translations": {
+      "zh-TW": {
+        "kernel": "銳利感自然下滑。",
+        "interface": "你可以在專注較低的時段使用，不把它當成失敗。"
+      },
+      "zh-CN": {
+        "kernel": "锐利感自然下滑。",
+        "interface": "你可以在专注较低的时段使用，不把它当成失败。"
+      },
+      "ja": {
+        "kernel": "鋭さは自然に下がります。",
+        "interface": "集中が低い時間帯でも、それを失敗にしなくて使えます。"
+      }
+    },
+    "design_rationale": "Gap filled: the library currently has no prescription for the familiar afternoon slump. Research basis: the post-lunch dip is a documented circadian phenomenon, so the permission works by normalizing reduced sharpness instead of moralizing it. Expected app context: user checks Maida during a dull workday or midday lull and benefits from a softer threshold for entry."
+  },
+  {
+    "id": "evening-entry",
+    "tier": 1,
+    "kernel": "Closure may remain pending.",
+    "interface": "You may enter without closing every loop the day left behind.",
+    "momentum": "release",
+    "audit": {
+      "permission_effect": "lower_obligation",
+      "risk": "safe",
+      "notes": "Mechanism: lowers completion pressure at the work-to-leisure boundary using psychological detachment framing; source: Sonnentag and Bayer, 'Switching off mentally: predictors and consequences of psychological detachment from work during off-job time' (2005), doi:10.1037/1076-8998.10.4.393."
+    },
+    "trigger": {
+      "type": "time-of-day",
+      "hours": [
+        18,
+        19,
+        20,
+        21
+      ]
+    },
+    "translations": {
+      "zh-TW": {
+        "kernel": "收尾可以暫欠。",
+        "interface": "你可以在不先結清一天遺留事項的情況下進入。"
+      },
+      "zh-CN": {
+        "kernel": "收尾可以暂欠。",
+        "interface": "你可以在不先结清一天遗留事项的情况下进入。"
+      },
+      "ja": {
+        "kernel": "区切りは保留でもよいです。",
+        "interface": "一日に残った用件を全部閉じなくても入れます。"
+      }
+    },
+    "design_rationale": "Gap filled: there is no evening-specific permission for unfinished-day residue. Research basis: psychological detachment supports recovery, so the prescription removes the felt requirement to complete every open loop before leisure. Expected app context: user arrives after work or chores and hesitates because the day still feels administratively unfinished."
+  },
+  {
+    "id": "late-night-entry",
+    "tier": 1,
+    "kernel": "A brief visit is whole.",
+    "interface": "You may open the launcher without owing the night a full session.",
+    "momentum": "release",
+    "audit": {
+      "permission_effect": "lower_stakes",
+      "risk": "safe",
+      "notes": "Mechanism: reduces all-or-nothing commitment pressure in the time window associated with bedtime procrastination and self-regulation conflict; source: Kroese et al., 'Bedtime procrastination: introducing a new area of procrastination,' Front Psychol (2014), doi:10.3389/fpsyg.2014.00611."
+    },
+    "trigger": {
+      "type": "time-of-day",
+      "hours": [
+        22,
+        23,
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    "translations": {
+      "zh-TW": {
+        "kernel": "短暫進入也完整。",
+        "interface": "你可以打開啟動器，而不需要讓夜晚承擔完整的一次遊玩。"
+      },
+      "zh-CN": {
+        "kernel": "短暂进入也完整。",
+        "interface": "你可以打开启动器，而不需要让夜晚承担完整的一次游玩。"
+      },
+      "ja": {
+        "kernel": "短い立ち寄りでも完結します。",
+        "interface": "ランチャーを開いても、夜にフルセッションを負わせる必要はありません。"
+      }
+    },
+    "design_rationale": "Gap filled: the set lacks a late-night prescription for guilt and commitment inflation. Research basis: bedtime procrastination is a self-regulation conflict, so the permission lowers stakes by making entry nonbinding rather than totalizing. Expected app context: user opens Maida late, feels the tension between rest and leisure, and benefits from permission that does not turn opening into an obligation to stay."
+  }
+]

@@ -159,7 +159,92 @@ export function updateDebugTrace(traceCandidates, selected, temperature, totalGa
 
 
 
-export function getPrescription(game, prescriptionsData) {
+// Helper — convert lastPlayed string to days-since-played number (or null if never).
+function daysSinceLastPlayed(lastPlayedStr) {
+    if (!lastPlayedStr || lastPlayedStr === "Never") return null;
+    if (lastPlayedStr === "Today") return 0;
+    if (lastPlayedStr === "Yesterday") return 1;
+    const d = new Date(lastPlayedStr);
+    if (isNaN(d.getTime())) return null;
+    return (Date.now() - d.getTime()) / (1000 * 60 * 60 * 24);
+}
+
+// Helper — match emotional-states proxy against runtime context.
+// See docs/a11y-audit-v0.2.0-translation-critique.md and
+// autoresearch Phase 2 design rationales for each proxy's meaning.
+function matchEmotionalProxy(proxy, game, context) {
+    switch (proxy) {
+        case "skip-streak-3":
+            return (context.sessionSkippedSet?.size ?? 0) >= 3;
+        case "late-night-with-skip": {
+            const h = new Date().getHours();
+            const isLate = h >= 22 || h <= 4;
+            return isLate && (context.sessionSkippedSet?.size ?? 0) >= 1;
+        }
+        case "long-absence-return": {
+            const gap = daysSinceLastPlayed(game?.lastPlayed);
+            return gap !== null && gap > 90 && !!context.inActiveKata;
+        }
+        case "just-anchored":
+            return !!context.isAnchored;
+        case "return-penalty-accumulated":
+            return (context.returnPenaltySet?.size ?? 0) >= 2;
+        case "post-freeze-resume":
+            return !!context.postFreezeResume;
+        case "selection-churn-5":
+            return (context.sessionSkippedSet?.size ?? 0) >= 5;
+        default:
+            return false;
+    }
+}
+
+// Compute the pool of prescriptions whose trigger matches the current context.
+// Returns empty array if no new categories present or no matches.
+function computeContextualMatches(game, context, prescriptions) {
+    const matches = [];
+
+    // Time-of-day (always computable)
+    if (prescriptions["time-of-day"]) {
+        const hour = new Date().getHours();
+        for (const p of prescriptions["time-of-day"]) {
+            if (p.trigger?.hours?.includes(hour)) matches.push(p);
+        }
+    }
+
+    // Return-after-absence (needs game.lastPlayed)
+    if (prescriptions["return-after-absence"] && game) {
+        const gap = daysSinceLastPlayed(game.lastPlayed);
+        for (const p of prescriptions["return-after-absence"]) {
+            const t = p.trigger;
+            if (!t) continue;
+            if (t.criterion === "no-last-played") {
+                if (gap === null) matches.push(p);
+            } else if (t.criterion === "post-anchor-gap") {
+                if (context.previouslyAnchored && gap !== null && gap > 30) matches.push(p);
+            } else if (gap !== null) {
+                if (t.min_days !== undefined && gap < t.min_days) continue;
+                if (t.max_days !== undefined && gap > t.max_days) continue;
+                if (t.min_days !== undefined) matches.push(p);
+            }
+        }
+    }
+
+    // Emotional-states (needs behavioral proxies)
+    if (prescriptions["emotional-states"]) {
+        for (const p of prescriptions["emotional-states"]) {
+            const proxy = p.trigger?.proxy;
+            if (proxy && matchEmotionalProxy(proxy, game, context)) matches.push(p);
+        }
+    }
+
+    return matches;
+}
+
+// Injection rate for contextual triggers — keeps existing catalog/default
+// behavior dominant while surfacing new categories occasionally.
+const CONTEXTUAL_INJECTION_RATE = 0.3;
+
+export function getPrescription(game, prescriptionsData, context = {}) {
     if (!prescriptionsData || !prescriptionsData.prescriptions) return null;
     const prescriptions = prescriptionsData.prescriptions;
 
@@ -167,6 +252,15 @@ export function getPrescription(game, prescriptionsData) {
     if (!game) {
         const idleList = prescriptions.idle_state || prescriptions.default;
         return idleList[Math.floor(Math.random() * idleList.length)];
+    }
+
+    // CONTEXTUAL TRIGGER LAYER (new in v0.3.0)
+    // Before falling into catalog/default, check if any time-of-day /
+    // emotional-states / return-after-absence prescription matches current
+    // context. If so, 30% chance to inject one; otherwise fall through.
+    const contextualPool = computeContextualMatches(game, context, prescriptions);
+    if (contextualPool.length > 0 && Math.random() < CONTEXTUAL_INJECTION_RATE) {
+        return contextualPool[Math.floor(Math.random() * contextualPool.length)];
     }
 
     // BEHAVIORAL LOGIC (Section 5 of PRD)
@@ -212,5 +306,8 @@ export function getPrescription(game, prescriptionsData) {
     const finalResult = defaults[Math.floor(Math.random() * defaults.length)];
     return finalResult;
 }
+
+// Exported for tests
+export const __internal = { computeContextualMatches, matchEmotionalProxy, daysSinceLastPlayed };
 
 

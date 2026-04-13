@@ -1,0 +1,223 @@
+[
+  {
+    "id": "return-after-week",
+    "tier": 1,
+    "kernel": "Continuity has not expired.",
+    "interface": "After a short gap, you may re-enter without restoring the previous rhythm.",
+    "momentum": "stabilize",
+    "audit": {
+      "permission_effect": "lower_obligation",
+      "risk": "safe",
+      "notes": "Mechanism: brief absence weakens cue-driven automaticity, so immediate smoothness should not be required. Source: Stojanovic et al., Front Psychol 2022, PMCID: PMC9226889."
+    },
+    "trigger": {
+      "type": "return-after-absence",
+      "min_days": 7,
+      "max_days": 14
+    },
+    "translations": {
+      "zh-TW": {
+        "kernel": "連續性未失效。",
+        "interface": "短暫中斷後，你可以回來，而不必立刻接回先前節奏。"
+      },
+      "zh-CN": {
+        "kernel": "连续性未失效。",
+        "interface": "短暂中断后，你可以回来，不必立刻接回先前的节奏。"
+      },
+      "ja": {
+        "kernel": "連続性は失効していません。",
+        "interface": "短い空白のあとでも、以前のリズムをすぐに再開しなくてかまいません。"
+      }
+    },
+    "design_rationale": "Targets short-gap re-entry friction by removing the expectation of instant continuity, without repeating no-debt's backlog framing."
+  },
+  {
+    "id": "return-after-month",
+    "tier": 1,
+    "kernel": "Recall may be partial.",
+    "interface": "After a month-scale gap, you may return without proving memory, skill, or narrative continuity.",
+    "momentum": "unlock",
+    "audit": {
+      "permission_effect": "lower_obligation",
+      "risk": "safe",
+      "notes": "Mechanism: disrupted context weakens habitual responding, so recall friction is normal rather than disqualifying. Source: Thomas et al., PLoS One 2016, PMCID: PMC4847906."
+    },
+    "trigger": {
+      "type": "return-after-absence",
+      "min_days": 14,
+      "max_days": 60
+    },
+    "translations": {
+      "zh-TW": {
+        "kernel": "記憶可以不完整。",
+        "interface": "一個月量級的空白後，你可以回來，而不必證明記憶、熟練度或敘事連續。"
+      },
+      "zh-CN": {
+        "kernel": "记忆可以不完整。",
+        "interface": "一个月量级的空白后，你可以回来，不必证明记忆、熟练度或叙事连续。"
+      },
+      "ja": {
+        "kernel": "記憶は部分的でかまいません。",
+        "interface": "一か月規模の空白のあとでも、記憶や腕前や物語の連続を証明しなくてかまいません。"
+      }
+    },
+    "design_rationale": "Shifts the permission from historical absolution to partial recall tolerance, which is more specific to a month-long absence."
+  },
+  {
+    "id": "return-after-quarter",
+    "tier": 1,
+    "kernel": "Re-entry may be fresh.",
+    "interface": "After several months away, you may treat this as a new contact instead of a resumed streak.",
+    "momentum": "unlock",
+    "audit": {
+      "permission_effect": "lower_obligation",
+      "risk": "safe",
+      "notes": "Mechanism: longer context discontinuity breaks old cue chains, making a fresh-contact frame more accurate than seamless continuation. Source: Thomas et al., PLoS One 2016, PMCID: PMC4847906."
+    },
+    "trigger": {
+      "type": "return-after-absence",
+      "min_days": 60,
+      "max_days": 120
+    },
+    "translations": {
+      "zh-TW": {
+        "kernel": "重返可以是新的。",
+        "interface": "幾個月未碰後，你可以把這次視為新的接觸，而不是延續中的連續紀錄。"
+      },
+      "zh-CN": {
+        "kernel": "重返可以是新的。",
+        "interface": "几个月未碰后，你可以把这次视为新的接触，而不是延续中的连续记录。"
+      },
+      "ja": {
+        "kernel": "再入は新規でもかまいません。",
+        "interface": "数か月離れていたあとでも、今回は継続の再開ではなく、新しい接触として扱ってかまいません。"
+      }
+    },
+    "design_rationale": "At quarter-scale absence, the permission needed is freshness rather than continuity; this avoids guilt while staying about elapsed time."
+  },
+  {
+    "id": "return-after-half-year",
+    "tier": 1,
+    "kernel": "Previous pace is released.",
+    "interface": "After half a year away, you may enter without matching the tempo, plans, or competence from before.",
+    "momentum": "release",
+    "audit": {
+      "permission_effect": "lower_obligation",
+      "risk": "safe",
+      "notes": "Mechanism: old automaticity and contextual fluency decay across long gaps; lowering restart pressure also avoids guilt-reactivity after lapses. Sources: Stojanovic et al., Front Psychol 2022, PMCID: PMC9226889; Thogersen-Ntoumani et al., Br J Health Psychol 2021, PMCID: PMC8451927."
+    },
+    "trigger": {
+      "type": "return-after-absence",
+      "min_days": 120,
+      "max_days": 240
+    },
+    "translations": {
+      "zh-TW": {
+        "kernel": "先前節奏已解除。",
+        "interface": "半年未碰後，你可以進入，而不必符合從前的速度、計畫或熟練狀態。"
+      },
+      "zh-CN": {
+        "kernel": "先前节奏已解除。",
+        "interface": "半年未碰后，你可以进入，不必符合从前的速度、计划或熟练状态。"
+      },
+      "ja": {
+        "kernel": "以前のペースは解除されています。",
+        "interface": "半年離れていたあとでも、以前の速度や計画や習熟度に合わせなくてかまいません。"
+      }
+    },
+    "design_rationale": "Half-year absence calls for release from prior pace and competence expectations, not a generic debt reset."
+  },
+  {
+    "id": "return-after-year",
+    "tier": 1,
+    "kernel": "Former identity is optional.",
+    "interface": "After a year or more, you may approach this title without inheriting the standards of your earlier self.",
+    "momentum": "release",
+    "audit": {
+      "permission_effect": "lower_obligation",
+      "risk": "safe",
+      "notes": "Mechanism: extended discontinuity weakens old habit-context links enough that identity continuity should not be assumed. Source: Thomas et al., PLoS One 2016, PMCID: PMC4847906."
+    },
+    "trigger": {
+      "type": "return-after-absence",
+      "min_days": 240
+    },
+    "translations": {
+      "zh-TW": {
+        "kernel": "舊身份不是必要條件。",
+        "interface": "一年以上後，你可以接近這款遊戲，而不必承接較早那個自己的標準。"
+      },
+      "zh-CN": {
+        "kernel": "旧身份不是必要条件。",
+        "interface": "一年以上后，你可以接近这款游戏，不必继承更早那个自己的标准。"
+      },
+      "ja": {
+        "kernel": "以前の自己像は必須ではありません。",
+        "interface": "一年以上たっていても、以前の自分の基準を引き継がずにこの作品へ戻ってかまいません。"
+      }
+    },
+    "design_rationale": "Year-scale absence shifts the problem from pace to identity; the permission removes obligation to be the same player as before."
+  },
+  {
+    "id": "new-device-start",
+    "tier": 1,
+    "kernel": "Continuity record may be absent.",
+    "interface": "When no last-played record exists, you may begin without reconstructing history, sequence, or proof of prior use.",
+    "momentum": "unlock",
+    "audit": {
+      "permission_effect": "lower_obligation",
+      "risk": "safe",
+      "notes": "Mechanism: missing telemetry functions like context discontinuity, so proof of continuity should not be demanded. Sources: Stojanovic et al., Front Psychol 2022, PMCID: PMC9226889; Thomas et al., PLoS One 2016, PMCID: PMC4847906."
+    },
+    "trigger": {
+      "type": "return-after-absence",
+      "criterion": "no-last-played"
+    },
+    "translations": {
+      "zh-TW": {
+        "kernel": "連續記錄可以缺席。",
+        "interface": "當沒有 last-played 記錄時，你可以開始，而不必重建歷史、順序或曾經使用的證明。"
+      },
+      "zh-CN": {
+        "kernel": "连续记录可以缺席。",
+        "interface": "当没有 last-played 记录时，你可以开始，不必重建历史、顺序或先前使用的证明。"
+      },
+      "ja": {
+        "kernel": "連続記録がなくてもかまいません。",
+        "interface": "last-played の記録がない場合でも、履歴や順序や以前使っていた証拠を再構成しなくてかまいません。"
+      }
+    },
+    "design_rationale": "Designed for absent telemetry rather than elapsed time: permission focuses on missing continuity evidence, not on past inactivity as debt."
+  },
+  {
+    "id": "post-burnout-return",
+    "tier": 1,
+    "kernel": "Intensity need not recur.",
+    "interface": "After a once-anchored period ended in long absence, you may return without reactivating the old level of investment.",
+    "momentum": "release",
+    "audit": {
+      "permission_effect": "lower_obligation",
+      "risk": "safe",
+      "notes": "Mechanism: burnout is marked by exhaustion, distance, and reduced efficacy; permission removes pressure to resume prior intensity, while self-compassion is inversely associated with burnout. Sources: WHO ICD-11 burn-out FAQ; Hashem & Zeinoun, Mindfulness 2020, PMCID: PMC7481342."
+    },
+    "trigger": {
+      "type": "return-after-absence",
+      "criterion": "post-anchor-gap"
+    },
+    "translations": {
+      "zh-TW": {
+        "kernel": "強度不必重現。",
+        "interface": "在曾經深度投入又長時間離開之後，你可以回來，而不必重新啟動舊有投入程度。"
+      },
+      "zh-CN": {
+        "kernel": "强度不必重现。",
+        "interface": "在曾经深度投入又长时间离开之后，你可以回来，不必重新启动旧有投入程度。"
+      },
+      "ja": {
+        "kernel": "以前の強度は再現不要です。",
+        "interface": "以前に深く結び付いていて、その後長く離れていた場合でも、元の投入度を再起動しなくてかまいません。"
+      }
+    },
+    "design_rationale": "This is the only absence case anchored in overload recovery: it grants distance from former intensity, not relief from backlog or skill expectations."
+  }
+]

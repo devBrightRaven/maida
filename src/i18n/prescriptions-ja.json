@@ -5,8 +5,8 @@
         "note": "AI初訳、人間によるレビュー待ち。各処方箋のトーンはBehavioral Constraintsに従う：許可を与えるのみ。助言・奨励・評価はしない。"
     },
     "entry-permitted": {
-        "kernel": "決断は不要。",
-        "interface": "正しい選択かどうか分からなくても始められます。"
+        "kernel": "決定は必須ではありません。",
+        "interface": "これが正しい選択か分からなくても、始められます。"
     },
     "no-optimization": {
         "kernel": "最適化は不要。",
@@ -25,24 +25,24 @@
         "interface": "過去の非活動は今日の負債を生みません。"
     },
     "observation-mode": {
-        "kernel": "受動的参入。",
-        "interface": "見るだけでも有効な参加形態です。"
+        "kernel": "見ることも参加です。",
+        "interface": "遊ばずに見るだけでも、それは参加に含まれます。"
     },
     "low-input": {
-        "kernel": "最小エネルギー。",
-        "interface": "全力を持ってくる必要はありません。"
+        "kernel": "全力は必要ありません。",
+        "interface": "今ある気力だけで来てもかまいません。"
     },
     "objective-optional": {
-        "kernel": "無目的が許可される。",
+        "kernel": "目標は必須ではありません。",
         "interface": "目標がなくても入れます。"
     },
     "latency-allowed": {
-        "kernel": "躊躇は構造的。",
-        "interface": "躊躇はエラーではありません。ゆっくりどうぞ。"
+        "kernel": "ためらいは許容されます。",
+        "interface": "ためらっていても、誤りにはなりません。"
     },
     "silence-valid": {
-        "kernel": "静かなインターフェース。",
-        "interface": "行動前の沈黙は体験の一部です。"
+        "kernel": "沈黙も含まれます。",
+        "interface": "行動する前に黙っていてもかまいません。"
     },
     "zero-loss": {
         "kernel": "状態の完全性は保持。",
@@ -53,36 +53,36 @@
         "interface": "持っていることは義務を生みません。"
     },
     "intent-only": {
-        "kernel": "入力に実行は不要。",
-        "interface": "意図だけで十分です。"
+        "kernel": "意図だけで十分です。",
+        "interface": "遊びたいと思うだけで、行動は不要です。"
     },
     "constant-access": {
         "kernel": "リソースは減衰しない。",
         "interface": "アクセス可能性は時間とともに低下しません。"
     },
     "time-suspension": {
-        "kernel": "時計は無視。",
-        "interface": "システム時間は停止中です。"
+        "kernel": "時間圧は作動していません。",
+        "interface": "待っているあいだ、あなたの時間は減っていません。"
     },
     "static-state": {
         "kernel": "選択不要。",
         "interface": "選ばないことは安定した状態です。"
     },
     "inventory-neutral": {
-        "kernel": "ライブラリは受動的。",
-        "interface": "ライブラリの大きさは何も要求しません。"
+        "kernel": "ライブラリの規模は中立です。",
+        "interface": "あなたのライブラリは、何も求めていません。"
     },
     "wait-cost-zero": {
         "kernel": "コストはゼロ。",
         "interface": "待つコストはゼロです。"
     },
     "availability-persistent": {
-        "kernel": "アクセスは静的。",
-        "interface": "操作しなくてもアクセス可能性は変わりません。"
+        "kernel": "利用可能性は変化しません。",
+        "interface": "今使えるものは、そのまま使えます。"
     },
     "pause-validity": {
-        "kernel": "一時停止は有効。",
-        "interface": "準備ができたことにシグナルは不要です。"
+        "kernel": "一時停止は有効なままです。",
+        "interface": "準備ができたことを示す必要はありません。"
     },
     "muscle-memory": {
         "kernel": "反射が自動起動する。",
@@ -109,8 +109,8 @@
         "interface": "目標は一つだけ。他に注意を向けるものはありません。"
     },
     "factory-wait": {
-        "kernel": "システムは稼働し続ける。",
-        "interface": "工場はあなたを待っています。今日全部直す必要はありません。"
+        "kernel": "工場は持続します。",
+        "interface": "未完のまま離れて、今の状態から戻れます。"
     },
     "one-belt": {
         "kernel": "漸進的入力を受容。",
@@ -133,12 +133,12 @@
         "interface": "都市の要求はいつでも止められます。"
     },
     "internal-voice": {
-        "kernel": "混沌は可読。",
-        "interface": "覚醒も聡明さも不要。読むだけでいい。"
+        "kernel": "対話は少しずつ読めます。",
+        "interface": "一行ずつ、一つの思考ずつ、または一回の判定ずつ進められます。"
     },
     "failure-path": {
-        "kernel": "間違いはコンテンツ。",
-        "interface": "間違った発言は別のプレイスタイルにすぎません。"
+        "kernel": "失敗にも内容があります。",
+        "interface": "判定に失敗しても、その場面は有効な経路として進みます。"
     },
     "dialogue-choice": {
         "kernel": "物語は流動的。",
@@ -157,8 +157,8 @@
         "interface": "風に従うか従わないか。マップは完了を求めません。"
     },
     "spectacle": {
-        "kernel": "壮観が待っている。",
-        "interface": "スケールは画面に任せて。あなたはボタンだけ扱えばいい。"
+        "kernel": "壮大さは画面が担います。",
+        "interface": "あなたは入力だけ行えます。壮観さは画面が担います。"
     },
     "journey": {
         "kernel": "道は線形。",
@@ -181,28 +181,28 @@
         "interface": "哲学的な問いを観察しているのであって、解決しているのではありません。"
     },
     "crop-cycle": {
-        "kernel": "成長は自動。",
-        "interface": "作物は大丈夫。短い一日で十分です。"
+        "kernel": "成長は自動です。",
+        "interface": "作物は自動で育ちます。ゲーム内の一日が短くても、そこで止められます。"
     },
     "dam-control": {
-        "kernel": "水流は制御下。",
-        "interface": "水はあなたの指示通りに流れます。急ぐ必要はありません。"
+        "kernel": "水流は制御下です。",
+        "interface": "水系の反応は緩やかです。常時入力しなくても、そのまま動かせます。"
     },
     "survival-day": {
         "kernel": "耐久モード。",
         "interface": "ゲーム内の一日は独立した単位です。一日完了すれば十分です。"
     },
     "cycle-restart": {
-        "kernel": "サイクルが待っている。",
-        "interface": "死は進行の一部であり、後退ではありません。"
+        "kernel": "サイクルは想定内です。",
+        "interface": "死は進行の一部です。あなたが入るのはリセットのループであり、能力の損失ではありません。"
     },
     "deep-dive": {
         "kernel": "深度は調整可能。",
         "interface": "一回のダイブが完全な体験です。"
     },
     "hands-played": {
-        "kernel": "確率がプレイ。",
-        "interface": "一手だけ打てばいい。数学が処理してくれます。"
+        "kernel": "一手でも成立します。",
+        "interface": "一手だけ出して、あとは得点計算に任せられます。"
     },
     "floor-climb": {
         "kernel": "ターン制の安全。",
@@ -221,32 +221,32 @@
         "interface": "漂流するだけでもいい。宇宙は完了できないほど広い。"
     },
     "color-flow": {
-        "kernel": "状態は流動的。",
-        "interface": "ここに失敗状態はありません。動くだけでいい。"
+        "kernel": "状態は流動的です。",
+        "interface": "ここに失敗状態はありません。ペナルティなく動き続けられます。"
     },
     "vehicle-maintain": {
         "kernel": "動力は機械的。",
         "interface": "エンジンが主要なインタラクションです。前進がその結果です。"
     },
     "gentle-puzzle": {
-        "kernel": "論理は柔らかい。",
-        "interface": "時間制限はありません。パズルはあなたを待ちます。"
+        "kernel": "論理は柔らかいです。",
+        "interface": "ここに時間制限はありません。同じパズルにいくらでも留まれます。"
     },
     "ocean-drift": {
-        "kernel": "浮力が支えている。",
-        "interface": "溺れることはありません。泳ぐだけでいい。"
+        "kernel": "溺水状態はありません。",
+        "interface": "ここでは浮力が保たれます。水中移動は溺水までのカウントではありません。"
     },
     "history-gen": {
-        "kernel": "失敗は面白い。",
-        "interface": "災害はストーリー生成エンジンにすぎません。"
+        "kernel": "崩壊も歴史です。",
+        "interface": "要塞が崩れても、出来事と記録と余波は残ります。"
     },
     "ecosystem": {
         "kernel": "捕食は自然。",
         "interface": "スケールはデザインの一部です。隠れることが主要なメカニクスです。"
     },
     "physics-puzzle": {
-        "kernel": "物理は予測可能。",
-        "interface": "仕掛けを試す。失敗はデータにすぎません。"
+        "kernel": "仕組みは試せます。",
+        "interface": "一度試して結果を見て、もう一度やり直せます。"
     },
     "logic-build": {
         "kernel": "コードは静的。",
@@ -279,5 +279,81 @@
     "generic-story": {
         "kernel": "物語が待っている。",
         "interface": "次のページはあなたの準備ができるまでめくられません。"
+    },
+    "dawn-entry": {
+        "kernel": "覚醒は部分的でもよいです。",
+        "interface": "頭がまだ全速でなくても入れます。"
+    },
+    "morning-entry": {
+        "kernel": "朝の速度は可変です。",
+        "interface": "最初の一時間をテストにしなくても開けます。"
+    },
+    "afternoon-entry": {
+        "kernel": "鋭さは自然に下がります。",
+        "interface": "集中が低い時間帯でも、それを失敗にしなくて使えます。"
+    },
+    "evening-entry": {
+        "kernel": "区切りは保留でもよいです。",
+        "interface": "一日に残った用件を全部閉じなくても入れます。"
+    },
+    "late-night-entry": {
+        "kernel": "短い立ち寄りでも完結します。",
+        "interface": "ランチャーを開いても、夜にフルセッションを負わせる必要はありません。"
+    },
+    "frustrated-unresolved-valid": {
+        "kernel": "解決は不要です。",
+        "interface": "未解決のまま離れてもかまいません。連続で飛ばしたことは、無理に締める義務になりません。"
+    },
+    "tired-partial-capacity": {
+        "kernel": "万全である必要はありません。",
+        "interface": "一部の注意だけで触れてもかまいません。深夜であることは基準を上げません。"
+    },
+    "numb-neutral-return": {
+        "kernel": "何かを感じる必要はありません。",
+        "interface": "温かさや好奇心や切迫感がなくても戻れます。戻ることは中立のままでかまいません。"
+    },
+    "content-no-escalation": {
+        "kernel": "エスカレーションは不要です。",
+        "interface": "このままにしておいてかまいません。満ち足りていることは次の一手の義務を生みません。"
+    },
+    "restless-unsettled-valid": {
+        "kernel": "落ち着く必要はありません。",
+        "interface": "短く触れて離れてもかまいません。未完了は未完了のままで置いておけます。"
+    },
+    "still-here-no-explanation": {
+        "kernel": "再開に説明は要りません。",
+        "interface": "止まっていた後から、そのまま続けてかまいません。空白の説明は不要です。"
+    },
+    "overwhelmed-selection-optional": {
+        "kernel": "選定は不要です。",
+        "interface": "見るだけで選ばなくてもかまいません。開いた選択肢を一つに絞る義務はありません。"
+    },
+    "return-after-week": {
+        "kernel": "連続性は失効していません。",
+        "interface": "短い空白のあとでも、以前のリズムをすぐに再開しなくてかまいません。"
+    },
+    "return-after-month": {
+        "kernel": "記憶は部分的でかまいません。",
+        "interface": "一か月規模の空白のあとでも、記憶や腕前や物語の連続を証明しなくてかまいません。"
+    },
+    "return-after-quarter": {
+        "kernel": "再入は新規でもかまいません。",
+        "interface": "数か月離れていたあとでも、今回は継続の再開ではなく、新しい接触として扱ってかまいません。"
+    },
+    "return-after-half-year": {
+        "kernel": "以前のペースは解除されています。",
+        "interface": "半年離れていたあとでも、以前の速度や計画や習熟度に合わせなくてかまいません。"
+    },
+    "return-after-year": {
+        "kernel": "以前の自己像は必須ではありません。",
+        "interface": "一年以上たっていても、以前の自分の基準を引き継がずにこの作品へ戻ってかまいません。"
+    },
+    "new-device-start": {
+        "kernel": "連続記録がなくてもかまいません。",
+        "interface": "last-played の記録がない場合でも、履歴や順序や以前使っていた証拠を再構成しなくてかまいません。"
+    },
+    "post-burnout-return": {
+        "kernel": "以前の強度は再現不要です。",
+        "interface": "以前に深く結び付いていて、その後長く離れていた場合でも、元の投入度を再起動しなくてかまいません。"
     }
 }

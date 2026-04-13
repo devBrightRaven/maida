@@ -5,8 +5,8 @@
         "note": "AI 初译，待人工校对。每条 prescription 的语感必须符合 Behavioral Constraints：只给予许可，不给建议、不鼓励、不评价。"
     },
     "entry-permitted": {
-        "kernel": "不需要做决定。",
-        "interface": "你可以在不确定这是否正确的情况下开始。"
+        "kernel": "决定并非必要。",
+        "interface": "你可以先进入，不必先知道这是不是正确选择。"
     },
     "no-optimization": {
         "kernel": "不需要最优化。",
@@ -25,24 +25,24 @@
         "interface": "过去的不活跃不会在今天产生债务。"
     },
     "observation-mode": {
-        "kernel": "被动进入。",
-        "interface": "只看不玩也是一种有效的参与方式。"
+        "kernel": "观看也是参与。",
+        "interface": "你可以只看不玩，那仍然算是一种参与。"
     },
     "low-input": {
-        "kernel": "最低能量。",
-        "interface": "你不需要带着全部的精力来这里。"
+        "kernel": "不必带来全力。",
+        "interface": "你可以只带着现在有的精力来。"
     },
     "objective-optional": {
-        "kernel": "允许漫无目的。",
-        "interface": "你不需要有目标就能进入。"
+        "kernel": "目标并非必要。",
+        "interface": "你可以没有目标就进入。"
     },
     "latency-allowed": {
-        "kernel": "犹豫是结构性的。",
-        "interface": "犹豫不是错误；慢慢来。"
+        "kernel": "犹豫是被允许的。",
+        "interface": "你可以犹豫，这不算错误。"
     },
     "silence-valid": {
-        "kernel": "安静的界面。",
-        "interface": "行动之前的沉默是体验的一部分。"
+        "kernel": "沉默也被包含。",
+        "interface": "你可以先沉默，再决定是否行动。"
     },
     "zero-loss": {
         "kernel": "状态完整性已保留。",
@@ -53,36 +53,36 @@
         "interface": "拥有不会产生义务。"
     },
     "intent-only": {
-        "kernel": "输入不需要执行。",
-        "interface": "意图就已足够。"
+        "kernel": "意图本身已足够。",
+        "interface": "你想玩，不需要立刻采取行动。"
     },
     "constant-access": {
         "kernel": "资源不会衰减。",
         "interface": "可用性不会随时间递减。"
     },
     "time-suspension": {
-        "kernel": "时钟已忽略。",
-        "interface": "系统时间已暂停。"
+        "kernel": "时间压力未启动。",
+        "interface": "你等待时，没有任何时间正在耗尽。"
     },
     "static-state": {
         "kernel": "不需要选择。",
         "interface": "不做选择是一种稳定的状态。"
     },
     "inventory-neutral": {
-        "kernel": "数据库是被动的。",
-        "interface": "游戏库的大小不构成任何要求。"
+        "kernel": "游戏库规模是中性的。",
+        "interface": "你的游戏库不会对你提出任何要求。"
     },
     "wait-cost-zero": {
         "kernel": "成本为零。",
         "interface": "等待的成本是零。"
     },
     "availability-persistent": {
-        "kernel": "存取是静态的。",
-        "interface": "不互动也不会影响可用性。"
+        "kernel": "可用性保持不变。",
+        "interface": "现在可用的，之后也仍然可用。"
     },
     "pause-validity": {
-        "kernel": "暂停生效中。",
-        "interface": "准备好不需要任何信号。"
+        "kernel": "暂停状态仍然有效。",
+        "interface": "你不需要发出任何准备好的信号。"
     },
     "muscle-memory": {
         "kernel": "反射会自动启动。",
@@ -109,8 +109,8 @@
         "interface": "只有一个目标。没有其他东西需要你的注意力。"
     },
     "factory-wait": {
-        "kernel": "系统会持续运行。",
-        "interface": "工厂在等你；你不需要今天全部修好。"
+        "kernel": "工厂会持续存在。",
+        "interface": "你可以先放着没做完，之后再回来接着目前的状态。"
     },
     "one-belt": {
         "kernel": "接受渐进的输入。",
@@ -133,12 +133,12 @@
         "interface": "你可以随时暂停城市的需求。"
     },
     "internal-voice": {
-        "kernel": "混乱是可读的。",
-        "interface": "你不需要清醒或聪明。只要读就好。"
+        "kernel": "对话可以逐步读。",
+        "interface": "你可以一次只看一行、一个想法或一次检定。"
     },
     "failure-path": {
-        "kernel": "错误是内容。",
-        "interface": "说错话只是另一种玩法。"
+        "kernel": "失败仍然有内容。",
+        "interface": "检定失败后，场景仍会沿着有效路线继续。"
     },
     "dialogue-choice": {
         "kernel": "叙事是流动的。",
@@ -157,8 +157,8 @@
         "interface": "跟着风走或不走。地图不要求完成。"
     },
     "spectacle": {
-        "kernel": "奇观在等待。",
-        "interface": "让屏幕处理规模。你只需要处理按钮。"
+        "kernel": "规模由屏幕呈现。",
+        "interface": "你可以只提供输入，让屏幕承载场面的规模。"
     },
     "journey": {
         "kernel": "路径是线性的。",
@@ -182,27 +182,27 @@
     },
     "crop-cycle": {
         "kernel": "成长是自动的。",
-        "interface": "作物会没事的。短短一天就够了。"
+        "interface": "作物会自行生长。你可以在短短一天后结束。"
     },
     "dam-control": {
         "kernel": "水流是受控的。",
-        "interface": "水按你的指令流动。不急。"
+        "interface": "水系统的反应偏慢。你可以让它持续运作，不必一直操作。"
     },
     "survival-day": {
         "kernel": "耐久模式。",
         "interface": "游戏内的每一天是独立的单位。完成一天就足够了。"
     },
     "cycle-restart": {
-        "kernel": "循环在等你。",
-        "interface": "死亡是进度的一部分，不是退步。"
+        "kernel": "循环是预期状态。",
+        "interface": "死亡是进度的一部分。你进入的是重置循环，不是能力损失。"
     },
     "deep-dive": {
         "kernel": "深度是可调的。",
         "interface": "一次潜水就是完整的体验。"
     },
     "hands-played": {
-        "kernel": "概率就是游玩。",
-        "interface": "打一手牌就好。数学会自己处理。"
+        "kernel": "一手也可以成立。",
+        "interface": "你可以只打一手牌，剩下的由计分系统结算。"
     },
     "floor-climb": {
         "kernel": "回合制的安全。",
@@ -222,7 +222,7 @@
     },
     "color-flow": {
         "kernel": "状态是流动的。",
-        "interface": "这里没有失败状态。移动就好。"
+        "interface": "这里没有失败状态。你可以持续移动而不受惩罚。"
     },
     "vehicle-maintain": {
         "kernel": "动力是机械的。",
@@ -230,23 +230,23 @@
     },
     "gentle-puzzle": {
         "kernel": "逻辑是柔软的。",
-        "interface": "没有时间限制。谜题会等你。"
+        "interface": "这里没有时间限制。你可以在同一个谜题前停留多久都可以。"
     },
     "ocean-drift": {
-        "kernel": "浮力托着你。",
-        "interface": "你不会溺水。游就好。"
+        "kernel": "没有溺水状态。",
+        "interface": "你在这里会保持漂浮。水下移动不是溺水倒计时。"
     },
     "history-gen": {
-        "kernel": "失败是有趣的。",
-        "interface": "灾难只是一个故事生成引擎。"
+        "kernel": "崩溃仍是历史。",
+        "interface": "堡垒倒下后，仍会留下事件、记录与后续。"
     },
     "ecosystem": {
         "kernel": "掠食是自然的。",
         "interface": "体型差异是设计的一部分。隐藏是主要机制。"
     },
     "physics-puzzle": {
-        "kernel": "物理是可预测的。",
-        "interface": "测试机关。失败只是数据。"
+        "kernel": "机制可以测试。",
+        "interface": "你可以先试一次、看结果，再重来一次。"
     },
     "logic-build": {
         "kernel": "程序代码是静态的。",
@@ -279,5 +279,81 @@
     "generic-story": {
         "kernel": "故事在等待。",
         "interface": "下一页在你准备好之前不会翻。"
+    },
+    "dawn-entry": {
+        "kernel": "清醒可以不完整。",
+        "interface": "你可以在脑子还没全速之前进入。"
+    },
+    "morning-entry": {
+        "kernel": "晨间步调可变。",
+        "interface": "你可以在不把第一个小时变成测验的情况下打开。"
+    },
+    "afternoon-entry": {
+        "kernel": "锐利感自然下滑。",
+        "interface": "你可以在专注较低的时段使用，不把它当成失败。"
+    },
+    "evening-entry": {
+        "kernel": "收尾可以暂欠。",
+        "interface": "你可以在不先结清一天遗留事项的情况下进入。"
+    },
+    "late-night-entry": {
+        "kernel": "短暂进入也完整。",
+        "interface": "你可以打开启动器，而不需要让夜晚承担完整的一次游玩。"
+    },
+    "frustrated-unresolved-valid": {
+        "kernel": "不需要解决。",
+        "interface": "你可以先把它留着不解；连续跳过也不构成必须收尾的义务。"
+    },
+    "tired-partial-capacity": {
+        "kernel": "不需要完整状态。",
+        "interface": "你可以只带部分注意力来；深夜不会把标准提高。"
+    },
+    "numb-neutral-return": {
+        "kernel": "不需要感觉。",
+        "interface": "你可以在没有暖意、好奇或急迫感时回来；接触可以保持中性。"
+    },
+    "content-no-escalation": {
+        "kernel": "不需要升级。",
+        "interface": "你可以让它维持原样；满足感不会产生下一步的义务。"
+    },
+    "restless-unsettled-valid": {
+        "kernel": "不需要安定下来。",
+        "interface": "你可以只是短暂经过；未完成的状态可以先维持未完成。"
+    },
+    "still-here-no-explanation": {
+        "kernel": "恢复不需要解释。",
+        "interface": "你可以在停住之后直接继续；那段空白不需要交代。"
+    },
+    "overwhelmed-selection-optional": {
+        "kernel": "不需要选定。",
+        "interface": "你可以只看不选；同时开着的多个选项不需要收敛成一个。"
+    },
+    "return-after-week": {
+        "kernel": "连续性未失效。",
+        "interface": "短暂中断后，你可以回来，不必立刻接回先前的节奏。"
+    },
+    "return-after-month": {
+        "kernel": "记忆可以不完整。",
+        "interface": "一个月量级的空白后，你可以回来，不必证明记忆、熟练度或叙事连续。"
+    },
+    "return-after-quarter": {
+        "kernel": "重返可以是新的。",
+        "interface": "几个月未碰后，你可以把这次视为新的接触，而不是延续中的连续记录。"
+    },
+    "return-after-half-year": {
+        "kernel": "先前节奏已解除。",
+        "interface": "半年未碰后，你可以进入，不必符合从前的速度、计划或熟练状态。"
+    },
+    "return-after-year": {
+        "kernel": "旧身份不是必要条件。",
+        "interface": "一年以上后，你可以接近这款游戏，不必继承更早那个自己的标准。"
+    },
+    "new-device-start": {
+        "kernel": "连续记录可以缺席。",
+        "interface": "当没有 last-played 记录时，你可以开始，不必重建历史、顺序或先前使用的证明。"
+    },
+    "post-burnout-return": {
+        "kernel": "强度不必重现。",
+        "interface": "在曾经深度投入又长时间离开之后，你可以回来，不必重新启动旧有投入程度。"
     }
 }
