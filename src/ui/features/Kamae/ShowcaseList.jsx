@@ -165,6 +165,15 @@ function HoldButton({ onConfirm, label, ariaLabel }) {
 
     const isRunning = progress > 0;
 
+    // Single live region announcement — previously three channels (aria-label
+    // dynamic + two sr-only regions) caused redundant NVDA announcements.
+    // aria-label stays static (ariaLabel); state transitions narrated via this.
+    const stateAnnouncement = confirming
+        ? t('ui.kamae.remove_confirm_aria')
+        : isRunning
+            ? t('ui.kamae.remove_progress_aria')
+            : '';
+
     return (
         <button
             ref={btnRef}
@@ -187,7 +196,7 @@ function HoldButton({ onConfirm, label, ariaLabel }) {
                     reset();
                 }
             }}
-            aria-label={confirming ? t('ui.kamae.remove_confirm_aria') : ariaLabel}
+            aria-label={ariaLabel}
             onKeyDown={(e) => {
                 if (e.key === 'Escape' && confirming) {
                     e.stopPropagation();
@@ -199,16 +208,9 @@ function HoldButton({ onConfirm, label, ariaLabel }) {
             <span className="showcase-hold-label">
                 {confirming ? t('ui.kamae.remove_confirm') : label}
             </span>
-            {confirming && (
-                <span className="sr-only" role="status" aria-live="assertive">
-                    {t('ui.kamae.remove_confirm_aria')}
-                </span>
-            )}
-            {isRunning && (
-                <span className="sr-only" role="status" aria-live="assertive">
-                    {t('ui.kamae.remove_progress_aria')}
-                </span>
-            )}
+            <span className="sr-only" role="status" aria-live="polite">
+                {stateAnnouncement}
+            </span>
         </button>
     );
 }

@@ -112,16 +112,20 @@ export default function OnboardingView({ onComplete }) {
     };
 
     return (
-        <main className="onboarding-container" aria-labelledby="onboarding-title">
+        <main
+            className="onboarding-container"
+            aria-labelledby="onboarding-title"
+            aria-describedby="onboarding-voice onboarding-detail"
+        >
             <section className="onboarding-content">
                 <h1 id="onboarding-title" ref={titleRef} className="onboarding-title" tabIndex={-1}>Maida</h1>
-                <p className="onboarding-voice" aria-live="polite">
+                <p id="onboarding-voice" className="onboarding-voice" aria-live="polite">
                     {state === 'error'
                         ? t('voice.error.steam_not_found')
                         : t('voice.onboarding.permission_intro')}
                 </p>
                 {state === 'idle' && (
-                    <p className="onboarding-detail">{t('voice.onboarding.permission_detail')}</p>
+                    <p id="onboarding-detail" className="onboarding-detail">{t('voice.onboarding.permission_detail')}</p>
                 )}
 
                 <div className="onboarding-actions">
@@ -136,8 +140,8 @@ export default function OnboardingView({ onComplete }) {
                     )}
 
                     {state === 'scanning' && (
-                        <div className="listening-indicator">
-                            <span className="dot"></span>
+                        <div className="listening-indicator" role="status" aria-live="polite">
+                            <span className="dot" aria-hidden="true"></span>
                             <span className="voice-text">{t('ui.status.scanning')}</span>
                         </div>
                     )}

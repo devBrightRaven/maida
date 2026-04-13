@@ -31,7 +31,17 @@
             "frozen_wait": "ボタンは {seconds} 秒後に有効になります。",
             "frozen_ready": "ボタンが使用可能になりました。",
             "scanning": "リスニング中",
-            "error": "エラー"
+            "error": "エラー",
+            "back_focused": "もう一度 Escape または B を押して設定を閉じる。",
+            "anchoring_mid": "アンカー中、半分経過。",
+            "anchoring_near": "もうすぐアンカーされます。",
+            "anchored_announce": "アンカーされました。"
+        },
+        "error": {
+            "boundary": "Maidaでエラーが発生しました。",
+            "reload": "再読み込み",
+            "clear_data": "データを消去して再読み込み",
+            "clear_confirm": "もう一度押して確認"
         },
         "game": {
             "anchored_prefix": "アンカー"

@@ -8,7 +8,7 @@ import bridge from '../../../services/bridge';
  * SettingsPanel — inline panel for IGDB credential management.
  * Renders inside KamaeView when settings is toggled open.
  */
-export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleChange, onTourStart }) {
+export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleChange, onTourStart, onNavigateLegal }) {
     const [clientId, setClientId] = useState('');
     const [clientSecret, setClientSecret] = useState('');
     const [hasExisting, setHasExisting] = useState(false);
@@ -174,6 +174,7 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
                                     type="button"
                                     className={`kamae-settings-lang-btn ${isCurrent ? 'kamae-settings-lang-btn--current' : ''} ${isPending ? 'kamae-settings-lang-btn--pending' : ''}`}
                                     aria-pressed={isCurrent}
+                                    aria-label={isPending ? `${label}, ${t('ui.settings.language_confirm')}` : label}
                                     onClick={() => {
                                         if (isPending) {
                                             setCurrentLang(value);
@@ -185,7 +186,7 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
                                     }}
                                 >
                                     <span>{label}</span>
-                                    {isPending && <span className="kamae-settings-lang-confirm">{t('ui.settings.language_confirm')}</span>}
+                                    {isPending && <span className="kamae-settings-lang-confirm" aria-hidden="true">{t('ui.settings.language_confirm')}</span>}
                                 </button>
                             );
                         })}
@@ -253,8 +254,9 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
                 </button>
                 {controlsExpanded && (
                     <div id="controls-content" className="kamae-settings-controls">
-                        <h3>{t('ui.settings.controls_rin')}</h3>
-                        <table className="kamae-controls-table">
+                        <h3 id="controls-rin-heading">{t('ui.settings.controls_rin')}</h3>
+                        <table className="kamae-controls-table" aria-labelledby="controls-rin-heading">
+                            <caption className="sr-only">{t('ui.settings.controls_rin')}</caption>
                             <thead><tr><th>{t('ui.settings.controls_action')}</th><th>{t('ui.settings.controls_keyboard')}</th><th>{t('ui.settings.controls_gamepad')}</th></tr></thead>
                             <tbody>
                                 <tr><td>{t('ui.button.try')}</td><td>Enter</td><td>A</td></tr>
@@ -263,8 +265,9 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
                                 <tr><td>{t('ui.button.back')}</td><td>Enter</td><td>A</td></tr>
                             </tbody>
                         </table>
-                        <h3>{t('ui.settings.controls_kamae')}</h3>
-                        <table className="kamae-controls-table">
+                        <h3 id="controls-kamae-heading">{t('ui.settings.controls_kamae')}</h3>
+                        <table className="kamae-controls-table" aria-labelledby="controls-kamae-heading">
+                            <caption className="sr-only">{t('ui.settings.controls_kamae')}</caption>
                             <thead><tr><th>{t('ui.settings.controls_action')}</th><th>{t('ui.settings.controls_keyboard')}</th><th>{t('ui.settings.controls_gamepad')}</th></tr></thead>
                             <tbody>
                                 <tr><td>{t('ui.katas.title')}</td><td>Enter</td><td>A</td></tr>
@@ -272,8 +275,9 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
                                 <tr><td>{t('ui.kamae.remove_from_kata')}</td><td>Enter (2.5s) / 2x Enter</td><td>A (2.5s) / 2x A</td></tr>
                             </tbody>
                         </table>
-                        <h3>{t('ui.settings.controls_general')}</h3>
-                        <table className="kamae-controls-table">
+                        <h3 id="controls-general-heading">{t('ui.settings.controls_general')}</h3>
+                        <table className="kamae-controls-table" aria-labelledby="controls-general-heading">
+                            <caption className="sr-only">{t('ui.settings.controls_general')}</caption>
                             <thead><tr><th>{t('ui.settings.controls_action')}</th><th>{t('ui.settings.controls_keyboard')}</th><th>{t('ui.settings.controls_gamepad')}</th></tr></thead>
                             <tbody>
                                 <tr><td>{t('ui.button.switch_to_kamae')}/{t('ui.button.switch_to_rin')}</td><td>Ctrl+Tab</td><td>RB / LB</td></tr>
@@ -440,6 +444,19 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
                     </p>
                 )}
             </section>}
+
+            {onNavigateLegal && (
+                <section className="kamae-settings-section" aria-labelledby="settings-a11y-title">
+                    <h2 id="settings-a11y-title" className="kamae-settings-section-title">{t('ui.legal.accessibility')}</h2>
+                    <button
+                        type="button"
+                        className="kamae-settings-btn"
+                        onClick={() => { onClose(); onNavigateLegal('accessibility'); }}
+                    >
+                        {t('ui.legal.accessibility')}
+                    </button>
+                </section>
+            )}
 
             <section className="kamae-settings-section" aria-labelledby="settings-telemetry-title">
                 <h2 id="settings-telemetry-title" className="kamae-settings-section-title">{t('ui.telemetry.title')}</h2>

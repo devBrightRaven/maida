@@ -48,6 +48,16 @@ export default function RinView({
     const [showTrace, setShowTrace] = useState(false);
     const [showSpotlight, setShowSpotlight] = useState(!hasSeenTour);
     const [legalPage, setLegalPage] = useState(null);
+    // SR guide announces once per install, not every render. Without this gate
+    // role="alert" (or even role="status") fires every time RinView re-mounts
+    // (game change, locale change, face switch), spamming NVDA users.
+    const [showSrGuide] = useState(() => localStorage.getItem('maida-hasHeardRinGuide') !== 'true');
+    useEffect(() => {
+        if (showSrGuide) {
+            const t = setTimeout(() => localStorage.setItem('maida-hasHeardRinGuide', 'true'), 2000);
+            return () => clearTimeout(t);
+        }
+    }, [showSrGuide]);
     const legalReturnRef = React.useRef(null);
     const [focusedBtn, setFocusedBtn] = useState(null); // 'visit' | 'notToday' | 'back' | 'switchKamae' | null
     const showTour = tourStep !== null && tourStep >= 0 && tourStep <= 4;
@@ -160,6 +170,11 @@ export default function RinView({
         return () => window.removeEventListener('keydown', handleKey);
     }, [showTrace, showTour, onTourStart]);
 
+    // Long-press SR milestone announcement — state must be declared BEFORE
+    // the useEffect below that references it, and BEFORE useGameInput returns
+    // longPressProgress (otherwise we hit a TDZ on the dep array evaluation).
+    const [anchorAnnounce, setAnchorAnnounce] = useState('');
+
     // Input Hook for Gamepad & Keyboard
     const { longPressProgress, handlers } = useGameInput({
         disabled: !game || showTrace || showTour, // Disable when no game, trace panel, or tour is open
@@ -243,6 +258,19 @@ export default function RinView({
         }
     });
 
+    // Long-press milestone -> SR announcement (set on threshold crossings only).
+    // Placed after useGameInput() because it reads longPressProgress.
+    useEffect(() => {
+        if (isAnchored) return;
+        if (longPressProgress === 0) { setAnchorAnnounce(''); return; }
+        if (longPressProgress >= 0.95) setAnchorAnnounce(t('ui.status.anchoring_near'));
+        else if (longPressProgress >= 0.5) setAnchorAnnounce(t('ui.status.anchoring_mid'));
+    }, [longPressProgress, isAnchored]);
+    // Announce "Anchored" when isAnchored flips true
+    useEffect(() => {
+        if (isAnchored) setAnchorAnnounce(t('ui.status.anchored_announce'));
+    }, [isAnchored]);
+
     if (!prescription) return null;
 
     if (legalPage) {
@@ -281,7 +309,13 @@ export default function RinView({
             className={`mvp-container ${!game ? 'is-idle' : ''} ${debugMode ? 'debug-mode' : ''} ${expanded ? 'is-expanded' : ''} ${isAnchored ? 'is-anchored' : ''}`}
             onClick={handleContainerClick}
         >
-            <p className="sr-only" role="alert">{t('ui.rin.sr_guide')}</p>
+            {showSrGuide && (
+                <p className="sr-only" role="status" aria-live="polite">{t('ui.rin.sr_guide')}</p>
+            )}
+            {/* Long-press milestone announcements — aria-live re-announces on
+                text change only, so updating state only at milestones keeps
+                NVDA from being interrupted continuously. */}
+            <p className="sr-only" role="status" aria-live="polite">{anchorAnnounce}</p>
             {!hasSeenTour && (
                 <p className="sr-only" aria-live="polite">{t('ui.tour.sr_hint')}</p>
             )}
@@ -430,21 +464,27 @@ export default function RinView({
             </button>
 
             {showSpotlight && game && !showTour && (
-                <div
-                    className="help-spotlight-overlay"
-                    onClick={(e) => {
-                        if (!e.target.closest('.help-tour-btn')) {
-                            setShowSpotlight(false);
-                            localStorage.setItem('maida-hasSeenTour', 'true');
-                        }
-                    }}
-                    aria-hidden="true"
-                >
-                    <div className="help-spotlight-hint">
-                        <span className="help-spotlight-arrow">&#x2191;</span>
-                        <span>{t('ui.tour.spotlight_hint')}</span>
+                <>
+                    {/* SR announcement — visual hint below is aria-hidden */}
+                    <p className="sr-only" role="status" aria-live="polite">
+                        {t('ui.tour.spotlight_hint')}
+                    </p>
+                    <div
+                        className="help-spotlight-overlay"
+                        onClick={(e) => {
+                            if (!e.target.closest('.help-tour-btn')) {
+                                setShowSpotlight(false);
+                                localStorage.setItem('maida-hasSeenTour', 'true');
+                            }
+                        }}
+                        aria-hidden="true"
+                    >
+                        <div className="help-spotlight-hint">
+                            <span className="help-spotlight-arrow">&#x2191;</span>
+                            <span>{t('ui.tour.spotlight_hint')}</span>
+                        </div>
                     </div>
-                </div>
+                </>
             )}
 
             {showTour && game && (() => {

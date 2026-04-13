@@ -31,7 +31,17 @@
             "frozen_wait": "按鈕將在 {seconds} 秒後啟用。",
             "frozen_ready": "按鈕已可使用。",
             "scanning": "正在偵聽",
-            "error": "錯誤"
+            "error": "錯誤",
+            "back_focused": "再按一次 Escape 或 B 關閉設定。",
+            "anchoring_mid": "長按錨定中，已過一半。",
+            "anchoring_near": "即將錨定。",
+            "anchored_announce": "已錨定。"
+        },
+        "error": {
+            "boundary": "Maida 發生錯誤。",
+            "reload": "重新載入",
+            "clear_data": "清除資料並重新載入",
+            "clear_confirm": "再按一次確認"
         },
         "game": {
             "anchored_prefix": "錨定"

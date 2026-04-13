@@ -73,7 +73,7 @@ export function useGameInput({
             }
             progressFrame.current = requestAnimationFrame(updateProgress);
         } else {
-            console.log('[Input] Long Press Complete! Triggering Anchor.');
+            if (import.meta.env.DEV) console.log('[Input] Long Press Complete! Triggering Anchor.');
             longPressTriggered.current = true;
             vibrate('strong');
             resetPress();
@@ -83,15 +83,15 @@ export function useGameInput({
 
     // Exposed handlers for UI elements (e.g. Mouse/Touch)
     const handleStartPress = () => {
-        console.log('[Input] Start Press Called', { disabled, currentRef: pressStartTime.current });
+        if (import.meta.env.DEV) console.log('[Input] Start Press Called', { disabled, currentRef: pressStartTime.current });
         if (!disabled && !pressStartTime.current) {
             pressStartTime.current = Date.now();
             lastHapticTime.current = Date.now();
             vibrate('confirm');
-            console.log('[Input] SET pressStartTime:', pressStartTime.current);
+            if (import.meta.env.DEV) console.log('[Input] SET pressStartTime:', pressStartTime.current);
             progressFrame.current = requestAnimationFrame(updateProgress);
         } else {
-            console.log('[Input] Start Press Ignored (disabled or already pressed)');
+            if (import.meta.env.DEV) console.log('[Input] Start Press Ignored (disabled or already pressed)');
         }
     };
 
@@ -99,15 +99,15 @@ export function useGameInput({
         // console.log('[Input] End Press', { disabled, pressStartTime: pressStartTime.current, longPressTriggered: longPressTriggered.current });
         if (pressStartTime.current) {
             const elapsed = Date.now() - pressStartTime.current;
-            console.log('[Input] Elapsed:', elapsed, 'TapThreshold:', tapThreshold);
+            if (import.meta.env.DEV) console.log('[Input] Elapsed:', elapsed, 'TapThreshold:', tapThreshold);
 
             // Only check if long press didn't already fire
             if (!longPressTriggered.current && !disabled) {
                 if (elapsed <= tapThreshold) {
-                    console.log('[Input] Valid Tap (< ' + tapThreshold + 'ms). Triggering Action.');
+                    if (import.meta.env.DEV) console.log('[Input] Valid Tap (< ' + tapThreshold + 'ms). Triggering Action.');
                     if (callbacksRef.current.onMainAction) callbacksRef.current.onMainAction();
                 } else {
-                    console.log('[Input] Dead Zone (' + elapsed + 'ms). Action Cancelled.');
+                    if (import.meta.env.DEV) console.log('[Input] Dead Zone (' + elapsed + 'ms). Action Cancelled.');
                 }
             }
             resetPress();
@@ -118,7 +118,7 @@ export function useGameInput({
     const handleCancelPress = () => {
         // Only cancel if a press is actually in progress
         if (pressStartTime.current || progressFrame.current) {
-            console.log('[Input] Cancel Press');
+            if (import.meta.env.DEV) console.log('[Input] Cancel Press');
             resetPress();
         }
         // If no press, do nothing (not even log)
@@ -130,7 +130,14 @@ export function useGameInput({
             if (disabled || !document.hasFocus()) return;
             const key = e.key;
 
-            // Block Space on buttons — prevent browser native click, avoid NVDA+Space conflict
+            // Block Space on buttons — intentional defense against NVDA browse-mode
+            // synthetic clicks. NVDA in browse mode translates Space into a synthetic
+            // click (detail=1, identical to mouse click); with focus on TRY this would
+            // bypass the long-press friction and launch a game unintentionally. Enter
+            // still provides full keyboard access (short press = visit, hold 3s = anchor).
+            // Combined with default-focus-on-NOT-NOW, this makes accidental activation
+            // safe (skip instead of launch). See journal 2026-03-24, commit 5c4f9152.
+            // Documented in AccessibilityPage as a known limitation.
             if (key === ' ') {
                 const active = document.activeElement;
                 if (active && active.tagName === 'BUTTON') {
@@ -191,7 +198,9 @@ export function useGameInput({
 
         const handleKeyUp = (e) => {
             const key = e.key;
-            // Block Space on buttons — browser fires click on keyup
+            // Block Space on buttons on keyup too — browser natively fires click on
+            // keyup, so intercepting only keydown is insufficient. See comment on
+            // handleKeyDown above for full rationale.
             if (key === ' ') {
                 const active = document.activeElement;
                 if (active && active.tagName === 'BUTTON') {

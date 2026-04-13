@@ -23,6 +23,15 @@ import './KamaeView.css';
  * Kata selector + game list + search + explore entry.
  */
 export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleChange, tourStep, tourTotal, onTourStart, onTourReplay, onTourClose, onTourAdvance, onTourPrev, settingsRequested, onSettingsOpened }) {
+    // SR guide announces once per install, gated by localStorage to avoid
+    // re-announcement on every re-render / face switch. See RinView for same pattern.
+    const [showSrGuide] = useState(() => localStorage.getItem('maida-hasHeardKamaeGuide') !== 'true');
+    useEffect(() => {
+        if (showSrGuide) {
+            const t = setTimeout(() => localStorage.setItem('maida-hasHeardKamaeGuide', 'true'), 2000);
+            return () => clearTimeout(t);
+        }
+    }, [showSrGuide]);
     const [showcaseState, setShowcaseState] = useState({ games: [] });
     const [allInstalledGames, setAllInstalledGames] = useState([]);
     const [gameMap, setGameMap] = useState(new Map());
@@ -32,6 +41,8 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
     const [expandedKataId, setExpandedKataId] = useState(null);
     const [legalPage, setLegalPage] = useState(null);
     const legalReturnRef = useRef(null);
+    // SR hint when Escape/B first moves focus to back button (vs closing)
+    const [backEscapeHint, setBackEscapeHint] = useState('');
 
     // Load showcase + all installed games on mount
     useEffect(() => {
@@ -170,8 +181,12 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
             const backBtn = containerRef.current?.querySelector('.kamae-settings-back-btn');
             if (backBtn && document.activeElement !== backBtn) {
                 backBtn.focus();
+                setBackEscapeHint(t('ui.status.back_focused'));
+                // Clear hint after a moment so repeated Escape doesn't re-announce stale text
+                setTimeout(() => setBackEscapeHint(''), 2500);
                 return;
             }
+            setBackEscapeHint('');
             setShowSettings(false);
         } else if (exploring) {
             setExploring(false);
@@ -223,8 +238,16 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
     if (showSettings) {
         return (
             <main className="kamae-view" ref={containerRef}>
+                <p className="sr-only" role="status" aria-live="polite">{backEscapeHint}</p>
                 <div className="kamae-content">
-                    <SettingsPanel onClose={() => setShowSettings(false)} theme={theme} toggleTheme={toggleTheme} onLocaleChange={onLocaleChange} onTourStart={onTourReplay} />
+                    <SettingsPanel
+                        onClose={() => setShowSettings(false)}
+                        theme={theme}
+                        toggleTheme={toggleTheme}
+                        onLocaleChange={onLocaleChange}
+                        onTourStart={onTourReplay}
+                        onNavigateLegal={(page) => { legalReturnRef.current = document.activeElement; setLegalPage(page); }}
+                    />
                 </div>
             </main>
         );
@@ -261,7 +284,9 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
 
     return (
         <main className="kamae-view" ref={containerRef}>
-            <p className="sr-only" role="alert">{t('ui.kamae.sr_guide')}</p>
+            {showSrGuide && (
+                <p className="sr-only" role="status" aria-live="polite">{t('ui.kamae.sr_guide')}</p>
+            )}
             <CalligraphyBg char="構" className="kamae-calligraphy-bg" />
             <div className="kamae-title-block" aria-hidden="true">
                 <p className="kamae-title-reading">{t('ui.kamae.reading')}</p>

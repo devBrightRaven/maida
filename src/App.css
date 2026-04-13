@@ -56,29 +56,35 @@
 }
 
 .restart-selection-btn:hover {
-    background: transparent;
-    color: var(--t-text);
-    border-color: var(--t-border);
+    background: var(--t-hover-bg);
+    color: var(--t-hover-text);
+    border-color: var(--t-hover-bg);
     opacity: 1;
-    box-shadow: 0 0 20px var(--t-border-subtle);
 }
 
 .restart-selection-btn:focus-visible {
     outline: none;
     opacity: 1;
-    border-color: var(--t-border);
+    border-color: var(--t-focus-border);
     color: var(--t-text);
-    box-shadow: 0 0 0 2px var(--t-bg), 0 0 0 4px var(--t-border);
-    /* Double ring for high visibility on dark bg */
+    box-shadow: 0 0 0 2px var(--t-bg), 0 0 0 4px var(--t-focus-border);
+    /* Double amber ring — app-wide focus convention */
+}
+
+.restart-selection-btn:focus-visible:hover {
+    background: var(--t-hover-bg);
+    color: var(--t-hover-text);
+    border-color: var(--t-hover-bg);
+    /* Hover inversion stacked with amber ring from focus-visible above */
 }
 
 .restart-selection-btn:active {
     transform: translate(-50%, -50%) scale(0.98);
 }
 
-/* Focus & Accessibility (Gamepad/Keyboard) */
+/* Focus & Accessibility (Gamepad/Keyboard) — amber accent per app-wide convention */
 .mvp-btn:focus-visible {
-    outline: 3px solid var(--t-border);
+    outline: 3px solid var(--t-focus-border);
     outline-offset: 4px;
     box-shadow: 0 0 20px var(--t-text-soft);
     z-index: 10;
@@ -207,13 +213,14 @@
 }
 
 .theme-toggle:hover {
-    color: var(--t-text);
-    border-color: var(--t-text);
+    color: var(--t-hover-text);
+    background: var(--t-hover-bg);
+    border-color: var(--t-hover-bg);
 }
 
 .theme-toggle:focus-visible {
     outline: none;
-    box-shadow: 0 0 0 2px var(--t-bg), 0 0 0 4px var(--t-border);
+    box-shadow: 0 0 0 2px var(--t-bg), 0 0 0 4px var(--t-focus-border);
 }
 
 .theme-toggle::after {

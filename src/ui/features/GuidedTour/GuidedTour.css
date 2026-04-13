@@ -159,13 +159,14 @@
 }
 
 .help-tour-btn:hover {
-    color: var(--t-text);
-    border-color: var(--t-text);
+    color: var(--t-hover-text);
+    background: var(--t-hover-bg);
+    border-color: var(--t-hover-bg);
 }
 
 .help-tour-btn:focus-visible {
     outline: none;
-    box-shadow: 0 0 0 2px var(--t-bg), 0 0 0 4px var(--t-border);
+    box-shadow: 0 0 0 2px var(--t-bg), 0 0 0 4px var(--t-focus-border);
 }
 
 .help-tour-btn::after {

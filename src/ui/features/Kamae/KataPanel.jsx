@@ -85,8 +85,16 @@ export default function KataPanel({
         setEditingId(null);
     }, [editingId, editName, katas, activeKataId, onUpdate]);
 
+    // SR announcement for delete-confirm state — aria-label on the button alone
+    // does not re-announce when state changes while focus stays on the button.
+    const confirmingKata = confirmDeleteId ? katas.find(c => c.id === confirmDeleteId) : null;
+    const confirmAnnouncement = confirmingKata
+        ? t('ui.katas.confirm_delete_aria', { name: confirmingKata.name })
+        : '';
+
     return (
         <section className="kata-panel">
+            <p className="sr-only" role="status" aria-live="assertive">{confirmAnnouncement}</p>
             <header className="kata-panel-header">
                 <div>
                     <h2 className="kata-panel-title">{t('ui.katas.title')}</h2>

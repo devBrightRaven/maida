@@ -31,7 +31,17 @@
             "frozen_wait": "Button will be available in {seconds} seconds.",
             "frozen_ready": "Button is now available.",
             "scanning": "Listening",
-            "error": "Error"
+            "error": "Error",
+            "back_focused": "Press Escape or B again to close Settings.",
+            "anchoring_mid": "Holding to anchor, halfway.",
+            "anchoring_near": "Almost anchored.",
+            "anchored_announce": "Anchored."
+        },
+        "error": {
+            "boundary": "Maida encountered an error.",
+            "reload": "Reload",
+            "clear_data": "Clear Data & Reload",
+            "clear_confirm": "Press again to confirm"
         },
         "game": {
             "anchored_prefix": "Anchored"

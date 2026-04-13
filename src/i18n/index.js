@@ -42,9 +42,11 @@ export function detectLocale() {
 
 let currentLocale = detectLocale();
 
-// Sync HTML lang attribute with detected locale for screen readers
+// Sync HTML lang attribute with detected locale for screen readers.
+// Keep full BCP-47 locale (zh-TW / zh-CN) so NVDA distinguishes traditional
+// vs simplified Chinese pronunciation. 'zh' alone triggers simplified mode.
 if (typeof document !== 'undefined') {
-    document.documentElement.lang = currentLocale.split('-')[0];
+    document.documentElement.lang = currentLocale;
 }
 
 /**
@@ -92,7 +94,7 @@ export function setLocale(locale) {
         currentLocale = locale;
         try { localStorage.setItem(LOCALE_STORAGE_KEY, locale); } catch {}
         if (typeof document !== 'undefined') {
-            document.documentElement.lang = locale.split('-')[0];
+            document.documentElement.lang = locale;
         }
     } else {
         console.warn(`[i18n] Locale not found: ${locale}`);

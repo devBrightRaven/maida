@@ -47,10 +47,11 @@
     color: var(--t-text-soft);
 }
 
+/* BASE: solid text + visible subtle border so affordance is clear */
 .onboarding-link {
-    background: none;
-    border: 1px solid transparent;
-    color: var(--t-text-faint);
+    background: transparent;
+    border: 1px solid var(--t-text-soft);
+    color: var(--t-text);
     font-size: 1rem;
     cursor: pointer;
     text-decoration: underline;
@@ -59,20 +60,32 @@
     transition: all 0.2s ease;
 }
 
+/* HOVER: white inversion — matches app convention (kamae-settings-btn etc) */
 .onboarding-link:hover {
-    color: var(--t-text-soft);
-    border-color: var(--t-border-subtle);
+    color: var(--t-hover-text);
+    background: var(--t-hover-bg);
+    border-color: var(--t-hover-bg);
 }
 
-/* Focus state - works with ALL focus methods (tab, d-pad, programmatic) */
+/* FOCUS: amber/gold accent outline — app-wide via --t-focus-border token
+ * (which is aliased to --t-accent in index.css). Per WCAG 1.4.11,
+ * high-contrast unambiguous ring for low-vision + SR combo users. */
 .onboarding-link:focus,
 .onboarding-link.is-focused {
-    outline: none;
+    outline: 3px solid var(--t-focus-border);
+    outline-offset: 4px;
     color: var(--t-text);
+    background: transparent;
+    border-color: var(--t-text-soft);
     text-decoration: none;
-    border: 1px solid var(--t-text-soft);
-    background: var(--t-border-subtle);
-    box-shadow: 0 0 16px var(--t-border-subtle);
+}
+
+/* FOCUS + HOVER stacked: amber outline + white inversion */
+.onboarding-link:focus:hover,
+.onboarding-link.is-focused:hover {
+    color: var(--t-hover-text);
+    background: var(--t-hover-bg);
+    border-color: var(--t-hover-bg);
 }
 
 

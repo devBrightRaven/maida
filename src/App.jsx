@@ -443,7 +443,10 @@ function App() {
                 tourStep={tourStep} tourTotal={TOUR_TOTAL} onTourStart={startTour} onTourClose={closeTour} onTourAdvance={advanceTour} onTourPrev={prevTour} hasSeenTour={hasSeenTour}
             />
             {themeToggle}
-            <div className="global-version-tag" role="contentinfo">
+            {/* No landmark role here — the <footer> inside RinView/KamaeView
+                already carries role=contentinfo. Two contentinfo landmarks
+                would confuse SR landmark navigation. */}
+            <div className="global-version-tag">
                 <span className="version-name">Maida マイダ</span>
                 <span className="version-number">
                     v{__APP_VERSION__}

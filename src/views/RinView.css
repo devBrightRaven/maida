@@ -210,7 +210,7 @@
     outline: none;
     background: var(--t-hover-bg);
     color: var(--t-hover-text);
-    box-shadow: 0 0 0 4px var(--t-bg), 0 0 0 8px var(--t-border), 0 0 30px var(--t-text-soft);
+    box-shadow: 0 0 0 4px var(--t-bg), 0 0 0 8px var(--t-focus-border), 0 0 30px var(--t-text-soft);
 }
 
 .mvp-btn.visit:hover .visit-btn-subtitle,
@@ -249,9 +249,9 @@
 .mvp-btn.not-today:focus,
 .mvp-btn.not-today.is-focused {
     background: transparent;
-    color: var(--t-border);
+    color: var(--t-focus-border);
     outline: none;
-    box-shadow: inset 0 0 0 4px var(--t-border), 0 0 30px var(--t-text-ghost);
+    box-shadow: inset 0 0 0 4px var(--t-focus-border), 0 0 30px var(--t-text-ghost);
     text-decoration: line-through;
     border-color: transparent;
 }
@@ -298,10 +298,10 @@
 .back-link:focus,
 .back-link.is-focused {
     outline: none;
-    color: var(--t-border);
-    border-color: var(--t-border);
-    box-shadow: 0 0 0 4px var(--t-bg), 0 0 0 6px var(--t-border);
-    /* Distinct focus ring */
+    color: var(--t-focus-border);
+    border-color: var(--t-focus-border);
+    box-shadow: 0 0 0 4px var(--t-bg), 0 0 0 6px var(--t-focus-border);
+    /* Amber focus ring — app-wide convention */
     background: transparent;
 }
 

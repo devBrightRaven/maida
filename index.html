@@ -17,7 +17,9 @@
         var base = lang.split('-')[0];
         var match = supported.find(function(l) { return l === lang; }) ||
                     supported.find(function(l) { return l.split('-')[0] === base; }) || 'en';
-        document.documentElement.lang = match.split('-')[0];
+        // Keep full locale (zh-TW / zh-CN) so SR distinguishes traditional vs simplified.
+        // NVDA with 'zh' alone defaults to Simplified Chinese voice mode.
+        document.documentElement.lang = match;
       } catch (e) {
         document.documentElement.setAttribute('data-theme', 'dark');
       }

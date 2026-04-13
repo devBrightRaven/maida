@@ -19,7 +19,9 @@
     --t-accent-border: rgba(255, 170, 0, 0.3);
     --t-accent-glow: rgba(255, 170, 0, 0.5);
     --t-focus-soft: rgba(255, 255, 255, 0.15);
-    --t-focus-border: #ffffff;
+    /* --t-focus-border tracks --t-accent so focus rings are app-wide orange.
+     * Single source of truth — change --t-accent to recolor all focus. */
+    --t-focus-border: var(--t-accent);
     --t-hover-glow: rgba(255, 255, 255, 0.15);
     --t-debug-text: #ffd480;
 }
@@ -44,7 +46,7 @@
     --t-accent-border: rgba(150, 101, 45, 0.3);
     --t-accent-glow: rgba(150, 101, 45, 0.5);
     --t-focus-soft: rgba(44, 44, 44, 0.12);
-    --t-focus-border: #2c2c2c;
+    --t-focus-border: var(--t-accent);
     --t-hover-glow: rgba(44, 44, 44, 0.12);
     --t-debug-text: #96652d;
 }

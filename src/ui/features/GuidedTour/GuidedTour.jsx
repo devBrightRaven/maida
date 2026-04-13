@@ -14,12 +14,16 @@ import './GuidedTour.css';
  * - D-pad focuses buttons so A confirms the focused action
  */
 
-// Wrap keyboard shortcuts and quoted button names in <kbd> tags
+// Wrap keyboard shortcuts and quoted button names in <kbd> tags.
+// Quote patterns cover: zh-TW/ja corner brackets 「」, EN double quotes "…",
+// EN single quotes '…'. Keyboard shortcuts are the same across locales.
 function formatHotkeys(text) {
     if (!text) return null;
-    const parts = text.split(/(Ctrl\+Tab|LB|RB|F1|F2|「[^」]+」)/g);
+    const pattern = /(Ctrl\+Tab|LB|RB|F1|F2|F10|「[^」]+」|"[^"]+"|'[^']+')/g;
+    const parts = text.split(pattern);
+    const singleMatch = /^(Ctrl\+Tab|LB|RB|F1|F2|F10|「[^」]+」|"[^"]+"|'[^']+')$/;
     return parts.map((part, i) =>
-        /^(Ctrl\+Tab|LB|RB|F1|F2|「[^」]+」)$/.test(part)
+        singleMatch.test(part)
             ? <kbd key={i} className="guided-tour-kbd">{part}</kbd>
             : part
     );
@@ -188,14 +192,50 @@ export default function GuidedTour({ steps, localIndex, globalIndex, totalSteps,
         disabled: false,
     });
 
-    // Escape key
+    // Escape key + interactive-step Tab trap. For non-interactive steps, Tab
+    // is trapped inside the dialog via handleTabTrap below. For interactive
+    // steps, the target element is focused OUTSIDE the dialog DOM, so we need
+    // a window-level Tab interceptor to keep focus on the target (otherwise
+    // Tab escapes to underlying UI that's visually hidden by the spotlight).
     useEffect(() => {
         const handleKey = (e) => {
             if (e.key === 'Escape') { e.preventDefault(); onClose(); }
+            if (e.key === 'Tab' && step?.interactive && step?.targetRef?.current) {
+                // Only trap if focus is currently on the target; otherwise let
+                // dialog's own handleTabTrap deal with it.
+                if (document.activeElement === step.targetRef.current) {
+                    e.preventDefault();
+                    step.targetRef.current.focus();
+                }
+            }
         };
         window.addEventListener('keydown', handleKey);
         return () => window.removeEventListener('keydown', handleKey);
-    }, [onClose]);
+    }, [onClose, step]);
+
+    // Tab trap — keeps focus inside the dialog per ARIA dialog pattern.
+    // For interactive steps the target element owns focus (user is about to
+    // operate it), so Tab stays pinned there until they advance.
+    const handleTabTrap = useCallback((e) => {
+        if (e.key !== 'Tab') return;
+        if (step?.interactive && step?.targetRef?.current) {
+            e.preventDefault();
+            step.targetRef.current.focus();
+            return;
+        }
+        const order = getButtonOrder();
+        if (order.length === 0) return;
+        const idx = order.indexOf(focusedBtnRef.current);
+        if (idx === -1) {
+            e.preventDefault();
+            focusButton(order[0]);
+            return;
+        }
+        e.preventDefault();
+        const delta = e.shiftKey ? -1 : 1;
+        const next = order[(idx + delta + order.length) % order.length];
+        focusButton(next);
+    }, [step, getButtonOrder, focusButton]);
 
     return (
         <div className="guided-tour-overlay" ref={highlightRef}>
@@ -203,10 +243,12 @@ export default function GuidedTour({ steps, localIndex, globalIndex, totalSteps,
                 className="guided-tour-tooltip"
                 style={{ position: 'fixed', maxWidth: '360px' }}
                 role="dialog"
+                aria-modal="true"
                 aria-label={t('ui.tour.aria_label')}
-                aria-live="polite"
+                aria-describedby="guided-tour-step-text"
+                onKeyDown={handleTabTrap}
             >
-                <p className="guided-tour-text">{formatHotkeys(step?.text)}</p>
+                <p id="guided-tour-step-text" className="guided-tour-text">{formatHotkeys(step?.text)}</p>
                 <div className="guided-tour-actions">
                     <span className="guided-tour-counter">
                         {globalIndex + 1} / {totalSteps}
