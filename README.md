@@ -71,8 +71,8 @@ Not accepting contributions at this time.
 
 ## Support
 
-If Maida helps you, consider buying me a coffee:
+If Maida is useful to you:
 
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/W7W21WT2FT)
+[![Sponsor](https://img.shields.io/github/sponsors/devBrightRaven?label=Sponsor&logo=github&style=flat-square&color=black)](https://github.com/sponsors/devBrightRaven)
 
 Contact: bertram@brightraven.world
