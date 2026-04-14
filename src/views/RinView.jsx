@@ -207,8 +207,9 @@ export default function RinView({
             const isTraceBtn = current?.classList?.contains('debug-trace-btn');
             const isSwitchKamae = current === btnRefs.switchKamae.current;
             const isHelpBtn = current === helpBtnRef.current;
+            const isThemeToggle = current?.classList?.contains('theme-toggle');
             const isFooterBtn = current?.closest('.app-footer');
-            const isKnownButton = isVisit || isNotToday || isBack || isTraceBtn || isSwitchKamae || isHelpBtn || isFooterBtn;
+            const isKnownButton = isVisit || isNotToday || isBack || isTraceBtn || isSwitchKamae || isHelpBtn || isThemeToggle || isFooterBtn;
 
             // Fallback: If focus is lost, on body, or on unknown element, grab NOT NOW
             if (!current || current === document.body || !isKnownButton) {
@@ -216,12 +217,22 @@ export default function RinView({
                 return;
             }
 
+            // themeToggle is rendered inside main but referenced here by class
+            // (no ref pass-through). Query when needed.
+            const themeToggleEl = document.querySelector('.theme-toggle');
+
             // Up / Left = Previous (backwards)
             if (dir === 'left' || dir === 'up') {
-                if (isNotToday) focusBtn('visit');
+                if (isVisit) {
+                    // visit up → loop to last footer button (full backwards cycle)
+                    const footerBtns = Array.from(document.querySelectorAll('.app-footer button'));
+                    if (footerBtns.length > 0) footerBtns[footerBtns.length - 1].focus();
+                }
+                else if (isNotToday) focusBtn('visit');
                 else if (isBack) focusBtn('notToday');
                 else if (isTraceBtn) focusBtn('visit');
                 else if (isHelpBtn) focusBtn('switchKamae');
+                else if (isThemeToggle) helpBtnRef.current?.focus();
                 else if (isSwitchKamae) canUndo ? focusBtn('back') : focusBtn('notToday');
                 else {
                     // Navigate within footer buttons or back to main
@@ -230,7 +241,8 @@ export default function RinView({
                     if (idx > 0) {
                         footerBtns[idx - 1].focus();
                     } else if (idx === 0) {
-                        helpBtnRef.current?.focus();
+                        // First footer button up → theme toggle (then ?)
+                        themeToggleEl?.focus();
                     }
                 }
             }
@@ -243,6 +255,9 @@ export default function RinView({
                 else if (isSwitchKamae) {
                     helpBtnRef.current?.focus();
                 } else if (isHelpBtn) {
+                    // ? down → theme toggle (then footer)
+                    themeToggleEl?.focus();
+                } else if (isThemeToggle) {
                     const footer = document.querySelector('.app-footer button');
                     if (footer) footer.focus();
                 } else {
@@ -252,7 +267,8 @@ export default function RinView({
                     if (idx >= 0 && idx < footerBtns.length - 1) {
                         footerBtns[idx + 1].focus();
                     } else if (idx === footerBtns.length - 1) {
-                        focusBtn('notToday');
+                        // Last footer down → loop to TRY (full forward cycle)
+                        focusBtn('visit');
                     }
                 }
             }

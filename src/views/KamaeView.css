@@ -948,6 +948,7 @@
     padding: 0.5rem 1.5rem;
     font-size: 1rem;
     font-family: inherit;
+    font-weight: 700;
     letter-spacing: 0.04em;
     color: var(--t-dim);
     background: transparent;
@@ -972,9 +973,20 @@
 
 .kamae-settings-shortcut {
     font-size: 0.6875rem;
+    font-weight: 600;
     color: var(--t-text-faint);
     margin-left: 0.5rem;
 }
+
+/* When parent inverts on hover/focus, shortcut must follow or it becomes
+ * invisible against the new background. Keep secondary-feel via opacity. */
+.kamae-settings-link:hover .kamae-settings-shortcut,
+.kamae-settings-link:focus .kamae-settings-shortcut,
+.kamae-settings-link:focus-visible .kamae-settings-shortcut {
+    color: var(--t-hover-text);
+    opacity: 0.7;
+}
+
 
 /* ── Settings Panel ───────────────────── */
 
@@ -982,6 +994,21 @@
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    /* Counter for visual section numbering. CSS counter auto-skips
+     * conditional sections that don't render. JS mirrors the count to
+     * aria-setsize/aria-posinset for SR (see SettingsPanel.jsx useEffect). */
+    counter-reset: settings-section;
+}
+
+.kamae-settings > .kamae-settings-section {
+    counter-increment: settings-section;
+}
+
+.kamae-settings-section-title::before {
+    content: counter(settings-section) ". ";
+    color: var(--t-text-faint);
+    font-weight: 600;
+    margin-right: 0.25em;
 }
 
 .kamae-settings-header {
