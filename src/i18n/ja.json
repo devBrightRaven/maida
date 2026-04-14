@@ -47,7 +47,7 @@
             "anchored_prefix": "アンカー"
         },
         "tour": {
-            "help_aria": "Maidaの使い方を見る",
+            "help_aria": "Maidaの使い方を見る(F1)",
             "help_tooltip": "ヘルプ (F1)",
             "aria_label": "ガイドツアー",
             "sr_hint": "F1キーを押すと操作方法を確認できます。",
@@ -100,9 +100,10 @@
             "put_back": "戻す",
             "remove_from_kata": "外す",
             "remove_aria": "{title} を外す",
+            "remove_help": "Enter を 2 回押して確定、Escape でキャンセル。",
             "remove_confirm": "確認？",
-            "remove_confirm_aria": "もう一度押すと削除を確認。",
-            "remove_progress_aria": "削除中。もう一度押すとキャンセル。",
+            "remove_confirm_aria": "もう一度押すと削除を確定、Escape でキャンセル。",
+            "remove_progress_aria": "長押しで削除、離すとキャンセル。",
             "explore_more": "もっと見る",
             "sr_guide": "表示するゲームを整理。Ctrl+Tab で臨モードに切り替えてゲームを選ぶ。"
         },

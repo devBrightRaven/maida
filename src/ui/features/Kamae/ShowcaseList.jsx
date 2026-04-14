@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback, useEffect, useId } from 'react';
 import { t } from '../../../i18n';
 import { MAX_KATA_GAMES } from '../../../core/katas';
 import { vibrate, vibrateProgress } from '../../../services/haptics';
@@ -49,6 +49,7 @@ function easedProgress(elapsed) {
 const TOTAL_HOLD = 2500; // 1.5s + 1s
 
 function HoldButton({ onConfirm, label, ariaLabel }) {
+    const helpId = useId();
     const [progress, setProgress] = useState(0);
     const [confirming, setConfirming] = useState(false);
     const confirmStartRef = useRef(0);
@@ -163,16 +164,19 @@ function HoldButton({ onConfirm, label, ariaLabel }) {
         return () => reset();
     }, [reset]);
 
-    const isRunning = progress > 0;
-
     // Single live region announcement — previously three channels (aria-label
     // dynamic + two sr-only regions) caused redundant NVDA announcements.
     // aria-label stays static (ariaLabel); state transitions narrated via this.
+    //
+    // Only announce the confirming state. Keyboard Enter is too fast for
+    // a real hold (keydown→keyup typically <150ms), so the short-tap path
+    // moves directly into confirming; the progress announcement would only
+    // flash for a frame. Mouse/touch hold users are unlikely to be running
+    // a screen reader, and even if they are, they initiated the hold so
+    // narration adds nothing.
     const stateAnnouncement = confirming
         ? t('ui.kamae.remove_confirm_aria')
-        : isRunning
-            ? t('ui.kamae.remove_progress_aria')
-            : '';
+        : '';
 
     return (
         <button
@@ -197,6 +201,7 @@ function HoldButton({ onConfirm, label, ariaLabel }) {
                 }
             }}
             aria-label={ariaLabel}
+            aria-describedby={helpId}
             onKeyDown={(e) => {
                 if (e.key === 'Escape' && confirming) {
                     e.stopPropagation();
@@ -208,6 +213,7 @@ function HoldButton({ onConfirm, label, ariaLabel }) {
             <span className="showcase-hold-label">
                 {confirming ? t('ui.kamae.remove_confirm') : label}
             </span>
+            <span id={helpId} className="sr-only">{t('ui.kamae.remove_help')}</span>
             <span className="sr-only" role="status" aria-live="polite">
                 {stateAnnouncement}
             </span>

@@ -47,7 +47,7 @@
             "anchored_prefix": "Anchored"
         },
         "tour": {
-            "help_aria": "Learn how Maida works",
+            "help_aria": "Learn how Maida works (press F1)",
             "help_tooltip": "Help (F1)",
             "aria_label": "Guided tour",
             "sr_hint": "Press F1 for help to learn the controls.",
@@ -100,9 +100,10 @@
             "put_back": "put back",
             "remove_from_kata": "Remove",
             "remove_aria": "Remove {title}",
+            "remove_help": "Press Enter twice to confirm. Press Escape to cancel.",
             "remove_confirm": "Confirm?",
-            "remove_confirm_aria": "Press again to confirm removal.",
-            "remove_progress_aria": "Removing. Press again to cancel.",
+            "remove_confirm_aria": "Press again to confirm removal. Press Escape to cancel.",
+            "remove_progress_aria": "Hold to remove. Release to cancel.",
             "explore_more": "explore more",
             "sr_guide": "Organize which games appear. Ctrl+Tab to switch to Rin mode and pick a game to play."
         },

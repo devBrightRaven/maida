@@ -47,7 +47,7 @@
             "anchored_prefix": "锚定"
         },
         "tour": {
-            "help_aria": "了解 Maida 的使用方式",
+            "help_aria": "了解 Maida 的使用方式,按 F1 开启",
             "help_tooltip": "帮助 (F1)",
             "aria_label": "操作导览",
             "sr_hint": "按 F1 键可以了解操作方式。",
@@ -100,9 +100,10 @@
             "put_back": "收回去",
             "remove_from_kata": "移除",
             "remove_aria": "移除 {title}",
+            "remove_help": "按 Enter 两次确认,按 Escape 取消。",
             "remove_confirm": "确定？",
-            "remove_confirm_aria": "再按一次确认移除。",
-            "remove_progress_aria": "正在移除，再按一次取消。",
+            "remove_confirm_aria": "再按一次确认移除,按 Escape 取消。",
+            "remove_progress_aria": "按住以移除,松开取消。",
             "explore_more": "探索",
             "sr_guide": "整理你想让哪些游戏出现。Ctrl+Tab 切换到临模式，选择游戏游玩。"
         },

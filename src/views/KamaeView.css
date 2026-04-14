@@ -1005,7 +1005,11 @@
 }
 
 .kamae-settings-section-title::before {
-    content: counter(settings-section) ". ";
+    /* Alternative text "" suppresses the counter from the accessible
+     * name so SR doesn't read "5. About" when aria-setsize/posinset
+     * already announces the position. Chromium 120+ supports the
+     * `content: <generated> / <alt>` syntax. */
+    content: counter(settings-section) ". " / "";
     color: var(--t-text-faint);
     font-weight: 600;
     margin-right: 0.25em;
