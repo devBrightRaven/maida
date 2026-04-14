@@ -52,6 +52,8 @@ function HoldButton({ onConfirm, label, ariaLabel }) {
     const helpId = useId();
     const [progress, setProgress] = useState(0);
     const [confirming, setConfirming] = useState(false);
+    const [tooFast, setTooFast] = useState(false);
+    const [announceConfirm, setAnnounceConfirm] = useState(false);
     const confirmStartRef = useRef(0);
     const startRef = useRef(null);
     const frameRef = useRef(null);
@@ -120,6 +122,21 @@ function HoldButton({ onConfirm, label, ariaLabel }) {
         reset();
     }, [reset]);
 
+    // Second press in confirming state: accept if beyond the bounce
+    // window, otherwise announce too-fast so SR users know the press
+    // registered but was rejected. The 150ms window filters NVDA
+    // browse-mode synthetic click bursts (which can re-fire faster
+    // than a human can intentionally double-press).
+    const handleConfirmPress = useCallback(() => {
+        if (!confirming) return;
+        if (Date.now() - confirmStartRef.current > 150) {
+            onConfirm();
+            reset();
+        } else {
+            setTooFast(true);
+        }
+    }, [confirming, onConfirm, reset]);
+
     // Keyboard hold: Enter down = start, up = end (focus mode / non-NVDA)
     const btnRef = useRef(null);
     useEffect(() => {
@@ -130,10 +147,9 @@ function HoldButton({ onConfirm, label, ariaLabel }) {
                 e.preventDefault();
                 e.stopImmediatePropagation();
                 if (!e.repeat) {
-                    if (confirming && Date.now() - confirmStartRef.current > 500) {
-                        onConfirm();
-                        reset();
-                    } else if (!confirming) {
+                    if (confirming) {
+                        handleConfirmPress();
+                    } else {
                         handleStart();
                     }
                 }
@@ -160,6 +176,25 @@ function HoldButton({ onConfirm, label, ariaLabel }) {
         return () => clearTimeout(timer);
     }, [confirming]);
 
+    // Clear too-fast warning after 2 seconds so SR doesn't keep repeating
+    useEffect(() => {
+        if (!tooFast) return;
+        const timer = setTimeout(() => setTooFast(false), 2000);
+        return () => clearTimeout(timer);
+    }, [tooFast]);
+
+    // Mirror confirming into announceConfirm so confirm_aria fires once.
+    // Once tooFast fires, suppress future confirm_aria for this session
+    // so SR users don't hear the progress prompt again after the
+    // too-fast announcement clears (that would sound like a second
+    // state transition and mislead).
+    useEffect(() => {
+        setAnnounceConfirm(confirming);
+    }, [confirming]);
+    useEffect(() => {
+        if (tooFast) setAnnounceConfirm(false);
+    }, [tooFast]);
+
     useEffect(() => {
         return () => reset();
     }, [reset]);
@@ -174,9 +209,11 @@ function HoldButton({ onConfirm, label, ariaLabel }) {
     // flash for a frame. Mouse/touch hold users are unlikely to be running
     // a screen reader, and even if they are, they initiated the hold so
     // narration adds nothing.
-    const stateAnnouncement = confirming
-        ? t('ui.kamae.remove_confirm_aria')
-        : '';
+    const stateAnnouncement = tooFast
+        ? t('ui.kamae.remove_too_fast')
+        : announceConfirm
+            ? t('ui.kamae.remove_confirm_aria')
+            : '';
 
     return (
         <button
@@ -184,10 +221,9 @@ function HoldButton({ onConfirm, label, ariaLabel }) {
             type="button"
             className={`showcase-hold-btn ${confirming ? 'showcase-hold-btn--confirm' : ''}`}
             onPointerDown={() => {
-                if (confirming && Date.now() - confirmStartRef.current > 500) {
-                    onConfirm();
-                    reset();
-                } else if (!confirming) {
+                if (confirming) {
+                    handleConfirmPress();
+                } else {
                     handleStart();
                 }
             }}
@@ -195,9 +231,8 @@ function HoldButton({ onConfirm, label, ariaLabel }) {
             onPointerLeave={() => { if (!confirming) handleEnd(); }}
             onClick={(e) => {
                 e.stopPropagation();
-                if (confirming && Date.now() - confirmStartRef.current > 500) {
-                    onConfirm();
-                    reset();
+                if (confirming) {
+                    handleConfirmPress();
                 }
             }}
             aria-label={ariaLabel}

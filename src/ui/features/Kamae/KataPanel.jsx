@@ -150,7 +150,13 @@ export default function KataPanel({
                         tabIndex={0}
                         role="group"
                         aria-label={ch.name}
-                        onKeyDown={(e) => { if (e.key === 'F2') { e.preventDefault(); handleStartRename(ch); } }}
+                        onKeyDown={(e) => {
+                            if (e.key === 'F2') { e.preventDefault(); handleStartRename(ch); return; }
+                            if (e.key === 'Enter' && !e.target.closest('button, input')) {
+                                e.preventDefault();
+                                if (ch.gameIds.length > 0) handleSetActive(ch.id);
+                            }
+                        }}
                         onClick={(e) => {
                             if (isEditing) return;
                             if (e.target.closest('button') || e.target.closest('input')) return;
