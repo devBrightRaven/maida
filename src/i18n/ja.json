@@ -2,9 +2,9 @@
     "ui": {
         "button": {
             "try": "やる",
-            "try_hint": "3秒長押しでアンカー",
+            "try_hint": "タップ・3秒長押しアンカー",
             "try_aria": "{game} をちょっと見てみる",
-            "try_hint_aria": "長押しでロック",
+            "try_hint_aria": "1回押して試す、3秒長押しでアンカー",
             "play": "プレイ",
             "play_aria": "{game} を続ける",
             "not_now": "パス",
@@ -13,7 +13,7 @@
             "clear_aria": "{game} のロック解除",
             "back": "元に戻す\n（一回限り）",
             "acknowledge": "了解",
-            "sync": "Steamライブラリをスキャン",
+            "sync": "ライブラリをスキャン",
             "restart_selection": "再開",
             "im_back": "再開",
             "switch_to_kamae": "構",
@@ -52,7 +52,7 @@
             "aria_label": "ガイドツアー",
             "sr_hint": "F1キーを押すと操作方法を確認できます。",
             "spotlight_hint": "ここを押すか F1 で操作ガイド",
-            "step_title": "これはSteamライブラリのゲームです。Maidaが選びました。",
+            "step_title": "ライブラリにあるゲームです。Maidaが選びました。",
             "step_prescription": "ゲームごとに短いメッセージが表示されます。深く考えず、直感で選んでください。",
             "step_try": "「やる」を押すとゲームが起動します。3秒長押しで後で遊ぶために保存できます。",
             "step_not_now": "気分じゃない？「パス」を押すと次のゲームが表示されます。",
@@ -117,6 +117,7 @@
         },
         "settings": {
             "title": "設定",
+            "about_title": "バージョン情報",
             "tour_title": "操作ガイド",
             "tour_replay": "もう一度見る",
             "language_title": "言語：{current}",
@@ -218,6 +219,7 @@
             "a11y_limitation_space_key": "誤操作を防ぐため、ボタン上のスペースキーは意図的に無効化されています。短押しは Enter キーを使用してください。Enter を 3 秒間長押しするとアンカーされます。",
             "a11y_limitation_settings_in_kamae": "設定は Kamae モードでのみ表示されます。Rin からは F10 またはゲームパッドの Menu ボタンで設定を開けます。設定には「チュートリアルを再生」オプションがあります。",
             "a11y_limitation_screen_reader_browse": "一部のスクリーンリーダー機能（NVDA のブラウズモード視覚ハイライトなど）は、Maida ではなく、ご使用のスクリーンリーダー設定で有効にする必要があります。Maida 自体のフォーカス表示はスクリーンリーダー設定に関わらず常に表示されます。",
+            "a11y_limitation_screen_reader_buffer_stuck": "NVDA のブラウズモードでは、仮想バッファと実際の表示がまれに同期しなくなり、矢印キーで文字を選択できなかったり、幽霊のような位置で止まることがあります。まず Insert+F5 でバッファを更新し、改善しない場合は NVDA を終了して再起動してください。これは NVDA 側の既知の挙動で、Maida の問題ではありません。",
             "a11y_planned_heading": "今後の予定",
             "a11y_planned_threshold": "ボタンを押し続ける時間を自分で調整できるようにします。",
             "a11y_planned_fontsize": "文字サイズを自分で調整できるようにします。",
@@ -255,7 +257,7 @@
         "onboarding": {
             "aria_label": "Maidaへようこそ",
             "permission_intro": "ゲームが多すぎて選べない？Maidaが一つずつ提案します。",
-            "permission_detail": "下のボタンを押すと、インストール済みのSteamゲームをスキャンします。ゲームは起動しません。"
+            "permission_detail": "下のボタンを押すと、インストール済みのゲームをスキャンします。ゲームは起動しません。"
         },
         "error": {
             "steam_not_found": "Steamが検出されません。後でもう一度お試しください。"

@@ -26,6 +26,7 @@ export default [
                 HTMLElement: 'readonly',
                 // Vite
                 __APP_VERSION__: 'readonly',
+                __BUILD_DATE__: 'readonly',
             },
             parserOptions: {
                 ecmaFeatures: { jsx: true },

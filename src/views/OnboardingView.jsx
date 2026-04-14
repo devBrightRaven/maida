@@ -5,7 +5,7 @@ import { createKata, addGameToKata } from '../core/katas';
 import bridge from '../services/bridge';
 import './OnboardingView.css';
 
-export default function OnboardingView({ onComplete }) {
+export default function OnboardingView({ onComplete, themeToggle }) {
     const [state, setState] = useState('idle'); // 'idle' | 'scanning' | 'error'
     const [isFocused, setIsFocused] = useState(false);
     const btnRef = useRef(null);
@@ -158,6 +158,7 @@ export default function OnboardingView({ onComplete }) {
                 </div>
             </section>
             <div className="bg-glow"></div>
+            {themeToggle}
             <div className="app-version-tag">v{__APP_VERSION__}</div>
         </main>
     );

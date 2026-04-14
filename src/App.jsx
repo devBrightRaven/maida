@@ -3,6 +3,7 @@ import RinView from './views/RinView';
 import KamaeView from './views/KamaeView';
 import OnboardingView from './views/OnboardingView';
 import FaceSwitchButton from './ui/FaceSwitchButton';
+import VersionTag from './ui/VersionTag';
 import { calculateTraceWeights, updateDebugTrace } from './core/engine';
 import { useMaidaSession } from './hooks/useMaidaSession';
 import { useUpdateCheck } from './hooks/useUpdateCheck';
@@ -393,8 +394,7 @@ function App() {
 
     if (status === 'onboarding') return (
         <React.Fragment key={localeVersion}>
-            <OnboardingView onComplete={init} />
-            {themeToggle}
+            <OnboardingView onComplete={init} themeToggle={themeToggle} />
         </React.Fragment>
     );
 
@@ -413,7 +413,9 @@ function App() {
                 <KamaeView onSwitchToRin={switchToRin} theme={theme} toggleTheme={toggleTheme} onLocaleChange={handleLocaleChange}
                     tourStep={tourStep} tourTotal={TOUR_TOTAL} onTourStart={startKamaeTour} onTourReplay={startFullTour} onTourClose={closeTour} onTourAdvance={advanceTour} onTourPrev={prevTour}
                     settingsRequested={settingsRequested} onSettingsOpened={() => setSettingsRequested(false)}
-                    themeToggle={themeToggle} />
+                    themeToggle={themeToggle}
+                    updateCheck={updateCheck} updateAlertShown={updateAlertShown} />
+                <VersionTag className="global-version-tag" updateCheck={updateCheck} updateAlertShown={updateAlertShown} />
                 {import.meta.env.DEV && import.meta.env.VITE_AGENTATION && <div aria-hidden="true"><Agentation endpoint="http://localhost:4747" /></div>}
             </div>
         );
@@ -446,30 +448,7 @@ function App() {
             {/* No landmark role here — the <footer> inside RinView/KamaeView
                 already carries role=contentinfo. Two contentinfo landmarks
                 would confuse SR landmark navigation. */}
-            <div className="global-version-tag">
-                <span className="version-name">Maida マイダ</span>
-                <span className="version-number">
-                    v{__APP_VERSION__}
-                    {updateCheck.isUpdateAvailable && ` → ${updateCheck.latestVersion}`}
-                </span>
-                {updateCheck.isUpdateAvailable && (
-                    <>
-                        {!updateAlertShown && (
-                            <p className="sr-only" role="alert">
-                                {t('ui.update.available_alert', { version: updateCheck.latestVersion })}
-                            </p>
-                        )}
-                        <button
-                            className="version-link"
-                            onClick={updateCheck.installUpdate}
-                            disabled={updateCheck.updating}
-                            aria-label={t('ui.update.button_aria', { from: __APP_VERSION__, to: updateCheck.latestVersion })}
-                        >
-                            {updateCheck.updating ? t('ui.update.updating') : t('ui.update.button')}
-                        </button>
-                    </>
-                )}
-            </div>
+            <VersionTag className="global-version-tag" updateCheck={updateCheck} updateAlertShown={updateAlertShown} />
             {import.meta.env.DEV && import.meta.env.VITE_AGENTATION && <div aria-hidden="true"><Agentation endpoint="http://localhost:4747" /></div>}
         </div>
     );

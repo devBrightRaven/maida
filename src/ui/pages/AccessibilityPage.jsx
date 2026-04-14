@@ -31,6 +31,7 @@ export default function AccessibilityPage({ onClose }) {
                 <li>{t('ui.legal.a11y_limitation_space_key')}</li>
                 <li>{t('ui.legal.a11y_limitation_settings_in_kamae')}</li>
                 <li>{t('ui.legal.a11y_limitation_screen_reader_browse')}</li>
+                <li>{t('ui.legal.a11y_limitation_screen_reader_buffer_stuck')}</li>
             </ul>
 
             <h2>{t('ui.legal.a11y_planned_heading')}</h2>

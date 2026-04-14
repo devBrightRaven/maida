@@ -2,9 +2,9 @@
     "ui": {
         "button": {
             "try": "TRY",
-            "try_hint": "hold 3 seconds to anchor",
+            "try_hint": "Tap or hold 3s to anchor",
             "try_aria": "Try {game}",
-            "try_hint_aria": "Hold to lock",
+            "try_hint_aria": "Press once to try, hold for 3 seconds to anchor",
             "play": "PLAY",
             "play_aria": "Continue {game}",
             "not_now": "Not Now",
@@ -13,7 +13,7 @@
             "clear_aria": "Unlock {game}",
             "back": "Undo\n(One Time Only)",
             "acknowledge": "Acknowledge",
-            "sync": "Scan my Steam library",
+            "sync": "Scan my game library",
             "restart_selection": "Restart Selection",
             "im_back": "I'M BACK",
             "switch_to_kamae": "構",
@@ -52,7 +52,7 @@
             "aria_label": "Guided tour",
             "sr_hint": "Press F1 for help to learn the controls.",
             "spotlight_hint": "Press here or F1 for a quick tour",
-            "step_title": "This is a game from your Steam library. Maida picked it for you.",
+            "step_title": "A game from your library. Maida picked this one for you.",
             "step_prescription": "Each game comes with a short message to help you decide. Don't overthink it.",
             "step_try": "Press 「TRY」 to launch this game. Hold for 3 seconds to save it for later.",
             "step_not_now": "Not feeling it? Press 「Not Now」 and Maida will show you another one.",
@@ -117,6 +117,7 @@
         },
         "settings": {
             "title": "Settings",
+            "about_title": "About",
             "tour_title": "Guided Tour",
             "tour_replay": "Replay",
             "language_title": "Language: {current}",
@@ -218,6 +219,7 @@
             "a11y_limitation_space_key": "The Space key on buttons is intentionally blocked to prevent accidental activation. Use Enter for short press; hold Enter for 3 seconds to anchor.",
             "a11y_limitation_settings_in_kamae": "Settings is only visible in Kamae mode. From Rin, press F10 or the gamepad Menu button to open Settings. Settings includes a Replay Tutorial option.",
             "a11y_limitation_screen_reader_browse": "Some screen reader features (like NVDA Visual Highlight in browse mode) need to be enabled in your screen reader settings, not in Maida. Maida provides its own focus indicator that works regardless of screen reader settings.",
+            "a11y_limitation_screen_reader_buffer_stuck": "Occasionally NVDA's virtual buffer in browse mode desyncs from the actual page, causing arrow keys to stop selecting text or get stuck on a phantom position. Try Insert+F5 to refresh the buffer first; if that does not recover, quit and reopen NVDA. This is a known NVDA behavior, not a Maida issue.",
             "a11y_planned_heading": "Future Plans",
             "a11y_planned_threshold": "The option to change how long you need to hold a button.",
             "a11y_planned_fontsize": "The option to make text larger.",
@@ -255,7 +257,7 @@
         "onboarding": {
             "aria_label": "Welcome to Maida",
             "permission_intro": "Too many games, can't pick one? Maida shows you one game at a time.",
-            "permission_detail": "Press the button below to scan your installed Steam games. Nothing will be launched."
+            "permission_detail": "Press the button below to scan your installed games. Nothing will be launched."
         },
         "error": {
             "steam_not_found": "Steam not detected. You can try again later."

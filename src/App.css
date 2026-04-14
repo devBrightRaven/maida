@@ -136,7 +136,7 @@
 .global-version-tag {
     position: absolute;
     bottom: 12px;
-    right: 16px;
+    right: 32px;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
@@ -187,6 +187,29 @@
 .version-link:focus-visible {
     outline: 2px solid var(--t-focus-border);
     outline-offset: 2px;
+}
+
+.settings-version {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    flex-wrap: wrap;
+    column-gap: 1rem;
+    row-gap: 0.5rem;
+    font-family: 'Outfit', sans-serif;
+}
+
+.settings-version .version-name,
+.settings-version .version-number,
+.settings-version .version-date {
+    font-size: 1rem;
+}
+
+.version-date {
+    color: var(--t-text-ghost);
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 0.625rem;
+    letter-spacing: 0.05em;
 }
 
 /* Transitions could be added here for a smoother "fade to black" */

@@ -19,9 +19,9 @@ import './GuidedTour.css';
 // EN single quotes '…'. Keyboard shortcuts are the same across locales.
 function formatHotkeys(text) {
     if (!text) return null;
-    const pattern = /(Ctrl\+Tab|LB|RB|F1|F2|F10|「[^」]+」|"[^"]+"|'[^']+')/g;
+    const pattern = /(Ctrl\+Tab|F10|F1|F2|LB|RB|「[^」]+」|"[^"]+"|'[^']+')/g;
     const parts = text.split(pattern);
-    const singleMatch = /^(Ctrl\+Tab|LB|RB|F1|F2|F10|「[^」]+」|"[^"]+"|'[^']+')$/;
+    const singleMatch = /^(Ctrl\+Tab|F10|F1|F2|LB|RB|「[^」]+」|"[^"]+"|'[^']+')$/;
     return parts.map((part, i) =>
         singleMatch.test(part)
             ? <kbd key={i} className="guided-tour-kbd">{part}</kbd>

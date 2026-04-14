@@ -3,12 +3,13 @@ import { t, getLocale, setLocale } from '../../../i18n';
 import { getIntensity, setIntensity, vibrate } from '../../../services/haptics';
 import { validateKeyFormat, formatLicenseKey } from '../../../core/license';
 import bridge from '../../../services/bridge';
+import VersionTag from '../../VersionTag';
 
 /**
  * SettingsPanel — inline panel for IGDB credential management.
  * Renders inside KamaeView when settings is toggled open.
  */
-export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleChange, onTourStart, onNavigateLegal, replayTourBtnRef }) {
+export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleChange, onTourStart, onNavigateLegal, replayTourBtnRef, updateCheck, updateAlertShown }) {
     const [clientId, setClientId] = useState('');
     const [clientSecret, setClientSecret] = useState('');
     const [hasExisting, setHasExisting] = useState(false);
@@ -114,8 +115,21 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
         titleRef.current?.focus();
     }, []);
 
+    // Set aria-setsize/aria-posinset on each rendered section after mount,
+    // so SR users hear "section N of M" as they navigate. CSS counter handles
+    // the visual prefix; here we mirror the count to the accessibility tree.
+    const settingsRootRef = useRef(null);
+    useEffect(() => {
+        const sections = settingsRootRef.current?.querySelectorAll(':scope > .kamae-settings-section');
+        if (!sections) return;
+        sections.forEach((s, i) => {
+            s.setAttribute('aria-setsize', String(sections.length));
+            s.setAttribute('aria-posinset', String(i + 1));
+        });
+    });
+
     return (
-        <section className="kamae-settings">
+        <section className="kamae-settings" ref={settingsRootRef}>
             <header className="kamae-settings-header">
                 <h1 className="kamae-settings-title" ref={titleRef} tabIndex={-1}>{t('ui.settings.title')}</h1>
                 <button
@@ -483,6 +497,11 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
                 <p className="kamae-settings-section-desc kamae-settings-privacy">
                     {t('ui.telemetry.privacy')}
                 </p>
+            </section>
+
+            <section className="kamae-settings-section" aria-labelledby="settings-about-title">
+                <h2 id="settings-about-title" className="kamae-settings-section-title">{t('ui.settings.about_title')}</h2>
+                <VersionTag className="settings-version" updateCheck={updateCheck} updateAlertShown={updateAlertShown} showBuildDate />
             </section>
 
         </section>
