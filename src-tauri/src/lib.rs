@@ -20,7 +20,6 @@ pub fn run() {
         .setup(|app| {
             let base = persistence::app_data_dir(app.handle());
             persistence::ensure_dir(&base);
-            persistence::migrate_from_electron(&base);
             commands::session_log::prune_session_log(&base);
 
             // Fire-and-forget telemetry ping

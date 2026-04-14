@@ -6,6 +6,7 @@ import { debugStore } from '../core/debugStore';
 import { loadData, saveData } from '../services/persistence';
 import bridge from '../services/bridge';
 import { loadShowcase } from '../services/persistence';
+import bundledPrescriptions from '../data/prescriptions.json';
 
 export function useMaidaSession() {
     const [data, setData] = useState({ games: null, prescriptions: null });
@@ -28,14 +29,14 @@ export function useMaidaSession() {
     const [showcaseIds, setShowcaseIds] = useState(null); // null = not loaded yet, [] = empty
 
     const init = async () => {
-        const [games, prescriptions, anchorData, returnPenalties, constraintsData, showcaseData] = await Promise.all([
+        const [games, anchorData, returnPenalties, constraintsData, showcaseData] = await Promise.all([
             loadData('games'),
-            loadData('prescriptions'),
             loadData('anchor'),
             loadData('returnPenalties'),
             loadData('constraints'),
             loadShowcase()
         ]);
+        const prescriptions = bundledPrescriptions;
 
         if (constraintsData) setConstraints(constraintsData);
 
