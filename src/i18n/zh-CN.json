@@ -89,6 +89,7 @@
             "mode_prefix": "构模式：",
             "desc": "面临之前，静静准备。",
             "search_placeholder": "搜索游戏库，加入 {kata}",
+            "search_hint": "向下键浏览结果,Esc 清除,Tab 离开。",
             "search_aria": "搜索游戏加入 {kata}",
             "searching": "搜索中",
             "not_installed": "未安装",

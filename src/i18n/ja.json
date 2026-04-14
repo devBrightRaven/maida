@@ -89,6 +89,7 @@
             "mode_prefix": "構モード：",
             "desc": "臨む前の、静かな仕度。",
             "search_placeholder": "ライブラリを検索 — {kata} に追加",
+            "search_hint": "下矢印で結果を閲覧、Esc でクリア、Tab で離脱。",
             "search_aria": "{kata} に追加するゲームを検索",
             "searching": "検索中",
             "not_installed": "未インストール",

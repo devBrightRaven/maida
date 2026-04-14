@@ -130,6 +130,15 @@ export function useGameInput({
             if (disabled || !document.hasFocus()) return;
             const key = e.key;
 
+            // Skip when the event originated inside a widget that owns
+            // its own keys (ARIA search landmark, listbox, menu). Use
+            // e.target (dispatch origin) rather than document.activeElement
+            // so a handler that shifts focus (e.g. KamaeSearch layered
+            // Escape's 3rd tier focusing the active kata) is not then
+            // double-handled by this global nav as if focus had always
+            // been on the destination.
+            if (e.target?.closest?.('[role="search"], [role="listbox"], [role="menu"]')) return;
+
             // Block Space on buttons — intentional defense against NVDA browse-mode
             // synthetic clicks. NVDA in browse mode translates Space into a synthetic
             // click (detail=1, identical to mouse click); with focus on TRY this would

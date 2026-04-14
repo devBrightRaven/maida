@@ -90,6 +90,7 @@
             "desc": "Quiet preparation before you face it.",
             "search_placeholder": "Search your library — add to {kata}",
             "search_aria": "Search games to add to {kata}",
+            "search_hint": "Arrow down to browse results, Escape to clear, Tab to leave.",
             "searching": "Searching",
             "not_installed": "not installed",
             "add": "add",

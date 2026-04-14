@@ -90,6 +90,7 @@
             "desc": "面臨之前，靜靜準備。",
             "search_placeholder": "搜尋遊戲庫，加入 {kata}",
             "search_aria": "搜尋遊戲加入 {kata}",
+            "search_hint": "向下鍵瀏覽結果,Esc 清除,Tab 離開。",
             "searching": "搜尋中",
             "not_installed": "未安裝",
             "add": "擺上去",

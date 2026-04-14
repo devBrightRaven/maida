@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback, useId } from 'react';
 import { t } from '../../../i18n';
 import bridge from '../../../services/bridge';
 
@@ -14,6 +14,7 @@ export default function KamaeSearch({ activeKataGameIds, activeKataName, onAdd }
     const debounceRef = useRef(null);
     const inputRef = useRef(null);
     const listRef = useRef(null);
+    const helpId = useId();
 
     const kataSet = activeKataGameIds ? new Set(activeKataGameIds) : null;
 
@@ -45,7 +46,26 @@ export default function KamaeSearch({ activeKataGameIds, activeKataName, onAdd }
     }, [onAdd]);
 
     const handleKeyDown = useCallback((e) => {
-        // When no results, navigate to next/prev focusable element outside search
+        // Escape handled upfront across every state (layered retreat):
+        //   1st  clear the dropdown
+        //   2nd  clear the query text
+        //   3rd  focus the active kata button — matches the Kamae
+        //        mode's global Escape behavior so the user can retreat
+        //        from search to their last kata in situ
+        if (e.key === 'Escape') {
+            if (results.length > 0) {
+                setResults([]);
+                setActiveIndex(-1);
+            } else if (query) {
+                setQuery('');
+            } else {
+                document.querySelector('.kata-group--active .kata-select-btn')?.focus();
+            }
+            return;
+        }
+
+        // When no results, ArrowDown/Up navigates to next/prev focusable
+        // element outside search so the search bar doesn't swallow nav
         if (results.length === 0) {
             if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
                 e.preventDefault();
@@ -65,25 +85,37 @@ export default function KamaeSearch({ activeKataGameIds, activeKataName, onAdd }
             return;
         }
 
+        // With results showing: ArrowDown moves focus into the listbox
+        // so keyboard/SR users can navigate options with native DOM focus.
+        // Options own their arrow/Enter/Escape via handleOptionKeyDown.
         if (e.key === 'ArrowDown') {
             e.preventDefault();
-            setActiveIndex(prev => prev < results.length - 1 ? prev + 1 : 0);
+            const firstOption = listRef.current?.querySelector('li[role="option"]');
+            firstOption?.focus();
+        }
+    }, [results.length, query]);
+
+    const handleOptionKeyDown = useCallback((e, game) => {
+        const id = game.id || game.steamAppId;
+        const inKata = kataSet?.has(id);
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            e.currentTarget.nextElementSibling?.focus();
         } else if (e.key === 'ArrowUp') {
             e.preventDefault();
-            setActiveIndex(prev => prev > 0 ? prev - 1 : results.length - 1);
-        } else if (e.key === 'Enter' && activeIndex >= 0) {
+            const prev = e.currentTarget.previousElementSibling;
+            if (prev) prev.focus();
+            else inputRef.current?.focus();
+        } else if (e.key === 'Enter') {
             e.preventDefault();
-            const game = results[activeIndex];
-            const id = game.id || game.steamAppId;
-            if (!kataSet?.has(id)) {
-                handleAdd(id);
-            }
+            if (!inKata) handleAdd(id);
         } else if (e.key === 'Escape') {
+            e.preventDefault();
             setResults([]);
             setActiveIndex(-1);
             inputRef.current?.focus();
         }
-    }, [results, activeIndex, kataSet, handleAdd]);
+    }, [kataSet, handleAdd]);
 
     // Scroll active item into view
     useEffect(() => {
@@ -102,8 +134,21 @@ export default function KamaeSearch({ activeKataGameIds, activeKataName, onAdd }
         : undefined;
 
     return (
-        <div className="kamae-search" role="search">
+        <div
+            className="kamae-search"
+            role="search"
+            onBlur={(e) => {
+                // Auto-close dropdown when focus leaves the entire widget
+                // (Tab out to another landmark). Query text is preserved
+                // so returning to the input still shows the prior search.
+                if (!e.currentTarget.contains(e.relatedTarget)) {
+                    setResults([]);
+                    setActiveIndex(-1);
+                }
+            }}
+        >
             <label htmlFor="kamae-search-input" className="sr-only">{t('ui.kamae.search_aria', { kata: activeKataName })}</label>
+            <span id={helpId} className="sr-only">{t('ui.kamae.search_hint')}</span>
             <input
                 id="kamae-search-input"
                 ref={inputRef}
@@ -118,6 +163,7 @@ export default function KamaeSearch({ activeKataGameIds, activeKataName, onAdd }
                 aria-expanded={results.length > 0}
                 aria-controls="kamae-search-listbox"
                 aria-activedescendant={activeId ? `search-option-${activeId}` : undefined}
+                aria-describedby={helpId}
             />
             {results.length > 0 && (
                 <ul id="kamae-search-listbox" ref={listRef} className="kamae-search-results" role="listbox">
@@ -131,9 +177,12 @@ export default function KamaeSearch({ activeKataGameIds, activeKataName, onAdd }
                                 id={`search-option-${id}`}
                                 className={`kamae-search-result ${isActive ? 'kamae-search-result--active' : ''}`}
                                 role="option"
+                                tabIndex={-1}
                                 aria-selected={isActive}
                                 aria-disabled={inKata || undefined}
                                 onClick={() => !inKata && handleAdd(id)}
+                                onFocus={() => setActiveIndex(index)}
+                                onKeyDown={(e) => handleOptionKeyDown(e, game)}
                             >
                                 <span className="kamae-search-result-title">
                                     {game.title}
