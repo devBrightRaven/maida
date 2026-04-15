@@ -1,15 +1,20 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { t, getLocale, setLocale } from '../../../i18n';
+import { secondsToWord } from '../../../i18n/numbers';
 import { getIntensity, setIntensity, vibrate } from '../../../services/haptics';
 import { validateKeyFormat, formatLicenseKey } from '../../../core/license';
 import bridge from '../../../services/bridge';
 import VersionTag from '../../VersionTag';
 
+const FROZEN_GUARD_MIN = 5;
+const FROZEN_GUARD_MAX = 30;
+const FROZEN_GUARD_DEBOUNCE_MS = 300;
+
 /**
  * SettingsPanel — inline panel for IGDB credential management.
  * Renders inside KamaeView when settings is toggled open.
  */
-export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleChange, onTourStart, onNavigateLegal, replayTourBtnRef, updateCheck, updateAlertShown }) {
+export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleChange, onTourStart, onNavigateLegal, replayTourBtnRef, updateCheck, updateAlertShown, onFrozenGuardChange }) {
     const [clientId, setClientId] = useState('');
     const [clientSecret, setClientSecret] = useState('');
     const [hasExisting, setHasExisting] = useState(false);
@@ -26,6 +31,11 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
 
     // Haptic state
     const [hapticLevel, setHapticLevel] = useState(getIntensity());
+
+    // Frozen guard duration (seconds)
+    const [frozenGuardSeconds, setFrozenGuardSeconds] = useState(15);
+    const [frozenGuardAnnounce, setFrozenGuardAnnounce] = useState('');
+    const frozenGuardSaveTimer = useRef(null);
 
     // Telemetry state
     const [telemetryEnabled, setTelemetryEnabled] = useState(true);
@@ -50,7 +60,30 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
             }
             const telEnabled = await bridge.getTelemetryEnabled();
             setTelemetryEnabled(telEnabled);
+            const guard = await bridge.getFrozenGuardDuration();
+            setFrozenGuardSeconds(guard);
         })();
+    }, []);
+
+    const handleFrozenGuardChange = useCallback((raw) => {
+        const n = Math.max(FROZEN_GUARD_MIN, Math.min(FROZEN_GUARD_MAX, Number(raw) || FROZEN_GUARD_MIN));
+        setFrozenGuardSeconds(n);
+        if (onFrozenGuardChange) onFrozenGuardChange(n);
+        if (frozenGuardSaveTimer.current) clearTimeout(frozenGuardSaveTimer.current);
+        frozenGuardSaveTimer.current = setTimeout(() => {
+            bridge.setFrozenGuardDuration(n).catch((err) => {
+                console.warn('[Settings] failed to persist frozen guard duration:', err);
+            });
+            setFrozenGuardAnnounce(
+                t('ui.settings.frozen_guard_announce', { word: secondsToWord(n, getLocale()) })
+            );
+        }, FROZEN_GUARD_DEBOUNCE_MS);
+    }, [onFrozenGuardChange]);
+
+    useEffect(() => {
+        return () => {
+            if (frozenGuardSaveTimer.current) clearTimeout(frozenGuardSaveTimer.current);
+        };
     }, []);
 
     const handleTest = useCallback(async () => {
@@ -252,6 +285,37 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
                         ))}
                     </div>
                 )}
+            </section>
+
+            <section className="kamae-settings-section" aria-labelledby="frozen-guard-title">
+                <h2 id="frozen-guard-title" className="kamae-settings-section-title">
+                    {t('ui.settings.frozen_guard_title')}
+                    <span className="kamae-settings-guard-value" aria-hidden="true">
+                        {t('ui.settings.frozen_guard_value', { seconds: frozenGuardSeconds })}
+                    </span>
+                </h2>
+                <p className="kamae-settings-guard-desc">{t('ui.settings.frozen_guard_desc')}</p>
+                <input
+                    type="range"
+                    className="kamae-settings-guard-slider"
+                    min={FROZEN_GUARD_MIN}
+                    max={FROZEN_GUARD_MAX}
+                    step={1}
+                    value={frozenGuardSeconds}
+                    aria-label={t('ui.settings.frozen_guard_aria', { seconds: frozenGuardSeconds })}
+                    aria-valuemin={FROZEN_GUARD_MIN}
+                    aria-valuemax={FROZEN_GUARD_MAX}
+                    aria-valuenow={frozenGuardSeconds}
+                    onChange={(e) => handleFrozenGuardChange(e.target.value)}
+                />
+                <div
+                    className="sr-only"
+                    role="status"
+                    aria-live="polite"
+                    aria-atomic="true"
+                >
+                    {frozenGuardAnnounce}
+                </div>
             </section>
 
             <section className="kamae-settings-section">

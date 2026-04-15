@@ -267,6 +267,22 @@ function App() {
     const [anchorThreshold, setAnchorThreshold] = useState(3000);
     const [resumeGuard, setResumeGuard] = useState(15000);
 
+    // Load persisted frozen guard duration on mount. Bridge returns seconds;
+    // resumeGuard is stored in ms so the FrozenScreen API doesn't change.
+    useEffect(() => {
+        let cancelled = false;
+        bridge.getFrozenGuardDuration().then((seconds) => {
+            if (!cancelled && typeof seconds === 'number') {
+                setResumeGuard(seconds * 1000);
+            }
+        });
+        return () => { cancelled = true; };
+    }, []);
+
+    const handleFrozenGuardChange = useCallback((seconds) => {
+        setResumeGuard(seconds * 1000);
+    }, []);
+
     const themeToggle = (
         <button
             className="theme-toggle"
@@ -460,6 +476,7 @@ function App() {
                     tourStep={tourStep} tourTotal={TOUR_TOTAL} onTourStart={startKamaeTour} onTourReplay={startFullTour} onTourClose={closeTour} onTourAdvance={advanceTour} onTourPrev={prevTour}
                     settingsRequested={settingsRequested} onSettingsOpened={() => setSettingsRequested(false)}
                     themeToggle={themeToggle}
+                    onFrozenGuardChange={handleFrozenGuardChange}
                     updateCheck={updateCheck} updateAlertShown={updateAlertShown} />
                 <VersionTag className="global-version-tag" updateCheck={updateCheck} updateAlertShown={updateAlertShown} />
                 {import.meta.env.DEV && import.meta.env.VITE_AGENTATION && <div aria-hidden="true"><Agentation endpoint="http://localhost:4747" /></div>}

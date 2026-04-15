@@ -23,7 +23,7 @@ import './KamaeView.css';
  * Kamae (構) — slow curation face.
  * Kata selector + game list + search + explore entry.
  */
-export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleChange, tourStep, tourTotal, onTourStart, onTourReplay, onTourClose, onTourAdvance, onTourPrev, settingsRequested, onSettingsOpened, themeToggle, updateCheck, updateAlertShown }) {
+export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleChange, tourStep, tourTotal, onTourStart, onTourReplay, onTourClose, onTourAdvance, onTourPrev, settingsRequested, onSettingsOpened, themeToggle, onFrozenGuardChange, updateCheck, updateAlertShown }) {
     // SR guide announces once per install, gated by localStorage to avoid
     // re-announcement on every re-render / face switch. See RinView for same pattern.
     const [showSrGuide] = useState(() => localStorage.getItem('maida-hasHeardKamaeGuide') !== 'true');
@@ -287,6 +287,7 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
                         replayTourBtnRef={replayTourBtnRef}
                         updateCheck={updateCheck}
                         updateAlertShown={updateAlertShown}
+                        onFrozenGuardChange={onFrozenGuardChange}
                     />
                 </div>
                 {/* Tour step 8 highlights the Replay-tour button inside Settings.

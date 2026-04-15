@@ -5,6 +5,7 @@ mod credentials;
 mod decay;
 mod enrichment;
 mod persistence;
+mod preferences;
 mod steam;
 mod telemetry;
 mod touch_keyboard;
@@ -73,6 +74,9 @@ pub fn run() {
             // Telemetry
             telemetry::get_telemetry_enabled,
             telemetry::set_telemetry_enabled,
+            // Preferences
+            preferences::get_frozen_guard_duration,
+            preferences::set_frozen_guard_duration,
         ])
         .run(tauri::generate_context!())
         .expect("error while running Maida");

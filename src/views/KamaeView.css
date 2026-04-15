@@ -1234,6 +1234,30 @@
     z-index: 1;
 }
 
+.kamae-settings-guard-value {
+    margin-left: 0.5rem;
+    color: var(--t-accent, #c8a84e);
+    font-variant-numeric: tabular-nums;
+}
+
+.kamae-settings-guard-desc {
+    margin: 0.25rem 0 0.75rem;
+    color: var(--t-dim);
+    font-size: 0.875rem;
+    line-height: 1.4;
+}
+
+.kamae-settings-guard-slider {
+    width: 100%;
+    accent-color: var(--t-accent, #c8a84e);
+}
+
+.kamae-settings-guard-slider:focus-visible {
+    outline: 2px solid var(--t-accent, #c8a84e);
+    outline-offset: 4px;
+    border-radius: 4px;
+}
+
 .kamae-settings-radiogroup {
     display: flex;
     flex-direction: row;
