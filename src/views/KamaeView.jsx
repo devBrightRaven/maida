@@ -152,15 +152,16 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
     }, [tourStep]);
 
     // D-pad navigation: cycle through all interactive elements.
-    // Exception: on a legal page the only interactive target is the back
-    // button, so up/down scrolls the page instead. R-stick (useGamepadScroll)
-    // is the primary path; D-pad is a discrete fallback for users on
-    // controllers without a usable right stick.
+    // Exceptions:
+    //   - Legal page: up/down scroll the page (only the back button is
+    //     focusable, so focus-cycle would be a no-op). R-stick is the
+    //     primary scroll path; D-pad is a discrete fallback.
+    //   - Range slider focused: left/right adjust the value (with
+    //     auto-repeat from useGameInput's D-pad held-press handling),
+    //     up/down fall through to focus-cycle so the user can exit
+    //     the slider.
     const handleNav = useCallback((dir) => {
         if (legalPage && (dir === 'up' || dir === 'down')) {
-            // The legal page's scroll container is .app-root (overflow-y: auto),
-            // not the document root. Resolve the real target from the focused
-            // element so the scroll lands where the user is actually reading.
             const target = resolveScrollTarget(document.activeElement);
             if (target) {
                 target.scrollBy({ top: dir === 'up' ? -120 : 120, behavior: 'auto' });
@@ -169,6 +170,31 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
         }
 
         const active = document.activeElement;
+
+        if (active?.tagName === 'INPUT' && active.type === 'range'
+            && (dir === 'left' || dir === 'right')) {
+            const step = Number(active.step) || 1;
+            const min = active.min !== '' ? Number(active.min) : -Infinity;
+            const max = active.max !== '' ? Number(active.max) : Infinity;
+            const currentValue = Number(active.value);
+            const nextValue = dir === 'left'
+                ? Math.max(min, currentValue - step)
+                : Math.min(max, currentValue + step);
+            if (nextValue !== currentValue) {
+                // React tracks native setter calls via a descriptor hook.
+                // Direct `active.value = ...` would bypass React state, so
+                // we use the prototype setter to ensure onChange fires.
+                const setter = Object.getOwnPropertyDescriptor(
+                    HTMLInputElement.prototype, 'value'
+                )?.set;
+                if (setter) {
+                    setter.call(active, String(nextValue));
+                    active.dispatchEvent(new Event('input', { bubbles: true }));
+                    active.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+            }
+            return;
+        }
 
         const container = containerRef.current;
         if (!container) return;
