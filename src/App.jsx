@@ -11,6 +11,7 @@ import { usePrefersReducedMotion } from './hooks/usePrefersReducedMotion';
 import { STEP, TOUR_TOTAL } from './tourSteps';
 import { useTheme } from './hooks/useTheme';
 import { useGameInput } from './hooks/useGameInput';
+import { useGamepadScroll } from './hooks/useGamepadScroll';
 import bridge from './services/bridge';
 
 import { Agentation } from 'agentation';
@@ -145,6 +146,9 @@ function App() {
 
     const updateCheck = useUpdateCheck();
     const { theme, toggleTheme } = useTheme();
+
+    // Right analog stick → global scroll. Mounted once at App root.
+    useGamepadScroll();
 
 
     // Locale change: increment key to re-render entire tree without reload
