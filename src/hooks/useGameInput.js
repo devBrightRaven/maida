@@ -264,6 +264,16 @@ export function useGameInput({
             if (el.getAttribute('role') === 'button') return el;
             if (el.tagName === 'INPUT') return el;
             if (el.tagName === 'LABEL') return el;
+            // Keyboard-focusable custom elements (tabindex=0) that own an
+            // onClick / onKeyDown(Enter) handler — e.g. the kata-group div
+            // in KataPanel which uses role="group" but activates via click.
+            // Keyboard Enter already fires the element's own handlers via
+            // native focus; gamepad A should match by dispatching a click
+            // rather than falling through to the long-press tracker.
+            // tabindex=-1 is excluded because that's programmatic-only
+            // focus (e.g. showcase-item) with no user activation intent.
+            const tabIndex = el.getAttribute('tabindex');
+            if (tabIndex !== null && Number(tabIndex) >= 0) return el;
             return null;
         };
 
