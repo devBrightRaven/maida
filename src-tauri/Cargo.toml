@@ -1,8 +1,8 @@
 [package]
 name = "maida"
-version = "0.2.0"
+version = "0.3.0"
 description = "Maida - Daily Focus Psychopomp"
-authors = ["Bright Raven"]
+authors = ["Bertram (Bright Raven) <bertram@brightraven.world>"]
 edition = "2021"
 
 [lib]

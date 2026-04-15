@@ -1,10 +1,10 @@
 {
   "name": "maida",
   "description": "Maida - Daily Focus Psychopomp",
-  "author": "Bright Raven",
+  "author": "Bertram (Bright Raven) <bertram@brightraven.world>",
   "private": true,
   "packageManager": "pnpm@10.28.2",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
