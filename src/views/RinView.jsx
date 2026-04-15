@@ -7,6 +7,7 @@ import GuidedTour from '../ui/features/GuidedTour/GuidedTour';
 import { STEP } from '../tourSteps';
 import FaceSwitchButton from '../ui/FaceSwitchButton';
 import { useGameInput } from '../hooks/useGameInput';
+import { resolveScrollTarget } from '../utils/scroll';
 import CalligraphyBg from '../ui/CalligraphyBg';
 import Footer from '../ui/Footer';
 import AccessibilityPage from '../ui/pages/AccessibilityPage';
@@ -226,9 +227,12 @@ export default function RinView({
             // without a working right stick). R-stick handles this
             // continuously via useGamepadScroll at the App root.
             if (legalPage && (dir === 'up' || dir === 'down')) {
-                const root = document.scrollingElement;
-                if (root) {
-                    root.scrollBy({ top: dir === 'up' ? -120 : 120, behavior: 'auto' });
+                // Scroll container is .app-root (overflow-y:auto), not the
+                // document root. Resolve the real target from the focused
+                // element so scroll applies to the readable content.
+                const target = resolveScrollTarget(document.activeElement);
+                if (target) {
+                    target.scrollBy({ top: dir === 'up' ? -120 : 120, behavior: 'auto' });
                 }
                 return;
             }

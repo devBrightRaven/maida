@@ -227,10 +227,18 @@ function App() {
         }
     }, [face, switchToKamae]);
 
+    // Legal page is a read-only modal owned by RinView / KamaeView. While it
+    // is open, face-switching would abandon the reading context without the
+    // user explicitly saying "I'm done" (B / Esc / the back button). We block
+    // L1/R1 and Ctrl+Tab based on the DOM presence of .legal-page so neither
+    // view has to lift its modal state up to App.
+    const isLegalPageOpen = () =>
+        typeof document !== 'undefined' && !!document.querySelector('main.legal-page');
+
     // L1/R1 gamepad face switching + Menu button
     useGameInput({
-        onL1: switchToRin,
-        onR1: switchToKamae,
+        onL1: () => { if (!isLegalPageOpen()) switchToRin(); },
+        onR1: () => { if (!isLegalPageOpen()) switchToKamae(); },
         onMenu: openSettings,
     });
 
@@ -238,6 +246,7 @@ function App() {
     useEffect(() => {
         const handler = (e) => {
             if (e.ctrlKey && e.key === 'Tab') {
+                if (isLegalPageOpen()) return;
                 e.preventDefault();
                 toggleFace();
             }

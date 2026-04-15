@@ -4,6 +4,7 @@ import ShowcaseList from '../ui/features/Kamae/ShowcaseList';
 import KamaeSearch from '../ui/features/Kamae/KamaeSearch';
 import ExploreView from '../ui/features/Kamae/ExploreView';
 import SettingsPanel from '../ui/features/Kamae/SettingsPanel';
+import { resolveScrollTarget } from '../utils/scroll';
 import KataPanel from '../ui/features/Kamae/KataPanel';
 import GuidedTour from '../ui/features/GuidedTour/GuidedTour';
 import { STEP } from '../tourSteps';
@@ -157,9 +158,12 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
     // controllers without a usable right stick.
     const handleNav = useCallback((dir) => {
         if (legalPage && (dir === 'up' || dir === 'down')) {
-            const root = document.scrollingElement;
-            if (root) {
-                root.scrollBy({ top: dir === 'up' ? -120 : 120, behavior: 'auto' });
+            // The legal page's scroll container is .app-root (overflow-y: auto),
+            // not the document root. Resolve the real target from the focused
+            // element so the scroll lands where the user is actually reading.
+            const target = resolveScrollTarget(document.activeElement);
+            if (target) {
+                target.scrollBy({ top: dir === 'up' ? -120 : 120, behavior: 'auto' });
             }
             return;
         }
