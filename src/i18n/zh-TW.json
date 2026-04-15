@@ -130,6 +130,8 @@
             "language_title": "語言：{current}",
             "language_confirm": "再按一次以套用",
             "haptic_title": "振動：{current}",
+            "haptic_heading": "震動強度",
+            "a11y_statement_link": "查看完整無障礙聲明",
             "controls_title": "操控說明",
             "controls_action": "操作",
             "controls_keyboard": "鍵盤",

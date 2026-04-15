@@ -130,6 +130,8 @@
             "language_title": "Language: {current}",
             "language_confirm": "Press again to apply",
             "haptic_title": "Vibration: {current}",
+            "haptic_heading": "Vibration",
+            "a11y_statement_link": "View full accessibility statement",
             "controls_title": "Controls",
             "controls_action": "Action",
             "controls_keyboard": "Keyboard",

@@ -1258,6 +1258,30 @@
     border-radius: 4px;
 }
 
+.kamae-settings-a11y {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-top: 0.5rem;
+}
+
+.kamae-settings-a11y-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.kamae-settings-a11y-heading {
+    margin: 0 0 0.25rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--t-primary);
+}
+
+.kamae-settings-a11y-link {
+    align-self: flex-start;
+    margin-top: 0.25rem;
+}
+
 .kamae-settings-radiogroup {
     display: flex;
     flex-direction: row;

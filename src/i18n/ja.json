@@ -130,6 +130,8 @@
             "language_title": "言語：{current}",
             "language_confirm": "もう一度押して適用",
             "haptic_title": "振動：{current}",
+            "haptic_heading": "振動",
+            "a11y_statement_link": "アクセシビリティ声明を表示",
             "controls_title": "操作説明",
             "controls_action": "操作",
             "controls_keyboard": "キーボード",
