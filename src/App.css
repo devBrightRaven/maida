@@ -17,12 +17,12 @@
 
 .frozen-message {
     position: absolute;
-    top: 50%;
+    top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 100%;
     color: var(--t-text);
-    font-size: 1.125rem;
+    font-size: 1.6875rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     text-align: center;
@@ -31,10 +31,24 @@
     z-index: 2;
 }
 
+.frozen-subtitle {
+    position: absolute;
+    top: 48%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    color: var(--t-text-faint);
+    font-size: 1.3125rem;
+    letter-spacing: 0.1em;
+    text-align: center;
+    font-weight: 300;
+    z-index: 2;
+}
+
 /* Restart Selection Button (Ghost Style - Silent Exit) */
 .restart-selection-btn {
     position: absolute;
-    top: 75%;
+    top: 65%;
     left: 50%;
     transform: translate(-50%, -50%);
 
@@ -45,7 +59,7 @@
     padding: 1rem 3rem;
 
     font-family: 'Inter', sans-serif;
-    font-size: 0.75rem;
+    font-size: 1.125rem;
     letter-spacing: 0.15em;
     text-transform: uppercase;
 
@@ -210,6 +224,14 @@
     font-family: 'Consolas', 'Monaco', monospace;
     font-size: 0.625rem;
     letter-spacing: 0.05em;
+}
+
+/* Light mode: bump frozen-screen text weight to compensate for the
+ * lower perceptual contrast of dark-on-light vs light-on-dark. */
+[data-theme="light"] .frozen-message,
+[data-theme="light"] .frozen-subtitle,
+[data-theme="light"] .restart-selection-btn {
+    font-weight: 500;
 }
 
 /* Transitions could be added here for a smoother "fade to black" */

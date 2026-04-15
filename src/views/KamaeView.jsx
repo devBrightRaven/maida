@@ -6,6 +6,7 @@ import ExploreView from '../ui/features/Kamae/ExploreView';
 import SettingsPanel from '../ui/features/Kamae/SettingsPanel';
 import KataPanel from '../ui/features/Kamae/KataPanel';
 import GuidedTour from '../ui/features/GuidedTour/GuidedTour';
+import { STEP } from '../tourSteps';
 import { useGameInput } from '../hooks/useGameInput';
 import { addGameToKata, removeGameFromKata } from '../core/katas';
 import { t } from '../i18n';
@@ -139,13 +140,14 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
     const showcaseListRef = useRef(null);
     const faceSwitchRef = useRef(null);
     const replayTourBtnRef = useRef(null);
-    const showTour = tourStep !== null && tourStep >= 5 && tourStep <= 9;
+    const showTour = tourStep !== null && tourStep >= STEP.KAMAE_KATA && tourStep <= STEP.KAMAE_SWITCH_RIN;
 
-    // Tour step 8 highlights the Replay-tour button inside Settings panel.
-    // Auto-open Settings on entering step 8, auto-close on advancing to step 9.
+    // Tour step KAMAE_SETTINGS_REPLAY highlights the Replay-tour button inside
+    // Settings panel. Auto-open Settings on entering that step, auto-close on
+    // advancing to the next step.
     useEffect(() => {
-        if (tourStep === 8) setShowSettings(true);
-        else if (tourStep === 9) setShowSettings(false);
+        if (tourStep === STEP.KAMAE_SETTINGS_REPLAY) setShowSettings(true);
+        else if (tourStep === STEP.KAMAE_SWITCH_RIN) setShowSettings(false);
     }, [tourStep]);
 
     // D-pad navigation: cycle through all interactive elements
@@ -184,6 +186,21 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
     }, []);
 
     const handleBack = useCallback(() => {
+        if (legalPage) {
+            // B/Escape on a legal page: scroll back into view, focus it,
+            // and pulse it so users see the input was received even when
+            // focus was already on the button. User confirms with Enter/A.
+            const backBtn = document.querySelector('.legal-page-back');
+            if (backBtn) {
+                backBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                backBtn.focus();
+                backBtn.classList.remove('legal-page-back--pulse');
+                void backBtn.offsetWidth;
+                backBtn.classList.add('legal-page-back--pulse');
+                setTimeout(() => backBtn.classList.remove('legal-page-back--pulse'), 600);
+            }
+            return;
+        }
         if (showSettings) {
             // B in settings: focus back button instead of immediately closing
             const backBtn = containerRef.current?.querySelector('.kamae-settings-back-btn');
@@ -208,7 +225,7 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
                 if (active) active.focus();
             }
         }
-    }, [showSettings, exploring, expandedKataId]);
+    }, [legalPage, showSettings, exploring, expandedKataId]);
 
     // F1 opens Kamae tour
     useEffect(() => {
@@ -263,7 +280,7 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
                 {/* Tour step 8 highlights the Replay-tour button inside Settings.
                     Standalone GuidedTour rendered here because main render path
                     is replaced by SettingsPanel. */}
-                {showTour && tourStep === 8 && (
+                {showTour && tourStep === STEP.KAMAE_SETTINGS_REPLAY && (
                     <GuidedTour
                         steps={[{ targetRef: replayTourBtnRef, text: t('ui.tour.step_settings_replay') }]}
                         localIndex={0}
@@ -394,16 +411,16 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
             {/* Tour main render covers steps 5,6,7,9. Step 8 (Settings replay)
                 is rendered in the showSettings branch above because Settings
                 replaces this main view entirely. */}
-            {showTour && tourStep !== 8 && (() => {
+            {showTour && tourStep !== STEP.KAMAE_SETTINGS_REPLAY && (() => {
                 const kamaeSteps = [
                     { targetRef: kataPanelRef, text: t('ui.tour.step_kata') },
                     { targetRef: searchRef, text: activeKata ? t('ui.tour.step_search') : t('ui.tour.step_search_no_kata') },
                     { targetRef: showcaseListRef, text: activeKata ? t('ui.tour.step_list_kata') : t('ui.tour.step_list_no_kata') },
                     { targetRef: faceSwitchRef, text: t('ui.tour.step_switch_rin'), interactive: true },
                 ];
-                // tourStep 5,6,7 → localIndex 0,1,2 (kata/search/list)
-                // tourStep 9 → localIndex 3 (face switch); step 8 handled in showSettings branch
-                const localIndex = tourStep === 9 ? 3 : tourStep - 5;
+                // Kamae sub-tour local index (step KAMAE_SETTINGS_REPLAY is
+                // rendered in the showSettings branch above and skipped here).
+                const localIndex = tourStep === STEP.KAMAE_SWITCH_RIN ? 3 : tourStep - STEP.KAMAE_KATA;
                 return (
                     <GuidedTour
                         steps={kamaeSteps}

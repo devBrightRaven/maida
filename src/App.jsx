@@ -7,13 +7,16 @@ import VersionTag from './ui/VersionTag';
 import { calculateTraceWeights, updateDebugTrace } from './core/engine';
 import { useMaidaSession } from './hooks/useMaidaSession';
 import { useUpdateCheck } from './hooks/useUpdateCheck';
+import { usePrefersReducedMotion } from './hooks/usePrefersReducedMotion';
+import { STEP, TOUR_TOTAL } from './tourSteps';
 import { useTheme } from './hooks/useTheme';
 import { useGameInput } from './hooks/useGameInput';
 import bridge from './services/bridge';
 
 import { Agentation } from 'agentation';
-import { t } from './i18n';
+import { t, getLocale } from './i18n';
 import { loadPrescriptionTranslations } from './i18n/prescriptions';
+import { secondsToWord } from './i18n/numbers';
 import './App.css';
 
 // Load prescription translations for detected locale (fire-and-forget)
@@ -26,20 +29,37 @@ function FrozenScreen({ onResume, guardMs = 5000 }) {
     const msgRef = useRef(null);
     const [ready, setReady] = useState(false);
     const totalSeconds = Math.ceil(guardMs / 1000);
+    const [secondsLeft, setSecondsLeft] = useState(totalSeconds);
+    const [initialAnnounced, setInitialAnnounced] = useState(false);
+    const prefersReducedMotion = usePrefersReducedMotion();
 
     // Focus frozen message immediately so SR reads it (not theme toggle)
     useEffect(() => {
         msgRef.current?.focus();
     }, []);
 
-    // Input guard: delay before accepting input
+    // Delay the initial SR announce so it registers as a content
+    // mutation on the aria-live region. Content present on first
+    // render is typically not re-announced (SR already busy reading
+    // the focused h1). 300ms lets the h1 announcement settle first
+    // and ensures the live region's text transition is detected.
     useEffect(() => {
-        const timer = setTimeout(() => {
+        const timer = setTimeout(() => setInitialAnnounced(true), 300);
+        return () => clearTimeout(timer);
+    }, []);
+
+    // Per-second countdown: drives visual subtitle + transitions to
+    // ready. Single source of truth for both visual countdown and SR
+    // milestone announcements.
+    useEffect(() => {
+        if (secondsLeft <= 0) {
             setReady(true);
             btnRef.current?.focus();
-        }, guardMs);
+            return;
+        }
+        const timer = setTimeout(() => setSecondsLeft(s => s - 1), 1000);
         return () => clearTimeout(timer);
-    }, [guardMs]);
+    }, [secondsLeft]);
 
     // Auto-focus on window refocus (only after guard)
     useEffect(() => {
@@ -51,28 +71,52 @@ function FrozenScreen({ onResume, guardMs = 5000 }) {
 
     const guardedResume = () => { if (ready) onResume(); };
 
-    // Gamepad support (A = resume, D-pad grabs focus)
+    // Always listen (no disabled gate) so arrow / d-pad can cycle
+    // focus between the resume button and the theme toggle even
+    // during the guard period. guardedResume and the button's own
+    // disabled attribute prevent premature resume.
     useGameInput({
         onMainAction: guardedResume,
-        onBack: guardedResume, // B also resumes
-        onNav: () => ready && btnRef.current?.focus(),
-        disabled: !ready
+        onBack: guardedResume,
+        onNav: () => {
+            const current = document.activeElement;
+            const themeToggle = document.querySelector('.theme-toggle');
+            if (current === themeToggle) {
+                if (ready && btnRef.current) btnRef.current.focus();
+            } else if (current === btnRef.current) {
+                themeToggle?.focus();
+            } else {
+                if (ready && btnRef.current) btnRef.current.focus();
+                else themeToggle?.focus();
+            }
+        }
     });
 
     return (
         <main className="void-screen">
-            <p className="frozen-message" tabIndex={-1} ref={msgRef}>{t('ui.status.frozen')}</p>
+            <h1 className="frozen-message" tabIndex={-1} ref={msgRef}>{t('ui.status.frozen')}</h1>
+            <p className="frozen-subtitle">
+                {ready
+                    ? t('ui.status.frozen_ready')
+                    : prefersReducedMotion
+                        ? t('ui.status.frozen_wait_static', { seconds: totalSeconds })
+                        : t('ui.status.frozen_wait', { seconds: secondsLeft })}
+            </p>
             <button
                 ref={btnRef}
                 className="restart-selection-btn"
-                aria-label={t('ui.button.im_back')}
+                aria-label={ready ? t('ui.button.im_back') : t('ui.button.im_back_wait')}
                 onClick={guardedResume}
                 disabled={!ready}
             >
                 {t('ui.button.im_back')}
             </button>
-            <p className="sr-only" role="status" aria-live="assertive">
-                {ready ? t('ui.status.frozen_ready') : t('ui.status.frozen_wait', { seconds: totalSeconds })}
+            <p className="sr-only" role="status" aria-live={ready ? 'assertive' : 'polite'}>
+                {ready
+                    ? t('ui.status.frozen_ready')
+                    : (initialAnnounced && secondsLeft === totalSeconds
+                        ? t('ui.status.frozen_wait_sr', { seconds: secondsToWord(totalSeconds, getLocale()) })
+                        : '')}
             </p>
         </main>
     );
@@ -112,14 +156,11 @@ function App() {
 
     // Guided tour (spans Rin + Kamae)
     // null = off, number = global step index
-    // Rin steps:   0=title, 1=prescription, 2=try, 3=notNow, 4=faceSwitch(interactive)
-    // Kamae steps: 5=kata, 6=search, 7=gameList, 8=settingsReplay, 9=faceSwitchBack(interactive)
-    const TOUR_TOTAL = 10;
     const [tourStep, setTourStep] = useState(null);
     const hasSeenTour = localStorage.getItem('maida-hasSeenTour') === 'true';
 
     const startTour = useCallback(() => setTourStep(0), []);
-    const startKamaeTour = useCallback(() => setTourStep(5), []);
+    const startKamaeTour = useCallback(() => setTourStep(STEP.KAMAE_KATA), []);
     const startFullTour = useCallback(() => {
         setFace('rin');
         setTourStep(0);
@@ -131,8 +172,9 @@ function App() {
     const prevTour = useCallback(() => {
         setTourStep(s => {
             if (s === null || s <= 0) return s;
-            // Don't go back across face boundaries (can't go from Kamae step 5 to Rin step 4)
-            if (s === 5) return s;
+            // Don't go back across face boundaries (can't prev from Kamae's
+            // first step into Rin's last step — they're different views)
+            if (s === STEP.KAMAE_KATA) return s;
             return s - 1;
         });
     }, []);
@@ -161,12 +203,12 @@ function App() {
     const switchToKamae = useCallback(() => {
         setFace(prev => { if (prev === 'kamae') return prev; focusMain(); return 'kamae'; });
         // Tour step 4 = face switch to Kamae (interactive)
-        if (tourStep === 4) setTourStep(5);
+        if (tourStep === STEP.RIN_SWITCH_KAMAE) setTourStep(STEP.KAMAE_KATA);
     }, [focusMain, tourStep]);
     const switchToRin = useCallback(() => {
         setFace(prev => { if (prev === 'rin') return prev; reloadShowcase(); focusMain(); return 'rin'; });
         // Tour step 8 = face switch back to Rin (interactive) → tour ends
-        if (tourStep === 9) { setTourStep(null); localStorage.setItem('maida-hasSeenTour', 'true'); }
+        if (tourStep === STEP.KAMAE_SWITCH_RIN) { setTourStep(null); localStorage.setItem('maida-hasSeenTour', 'true'); }
     }, [reloadShowcase, focusMain, tourStep]);
     const toggleFace = useCallback(() => setFace(f => f === 'rin' ? 'kamae' : 'rin'), []);
 
@@ -219,7 +261,7 @@ function App() {
     // Input UX Thresholds (ms)
     const [tapThreshold, setTapThreshold] = useState(300);
     const [anchorThreshold, setAnchorThreshold] = useState(3000);
-    const [resumeGuard, setResumeGuard] = useState(5000);
+    const [resumeGuard, setResumeGuard] = useState(15000);
 
     const themeToggle = (
         <button

@@ -4,6 +4,7 @@ import { formatPlaytime } from '../core/format';
 import GameDisplay from '../ui/features/Uncertainty/GameDisplay';
 import TracePanel from '../ui/features/Trace/TracePanel';
 import GuidedTour from '../ui/features/GuidedTour/GuidedTour';
+import { STEP } from '../tourSteps';
 import FaceSwitchButton from '../ui/FaceSwitchButton';
 import { useGameInput } from '../hooks/useGameInput';
 import CalligraphyBg from '../ui/CalligraphyBg';
@@ -61,7 +62,12 @@ export default function RinView({
     }, [showSrGuide]);
     const legalReturnRef = React.useRef(null);
     const [focusedBtn, setFocusedBtn] = useState(null); // 'visit' | 'notToday' | 'back' | 'switchKamae' | null
-    const showTour = tourStep !== null && tourStep >= 0 && tourStep <= 4;
+    const showTour = tourStep !== null && tourStep >= STEP.RIN_TITLE && tourStep <= STEP.RIN_SWITCH_KAMAE;
+    // Back button is normally hidden until canUndo. Force-visible during
+    // the undo tour step so the tour target can be pointed at — keeps the
+    // button semantically disabled (no canUndo) but visually there to
+    // teach users where Undo will appear after Not Now.
+    const backHidden = (!canUndo || isAnchored) && !(showTour && tourStep === STEP.RIN_UNDO);
 
     // Refs for Focus Management
     const titleRef = React.useRef(null);
@@ -186,6 +192,22 @@ export default function RinView({
             if (!isAnchored) onAction('anchor'); // Long Press A (3s)
         },
         onBack: () => {
+            if (legalPage) {
+                // B/Escape on a legal page: scroll back button into view,
+                // focus it, and pulse it. The pulse runs even when focus
+                // was already there so sighted/low-vision users see a
+                // response. User then presses Enter/A to actually close.
+                const backBtn = document.querySelector('.legal-page-back');
+                if (backBtn) {
+                    backBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    backBtn.focus();
+                    backBtn.classList.remove('legal-page-back--pulse');
+                    void backBtn.offsetWidth;
+                    backBtn.classList.add('legal-page-back--pulse');
+                    setTimeout(() => backBtn.classList.remove('legal-page-back--pulse'), 600);
+                }
+                return;
+            }
             if (showSpotlight) {
                 setShowSpotlight(false);
                 localStorage.setItem('maida-hasSeenTour', 'true');
@@ -424,13 +446,13 @@ export default function RinView({
 
                     <button
                         ref={btnRefs.back}
-                        className={`mvp-btn back-link ${(!canUndo || isAnchored) ? 'is-hidden' : ''} ${focusedBtn === 'back' ? 'is-focused' : ''}`}
+                        className={`mvp-btn back-link ${backHidden ? 'is-hidden' : ''} ${focusedBtn === 'back' ? 'is-focused' : ''}`}
                         aria-label={t('ui.button.back')}
                         onMouseEnter={() => focusBtn('back')}
                         onClick={(e) => { e.stopPropagation(); if (canUndo && !isAnchored) onAction('back'); }}
                         disabled={!canUndo || isAnchored}
-                        tabIndex={(!canUndo || isAnchored) ? -1 : 0}
-                        aria-hidden={!canUndo || isAnchored}
+                        tabIndex={backHidden ? -1 : 0}
+                        aria-hidden={backHidden}
                     >
                         {t('ui.button.back')}
                     </button>
@@ -510,6 +532,7 @@ export default function RinView({
                     { targetRef: prescriptionRef, text: t('ui.tour.step_prescription') },
                     { targetRef: btnRefs.visit, text: t('ui.tour.step_try') },
                     { targetRef: btnRefs.notToday, text: t('ui.tour.step_not_now') },
+                    { targetRef: btnRefs.back, text: t('ui.tour.step_undo') },
                     { targetRef: btnRefs.switchKamae, text: t('ui.tour.step_switch_kamae'), interactive: true },
                 ];
                 return (

@@ -226,6 +226,27 @@ button {
     outline-offset: 2px;
 }
 
+/* Visual feedback when Escape/B is pressed inside a legal page: scroll
+ * the back button into view and pulse it. Even if focus was already on
+ * the button, the animation makes it clear the input registered. */
+@keyframes legal-back-pulse {
+    0%   { transform: scale(1); box-shadow: 0 0 0 0 var(--t-focus-border); }
+    40%  { transform: scale(1.06); box-shadow: 0 0 0 8px transparent; }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 transparent; }
+}
+
+.legal-page-back--pulse {
+    animation: legal-back-pulse 0.6s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .legal-page-back--pulse {
+        animation: none;
+        outline: 3px solid var(--t-focus-border);
+        outline-offset: 4px;
+    }
+}
+
 .legal-page-content {
     max-width: 560px;
     width: 100%;

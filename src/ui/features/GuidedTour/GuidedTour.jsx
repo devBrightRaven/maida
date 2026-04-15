@@ -152,12 +152,17 @@ export default function GuidedTour({ steps, localIndex, globalIndex, totalSteps,
                 // Interactive step: focus the target element and add visible focus indicator
                 const el = step.targetRef.current;
                 el.classList.add('guided-tour-target-focus');
-                el.focus();
+                if (document.activeElement !== el) el.focus();
             } else {
-                // Normal step: focus Next button
+                // Normal step: focus Next button (or Skip if Next absent).
+                // Skip re-focus if the intended button is already active —
+                // avoids NVDA re-announcing the same button on rerender.
                 const order = getButtonOrder();
                 const target = order.includes('next') ? 'next' : 'skip';
-                focusButton(target);
+                const refs = { skip: skipRef, prev: prevRef, next: nextRef };
+                if (document.activeElement !== refs[target]?.current) {
+                    focusButton(target);
+                }
             }
         }, 150);
         return () => {
@@ -248,7 +253,12 @@ export default function GuidedTour({ steps, localIndex, globalIndex, totalSteps,
                 aria-describedby="guided-tour-step-text"
                 onKeyDown={handleTabTrap}
             >
-                <p id="guided-tour-step-text" className="guided-tour-text">{formatHotkeys(step?.text)}</p>
+                <p
+                    id="guided-tour-step-text"
+                    className="guided-tour-text"
+                    aria-live="polite"
+                    aria-atomic="true"
+                >{formatHotkeys(step?.text)}</p>
                 <div className="guided-tour-actions">
                     <span className="guided-tour-counter">
                         {globalIndex + 1} / {totalSteps}
