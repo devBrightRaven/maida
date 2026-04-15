@@ -150,8 +150,20 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
         else if (tourStep === STEP.KAMAE_SWITCH_RIN) setShowSettings(false);
     }, [tourStep]);
 
-    // D-pad navigation: cycle through all interactive elements
+    // D-pad navigation: cycle through all interactive elements.
+    // Exception: on a legal page the only interactive target is the back
+    // button, so up/down scrolls the page instead. R-stick (useGamepadScroll)
+    // is the primary path; D-pad is a discrete fallback for users on
+    // controllers without a usable right stick.
     const handleNav = useCallback((dir) => {
+        if (legalPage && (dir === 'up' || dir === 'down')) {
+            const root = document.scrollingElement;
+            if (root) {
+                root.scrollBy({ top: dir === 'up' ? -120 : 120, behavior: 'auto' });
+            }
+            return;
+        }
+
         const active = document.activeElement;
 
         const container = containerRef.current;
@@ -169,7 +181,7 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
         }
         focusable[next]?.focus();
         focusable[next]?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-    }, []);
+    }, [legalPage]);
 
     // A button: activate focused element (button click, checkbox toggle)
     const handleMainAction = useCallback(() => {
