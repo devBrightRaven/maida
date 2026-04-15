@@ -4,6 +4,73 @@ All notable changes to Maida, combining public-facing updates and technical deta
 
 ---
 
+## [v0.4.0] - 2026-04-16
+
+Consolidated release covering iterative accessibility and UX work that built up since v0.1.0 (internal v0.2.x and v0.3.0 iterations). Headline additions are gamepad-first scrolling and a persisted cool-down setting.
+
+### Gamepad
+
+- **Right stick = global scroll**: The right analog stick now scrolls any scrollable content (kata list, legal pages, settings) with velocity proportional to deflection. Mounted once at the app root, resolves the scroll target by walking up from the focused element to the nearest scrollable ancestor. Dead zone 0.15, speed 1500 px/sec at full deflection, dt-based so scroll feels consistent across frame rates. Suppressed while a text input / textarea / combobox / contentEditable is focused so it never fights caret keys.
+- **D-pad fallback scroll on legal pages**: When a legal page (Accessibility / Privacy / Terms) is open, D-pad up/down scrolls the page body ~120 px per press (auto-repeats when held). This is the discrete fallback for users without a usable right stick; the back button remains focusable via Esc/B.
+
+### Settings
+
+- **Cool-down duration slider**: Users can set the post-TRY rest period from 5 to 30 seconds (default 15s) via a new slider in Settings. Change takes effect immediately, persists across launches in `config.json` under a new `preferences` section. SR announces the committed value using spelled-out numbers in the current locale.
+
+### Frozen Screen (from v0.3.0)
+
+- **Complete rework**: h1 heading receives focus so SR reads the "Take a break" title first. Two separate SR live regions: per-second visual countdown uses digits; initial and ready announcements use spelled-out numbers (prevents NVDA from struggling with rapid digit updates).
+- **Reduced-motion support**: `usePrefersReducedMotion` hook drives static "about X seconds" copy instead of live countdown when the OS requests reduced motion (WCAG 2.3.3).
+- **Font + size polish**: Frozen message 1.5x larger, light-mode weight 500 for clearer reading.
+
+### Guided Tour (from v0.3.0)
+
+- **Undo step (Rin step 4)**: Tour now covers the undo-back button. During this step the button is force-visible even when normally hidden (no-undo state), so the tour always has a target.
+- **Level A refactor**: Tour step indices centralized in `src/tourSteps.js` via named `STEP.*` constants and `TOUR_TOTAL`. Adding / removing / reordering steps no longer requires updating magic numbers across view files. Only 4 edits needed per change (const file + array + i18n keys).
+- **SR polish**: `aria-live` + `aria-atomic` on tour step text ensures each step is announced cleanly.
+
+### Legal Pages (from v0.3.0)
+
+- **Esc/B visual feedback**: Pressing Esc/B on a legal page now scrolls the back button into view, focuses it, and pulses it briefly (600ms CSS animation). User still has to press Enter/A to actually close; the single-step focus-plus-pulse is intentional so partially-sighted users see the input was received.
+- **Reduced-motion fallback**: Pulse animation respects `prefers-reduced-motion`.
+
+### i18n (4 locales: en, zh-TW, zh-CN, ja)
+
+- **`src/i18n/numbers.js`**: Spelled-out number table extended from 0-15 to 0-30 across all locales. Used by SR announcements so NVDA voices read durations phonetically (e.g. "twenty" / "二十" / "三十") instead of splicing digit tokens with locale counter words.
+- **Cross-locale polish pass**: Broad refactor of UI copy across all four locales (commit `599921c`).
+- **Frozen guard setting keys**: 6 new keys per locale covering title, description, aria-label, visual value, unit, SR announce.
+- **NVDA buffer-stuck limitation**: New `a11y_limitation_screen_reader_buffer_stuck` in all locales documenting the Insert+F5 workaround.
+
+### Accessibility
+
+- **Space-key defense on buttons**: Space no longer activates buttons, preventing NVDA browse-mode synthetic clicks from bypassing long-press friction. Enter still provides full keyboard access (short press = visit, 3s hold = anchor).
+- **Focus ring refinements**: Amber/accent for focus, white for hover; single CSS variable at the design-token level.
+- **KamaeSearch**: Listbox focus behavior, layered Escape (input clears → listbox closes → focus active kata), auto-close on blur.
+- **Kata group Enter**: Enter on a kata group header selects the group (previously ignored).
+- **Settings aria-setsize/posinset**: SR users now hear "section N of M" while navigating settings.
+- **`<html lang>` region suffix**: Chinese voices correctly distinguish zh-TW from zh-CN.
+
+### Author / Packaging
+
+- **Author**: Bertram (Bright Raven) `<bertram@brightraven.world>`.
+- **Version bump**: 0.3.0 → 0.4.0 in `package.json`, `Cargo.toml`, `tauri.conf.json`.
+
+### Tests
+
+- **Total: 281 tests / 21 files** (baseline at start of v0.4.0 work: 236 / 19).
+- `src/__tests__/utils/scroll.test.js` (11 tests) — scroll ancestor resolution with mocked DOM chains.
+- `src/__tests__/hooks/gamepadLogic.test.js` (17 tests) — dead zone, scroll delta, R-stick suppression rules. Pure-function coverage for all decision logic in the R-stick path.
+- `src/__tests__/services/bridge-preferences.test.js` (9 tests) — bridge range validation, graceful degrade when Tauri invoke fails.
+- `src/__tests__/i18n/numbers.test.js` (8 tests) — extended 16-30 range across all 4 locales + fallback behavior.
+
+### Infrastructure
+
+- **Rust `preferences` module**: New `src-tauri/src/preferences.rs` with clamped `get_frozen_guard_duration` / `set_frozen_guard_duration` Tauri commands, registered in `lib.rs` invoke handler. Config stored under a new `preferences.frozenGuardSeconds` key.
+- **`src/utils/scroll.js`**: New utility module with `getScrollableAncestor` and `resolveScrollTarget`. DOM-independent (takes optional window/document arguments) so it's fully unit-testable without jsdom.
+- **ESLint**: Added `performance` as a readonly global for the rAF time-delta path.
+
+---
+
 ## [v0.1.0] - 2026-04-06
 
 ### Internationalization
