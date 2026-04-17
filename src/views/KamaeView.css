@@ -1252,6 +1252,11 @@
     accent-color: var(--t-accent, #c8a84e);
 }
 
+/* Both :focus and :focus-visible. Gamepad polling moves focus via
+   programmatic .focus() calls which Chromium does not always classify
+   as keyboard-sourced, so :focus-visible alone may never light up for
+   gamepad users. :focus fallback is visually identical. */
+.kamae-settings-guard-slider:focus,
 .kamae-settings-guard-slider:focus-visible {
     outline: 2px solid var(--t-accent, #c8a84e);
     outline-offset: 4px;

@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
     applyDeadZone,
     computeScrollDelta,
+    discretizeStick,
     shouldSuppressRStickScroll,
 } from '../../hooks/gamepadLogic';
 
@@ -58,6 +59,45 @@ describe('computeScrollDelta', () => {
         const a = computeScrollDelta(0.5, 1500, 0.016, 0.15);
         const b = computeScrollDelta(0.5, 1500, 0.032, 0.15);
         expect(b).toBeCloseTo(a * 2, 5);
+    });
+});
+
+describe('discretizeStick', () => {
+    it('returns null within threshold on both axes', () => {
+        expect(discretizeStick(0, 0, 0.5)).toBeNull();
+        expect(discretizeStick(0.4, 0.4, 0.5)).toBeNull();
+        expect(discretizeStick(-0.49, 0.49, 0.5)).toBeNull();
+    });
+
+    it('returns left/right when horizontal axis dominates', () => {
+        expect(discretizeStick(-1, 0, 0.5)).toBe('left');
+        expect(discretizeStick(1, 0, 0.5)).toBe('right');
+        expect(discretizeStick(-0.8, 0.3, 0.5)).toBe('left');
+        expect(discretizeStick(0.9, -0.4, 0.5)).toBe('right');
+    });
+
+    it('returns up/down when vertical axis dominates', () => {
+        expect(discretizeStick(0, -1, 0.5)).toBe('up');
+        expect(discretizeStick(0, 1, 0.5)).toBe('down');
+        expect(discretizeStick(0.3, -0.8, 0.5)).toBe('up');
+        expect(discretizeStick(-0.4, 0.9, 0.5)).toBe('down');
+    });
+
+    it('ties resolve horizontally', () => {
+        expect(discretizeStick(0.8, 0.8, 0.5)).toBe('right');
+        expect(discretizeStick(-0.8, -0.8, 0.5)).toBe('left');
+    });
+
+    it('uses the supplied threshold', () => {
+        expect(discretizeStick(0.3, 0, 0.2)).toBe('right');
+        expect(discretizeStick(0.3, 0, 0.5)).toBeNull();
+    });
+
+    it('one axis above threshold, other below, picks the triggered one', () => {
+        // X is below threshold, Y is above — vertical wins even if |X| > |Y|
+        // is false. Matches "cardinal only when a stick is actually pushed".
+        expect(discretizeStick(0.3, -0.6, 0.5)).toBe('up');
+        expect(discretizeStick(-0.3, 0.7, 0.5)).toBe('down');
     });
 });
 

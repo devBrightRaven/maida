@@ -11,7 +11,9 @@ Consolidated release covering iterative accessibility and UX work that built up 
 ### Gamepad
 
 - **Right stick = global scroll**: The right analog stick now scrolls any scrollable content (kata list, legal pages, settings) with velocity proportional to deflection. Mounted once at the app root, resolves the scroll target by walking up from the focused element to the nearest scrollable ancestor. Dead zone 0.15, speed 1500 px/sec at full deflection, dt-based so scroll feels consistent across frame rates. Suppressed while a text input / textarea / combobox / contentEditable is focused so it never fights caret keys.
+- **Left stick = navigation (mirrors D-pad)**: The left analog stick now drives focus navigation, firing the same `onNav(dir)` callback as the D-pad. Discrete cardinal direction via `discretizeStick` (threshold 0.5; dominant axis wins, horizontal on ties). Shares the D-pad's 400 ms initial delay and 100 ms repeat interval so holding the stick adjusts the cool-down slider continuously, same as holding a D-pad direction.
 - **D-pad fallback scroll on legal pages**: When a legal page (Accessibility / Privacy / Terms) is open, D-pad up/down scrolls the page body ~120 px per press (auto-repeats when held). This is the discrete fallback for users without a usable right stick; the back button remains focusable via Esc/B.
+- **Slider focus ring for gamepad users**: The cool-down slider now styles both `:focus` and `:focus-visible`. Chromium does not always treat gamepad-driven programmatic `.focus()` as keyboard-sourced, so `:focus-visible` alone left the slider without a visible highlight; the `:focus` fallback ensures the amber outline renders whenever the slider is focused.
 
 ### Settings
 
@@ -57,9 +59,9 @@ Consolidated release covering iterative accessibility and UX work that built up 
 
 ### Tests
 
-- **Total: 281 tests / 21 files** (baseline at start of v0.4.0 work: 236 / 19).
+- **Total: 287 tests / 21 files** (baseline at start of v0.4.0 work: 236 / 19).
 - `src/__tests__/utils/scroll.test.js` (11 tests) — scroll ancestor resolution with mocked DOM chains.
-- `src/__tests__/hooks/gamepadLogic.test.js` (17 tests) — dead zone, scroll delta, R-stick suppression rules. Pure-function coverage for all decision logic in the R-stick path.
+- `src/__tests__/hooks/gamepadLogic.test.js` (23 tests) — dead zone, scroll delta, L-stick discretization, R-stick suppression rules. Pure-function coverage for both analog sticks' decision logic.
 - `src/__tests__/services/bridge-preferences.test.js` (9 tests) — bridge range validation, graceful degrade when Tauri invoke fails.
 - `src/__tests__/i18n/numbers.test.js` (8 tests) — extended 16-30 range across all 4 locales + fallback behavior.
 
