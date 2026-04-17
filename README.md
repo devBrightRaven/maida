@@ -4,7 +4,7 @@
 
 Maida shows you one game at a time. Try it or skip it. No browsing, no scrolling, no decision fatigue.
 
-Over time, your choices shape what Maida suggests -- games you keep trying appear more often, games you skip fade away naturally.
+Over time, your choices shape what you see -- games you keep trying appear more often, games you skip fade away naturally.
 
 ## Download
 
