@@ -7,13 +7,13 @@ status: published
 source: claude-code
 project: maida
 created: 2025-01-01
-updated: 2026-04-17
-description: "Maida v0.4.0 使用手册（简体中文）：涵盖临（Rin）快速决策、构（Kamae）策展管理、型（Kata）分组、引导导览、锚定、冻结状态、键盘与手柄操作、设置。"
+updated: 2026-04-18
+description: "Maida v0.4.2 使用手册（简体中文）：涵盖临（Rin）快速决策、构（Kamae）策展管理、型（Kata）分组、引导导览、锚定、冻结状态、键盘与手柄操作、设置。"
 ---
 
 # Maida 使用手册
 
-**版本：v0.4.0**
+**版本：v0.4.2**
 
 ---
 
@@ -280,5 +280,5 @@ Maida 完全移除浏览。一款游戏。一个选择。继续前进。
 
 联系：bertram@brightraven.world
 
-App Version: v0.4.0 | Manual Version: v0.4.0
-最后更新：2026-04-17
+App Version: v0.4.2 | Manual Version: v0.4.2
+最后更新：2026-04-18
