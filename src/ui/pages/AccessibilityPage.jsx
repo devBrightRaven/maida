@@ -15,6 +15,7 @@ export default function AccessibilityPage({ onClose }) {
             <ul>
                 <li>{t('ui.legal.a11y_feature_keyboard')}</li>
                 <li>{t('ui.legal.a11y_feature_gamepad')}</li>
+                <li>{t('ui.legal.a11y_feature_cooldown')}</li>
                 <li>{t('ui.legal.a11y_feature_sr')}</li>
                 <li>{t('ui.legal.a11y_feature_focus')}</li>
                 <li>{t('ui.legal.a11y_feature_motion')}</li>
