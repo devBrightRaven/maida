@@ -198,9 +198,16 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
 
         const container = containerRef.current;
         if (!container) return;
-        const focusable = Array.from(container.querySelectorAll(
-            'button:not(:disabled), input:not(:disabled), [tabindex]:not([tabindex="-1"]), [role="button"], .showcase-item[tabindex]'
-        ));
+        // Include the app-root VersionTag's Update button. It lives outside
+        // containerRef (sibling to KamaeView's main), so the container-scoped
+        // query would miss it and leave the button unreachable by D-pad /
+        // L-stick despite being Tab-focusable.
+        const focusable = [
+            ...Array.from(container.querySelectorAll(
+                'button:not(:disabled), input:not(:disabled), [tabindex]:not([tabindex="-1"]), [role="button"], .showcase-item[tabindex]'
+            )),
+            ...Array.from(document.querySelectorAll('.global-version-tag button:not(:disabled)'))
+        ];
         if (focusable.length === 0) return;
         const current = focusable.indexOf(active);
         let next;

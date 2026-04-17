@@ -263,7 +263,7 @@
             "copyright_text": "\u00a9 2026 Bright Raven World. All rights reserved."
         },
         "update": {
-            "available_alert": "Maida {version} が利用可能です。Tab キーで更新ボタンを見つけてください。",
+            "available_alert": "Maida {version} が利用可能です。「更新」ボタンを選んでインストールしてください。",
             "button_aria": "Maida を {from} から {to} に更新",
             "button": "更新",
             "updating": "更新中..."

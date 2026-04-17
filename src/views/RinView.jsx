@@ -239,6 +239,7 @@ export default function RinView({
 
             const current = document.activeElement;
 
+            const updateBtn = document.querySelector('.global-version-tag button:not(:disabled)');
             const isVisit = current === btnRefs.visit.current;
             const isNotToday = current === btnRefs.notToday.current;
             const isBack = current === btnRefs.back.current;
@@ -246,8 +247,9 @@ export default function RinView({
             const isSwitchKamae = current === btnRefs.switchKamae.current;
             const isHelpBtn = current === helpBtnRef.current;
             const isThemeToggle = current?.classList?.contains('theme-toggle');
+            const isUpdateBtn = current === updateBtn;
             const isFooterBtn = current?.closest('.app-footer');
-            const isKnownButton = isVisit || isNotToday || isBack || isTraceBtn || isSwitchKamae || isHelpBtn || isThemeToggle || isFooterBtn;
+            const isKnownButton = isVisit || isNotToday || isBack || isTraceBtn || isSwitchKamae || isHelpBtn || isThemeToggle || isUpdateBtn || isFooterBtn;
 
             // Fallback: If focus is lost, on body, or on unknown element, grab NOT NOW
             if (!current || current === document.body || !isKnownButton) {
@@ -271,6 +273,7 @@ export default function RinView({
                 else if (isTraceBtn) focusBtn('visit');
                 else if (isHelpBtn) focusBtn('switchKamae');
                 else if (isThemeToggle) helpBtnRef.current?.focus();
+                else if (isUpdateBtn) themeToggleEl?.focus();
                 else if (isSwitchKamae) canUndo ? focusBtn('back') : focusBtn('notToday');
                 else {
                     // Navigate within footer buttons or back to main
@@ -279,8 +282,11 @@ export default function RinView({
                     if (idx > 0) {
                         footerBtns[idx - 1].focus();
                     } else if (idx === 0) {
-                        // First footer button up → theme toggle (then ?)
-                        themeToggleEl?.focus();
+                        // First footer button up: updateBtn (if present) sits
+                        // between theme-toggle and footer, otherwise fall back
+                        // directly to theme-toggle.
+                        if (updateBtn) updateBtn.focus();
+                        else themeToggleEl?.focus();
                     }
                 }
             }
@@ -296,6 +302,15 @@ export default function RinView({
                     // ? down → theme toggle (then footer)
                     themeToggleEl?.focus();
                 } else if (isThemeToggle) {
+                    // theme-toggle down: if an Update button is showing,
+                    // stop there first before entering the footer strip.
+                    if (updateBtn) {
+                        updateBtn.focus();
+                    } else {
+                        const footer = document.querySelector('.app-footer button');
+                        if (footer) footer.focus();
+                    }
+                } else if (isUpdateBtn) {
                     const footer = document.querySelector('.app-footer button');
                     if (footer) footer.focus();
                 } else {

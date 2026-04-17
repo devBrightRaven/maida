@@ -564,7 +564,7 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
 
             <section className="kamae-settings-section" aria-labelledby="settings-about-title">
                 <h2 id="settings-about-title" className="kamae-settings-section-title">{t('ui.settings.about_title')}</h2>
-                <VersionTag className="settings-version" updateCheck={updateCheck} updateAlertShown={updateAlertShown} showBuildDate />
+                <VersionTag className="settings-version" updateCheck={updateCheck} updateAlertShown={updateAlertShown} showBuildDate announceUpdate={false} />
             </section>
 
         </section>

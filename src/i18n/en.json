@@ -263,7 +263,7 @@
             "copyright_text": "\u00a9 2026 Bright Raven World. All rights reserved."
         },
         "update": {
-            "available_alert": "Maida {version} is available. Press Tab to find the Update button.",
+            "available_alert": "Maida {version} is available. Activate the Update button to install.",
             "button_aria": "Update Maida from {from} to {to}",
             "button": "Update",
             "updating": "Updating..."

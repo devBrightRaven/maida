@@ -1,6 +1,6 @@
 import { t } from '../i18n';
 
-export default function VersionTag({ updateCheck, updateAlertShown, className = '', showBuildDate = false }) {
+export default function VersionTag({ updateCheck, updateAlertShown, className = '', showBuildDate = false, announceUpdate = true }) {
     if (!updateCheck) return null;
 
     return (
@@ -13,7 +13,11 @@ export default function VersionTag({ updateCheck, updateAlertShown, className = 
             {showBuildDate && <span className="version-date">{__BUILD_DATE__}</span>}
             {updateCheck.isUpdateAvailable && (
                 <>
-                    {!updateAlertShown && (
+                    {/* Duplicate role="alert" regions would make NVDA announce
+                        the update twice when Settings is open (global tag +
+                        settings tag both render). Only the announceUpdate=true
+                        instance emits the alert; other instances stay quiet. */}
+                    {announceUpdate && !updateAlertShown && (
                         <p className="sr-only" role="alert">
                             {t('ui.update.available_alert', { version: updateCheck.latestVersion })}
                         </p>
