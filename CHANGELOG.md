@@ -4,6 +4,20 @@ All notable changes to Maida, combining public-facing updates and technical deta
 
 ---
 
+## [v0.4.2] - 2026-04-18
+
+Two small tweaks shipped together.
+
+### Prescription
+
+- **`new-device-start` rewrite**: the "first time with this game" prescription leaked the internal data-model term `last-played` into user-facing copy. Rewritten in plain language across all four locales so the psychological nudge reads naturally instead of like debug text.
+
+### Focus cycles
+
+- **Rin and Kamae navigation reordered**: gamepad / keyboard focus traversal now starts at the theme toggle and help button (meta controls) before reaching the main action buttons, matching top-to-bottom visual scanning on a handheld. Initial focus on each view is unchanged (Rin: NOT NOW, Kamae: active kata row). Kamae additionally builds its focus sequence explicitly rather than from raw DOM order, so the app-root Update button is inserted before the footer strip and is no longer unreachable by D-pad or left stick.
+
+---
+
 ## [v0.4.1] - 2026-04-18
 
 Verification release for the auto-update pipeline. No functional changes beyond the version increment. Shipped so a live v0.4.0 install can exercise the signed-update code path end-to-end.
