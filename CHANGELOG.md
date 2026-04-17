@@ -4,7 +4,7 @@ All notable changes to Maida, combining public-facing updates and technical deta
 
 ---
 
-## [v0.4.0] - 2026-04-16
+## [v0.4.0] - 2026-04-17
 
 Consolidated release covering iterative accessibility and UX work that built up since v0.1.0 (internal v0.2.x and v0.3.0 iterations). Headline additions are gamepad-first scrolling and a persisted cool-down setting.
 
