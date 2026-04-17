@@ -7,13 +7,13 @@ status: published
 source: claude-code
 project: maida
 created: 2025-01-01
-updated: 2026-03-31
-description: "Maida v0.1.1 User Manual (English): covers Rin (fast decision), Kamae (curation), Kata (grouping), guided tour, anchoring, freeze state, keyboard and gamepad controls, settings."
+updated: 2026-04-17
+description: "Maida v0.4.0 User Manual (English): covers Rin (fast decision), Kamae (curation), Kata (grouping), guided tour, anchoring, freeze state, keyboard and gamepad controls, settings."
 ---
 
 # Maida User Manual
 
-**Version: v0.1.1**
+**Version: v0.4.0**
 
 ---
 
@@ -163,7 +163,7 @@ Freeze means:
 
 After playing, return to Maida and tap **I'M BACK**.
 
-Note: The button activates after 5 seconds to prevent accidental double-tap.
+Note: The button activates after the cool-down period (default 15 seconds, adjustable in Settings → Accessibility → Cool-down duration, 5-30 seconds). This prevents accidental double-tap.
 
 ---
 
@@ -179,6 +179,13 @@ It's not recommending. It honestly reflects where your intention is leaning.
 ---
 
 ## Keyboard and Gamepad Controls
+
+### Navigation (all modes)
+
+| Action | Keyboard | Gamepad |
+|--------|----------|---------|
+| Move focus | Arrow keys or Tab | D-pad, or left stick |
+| Scroll long pages | Page Up/Down | Right stick, or D-pad up/down on legal pages |
 
 ### Rin Mode
 
@@ -218,9 +225,12 @@ NVDA screen reader supported (Windows). On Linux, Orca support is limited due to
 In Kamae, tap "Settings". Each section can be expanded by tapping its title.
 
 - **Language**: Choose from English, Japanese, Simplified Chinese, or Traditional Chinese. Select a language, then press again to confirm.
-- **Vibration Feedback**: Choose Off, Low, Medium, or High. Changes apply immediately. (Gamepad only)
+- **Accessibility**: Expanded section with three preferences:
+  - **Haptic feedback**: Off / Low / Medium / High. Changes apply immediately. (Gamepad only)
+  - **Cool-down duration**: How long the post-TRY rest screen stays before "I'M BACK" activates. Slide between 5 and 30 seconds (default 15s). The value persists across launches.
+  - **View full Accessibility statement**: Opens the accessibility policy page.
 - **Controls**: Full list of keyboard and gamepad shortcuts.
-- **Appearance**: Toggle light/dark mode.
+- **Theme**: Toggle light/dark mode.
 - **IGDB Game Duration**: Optional. Enter Twitch Developer credentials to show estimated play time below game titles.
 - **Anonymous Usage Data**: Each launch sends a small anonymous signal (random ID + install day count + version). Toggle off anytime.
 
@@ -270,5 +280,5 @@ Maida removes browsing entirely. One game. One choice. Move on.
 
 Contact: bertram@brightraven.world
 
-App Version: v0.1.1 | Manual Version: v0.1.1
-Last updated: 2026-04-09
+App Version: v0.4.0 | Manual Version: v0.4.0
+Last updated: 2026-04-17

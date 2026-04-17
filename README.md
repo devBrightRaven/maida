@@ -24,7 +24,7 @@ Over time, your choices shape what Maida suggests -- games you keep trying appea
 - **Two modes** -- Rin for quick decisions, Kamae for grouping games into katas (mood-based playlists)
 - **Learns from you** -- choices carry weight that decays daily back to neutral
 - **4 languages** -- English, Japanese, Traditional Chinese, Simplified Chinese
-- **Keyboard and gamepad** -- full D-pad navigation, designed for handhelds like ROG Ally
+- **Keyboard and gamepad** -- D-pad and L-stick navigation, R-stick scrolls long pages, designed for handhelds like ROG Ally
 - **Screen reader support** -- tested with NVDA on Windows
 - **Auto-updates** -- future versions install automatically
 
