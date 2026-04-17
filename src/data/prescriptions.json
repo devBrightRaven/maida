@@ -1242,7 +1242,7 @@
                 "id": "new-device-start",
                 "tier": 1,
                 "kernel": "Continuity record may be absent.",
-                "interface": "When no last-played record exists, you may begin without reconstructing history, sequence, or proof of prior use.",
+                "interface": "Even without any record of playing this before, you may begin without reconstructing history, sequence, or proof of prior use.",
                 "momentum": "unlock",
                 "audit": {
                     "permission_effect": "lower_obligation",

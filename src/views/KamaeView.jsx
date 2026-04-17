@@ -198,15 +198,29 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
 
         const container = containerRef.current;
         if (!container) return;
-        // Include the app-root VersionTag's Update button. It lives outside
-        // containerRef (sibling to KamaeView's main), so the container-scoped
-        // query would miss it and leave the button unreachable by D-pad /
-        // L-stick despite being Tab-focusable.
+        // Build the cycle in a deliberate order:
+        //   theme → help → (content in DOM order) → updateBtn (if present)
+        //   → footer → wrap to theme.
+        // Meta controls (theme, help) are pulled to the front so gamepad
+        // traversal scans top-to-bottom visually instead of hitting them
+        // only after going through the whole kata list. The Update button
+        // (app-root sibling) is explicitly inserted before the footer
+        // strip because the container-scoped query would otherwise miss it.
+        const all = Array.from(container.querySelectorAll(
+            'button:not(:disabled), input:not(:disabled), [tabindex]:not([tabindex="-1"]), [role="button"], .showcase-item[tabindex]'
+        ));
+        const theme = all.find(el => el.classList.contains('theme-toggle'));
+        const help = all.find(el => el.classList.contains('help-tour-btn'));
+        const footerSet = new Set(Array.from(container.querySelectorAll('.app-footer button')));
+        const footerBtns = all.filter(el => footerSet.has(el));
+        const rest = all.filter(el => el !== theme && el !== help && !footerSet.has(el));
+        const updateBtn = document.querySelector('.global-version-tag button:not(:disabled)');
         const focusable = [
-            ...Array.from(container.querySelectorAll(
-                'button:not(:disabled), input:not(:disabled), [tabindex]:not([tabindex="-1"]), [role="button"], .showcase-item[tabindex]'
-            )),
-            ...Array.from(document.querySelectorAll('.global-version-tag button:not(:disabled)'))
+            ...(theme ? [theme] : []),
+            ...(help ? [help] : []),
+            ...rest,
+            ...(updateBtn ? [updateBtn] : []),
+            ...footerBtns
         ];
         if (focusable.length === 0) return;
         const current = focusable.indexOf(active);

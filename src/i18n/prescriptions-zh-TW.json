@@ -350,7 +350,7 @@
     },
     "new-device-start": {
         "kernel": "連續記錄可以缺席。",
-        "interface": "當沒有 last-played 記錄時，你可以開始，而不必重建歷史、順序或曾經使用的證明。"
+        "interface": "即使沒有以前遊玩過的記錄，也可以開始，不必重建歷史、順序或曾經使用的證明。"
     },
     "post-burnout-return": {
         "kernel": "強度不必重現。",

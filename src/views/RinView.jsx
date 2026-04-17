@@ -261,48 +261,51 @@ export default function RinView({
             // (no ref pass-through). Query when needed.
             const themeToggleEl = document.querySelector('.theme-toggle');
 
+            // Cycle order (forwards): theme → help → TRY → NOT NOW →
+            // (BACK if canUndo) → switchKamae → updateBtn (if present) →
+            // footer... → wrap to theme. Meta controls (theme, help) lead
+            // so gamepad traversal scans top-to-bottom visually instead of
+            // jumping mid-screen to TRY first.
+
             // Up / Left = Previous (backwards)
             if (dir === 'left' || dir === 'up') {
-                if (isVisit) {
-                    // visit up → loop to last footer button (full backwards cycle)
+                if (isThemeToggle) {
+                    // theme up → wrap to last footer button (full backwards cycle)
                     const footerBtns = Array.from(document.querySelectorAll('.app-footer button'));
                     if (footerBtns.length > 0) footerBtns[footerBtns.length - 1].focus();
                 }
+                else if (isHelpBtn) themeToggleEl?.focus();
+                else if (isVisit) helpBtnRef.current?.focus();
                 else if (isNotToday) focusBtn('visit');
                 else if (isBack) focusBtn('notToday');
                 else if (isTraceBtn) focusBtn('visit');
-                else if (isHelpBtn) focusBtn('switchKamae');
-                else if (isThemeToggle) helpBtnRef.current?.focus();
-                else if (isUpdateBtn) themeToggleEl?.focus();
                 else if (isSwitchKamae) canUndo ? focusBtn('back') : focusBtn('notToday');
+                else if (isUpdateBtn) focusBtn('switchKamae');
                 else {
-                    // Navigate within footer buttons or back to main
+                    // Navigate within footer buttons or back to switchKamae / updateBtn
                     const footerBtns = Array.from(document.querySelectorAll('.app-footer button'));
                     const idx = footerBtns.indexOf(current);
                     if (idx > 0) {
                         footerBtns[idx - 1].focus();
                     } else if (idx === 0) {
                         // First footer button up: updateBtn (if present) sits
-                        // between theme-toggle and footer, otherwise fall back
-                        // directly to theme-toggle.
+                        // between switchKamae and footer, otherwise fall back
+                        // directly to switchKamae.
                         if (updateBtn) updateBtn.focus();
-                        else themeToggleEl?.focus();
+                        else focusBtn('switchKamae');
                     }
                 }
             }
             // Down / Right = Next (forwards)
             else if (dir === 'right' || dir === 'down') {
-                if (isVisit) focusBtn('notToday');
+                if (isThemeToggle) helpBtnRef.current?.focus();
+                else if (isHelpBtn) focusBtn('visit');
+                else if (isVisit) focusBtn('notToday');
                 else if (isNotToday && canUndo) focusBtn('back');
                 else if (isNotToday && !canUndo) focusBtn('switchKamae');
                 else if (isBack) focusBtn('switchKamae');
                 else if (isSwitchKamae) {
-                    helpBtnRef.current?.focus();
-                } else if (isHelpBtn) {
-                    // ? down → theme toggle (then footer)
-                    themeToggleEl?.focus();
-                } else if (isThemeToggle) {
-                    // theme-toggle down: if an Update button is showing,
+                    // switchKamae down: if an Update button is showing,
                     // stop there first before entering the footer strip.
                     if (updateBtn) {
                         updateBtn.focus();
@@ -320,8 +323,8 @@ export default function RinView({
                     if (idx >= 0 && idx < footerBtns.length - 1) {
                         footerBtns[idx + 1].focus();
                     } else if (idx === footerBtns.length - 1) {
-                        // Last footer down → loop to TRY (full forward cycle)
-                        focusBtn('visit');
+                        // Last footer down → wrap to theme (full forward cycle)
+                        themeToggleEl?.focus();
                     }
                 }
             }
