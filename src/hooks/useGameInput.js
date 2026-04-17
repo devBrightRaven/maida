@@ -1,14 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
 import { vibrate, vibrateProgress } from '../services/haptics';
+import { discretizeStick } from './gamepadLogic';
 
 /**
  * useGameInput
- * Unified input handler for Keyboard and Gamepad (D-pad only).
+ * Unified input handler for Keyboard and Gamepad.
  * Supports "Long Press" detection for anchoring mechanics.
  *
  * Input sources:
  * - Keyboard: Arrow keys, Enter/Space, Escape
- * - Gamepad: D-pad (buttons 12-15), A (button 0), B (button 1)
+ * - Gamepad: D-pad (buttons 12-15), L-stick (axes 0-1, mirrors D-pad nav),
+ *   A (button 0), B (button 1), Y, L1, R1, Menu. R-stick is handled by
+ *   useGamepadScroll (analog scroll), not here.
  *
  * @param {Object} config
  * @param {Function} config.onMainAction - A / Enter (Short Press)
@@ -241,11 +244,22 @@ export function useGameInput({
         // Button indices (standard gamepad mapping)
         const BTN_A = 0, BTN_B = 1, BTN_Y = 3, BTN_L1 = 4, BTN_R1 = 5, BTN_MENU = 9;
         const DPAD_UP = 12, DPAD_DOWN = 13, DPAD_LEFT = 14, DPAD_RIGHT = 15;
+        // L-stick axes (standard mapping). R-stick (2, 3) is owned by useGamepadScroll.
+        const LSTICK_X = 0, LSTICK_Y = 1;
+        // Threshold must stay above typical stick drift. 0.5 is firm enough
+        // that users can rest their thumb without accidental triggers, and
+        // loose enough that a deliberate flick registers without finger fatigue.
+        const LSTICK_THRESHOLD = 0.5;
 
         // D-pad state + repeat timing
         const lastDpad = { up: false, down: false, left: false, right: false };
         const dpadHeldSince = { up: 0, down: 0, left: 0, right: 0 };
         const dpadLastRepeat = { up: 0, down: 0, left: 0, right: 0 };
+        // L-stick shares the repeat cadence with D-pad so users holding the
+        // stick get the same "adjust slider continuously" feel they expect.
+        let lStickDir = null;
+        let lStickHeldSince = 0;
+        let lStickLastRepeat = 0;
         const DPAD_INITIAL_DELAY = 400; // ms before repeat starts
         const DPAD_REPEAT_INTERVAL = 100; // ms between repeats
         let aButtonDown = false;
@@ -264,6 +278,16 @@ export function useGameInput({
             if (el.getAttribute('role') === 'button') return el;
             if (el.tagName === 'INPUT') return el;
             if (el.tagName === 'LABEL') return el;
+            // Keyboard-focusable custom elements (tabindex=0) that own an
+            // onClick / onKeyDown(Enter) handler — e.g. the kata-group div
+            // in KataPanel which uses role="group" but activates via click.
+            // Keyboard Enter already fires the element's own handlers via
+            // native focus; gamepad A should match by dispatching a click
+            // rather than falling through to the long-press tracker.
+            // tabindex=-1 is excluded because that's programmatic-only
+            // focus (e.g. showcase-item) with no user activation intent.
+            const tabIndex = el.getAttribute('tabindex');
+            if (tabIndex !== null && Number(tabIndex) >= 0) return el;
             return null;
         };
 
@@ -311,6 +335,29 @@ export function useGameInput({
                     }
 
                     Object.assign(lastDpad, dpadState);
+
+                    // L-stick navigation (mirrors D-pad). Discretize XY to a
+                    // cardinal direction; same initial-delay + repeat cadence.
+                    // A direction change (e.g. left -> up mid-hold) counts as
+                    // a fresh press so focus moves promptly.
+                    const axX = gp.axes?.[LSTICK_X] ?? 0;
+                    const axY = gp.axes?.[LSTICK_Y] ?? 0;
+                    const currentLDir = discretizeStick(axX, axY, LSTICK_THRESHOLD);
+                    if (currentLDir) {
+                        if (currentLDir !== lStickDir) {
+                            callbacksRef.current.onNav?.(currentLDir);
+                            lStickDir = currentLDir;
+                            lStickHeldSince = now;
+                            lStickLastRepeat = now;
+                        } else if (now - lStickHeldSince >= DPAD_INITIAL_DELAY
+                            && now - lStickLastRepeat >= DPAD_REPEAT_INTERVAL) {
+                            callbacksRef.current.onNav?.(currentLDir);
+                            lStickLastRepeat = now;
+                        }
+                    } else {
+                        lStickDir = null;
+                        lStickHeldSince = 0;
+                    }
 
                     // A button - activates the FOCUSED element
                     const aPressed = btn(BTN_A);
@@ -392,6 +439,9 @@ export function useGameInput({
             lastL1 = false;
             lastR1 = false;
             Object.assign(lastDpad, { up: false, down: false, left: false, right: false });
+            lStickDir = null;
+            lStickHeldSince = 0;
+            lStickLastRepeat = 0;
         };
 
         // Always start polling - blur event will stop it if window loses focus

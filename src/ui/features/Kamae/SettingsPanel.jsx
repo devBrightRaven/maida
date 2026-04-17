@@ -1,15 +1,20 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { t, getLocale, setLocale } from '../../../i18n';
+import { secondsToWord } from '../../../i18n/numbers';
 import { getIntensity, setIntensity, vibrate } from '../../../services/haptics';
 import { validateKeyFormat, formatLicenseKey } from '../../../core/license';
 import bridge from '../../../services/bridge';
 import VersionTag from '../../VersionTag';
 
+const FROZEN_GUARD_MIN = 5;
+const FROZEN_GUARD_MAX = 30;
+const FROZEN_GUARD_DEBOUNCE_MS = 300;
+
 /**
  * SettingsPanel — inline panel for IGDB credential management.
  * Renders inside KamaeView when settings is toggled open.
  */
-export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleChange, onTourStart, onNavigateLegal, replayTourBtnRef, updateCheck, updateAlertShown }) {
+export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleChange, onTourStart, onNavigateLegal, replayTourBtnRef, updateCheck, updateAlertShown, onFrozenGuardChange }) {
     const [clientId, setClientId] = useState('');
     const [clientSecret, setClientSecret] = useState('');
     const [hasExisting, setHasExisting] = useState(false);
@@ -21,11 +26,16 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
     const [currentLang, setCurrentLang] = useState(getLocale());
     const [pendingLang, setPendingLang] = useState(getLocale());
     const [langExpanded, setLangExpanded] = useState(false);
-    const [hapticExpanded, setHapticExpanded] = useState(false);
+    const [a11yExpanded, setA11yExpanded] = useState(false);
     const [controlsExpanded, setControlsExpanded] = useState(false);
 
     // Haptic state
     const [hapticLevel, setHapticLevel] = useState(getIntensity());
+
+    // Frozen guard duration (seconds)
+    const [frozenGuardSeconds, setFrozenGuardSeconds] = useState(15);
+    const [frozenGuardAnnounce, setFrozenGuardAnnounce] = useState('');
+    const frozenGuardSaveTimer = useRef(null);
 
     // Telemetry state
     const [telemetryEnabled, setTelemetryEnabled] = useState(true);
@@ -50,7 +60,30 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
             }
             const telEnabled = await bridge.getTelemetryEnabled();
             setTelemetryEnabled(telEnabled);
+            const guard = await bridge.getFrozenGuardDuration();
+            setFrozenGuardSeconds(guard);
         })();
+    }, []);
+
+    const handleFrozenGuardChange = useCallback((raw) => {
+        const n = Math.max(FROZEN_GUARD_MIN, Math.min(FROZEN_GUARD_MAX, Number(raw) || FROZEN_GUARD_MIN));
+        setFrozenGuardSeconds(n);
+        if (onFrozenGuardChange) onFrozenGuardChange(n);
+        if (frozenGuardSaveTimer.current) clearTimeout(frozenGuardSaveTimer.current);
+        frozenGuardSaveTimer.current = setTimeout(() => {
+            bridge.setFrozenGuardDuration(n).catch((err) => {
+                console.warn('[Settings] failed to persist frozen guard duration:', err);
+            });
+            setFrozenGuardAnnounce(
+                t('ui.settings.frozen_guard_announce', { word: secondsToWord(n, getLocale()) })
+            );
+        }, FROZEN_GUARD_DEBOUNCE_MS);
+    }, [onFrozenGuardChange]);
+
+    useEffect(() => {
+        return () => {
+            if (frozenGuardSaveTimer.current) clearTimeout(frozenGuardSaveTimer.current);
+        };
     }, []);
 
     const handleTest = useCallback(async () => {
@@ -213,43 +246,86 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
                 <button
                     type="button"
                     className="kamae-settings-disclosure"
-                    aria-expanded={hapticExpanded}
-                    aria-controls="haptic-options"
-                    onClick={() => setHapticExpanded(prev => !prev)}
+                    aria-expanded={a11yExpanded}
+                    aria-controls="a11y-options"
+                    onClick={() => setA11yExpanded(prev => !prev)}
                 >
                     <h2 className="kamae-settings-section-title">
-                        {t('ui.settings.haptic_title', { current: [
-                            { value: 0, label: t('ui.settings.haptic_off') },
-                            { value: 30, label: t('ui.settings.haptic_low') },
-                            { value: 60, label: t('ui.settings.haptic_medium') },
-                            { value: 100, label: t('ui.settings.haptic_high') },
-                        ].find(h => h.value === hapticLevel)?.label || '' })}
-                        <span className="kamae-settings-chevron" aria-hidden="true">{hapticExpanded ? '▾' : '▸'}</span>
+                        {t('ui.legal.accessibility')}
+                        <span className="kamae-settings-chevron" aria-hidden="true">{a11yExpanded ? '▾' : '▸'}</span>
                     </h2>
                 </button>
-                {hapticExpanded && (
-                    <div id="haptic-options" className="kamae-settings-haptic-bar" role="radiogroup" aria-label={t('ui.settings.haptic_title')}>
-                        {[
-                            { value: 0, label: t('ui.settings.haptic_off') },
-                            { value: 30, label: t('ui.settings.haptic_low') },
-                            { value: 60, label: t('ui.settings.haptic_medium') },
-                            { value: 100, label: t('ui.settings.haptic_high') },
-                        ].map(({ value, label }, i) => (
-                            <button
-                                key={value}
-                                type="button"
-                                role="radio"
-                                aria-checked={hapticLevel === value}
-                                className={`kamae-haptic-seg ${value === hapticLevel ? 'kamae-haptic-seg--filled' : ''}`}
-                                onClick={() => {
-                                    setHapticLevel(value);
-                                    setIntensity(value);
-                                    if (value > 0) vibrate('confirm');
-                                }}
+                {a11yExpanded && (
+                    <div id="a11y-options" className="kamae-settings-a11y">
+                        <div className="kamae-settings-a11y-item">
+                            <h3 id="a11y-haptic-heading" className="kamae-settings-a11y-heading">
+                                {t('ui.settings.haptic_heading')}
+                            </h3>
+                            <div className="kamae-settings-haptic-bar" role="radiogroup" aria-labelledby="a11y-haptic-heading">
+                                {[
+                                    { value: 0, label: t('ui.settings.haptic_off') },
+                                    { value: 30, label: t('ui.settings.haptic_low') },
+                                    { value: 60, label: t('ui.settings.haptic_medium') },
+                                    { value: 100, label: t('ui.settings.haptic_high') },
+                                ].map(({ value, label }) => (
+                                    <button
+                                        key={value}
+                                        type="button"
+                                        role="radio"
+                                        aria-checked={hapticLevel === value}
+                                        className={`kamae-haptic-seg ${value === hapticLevel ? 'kamae-haptic-seg--filled' : ''}`}
+                                        onClick={() => {
+                                            setHapticLevel(value);
+                                            setIntensity(value);
+                                            if (value > 0) vibrate('confirm');
+                                        }}
+                                    >
+                                        {label}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="kamae-settings-a11y-item">
+                            <h3 id="a11y-guard-heading" className="kamae-settings-a11y-heading">
+                                {t('ui.settings.frozen_guard_title')}
+                                <span className="kamae-settings-guard-value" aria-hidden="true">
+                                    {t('ui.settings.frozen_guard_value', { seconds: frozenGuardSeconds })}
+                                </span>
+                            </h3>
+                            <p className="kamae-settings-guard-desc">{t('ui.settings.frozen_guard_desc')}</p>
+                            <input
+                                type="range"
+                                className="kamae-settings-guard-slider"
+                                min={FROZEN_GUARD_MIN}
+                                max={FROZEN_GUARD_MAX}
+                                step={1}
+                                value={frozenGuardSeconds}
+                                aria-labelledby="a11y-guard-heading"
+                                aria-valuemin={FROZEN_GUARD_MIN}
+                                aria-valuemax={FROZEN_GUARD_MAX}
+                                aria-valuenow={frozenGuardSeconds}
+                                onChange={(e) => handleFrozenGuardChange(e.target.value)}
+                            />
+                            <div
+                                className="sr-only"
+                                role="status"
+                                aria-live="polite"
+                                aria-atomic="true"
                             >
-                                {label}
+                                {frozenGuardAnnounce}
+                            </div>
+                        </div>
+
+                        {onNavigateLegal && (
+                            <button
+                                type="button"
+                                className="kamae-settings-btn kamae-settings-a11y-link"
+                                onClick={() => { onClose(); onNavigateLegal('accessibility'); }}
+                            >
+                                {t('ui.settings.a11y_statement_link')}
                             </button>
-                        ))}
+                        )}
                     </div>
                 )}
             </section>
@@ -459,19 +535,6 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
                     </p>
                 )}
             </section>}
-
-            {onNavigateLegal && (
-                <section className="kamae-settings-section" aria-labelledby="settings-a11y-title">
-                    <h2 id="settings-a11y-title" className="kamae-settings-section-title">{t('ui.legal.accessibility')}</h2>
-                    <button
-                        type="button"
-                        className="kamae-settings-btn"
-                        onClick={() => { onClose(); onNavigateLegal('accessibility'); }}
-                    >
-                        {t('ui.legal.accessibility')}
-                    </button>
-                </section>
-            )}
 
             <section className="kamae-settings-section" aria-labelledby="settings-telemetry-title">
                 <h2 id="settings-telemetry-title" className="kamae-settings-section-title">{t('ui.telemetry.title')}</h2>

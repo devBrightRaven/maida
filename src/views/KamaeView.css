@@ -1234,6 +1234,59 @@
     z-index: 1;
 }
 
+.kamae-settings-guard-value {
+    margin-left: 0.5rem;
+    color: var(--t-accent, #c8a84e);
+    font-variant-numeric: tabular-nums;
+}
+
+.kamae-settings-guard-desc {
+    margin: 0.25rem 0 0.75rem;
+    color: var(--t-dim);
+    font-size: 0.875rem;
+    line-height: 1.4;
+}
+
+.kamae-settings-guard-slider {
+    width: 100%;
+    accent-color: var(--t-accent, #c8a84e);
+}
+
+/* Both :focus and :focus-visible. Gamepad polling moves focus via
+   programmatic .focus() calls which Chromium does not always classify
+   as keyboard-sourced, so :focus-visible alone may never light up for
+   gamepad users. :focus fallback is visually identical. */
+.kamae-settings-guard-slider:focus,
+.kamae-settings-guard-slider:focus-visible {
+    outline: 2px solid var(--t-accent, #c8a84e);
+    outline-offset: 4px;
+    border-radius: 4px;
+}
+
+.kamae-settings-a11y {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-top: 0.5rem;
+}
+
+.kamae-settings-a11y-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.kamae-settings-a11y-heading {
+    margin: 0 0 0.25rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--t-primary);
+}
+
+.kamae-settings-a11y-link {
+    align-self: flex-start;
+    margin-top: 0.25rem;
+}
+
 .kamae-settings-radiogroup {
     display: flex;
     flex-direction: row;

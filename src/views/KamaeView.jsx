@@ -4,6 +4,7 @@ import ShowcaseList from '../ui/features/Kamae/ShowcaseList';
 import KamaeSearch from '../ui/features/Kamae/KamaeSearch';
 import ExploreView from '../ui/features/Kamae/ExploreView';
 import SettingsPanel from '../ui/features/Kamae/SettingsPanel';
+import { resolveScrollTarget } from '../utils/scroll';
 import KataPanel from '../ui/features/Kamae/KataPanel';
 import GuidedTour from '../ui/features/GuidedTour/GuidedTour';
 import { STEP } from '../tourSteps';
@@ -23,7 +24,7 @@ import './KamaeView.css';
  * Kamae (構) — slow curation face.
  * Kata selector + game list + search + explore entry.
  */
-export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleChange, tourStep, tourTotal, onTourStart, onTourReplay, onTourClose, onTourAdvance, onTourPrev, settingsRequested, onSettingsOpened, themeToggle, updateCheck, updateAlertShown }) {
+export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleChange, tourStep, tourTotal, onTourStart, onTourReplay, onTourClose, onTourAdvance, onTourPrev, settingsRequested, onSettingsOpened, themeToggle, onFrozenGuardChange, updateCheck, updateAlertShown }) {
     // SR guide announces once per install, gated by localStorage to avoid
     // re-announcement on every re-render / face switch. See RinView for same pattern.
     const [showSrGuide] = useState(() => localStorage.getItem('maida-hasHeardKamaeGuide') !== 'true');
@@ -150,9 +151,50 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
         else if (tourStep === STEP.KAMAE_SWITCH_RIN) setShowSettings(false);
     }, [tourStep]);
 
-    // D-pad navigation: cycle through all interactive elements
+    // D-pad navigation: cycle through all interactive elements.
+    // Exceptions:
+    //   - Legal page: up/down scroll the page (only the back button is
+    //     focusable, so focus-cycle would be a no-op). R-stick is the
+    //     primary scroll path; D-pad is a discrete fallback.
+    //   - Range slider focused: left/right adjust the value (with
+    //     auto-repeat from useGameInput's D-pad held-press handling),
+    //     up/down fall through to focus-cycle so the user can exit
+    //     the slider.
     const handleNav = useCallback((dir) => {
+        if (legalPage && (dir === 'up' || dir === 'down')) {
+            const target = resolveScrollTarget(document.activeElement);
+            if (target) {
+                target.scrollBy({ top: dir === 'up' ? -120 : 120, behavior: 'auto' });
+            }
+            return;
+        }
+
         const active = document.activeElement;
+
+        if (active?.tagName === 'INPUT' && active.type === 'range'
+            && (dir === 'left' || dir === 'right')) {
+            const step = Number(active.step) || 1;
+            const min = active.min !== '' ? Number(active.min) : -Infinity;
+            const max = active.max !== '' ? Number(active.max) : Infinity;
+            const currentValue = Number(active.value);
+            const nextValue = dir === 'left'
+                ? Math.max(min, currentValue - step)
+                : Math.min(max, currentValue + step);
+            if (nextValue !== currentValue) {
+                // React tracks native setter calls via a descriptor hook.
+                // Direct `active.value = ...` would bypass React state, so
+                // we use the prototype setter to ensure onChange fires.
+                const setter = Object.getOwnPropertyDescriptor(
+                    HTMLInputElement.prototype, 'value'
+                )?.set;
+                if (setter) {
+                    setter.call(active, String(nextValue));
+                    active.dispatchEvent(new Event('input', { bubbles: true }));
+                    active.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+            }
+            return;
+        }
 
         const container = containerRef.current;
         if (!container) return;
@@ -169,7 +211,7 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
         }
         focusable[next]?.focus();
         focusable[next]?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-    }, []);
+    }, [legalPage]);
 
     // A button: activate focused element (button click, checkbox toggle)
     const handleMainAction = useCallback(() => {
@@ -275,6 +317,7 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
                         replayTourBtnRef={replayTourBtnRef}
                         updateCheck={updateCheck}
                         updateAlertShown={updateAlertShown}
+                        onFrozenGuardChange={onFrozenGuardChange}
                     />
                 </div>
                 {/* Tour step 8 highlights the Replay-tour button inside Settings.

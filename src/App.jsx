@@ -11,6 +11,7 @@ import { usePrefersReducedMotion } from './hooks/usePrefersReducedMotion';
 import { STEP, TOUR_TOTAL } from './tourSteps';
 import { useTheme } from './hooks/useTheme';
 import { useGameInput } from './hooks/useGameInput';
+import { useGamepadScroll } from './hooks/useGamepadScroll';
 import bridge from './services/bridge';
 
 import { Agentation } from 'agentation';
@@ -146,6 +147,9 @@ function App() {
     const updateCheck = useUpdateCheck();
     const { theme, toggleTheme } = useTheme();
 
+    // Right analog stick → global scroll. Mounted once at App root.
+    useGamepadScroll();
+
 
     // Locale change: increment key to re-render entire tree without reload
     const [localeVersion, setLocaleVersion] = useState(0);
@@ -223,10 +227,21 @@ function App() {
         }
     }, [face, switchToKamae]);
 
+    // Legal pages and the settings panel are modals owned by RinView /
+    // KamaeView. While either is open, face-switching would abandon the
+    // reading or configuring context without the user explicitly saying
+    // "I'm done" (B / Esc / the back button). We gate on DOM presence so
+    // neither view has to lift its modal state up to App.
+    const isModalOpen = () =>
+        typeof document !== 'undefined' && (
+            !!document.querySelector('main.legal-page') ||
+            !!document.querySelector('.kamae-settings')
+        );
+
     // L1/R1 gamepad face switching + Menu button
     useGameInput({
-        onL1: switchToRin,
-        onR1: switchToKamae,
+        onL1: () => { if (!isModalOpen()) switchToRin(); },
+        onR1: () => { if (!isModalOpen()) switchToKamae(); },
         onMenu: openSettings,
     });
 
@@ -234,6 +249,7 @@ function App() {
     useEffect(() => {
         const handler = (e) => {
             if (e.ctrlKey && e.key === 'Tab') {
+                if (isModalOpen()) return;
                 e.preventDefault();
                 toggleFace();
             }
@@ -262,6 +278,22 @@ function App() {
     const [tapThreshold, setTapThreshold] = useState(300);
     const [anchorThreshold, setAnchorThreshold] = useState(3000);
     const [resumeGuard, setResumeGuard] = useState(15000);
+
+    // Load persisted frozen guard duration on mount. Bridge returns seconds;
+    // resumeGuard is stored in ms so the FrozenScreen API doesn't change.
+    useEffect(() => {
+        let cancelled = false;
+        bridge.getFrozenGuardDuration().then((seconds) => {
+            if (!cancelled && typeof seconds === 'number') {
+                setResumeGuard(seconds * 1000);
+            }
+        });
+        return () => { cancelled = true; };
+    }, []);
+
+    const handleFrozenGuardChange = useCallback((seconds) => {
+        setResumeGuard(seconds * 1000);
+    }, []);
 
     const themeToggle = (
         <button
@@ -456,6 +488,7 @@ function App() {
                     tourStep={tourStep} tourTotal={TOUR_TOTAL} onTourStart={startKamaeTour} onTourReplay={startFullTour} onTourClose={closeTour} onTourAdvance={advanceTour} onTourPrev={prevTour}
                     settingsRequested={settingsRequested} onSettingsOpened={() => setSettingsRequested(false)}
                     themeToggle={themeToggle}
+                    onFrozenGuardChange={handleFrozenGuardChange}
                     updateCheck={updateCheck} updateAlertShown={updateAlertShown} />
                 <VersionTag className="global-version-tag" updateCheck={updateCheck} updateAlertShown={updateAlertShown} />
                 {import.meta.env.DEV && import.meta.env.VITE_AGENTATION && <div aria-hidden="true"><Agentation endpoint="http://localhost:4747" /></div>}

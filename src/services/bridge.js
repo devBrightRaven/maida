@@ -104,6 +104,21 @@ const bridge = {
         const result = await call('check_license');
         return result ?? { licensed: false };
     },
+
+    // --- Preferences ---
+    getFrozenGuardDuration: async () => {
+        const result = await call('get_frozen_guard_duration');
+        return typeof result === 'number' ? result : 15;
+    },
+
+    setFrozenGuardDuration: async (seconds) => {
+        const n = Math.round(Number(seconds));
+        if (!Number.isFinite(n) || n < 5 || n > 30) {
+            throw new Error(`frozen guard duration out of range: ${seconds} (expected 5..30)`);
+        }
+        const result = await call('set_frozen_guard_duration', { seconds: n });
+        return result ?? { success: false, error: 'not implemented' };
+    },
 };
 
 export default bridge;
