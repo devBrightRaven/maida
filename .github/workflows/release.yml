@@ -61,7 +61,25 @@ jobs:
           tauriScript: pnpm tauri
           tagName: v__VERSION__
           releaseName: Maida v__VERSION__
-          releaseBody: See the assets to download and install.
+          releaseBody: |
+            ## Download / ダウンロード / 下載
+
+            | Your system | Which file |
+            |---|---|
+            | Windows | the `.exe` file |
+            | Steam Deck or other Linux | the `.AppImage` file (single file, just run it) |
+            | Ubuntu / Mint / Debian | the `.deb` file (installs into your system menu) |
+
+            Files ending in `.sig` and `latest.json` are for the auto-updater and do not need to be downloaded.
+            `.sig` で終わるファイルと `latest.json` は自動更新用で、個別のダウンロードは不要です。
+            `.sig` 結尾的檔案跟 `latest.json` 是自動更新用,不需要手動下載。
+            `.sig` 结尾的文件跟 `latest.json` 是自动更新用,不需要手动下载。
+
+            ---
+
+            ## What's new / 更新內容
+
+            _TODO: replace with release-specific changes before publishing._
           releaseDraft: true
           prerelease: false
           includeUpdaterJson: true
