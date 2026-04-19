@@ -23,6 +23,8 @@
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}.card{background:var(--panel);border:1px solid var(--line);padding:24px;border-radius:10px}.reading{color:#e0d6ca;font-size:16px;margin-bottom:12px} html.lang-en .reading{font-size:16px}
     .visual-anchor{background:linear-gradient(180deg,#171717,#101010);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:24px 0}.mock-window{border:1px solid #3b342e;border-radius:10px;padding:18px;background:#0e0e0e}.mock-title{font-size:16px;color:var(--ghost);margin-bottom:12px} html.lang-en .mock-title{font-size:16px}.mock-game{font-size:26px;color:var(--text);margin-bottom:14px}.mock-actions{display:flex;gap:12px}.pill{padding:8px 14px;border:1px solid #4a4239;border-radius:999px;color:var(--muted);font-size:16px} html.lang-en .pill{font-size:16px}
     .cta{display:inline-block;margin-top:12px;background:var(--accent);color:#111;text-decoration:none;padding:14px 20px;border-radius:6px;font-weight:600;font-size:16px}.cta:hover{filter:brightness(1.04)} .cta:focus-visible{outline:3px solid var(--focus);outline-offset:4px} .cta:active{transform:scale(.98)} html.lang-en .cta{font-size:16px}
+    .cta-ghost{background:transparent;color:var(--accent);border:1px solid var(--accent);font-weight:500;margin-left:12px}.cta-ghost:hover{background:var(--accent);color:#111;filter:none}
+    .download-aux{margin-top:20px;font-size:14px;color:var(--muted);text-align:center}.download-aux a{color:var(--accent);text-decoration:none}.download-aux a:hover{text-decoration:underline}
     .skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;text-decoration:none}.skip-link:focus{left:16px;top:16px;width:auto;height:auto;padding:12px 16px;background:var(--accent);color:#111;border-radius:8px;z-index:9999;outline:4px solid var(--focus);outline-offset:3px;box-shadow:0 0 0 6px rgba(0,0,0,.45)}
     .skip-link[data-lang]{display:none!important}
     .back-home{position:fixed;top:16px;left:16px;color:var(--ghost);text-decoration:none;font-size:14px;z-index:10;letter-spacing:.03em;transition:color .2s}.back-home:hover{color:var(--text)}
@@ -139,9 +141,16 @@
       <h2 id="cta-title"><span data-lang="en">Tonight, don't just stare at the library.</span><span data-lang="ja">今夜は、ライブラリを眺めるだけで終わらせない。</span><span data-lang="zh-tw">今晚別再盯著庫看了。</span><span data-lang="zh-cn">今晚别再盯着库看了。</span></h2>
       <p><span data-lang="en">Free. No account. Windows + Linux. Handheld-friendly.</span><span data-lang="ja">無料。アカウント不要。Windows + Linux。ハンドヘルド対応。</span><span data-lang="zh-tw">免費。不需要帳號。Windows / Linux。手持裝置友善。</span><span data-lang="zh-cn">免费。不需要账号。Windows / Linux。掌机友好。</span></p>
       <a href="https://github.com/devBrightRaven/maida/releases/latest" class="cta"><span data-lang="en">Download from GitHub</span><span data-lang="ja">GitHub からダウンロード</span><span data-lang="zh-tw">從 GitHub 下載</span><span data-lang="zh-cn">从 GitHub 下载</span></a>
+      <a href="mailto:bertram@brightraven.world" class="cta cta-ghost"><span data-lang="en">Contact me</span><span data-lang="ja">お問い合わせ</span><span data-lang="zh-tw">聯絡我</span><span data-lang="zh-cn">联系我</span></a>
+      <p class="download-aux">
+        <span data-lang="en">Read the manual: <a href="manual/">online</a> · <a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec">Markdown on GitHub Gist</a></span>
+        <span data-lang="ja">マニュアルを読む:<a href="manual/">オンライン版</a>・<a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec">GitHub Gist の Markdown</a></span>
+        <span data-lang="zh-tw">讀使用手冊:<a href="manual/">線上版</a>・<a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec">GitHub Gist 上的 Markdown</a></span>
+        <span data-lang="zh-cn">读使用手册:<a href="manual/">在线版</a>・<a href="https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec">GitHub Gist 上的 Markdown</a></span>
+      </p>
     </section>
     <footer style="padding:48px 0 0;border-top:1px solid var(--line);text-align:center;color:var(--ghost);font-size:13px">
-      <p><a href="https://brightraven.world" style="color:var(--accent);text-decoration:none">&larr; Bright Raven World</a></p><p>&copy; 2026 Bright Raven World. <a href="manual/" style="color:var(--accent);text-decoration:none">User Manual</a> &middot; <a href="https://github.com/devBrightRaven/maida" style="color:var(--accent);text-decoration:none">Source (MIT)</a> &middot; <a href="mailto:bertram@brightraven.world" style="color:var(--accent);text-decoration:none">bertram@brightraven.world</a></p>
+      <p><a href="https://brightraven.world" style="color:var(--accent);text-decoration:none">&larr; Bright Raven World</a></p><p>&copy; 2026 Bright Raven World. <a href="https://github.com/devBrightRaven/maida" style="color:var(--accent);text-decoration:none">Source (MIT)</a></p>
     </footer>
   </main>
   <script>
