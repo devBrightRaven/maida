@@ -188,8 +188,22 @@ export default function RinView({
         disabled: !game || showTrace || showTour, // Disable when no game, trace panel, or tour is open
         tapThreshold,
         anchorThreshold,
-        onMainAction: () => onAction('visit'), // Short Press A
+        onMainAction: () => {
+            // Legal pages must not let A fall through to 'visit' — that would
+            // launch a game from underneath the overlay. If focus has been
+            // moved to the acknowledge button (by B/Escape or Tab), activate
+            // it; otherwise no-op so the user can press B to surface it.
+            if (legalPage) {
+                const active = document.activeElement;
+                if (active?.classList?.contains('legal-page-back')) {
+                    active.click();
+                }
+                return;
+            }
+            onAction('visit'); // Short Press A
+        },
         onAnchor: () => {
+            if (legalPage) return; // Anchor is a Rin-view-only action.
             if (!isAnchored) onAction('anchor'); // Long Press A (3s)
         },
         onBack: () => {
@@ -222,15 +236,34 @@ export default function RinView({
             }
         },
         onNav: (dir) => {
-            // Legal page has only the back button as a focus target.
-            // D-pad up/down scrolls the page (discrete fallback for users
-            // without a working right stick). R-stick handles this
-            // continuously via useGamepadScroll at the App root.
+            // Legal page navigation: D-pad / L-stick down scrolls content,
+            // but once scroll can no longer advance (at max or hit an input
+            // cap), the next press moves focus to the acknowledge button —
+            // matching gamepad UI convention that "keep going down reaches
+            // the next focusable". Up reverses: from the button it returns
+            // focus to the title so the user can scroll back through text.
             if (legalPage && (dir === 'up' || dir === 'down')) {
-                // Scroll container is .app-root (overflow-y:auto), not the
-                // document root. Resolve the real target from the focused
-                // element so scroll applies to the readable content.
+                const backBtn = document.querySelector('.legal-page-back');
+                const titleEl = document.querySelector('.legal-page-title');
                 const target = resolveScrollTarget(document.activeElement);
+
+                if (dir === 'down' && document.activeElement !== backBtn && target) {
+                    const before = target.scrollTop;
+                    target.scrollBy({ top: 120, behavior: 'auto' });
+                    if (target.scrollTop === before && backBtn) {
+                        // scroll did not advance — surface the button instead
+                        backBtn.focus({ preventScroll: true });
+                    }
+                    return;
+                }
+
+                if (dir === 'up' && document.activeElement === backBtn) {
+                    // Leaving the button upward returns focus to content so
+                    // subsequent up presses scroll the text.
+                    titleEl?.focus({ preventScroll: true });
+                    return;
+                }
+
                 if (target) {
                     target.scrollBy({ top: dir === 'up' ? -120 : 120, behavior: 'auto' });
                 }

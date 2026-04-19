@@ -16,7 +16,7 @@ export default function PrivacyPage({ onClose }) {
             <p>{t('ui.legal.privacy_telemetry')}</p>
 
             <h2>{t('ui.legal.privacy_contact_heading')}</h2>
-            <p>{t('ui.legal.privacy_contact')} <a href={`mailto:${EMAIL}`}>{EMAIL}</a></p>
+            <p>{t('ui.legal.privacy_contact')} <a href={`mailto:${EMAIL}`}>{t('ui.legal.email_me_link')}</a> ({EMAIL})</p>
         </LegalPage>
     );
 }

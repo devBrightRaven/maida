@@ -42,7 +42,7 @@ export default function AccessibilityPage({ onClose }) {
             </ul>
 
             <h2>{t('ui.legal.a11y_contact_heading')}</h2>
-            <p>{t('ui.legal.a11y_contact')} <a href={`mailto:${EMAIL}`}>{EMAIL}</a></p>
+            <p>{t('ui.legal.a11y_contact')} <a href={`mailto:${EMAIL}`}>{t('ui.legal.email_me_link')}</a> ({EMAIL})</p>
         </LegalPage>
     );
 }

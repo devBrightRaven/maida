@@ -185,6 +185,13 @@ button {
     padding: 2rem 1.5rem;
 }
 
+/* The global VersionTag (position:absolute bottom-right in App) would
+ * collide with the sticky footer button. A legal page reader does not
+ * need the version label, so hide it while the page is open. */
+.app-root:has(.legal-page) .global-version-tag {
+    display: none;
+}
+
 .legal-page-header {
     display: flex;
     align-items: center;
@@ -198,6 +205,20 @@ button {
     font-size: 1.5rem;
     font-weight: 500;
     margin: 0;
+}
+
+/* Title receives programmatic focus on mount (tabIndex={-1}) so the user
+ * arrives oriented on the page heading. Suppress the default focus ring
+ * for that case only — but preserve :focus-visible so keyboard users who
+ * Tab into the title still see a ring (red line 7.10). */
+.legal-page-title:focus {
+    outline: none;
+}
+
+.legal-page-title:focus-visible {
+    outline: 2px solid var(--t-focus-border);
+    outline-offset: 4px;
+    border-radius: 2px;
 }
 
 .legal-page-back {
@@ -251,6 +272,35 @@ button {
     max-width: 560px;
     width: 100%;
     margin: 0 auto;
+    /* Reserve space below the last paragraph so nothing hides behind the
+     * sticky footer. Footer height is roughly 64px; 5rem gives a visible
+     * breathing gap between last line and the acknowledge button. */
+    padding-bottom: 5rem;
+}
+
+/* Footer hosts the acknowledge button pinned to the bottom of the
+ * viewport. The non-sticky variant was unreachable for gamepad users
+ * whose analog scroll caps before the max scroll position, leaving the
+ * button permanently off-screen. Sticky guarantees the affordance is
+ * always available regardless of scroll depth.
+ *
+ * The box-shadow + clip-path combo extends the background horizontally
+ * to cover the full viewport width. Without it, the 560px max-width
+ * limits the opaque area and content scrolling behind the footer would
+ * bleed through the uncovered left/right margins. */
+.legal-page-footer {
+    position: sticky;
+    bottom: 0;
+    background: var(--t-bg);
+    box-shadow: 0 0 0 100vmax var(--t-bg);
+    clip-path: inset(0 -100vmax);
+    max-width: 560px;
+    width: 100%;
+    margin: 2.5rem auto 0;
+    padding: 1rem 0;
+    display: flex;
+    justify-content: flex-end;
+    z-index: 2;
 }
 
 .legal-page-content h2 {
