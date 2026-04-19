@@ -31,6 +31,7 @@ export default function AccessibilityPage({ onClose }) {
                 <li>{t('ui.legal.a11y_note_longpress')}</li>
                 <li>{t('ui.legal.a11y_note_space_key')}</li>
                 <li>{t('ui.legal.a11y_note_settings_in_kamae')}</li>
+                <li>{t('ui.legal.a11y_note_linux_haptic')}</li>
                 <li>{t('ui.legal.a11y_note_screen_reader_browse')}</li>
                 <li>{t('ui.legal.a11y_note_screen_reader_buffer_stuck')}</li>
             </ul>

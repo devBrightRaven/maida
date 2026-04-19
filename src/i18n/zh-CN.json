@@ -235,6 +235,7 @@
             "a11y_note_longpress": "部分操作需要按住按钮几秒钟。如果无法长按，你可以按一次看到确认提示，再按一次确认执行。所有输入方式包括屏幕阅读器都支持此操作。",
             "a11y_note_space_key": "按钮上的空格键刻意被屏蔽，避免误触。短按请用 Enter；按住 Enter 三秒将当前的选择固定（即「锚定」）。",
             "a11y_note_settings_in_kamae": "设置只在 Kamae 模式可见。在 Rin 模式请按 F10 或手柄的 Menu 键打开设置。设置里有「重播教学」选项。",
+            "a11y_note_linux_haptic": "在 Linux 上目前因为 WebKitGTK 的限制，手柄振动反馈无法使用（vibrationActuator API 未公开）。Windows 上正常运作。屏幕阅读器的语音以及画面上的焦点标示作为独立的确认管道仍可使用。",
             "a11y_note_screen_reader_browse": "部分屏幕阅读器功能（例如 NVDA 在浏览模式的视觉高亮）需要在你的屏幕阅读器设置里启用，不在 Maida 控制范围。Maida 自己提供焦点指示，与屏幕阅读器设置无关，始终可见。",
             "a11y_note_screen_reader_buffer_stuck": "NVDA 在浏览模式偶尔会发生虚拟缓冲区与实际画面不同步，造成方向键选不到文字或停在幽灵位置。先按 Insert+F5 刷新缓冲区，若未恢复请关闭并重新启动 NVDA。此为 NVDA 本身的已知行为，非 Maida 的问题。",
             "a11y_planned_heading": "未来计划",
