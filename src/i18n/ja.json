@@ -244,7 +244,7 @@
             "a11y_contact": "アクセシビリティに関する問題がありましたら、",
             "privacy_title": "プライバシーポリシー",
             "privacy_collection_heading": "データ収集",
-            "privacy_collection_what": "起動のたびに、Maida は匿名の小さな信号を 3 項目送信します：匿名識別子、インストールしてからの日数、アプリのバージョン。個人情報・ゲームデータ・使用状況は含みません。",
+            "privacy_collection_what": "起動のたびに、Maida は匿名の小さな信号を 3 項目送信します：匿名識別子、インストールしてからの日数、アプリのバージョン。氏名・メールアドレス・ゲームデータ・使用状況は含みません。",
             "privacy_collection_processor": "この信号は Cloudflare（インフラ提供元）で処理されます。起動時に GitHub でアプリの更新も確認します。",
             "privacy_collection_changes": "ポリシーが変更される場合、次回のアプリ更新に含めて配布します。",
             "privacy_storage_heading": "ローカルストレージ",

@@ -244,7 +244,7 @@
             "a11y_contact": "如遇到无障碍问题，请",
             "privacy_title": "隐私政策",
             "privacy_collection_heading": "数据收集",
-            "privacy_collection_what": "每次启动时，Maida 发送一个匿名小信号，包含三个字段：匿名标识符、安装天数、应用程序版本。不包含任何个人数据、游戏数据或使用细节。",
+            "privacy_collection_what": "每次启动时，Maida 发送一个匿名小信号，包含三个字段：匿名标识符、安装天数、应用程序版本。不包含姓名、邮箱、游戏数据或使用细节。",
             "privacy_collection_processor": "此信号由 Cloudflare（基础设施提供商）处理。启动时也会通过 GitHub 检查应用程序更新。",
             "privacy_collection_changes": "若此政策有变更，更新后的版本会随下次应用程序更新一起发布。",
             "privacy_storage_heading": "本地存储",

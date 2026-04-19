@@ -244,7 +244,7 @@
             "a11y_contact": "If you encounter accessibility issues, please",
             "privacy_title": "Privacy Policy",
             "privacy_collection_heading": "Data Collection",
-            "privacy_collection_what": "On each launch, Maida sends a small anonymous signal with three fields: an anonymous identifier, install age (days since first launch), and app version. No personal data, no game data, no usage details.",
+            "privacy_collection_what": "On each launch, Maida sends a small anonymous signal with three fields: an anonymous identifier, install age (days since first launch), and app version. No names, emails, game data, or usage details.",
             "privacy_collection_processor": "The signal is processed by Cloudflare (our infrastructure provider). Maida also checks GitHub for app updates on launch.",
             "privacy_collection_changes": "If this policy ever changes, the updated version ships with the next app update.",
             "privacy_storage_heading": "Local Storage",
