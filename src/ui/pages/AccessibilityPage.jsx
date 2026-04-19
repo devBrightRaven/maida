@@ -37,8 +37,7 @@ export default function AccessibilityPage({ onClose }) {
 
             <h2>{t('ui.legal.a11y_planned_heading')}</h2>
             <ul>
-                <li>{t('ui.legal.a11y_planned_threshold')}</li>
-                <li>{t('ui.legal.a11y_planned_fontsize')}</li>
+                <li>{t('ui.legal.a11y_planned_one_hand')}</li>
             </ul>
 
             <h2>{t('ui.legal.a11y_contact_heading')}</h2>
