@@ -12,6 +12,24 @@ mod touch_keyboard;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+    // In dev builds, clear inherited AppImage env vars so Tauri's runtime
+    // does not misidentify the dev binary as an AppImage. Context: when the
+    // developer launches `pnpm run tauri:dev` from inside an AppImage-based
+    // terminal (BetterAgentTerminal, Warp AppImage, etc.), APPIMAGE /
+    // APPDIR leak into the child process's environment. Tauri's Env struct
+    // reads them at init and assumes "this process is the AppImage at
+    // $APPIMAGE" — so tauri-plugin-process::restart() then spawns the
+    // parent terminal instead of the dev binary. Production AppImage runs
+    // are unaffected because AppRun sets these variables to the correct
+    // maida path before our code runs.
+    #[cfg(debug_assertions)]
+    {
+        std::env::remove_var("APPIMAGE");
+        std::env::remove_var("APPDIR");
+        std::env::remove_var("ARGV0");
+        std::env::remove_var("OWD");
+    }
+
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_dialog::init())

@@ -27,8 +27,12 @@ export function useUpdateCheck() {
                         error: null
                     });
                 }
-            } catch {
-                // Silent — dev mode or network failure
+            } catch (err) {
+                // Keep silent in UI (dev mode or network failure is expected),
+                // but preserve diagnostic trail on the console. Without this,
+                // real bugs in the updater pipeline (e.g. missing Tauri plugin
+                // registration) are invisible even with DevTools open.
+                console.warn('[useUpdateCheck] background check failed:', err);
             }
         })();
     }, []);
@@ -41,7 +45,11 @@ export function useUpdateCheck() {
                 await update.downloadAndInstall();
                 await relaunch();
             }
-        } catch {
+        } catch (err) {
+            // Surface the underlying reason to the console so "Update failed"
+            // in the UI is debuggable. The previous bare catch hid a missing
+            // tauri-plugin-process registration for months — don't repeat that.
+            console.error('[useUpdateCheck] installUpdate failed:', err);
             setUpdateState(prev => ({ ...prev, updating: false, error: 'Update failed' }));
         }
     };
