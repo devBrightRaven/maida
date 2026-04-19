@@ -211,7 +211,7 @@
         },
         "legal": {
             "back": "Back",
-            "acknowledge": "I understand",
+            "close": "Close",
             "accessibility": "Accessibility",
             "privacy": "Privacy Policy",
             "terms": "Terms of Service",
