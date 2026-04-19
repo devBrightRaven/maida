@@ -4,6 +4,39 @@ All notable changes to Maida, combining public-facing updates and technical deta
 
 ---
 
+## [v0.4.3] - 2026-04-20
+
+A round of accessibility and transparency polish across the legal pages, plus a Linux updater fix that lets existing installs auto-relaunch after an update.
+
+### Linux updater
+
+- **tauri-plugin-process registration**: the updater's auto-relaunch path threw a silent error on Linux because the Rust side never registered the plugin — users saw "install" succeed but had to quit and reopen manually. The plugin is now registered so relaunch fires automatically on both `.deb` and AppImage.
+- **Updater errors are no longer silent**: both the background version check and the install flow previously used bare `catch {}` that hid every failure (including the registration bug above). They now log to the console so "Update failed" in the UI is debuggable.
+- **Dev-mode AppImage env guard**: running `tauri dev` from inside an AppImage-based terminal (e.g. BetterAgentTerminal) could confuse Tauri into treating the dev binary as an AppImage, causing restart to launch the terminal instead of Maida. The dev binary now clears `APPIMAGE` / `APPDIR` at startup. Production AppImage behavior is unchanged.
+
+### Legal pages
+
+- **Footer button reads "Close"** across Privacy, Terms, and Accessibility (previously "I understand"). In-app legal references are informational, not acknowledgement flows — matching industry convention on both user comprehension and screen reader announcement clarity.
+- **Sticky footer button**: the acknowledge button previously lived in page flow and could be unreachable on Linux gamepads whose analog scroll caps below the max scroll position. It now pins to the bottom of the viewport so it is always visible, and D-pad / L-stick down automatically focuses it once scroll reaches the end.
+- **A button guard on legal overlays**: pressing A while reading a legal page previously fell through to "visit" the current game. A is now gated to activate only the acknowledge button, and only when that button has focus.
+- **Email contact link uses an action phrase** ("send me an email") instead of the raw email address — so screen readers announce the link by what it does rather than spelling out the address character by character.
+
+### Accessibility & privacy content
+
+- **Privacy Data Collection** split into three short paragraphs (what is sent, who processes it, how policy changes reach users) instead of one dense block.
+- **Privacy disclosure phrasing**: "no personal data" replaced with concrete examples ("no names, emails, game data, or usage details") — stays truthful under precise reading of privacy regulations.
+- **Accessibility Future Plans** trimmed to the single item actually under consideration (one-handed use support). Speculative placeholder items were removed; future feature additions will be made in response to real demand rather than advance promise.
+- **Accessibility notes honestly labeled**: the section previously titled "What We're Still Working On" is renamed "Notes & Tips" — its items are usage tips and external constraints, not active work items. Underlying i18n keys renamed from `a11y_limitation_*` to `a11y_note_*` to match.
+- **"Anchor" terminology explained** in the space-key note: screen reader users now hear "commit to your current choice — this is called 'anchoring'" so the product term is grounded in the action it describes.
+- **Linux gamepad haptic disclosed**: a new note records that vibration feedback is unavailable on Linux due to a current WebKitGTK limitation. Windows is unaffected. Tracked upstream in issue #5.
+
+### Repo hygiene
+
+- Added `.github/ISSUE_TEMPLATE/bug_report.md` with a11y-aware fields (affected input method, install type, WebKit version on Linux, reproducibility).
+- Tauri auto-generated capability schemas (`src-tauri/gen/schemas/*.json`) are now gitignored — they regenerate on every `tauri dev` and were polluting `git status` between runs.
+
+---
+
 ## [v0.4.2] - 2026-04-18
 
 Two small tweaks shipped together.

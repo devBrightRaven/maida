@@ -7,13 +7,13 @@ status: published
 source: claude-code
 project: maida
 created: 2025-01-01
-updated: 2026-04-18
-description: "Maida v0.4.2 User Manual (English): covers Rin (fast decision), Kamae (curation), Kata (grouping), guided tour, anchoring, freeze state, keyboard and gamepad controls, settings."
+updated: 2026-04-20
+description: "Maida v0.4.3 User Manual (English): covers Rin (fast decision), Kamae (curation), Kata (grouping), guided tour, anchoring, freeze state, keyboard and gamepad controls, settings."
 ---
 
 # Maida User Manual
 
-**Version: v0.4.2**
+**Version: v0.4.3**
 
 ---
 
@@ -280,5 +280,5 @@ Maida removes browsing entirely. One game. One choice. Move on.
 
 Contact: bertram@brightraven.world
 
-App Version: v0.4.2 | Manual Version: v0.4.2
-Last updated: 2026-04-18
+App Version: v0.4.3 | Manual Version: v0.4.3
+Last updated: 2026-04-20
