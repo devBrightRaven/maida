@@ -7,7 +7,9 @@ export default function PrivacyPage({ onClose }) {
     return (
         <LegalPage titleKey="ui.legal.privacy_title" onClose={onClose}>
             <h2>{t('ui.legal.privacy_collection_heading')}</h2>
-            <p>{t('ui.legal.privacy_collection')}</p>
+            <p>{t('ui.legal.privacy_collection_what')}</p>
+            <p>{t('ui.legal.privacy_collection_processor')}</p>
+            <p>{t('ui.legal.privacy_collection_changes')}</p>
 
             <h2>{t('ui.legal.privacy_storage_heading')}</h2>
             <p>{t('ui.legal.privacy_storage')}</p>

@@ -19,7 +19,7 @@ export default function AccessibilityPage({ onClose }) {
                 <li>{t('ui.legal.a11y_feature_sr')}</li>
                 <li>{t('ui.legal.a11y_feature_focus')}</li>
                 <li>{t('ui.legal.a11y_feature_motion')}</li>
-                <li>{t('ui.legal.a11y_feature_transparency')}</li>
+                <li>{t('ui.legal.a11y_feature_languages')}</li>
             </ul>
 
             <h2>{t('ui.legal.a11y_testing_heading')}</h2>
@@ -27,7 +27,7 @@ export default function AccessibilityPage({ onClose }) {
 
             <h2>{t('ui.legal.a11y_limitations_heading')}</h2>
             <ul>
-                <li>{t('ui.legal.a11y_limitation_gamepad')}</li>
+                <li>{t('ui.legal.a11y_sr_focus_note')}</li>
                 <li>{t('ui.legal.a11y_limitation_longpress')}</li>
                 <li>{t('ui.legal.a11y_limitation_space_key')}</li>
                 <li>{t('ui.legal.a11y_limitation_settings_in_kamae')}</li>
