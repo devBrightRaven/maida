@@ -48,9 +48,13 @@ All game data stays on your device. Maida sends one anonymous ping per launch (r
 
 ## Accessibility
 
-Maida is built with accessibility from day one -- keyboard navigation, screen reader announcements, focus management, and high-contrast visual states. See the [Accessibility Statement](https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec) for details.
+Maida is built with accessibility from day one -- keyboard navigation, screen reader announcements (NVDA tested on Windows; Orca on Linux partially supported), focus management, and respect for prefers-reduced-motion. See the full [Accessibility Statement](https://brightraven.world/accessibility/) at brightraven.world for scope, supported assistive technology, and known limitations.
 
 ## User Manual
+
+Online (English): [brightraven.world/maida/manual/](https://brightraven.world/maida/manual/)
+
+Markdown (four languages, on GitHub Gist):
 
 - [English](https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-user-manual-en-md)
 - [繁體中文](https://gist.github.com/devBrightRaven/b26da3e8aef40d683a92e66e5b783fec#file-user-manual-zh-tw-md)
