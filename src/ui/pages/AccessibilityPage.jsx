@@ -25,14 +25,14 @@ export default function AccessibilityPage({ onClose }) {
             <h2>{t('ui.legal.a11y_testing_heading')}</h2>
             <p>{t('ui.legal.a11y_testing')}</p>
 
-            <h2>{t('ui.legal.a11y_limitations_heading')}</h2>
+            <h2>{t('ui.legal.a11y_notes_heading')}</h2>
             <ul>
                 <li>{t('ui.legal.a11y_sr_focus_note')}</li>
-                <li>{t('ui.legal.a11y_limitation_longpress')}</li>
-                <li>{t('ui.legal.a11y_limitation_space_key')}</li>
-                <li>{t('ui.legal.a11y_limitation_settings_in_kamae')}</li>
-                <li>{t('ui.legal.a11y_limitation_screen_reader_browse')}</li>
-                <li>{t('ui.legal.a11y_limitation_screen_reader_buffer_stuck')}</li>
+                <li>{t('ui.legal.a11y_note_longpress')}</li>
+                <li>{t('ui.legal.a11y_note_space_key')}</li>
+                <li>{t('ui.legal.a11y_note_settings_in_kamae')}</li>
+                <li>{t('ui.legal.a11y_note_screen_reader_browse')}</li>
+                <li>{t('ui.legal.a11y_note_screen_reader_buffer_stuck')}</li>
             </ul>
 
             <h2>{t('ui.legal.a11y_planned_heading')}</h2>

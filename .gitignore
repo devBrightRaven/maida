@@ -8,6 +8,9 @@ test-results/
 playwright-report/
 .DS_Store
 Thumbs.db
+
+# Tauri auto-generated capability schemas — regenerated on every dev run
+src-tauri/gen/schemas/
 # AI agents
 CLAUDE.md
 .claude/
