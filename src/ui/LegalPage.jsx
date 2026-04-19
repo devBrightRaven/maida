@@ -5,7 +5,11 @@ export default function LegalPage({ titleKey, onClose, children }) {
     const titleRef = useRef(null);
 
     useEffect(() => {
-        titleRef.current?.focus();
+        // preventScroll avoids the browser's auto "scroll focused element into
+        // view" behavior. Without it, any later event that re-asserts focus on
+        // the title would yank the scroll position back to the top of the
+        // page, interrupting gamepad scroll attempts.
+        titleRef.current?.focus({ preventScroll: true });
     }, []);
 
     return (
