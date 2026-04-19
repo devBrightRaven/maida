@@ -20,7 +20,7 @@ export default function LegalPage({ titleKey, onClose, children }) {
             <div className="legal-page-content">{children}</div>
             <footer className="legal-page-footer">
                 <button type="button" className="legal-page-back" onClick={onClose}>
-                    {t('ui.legal.acknowledge')}
+                    {t('ui.legal.close')}
                 </button>
             </footer>
         </main>

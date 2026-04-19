@@ -211,7 +211,7 @@
         },
         "legal": {
             "back": "戻る",
-            "acknowledge": "わかりました",
+            "close": "閉じる",
             "accessibility": "アクセシビリティ",
             "privacy": "プライバシーポリシー",
             "terms": "利用規約",
