@@ -211,6 +211,7 @@
         },
         "legal": {
             "back": "返回",
+            "acknowledge": "我理解了",
             "accessibility": "无障碍",
             "privacy": "隐私政策",
             "terms": "服务条款",
