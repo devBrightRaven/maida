@@ -49,7 +49,7 @@
     <button data-set-lang="ja">JA</button>
     <button data-set-lang="zh-cn">简</button>
     <button data-set-lang="zh-tw">繁</button>
-    <button id="theme-toggle" aria-label="Theme: dark">Dark</button>
+    <button id="theme-toggle" aria-label="Switch theme">Dark</button>
   </nav>
   <main id="main">
     <section aria-labelledby="hero-title">
@@ -151,7 +151,7 @@
     const themes=['dark','light'];
     const themeVars={
       dark:{'--bg':'#0b0b0b','--panel':'#121212','--text':'#f1ebe3','--muted':'#d2cbc2','--ghost':'#b9b0a5','--accent':'#dcc4a0','--line':'#2a2622','--focus':'#e8c840'},
-      light:{'--bg':'#f5f0eb','--panel':'#ebe5de','--text':'#1c1712','--muted':'#4f4942','--ghost':'#6b6258','--accent':'#6a5535','--line':'#cfc5bb','--focus':'#9a6f00'}
+      light:{'--bg':'#f5f0eb','--panel':'#ebe5de','--text':'#1c1712','--muted':'#4f4942','--ghost':'#584f45','--accent':'#6a5535','--line':'#cfc5bb','--focus':'#9a6f00'}
     };
     const setThemeVars=(mode)=>{const vars=themeVars[mode]||themeVars.dark; Object.entries(vars).forEach(([k,v])=>root.style.setProperty(k,v));};
     const applyLang=(k)=>{root.className='lang-'+k;root.lang=map[k]||'en';document.querySelectorAll('.lang-switch button[data-set-lang]').forEach(b=>{const on=b.dataset.setLang===k; b.classList.toggle('active',on); b.setAttribute('aria-pressed', on ? 'true' : 'false');}); localStorage.setItem('maida-sample-lang',k);};
@@ -160,18 +160,18 @@
         root.removeAttribute('data-theme');
         const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
         setThemeVars(prefersLight ? 'light' : 'dark');
-        themeBtn.textContent='Dark';
-        themeBtn.setAttribute('aria-label','Theme: follow system');
+        themeBtn.textContent = prefersLight ? 'Dark' : 'Light';
+        themeBtn.setAttribute('aria-label', prefersLight ? 'Switch to dark theme' : 'Switch to light theme');
       } else if(mode==='light'){
         root.setAttribute('data-theme','light');
         setThemeVars('light');
-        themeBtn.textContent='Light';
-        themeBtn.setAttribute('aria-label','Theme: light');
+        themeBtn.textContent='Dark';
+        themeBtn.setAttribute('aria-label','Switch to dark theme');
       } else {
         root.removeAttribute('data-theme');
         setThemeVars('dark');
-        themeBtn.textContent='Dark';
-        themeBtn.setAttribute('aria-label','Theme: dark');
+        themeBtn.textContent='Light';
+        themeBtn.setAttribute('aria-label','Switch to light theme');
       }
       themeBtn.classList.toggle('is-active-theme', true);
       localStorage.setItem('maida-sample-theme',mode);
