@@ -67,8 +67,16 @@ jobs:
             | Your system | Which file |
             |---|---|
             | Windows | the `.exe` file |
-            | Steam Deck or other Linux | the `.AppImage` file (single file, just run it) |
+            | Steam Deck or other Linux | the `.AppImage` file |
             | Ubuntu / Mint / Debian | the `.deb` file (installs into your system menu) |
+
+            ### First-time setup on Linux
+
+            **AppImage** needs executable permission on first run:
+            - **GUI**: right-click the file → Properties → Permissions → allow executing as a program
+            - **Terminal**: `chmod +x Maida_*.AppImage` then run the file
+
+            **.deb** users don't need this — the installer handles it automatically.
 
             Files ending in `.sig` and `latest.json` are for the auto-updater and do not need to be downloaded.
             `.sig` で終わるファイルと `latest.json` は自動更新用で、個別のダウンロードは不要です。
