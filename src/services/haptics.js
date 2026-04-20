@@ -3,6 +3,7 @@
  * Silent no-op if gamepad not connected or API not supported.
  * Intensity configurable via localStorage (0-100, default 100).
  */
+import { getActiveGamepad } from './gamepad';
 
 const STORAGE_KEY = 'maida_haptic_intensity';
 const DEFAULT_INTENSITY = 100;
@@ -40,7 +41,7 @@ export function vibrate(type = 'light') {
     const intensity = getIntensity();
     if (intensity === 0) return;
 
-    const gp = navigator.getGamepads?.()?.[0];
+    const gp = getActiveGamepad();
     if (!gp?.vibrationActuator) return;
 
     const preset = PRESETS[type] || PRESETS.light;
@@ -59,7 +60,7 @@ export function vibrateProgress(progress) {
     const intensity = getIntensity();
     if (intensity === 0) return;
 
-    const gp = navigator.getGamepads?.()?.[0];
+    const gp = getActiveGamepad();
     if (!gp?.vibrationActuator) return;
 
     const weak = Math.min(0.4 + progress * 1.0, 1.0);

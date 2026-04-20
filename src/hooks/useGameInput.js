@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { vibrate, vibrateProgress } from '../services/haptics';
+import { getActiveGamepad } from '../services/gamepad';
 import { discretizeStick } from './gamepadLogic';
 
 /**
@@ -297,8 +298,10 @@ export function useGameInput({
         const pollGamepad = () => {
             if (!isPolling || !document.hasFocus()) return; // Stop if window lost focus
 
-            const gamepads = navigator.getGamepads?.() || [];
-            const gp = gamepads[0];
+            // Active gamepad index is tracked in services/gamepad.js, which
+            // listens for gamepadconnected/gamepaddisconnected so a pad that
+            // reconnects to a new slot (common on Windows HID) is still read.
+            const gp = getActiveGamepad();
 
             if (gp) {
                 const btn = (i) => gp.buttons[i]?.pressed;

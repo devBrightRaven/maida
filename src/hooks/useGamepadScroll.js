@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { resolveScrollTarget } from '../utils/scroll';
+import { getActiveGamepad } from '../services/gamepad';
 import {
     computeScrollDelta,
     shouldSuppressRStickScroll
@@ -54,8 +55,7 @@ export function useGamepadScroll({ disabled = false } = {}) {
             const dtSec = lastFrameTs === 0 ? 0 : (now - lastFrameTs) / 1000;
             lastFrameTs = now;
 
-            const pads = navigator.getGamepads?.() || [];
-            const gp = pads[0];
+            const gp = getActiveGamepad();
             if (gp && gp.axes && gp.axes.length > R_STICK_Y && dtSec > 0) {
                 const axisX = gp.axes[R_STICK_X] ?? 0;
                 const axisY = gp.axes[R_STICK_Y] ?? 0;
