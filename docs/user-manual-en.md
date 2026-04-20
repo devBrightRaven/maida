@@ -104,11 +104,11 @@ Katas are named sub-groups within your showcase. Create them by mood or theme.
 
 | Action | Method |
 |--------|--------|
-| Create kata | Tap "+" button |
+| Create kata | Press the "new kata" button |
 | Delete kata | Tap "x" button (confirm twice) |
 | Rename | Press F2 or controller Y |
-| Add game | Search and tap "add" |
-| Remove game | Hold Enter/A for 2.5 seconds, or press twice to confirm |
+| Add game | Click "+" and tick games to add, or search by name in the bar below |
+| Remove game | Press "Remove"; the button changes to "Confirm?", press again to confirm. Or hold Enter/A for 2.5 seconds. |
 
 ---
 
