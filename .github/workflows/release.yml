@@ -113,12 +113,7 @@ jobs:
 
             ---
 
-            **Contact / お問い合わせ / 聯絡 / 联系**
-
-            - [contact me](mailto:bertram@brightraven.world) (bertram@brightraven.world)
-            - [ご連絡ください](mailto:bertram@brightraven.world) (bertram@brightraven.world)
-            - [寫信給我](mailto:bertram@brightraven.world) (bertram@brightraven.world)
-            - [发邮件给我](mailto:bertram@brightraven.world) (bertram@brightraven.world)
+            Contact: [contact me](mailto:bertram@brightraven.world) (bertram@brightraven.world)
           releaseDraft: true
           prerelease: false
           includeUpdaterJson: true
