@@ -6,7 +6,11 @@ All notable changes to Maida, combining public-facing updates and technical deta
 
 ## [v0.4.3] - 2026-04-20
 
-A round of accessibility and transparency polish across the legal pages, plus a Linux updater fix that lets existing installs auto-relaunch after an update.
+A round of accessibility and transparency polish across the legal pages, plus a Linux updater fix that lets existing installs auto-relaunch after an update, and a Windows gamepad reconnect fix.
+
+### Gamepad reconnect
+
+- **Active-pad tracking** (PR #1): previously `navigator.getGamepads()[0]` was hardcoded across input, scroll, and haptics. On Windows HID, a disconnected pad left a ghost entry at index 0 while the reconnected pad got assigned to index 1, so the app silently stopped receiving input until the user forced a reload (Ctrl+R). A new `src/services/gamepad.js` module listens for `gamepadconnected` / `gamepaddisconnected`, tracks the active index dynamically, and exposes `getActiveGamepad()` that all three consumers now use. Verified as a safe no-op on Linux / WebKitGTK 2.50.4 (clean native event behavior, no ghost slots).
 
 ### Linux updater
 
