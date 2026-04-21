@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en" class="lang-en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maida -- User Manual</title>
+  <meta name="description" content="How to use Maida: Rin, Kamae, Kata, anchoring, freeze state, controls, settings.">
+  <style>
+    :root {
+      --bg:#0b0b0b; --panel:#121212; --text:#f1ebe3; --muted:#d2cbc2; --ghost:#b9b0a5;
+      --accent:#dcc4a0; --line:#2a2622; --focus:#e8c840;
+    }
+    html[data-theme='light'] {
+      --bg:#f5f0eb; --panel:#ebe5de; --text:#1c1712; --muted:#4f4942; --ghost:#6b6258;
+      --accent:#6a5535; --line:#cfc5bb; --focus:#9a6f00;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    main{max-width:820px;margin:0 auto;padding:72px 24px 96px}
+    section{padding:40px 0;border-top:1px solid var(--line)}
+    section:first-of-type{border-top:0;padding-top:12px}
+    h1,h2,h3{line-height:1.2;margin:0 0 18px;font-weight:500}
+    h1{font-size:clamp(36px,6vw,56px)}
+    h2{font-size:clamp(24px,3.5vw,32px);color:var(--accent)}
+    h3{font-size:20px;margin:24px 0 10px}
+    h4{font-size:17px;margin:18px 0 8px;color:var(--text);font-weight:500}
+    p{margin:0 0 16px;color:var(--muted);font-size:16px}
+    ul,ol{color:var(--muted);font-size:16px;padding-left:22px}
+    li{margin-bottom:8px}
+    .lead{color:var(--text);font-size:20px;line-height:1.55;margin:20px 0 28px}
+    .screenshot{margin:24px 0;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:var(--panel)}
+    .screenshot img{width:100%;height:auto;display:block}
+    .screenshot img.shot-light{display:none}
+    html[data-theme='light'] .screenshot img.shot-dark{display:none}
+    html[data-theme='light'] .screenshot img.shot-light{display:block}
+    .caption{font-size:14px;color:var(--ghost);margin-top:8px;text-align:center;font-style:italic}
+    .back-home{position:fixed;top:16px;left:16px;color:var(--ghost);text-decoration:none;font-size:14px;z-index:10;letter-spacing:.03em;transition:color .2s,border-color .2s;background:var(--bg);padding:6px 10px;border-radius:6px;border:1px solid var(--line)}
+    .back-home:hover{color:var(--text);border-color:var(--text)}
+    .footer-back{display:inline-block;padding:6px 10px;border:1px solid transparent;border-radius:6px;transition:border-color .2s,color .2s}
+    .footer-back:hover{border-color:var(--text);color:var(--text)}
+    a{color:var(--accent)}
+    a:hover{color:var(--text)}
+    kbd{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:2px 6px;font-size:14px;font-family:monospace;color:var(--text)}
+    table{width:100%;border-collapse:collapse;margin:16px 0;font-size:15px;color:var(--muted)}
+    th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+    th{color:var(--text);font-weight:500;background:var(--panel)}
+    blockquote{margin:20px 0;padding:14px 20px;border-left:3px solid var(--accent);color:var(--text);font-style:italic;background:var(--panel);border-radius:0 8px 8px 0}
+    .skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;text-decoration:none}
+    .skip-link:focus{left:16px;top:64px;width:auto;height:auto;padding:12px 16px;background:var(--accent);color:#111;border-radius:8px;z-index:9999;outline:4px solid var(--focus);outline-offset:3px}
+    .skip-link[data-lang]{display:none!important}
+    html.lang-en .skip-link[data-lang="en"],html.lang-ja .skip-link[data-lang="ja"],html.lang-zh-tw .skip-link[data-lang="zh-tw"],html.lang-zh-cn .skip-link[data-lang="zh-cn"]{display:block!important}
+    [data-lang]{display:none!important}
+    html.lang-en [data-lang="en"],html.lang-ja [data-lang="ja"],html.lang-zh-tw [data-lang="zh-tw"],html.lang-zh-cn [data-lang="zh-cn"]{display:revert!important}
+    .lang-switch{position:fixed;top:16px;right:16px;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;z-index:10}
+    .lang-switch button{background:var(--bg);border:1px solid #5b5248;color:var(--muted);padding:8px 10px;cursor:pointer;border-radius:6px;min-width:44px;min-height:32px}
+    .lang-switch button.active,.lang-switch button.is-active-theme{background:var(--text);color:var(--bg);border-color:var(--text)}
+    .lang-switch button:hover{border-color:var(--text);background:var(--text);color:var(--bg)}
+    .lang-switch button:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+    #theme-toggle{min-width:80px;text-align:center}
+    footer{margin-top:48px;padding-top:48px;border-top:1px solid var(--line);text-align:center;color:var(--ghost);font-size:14px}
+    .toc{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 22px;margin:16px 0 24px}
+    .toc ul{margin:0;padding-left:20px;font-size:15px}
+    .toc li{margin-bottom:4px}
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link" data-lang="en">Skip to main content</a>
+  <a href="#main" class="skip-link" data-lang="ja">メインコンテンツへスキップ</a>
+  <a href="#main" class="skip-link" data-lang="zh-tw">跳到主要內容</a>
+  <a href="#main" class="skip-link" data-lang="zh-cn">跳到主要内容</a>
+  <a href="../" class="back-home" aria-label="Back to Maida intro">← Maida</a>
+  <nav class="lang-switch" aria-label="Language switcher and theme toggle">
+    <button class="active" data-set-lang="en">EN</button>
+    <button data-set-lang="ja">JA</button>
+    <button data-set-lang="zh-cn">简</button>
+    <button data-set-lang="zh-tw">繁</button>
+    <button id="theme-toggle" aria-label="Switch theme">Dark</button>
+  </nav>
+  <main id="main">
+
+    <section aria-labelledby="title">
+      <h1 id="title">
+        <span data-lang="en">Maida User Manual</span>
+        <span data-lang="ja">Maida ユーザーマニュアル</span>
+        <span data-lang="zh-tw">Maida 使用手冊</span>
+        <span data-lang="zh-cn">Maida 使用手册</span>
+      </h1>
+      <p><strong>
+        <span data-lang="en">Version: v0.4.3</span>
+        <span data-lang="ja">バージョン：v0.4.3</span>
+        <span data-lang="zh-tw">版本：v0.4.3</span>
+        <span data-lang="zh-cn">版本：v0.4.3</span>
+      </strong></p>
+      <p class="lead">
+        <span data-lang="en">Maida shows you one game at a time from your Steam library. You answer: play it now, or see something else.</span>
+        <span data-lang="ja">Maida はあなたの Steam ライブラリから一度に 1 つのゲームを表示します。あなたが決めます：今プレイするか、別のものを見るか。</span>
+        <span data-lang="zh-tw">Maida 從你的 Steam 遊戲庫中，每次只顯示一款遊戲。你來決定：現在玩，或者看看別的。</span>
+        <span data-lang="zh-cn">Maida 从你的 Steam 游戏库中，每次只显示一款游戏。你来决定：现在玩，或者看看别的。</span>
+      </p>
+      <nav class="toc" aria-labelledby="toc-title">
+        <p id="toc-title"><strong>
+          <span data-lang="en">Contents</span>
+          <span data-lang="ja">目次</span>
+          <span data-lang="zh-tw">目錄</span>
+          <span data-lang="zh-cn">目录</span>
+        </strong></p>
+        <ul>
+          <li><a href="#what"><span data-lang="en">What is this?</span><span data-lang="ja">これは何ですか？</span><span data-lang="zh-tw">這是什麼？</span><span data-lang="zh-cn">这是什么？</span></a></li>
+          <li><a href="#setup"><span data-lang="en">First time setup</span><span data-lang="ja">初回セットアップ</span><span data-lang="zh-tw">首次設定</span><span data-lang="zh-cn">首次设置</span></a></li>
+          <li><a href="#tour"><span data-lang="en">Guided tour</span><span data-lang="ja">ガイドツアー</span><span data-lang="zh-tw">引導導覽</span><span data-lang="zh-cn">引导导览</span></a></li>
+          <li><a href="#rin"><span data-lang="en">Rin (臨) — fast decision</span><span data-lang="ja">臨（Rin）：即時の決断</span><span data-lang="zh-tw">臨（Rin）：快速決策</span><span data-lang="zh-cn">临（Rin）：快速决策</span></a></li>
+          <li><a href="#kamae"><span data-lang="en">Kamae (構) — curation</span><span data-lang="ja">構（Kamae）：キュレーション</span><span data-lang="zh-tw">構（Kamae）：策展管理</span><span data-lang="zh-cn">构（Kamae）：策展管理</span></a></li>
+          <li><a href="#anchor"><span data-lang="en">Anchoring (optional)</span><span data-lang="ja">アンカー（オプション）</span><span data-lang="zh-tw">錨定（選讀）</span><span data-lang="zh-cn">锚定（选读）</span></a></li>
+          <li><a href="#undo"><span data-lang="en">Undo (optional)</span><span data-lang="ja">元に戻す（オプション）</span><span data-lang="zh-tw">復原（選讀）</span><span data-lang="zh-cn">撤销（选读）</span></a></li>
+          <li><a href="#freeze"><span data-lang="en">Freeze state</span><span data-lang="ja">フリーズ状態</span><span data-lang="zh-tw">凍結狀態</span><span data-lang="zh-cn">冻结状态</span></a></li>
+          <li><a href="#picking"><span data-lang="en">How Maida picks games</span><span data-lang="ja">Maida がゲームを選ぶ仕組み</span><span data-lang="zh-tw">Maida 如何挑選遊戲</span><span data-lang="zh-cn">Maida 如何挑选游戏</span></a></li>
+          <li><a href="#controls"><span data-lang="en">Keyboard &amp; gamepad controls</span><span data-lang="ja">キーボードとゲームパッド操作</span><span data-lang="zh-tw">鍵盤與手把操作</span><span data-lang="zh-cn">键盘与手柄操作</span></a></li>
+          <li><a href="#settings"><span data-lang="en">Settings</span><span data-lang="ja">設定</span><span data-lang="zh-tw">設定</span><span data-lang="zh-cn">设置</span></a></li>
+          <li><a href="#faq"><span data-lang="en">Common questions</span><span data-lang="ja">よくある質問</span><span data-lang="zh-tw">常見問題</span><span data-lang="zh-cn">常见问题</span></a></li>
+          <li><a href="#trouble"><span data-lang="en">Troubleshooting</span><span data-lang="ja">トラブルシューティング</span><span data-lang="zh-tw">疑難排解</span><span data-lang="zh-cn">疑难排解</span></a></li>
+          <li><a href="#philosophy"><span data-lang="en">Design philosophy</span><span data-lang="ja">設計思想</span><span data-lang="zh-tw">設計理念</span><span data-lang="zh-cn">设计理念</span></a></li>
+        </ul>
+      </nav>
+    </section>
+
+    <section id="what" aria-labelledby="what-title">
+      <h2 id="what-title"><span data-lang="en">What is this?</span><span data-lang="ja">これは何ですか？</span><span data-lang="zh-tw">這是什麼？</span><span data-lang="zh-cn">这是什么？</span></h2>
+      <p><span data-lang="en">Maida has two faces:</span><span data-lang="ja">Maida には 2 つの面があります：</span><span data-lang="zh-tw">Maida 有兩個面：</span><span data-lang="zh-cn">Maida 有两个面：</span></p>
+      <ul>
+        <li>
+          <strong><span data-lang="en">Rin</span><span data-lang="ja">臨（Rin）</span><span data-lang="zh-tw">臨（Rin）</span><span data-lang="zh-cn">临（Rin）</span></strong>
+          <span data-lang="en"> — fast decision. A dice roll shows one game; you choose TRY or Not Now.</span>
+          <span data-lang="ja">：即時の決断。ダイスが 1 つのゲームを出し、「やる」か「パス」かを選びます。</span>
+          <span data-lang="zh-tw">：快速決策。骰子轉出一款遊戲，你選擇試試或現在不要。</span>
+          <span data-lang="zh-cn">：快速决策。骰子转出一款游戏，你选择试试或现在不要。</span>
+        </li>
+        <li>
+          <strong><span data-lang="en">Kamae</span><span data-lang="ja">構（Kamae）</span><span data-lang="zh-tw">構（Kamae）</span><span data-lang="zh-cn">构（Kamae）</span></strong>
+          <span data-lang="en"> — curation. Manage your showcase and decide which games enter the dice pool.</span>
+          <span data-lang="ja">：キュレーション。ショーケースを管理し、ダイスプールに入るゲームを決めます。</span>
+          <span data-lang="zh-tw">：策展管理。整理你的展示櫃，決定哪些遊戲進入骰子池。</span>
+          <span data-lang="zh-cn">：策展管理。整理你的展示柜，决定哪些游戏进入骰子池。</span>
+        </li>
+      </ul>
+    </section>
+
+    <section id="setup" aria-labelledby="setup-title">
+      <h2 id="setup-title"><span data-lang="en">First time setup</span><span data-lang="ja">初回セットアップ</span><span data-lang="zh-tw">首次設定</span><span data-lang="zh-cn">首次设置</span></h2>
+      <ol>
+        <li><span data-lang="en">Make sure <strong>Steam is running</strong></span><span data-lang="ja"><strong>Steam が起動している</strong>ことを確認</span><span data-lang="zh-tw">確保 <strong>Steam 正在執行</strong></span><span data-lang="zh-cn">确保 <strong>Steam 正在运行</strong></span></li>
+        <li><span data-lang="en">Open Maida</span><span data-lang="ja">Maida を開く</span><span data-lang="zh-tw">開啟 Maida</span><span data-lang="zh-cn">打开 Maida</span></li>
+        <li><span data-lang="en">Click <strong>"Scan my Steam library"</strong></span><span data-lang="ja">「Steam ライブラリをスキャン」をクリック</span><span data-lang="zh-tw">點擊「掃描 Steam 遊戲庫」</span><span data-lang="zh-cn">点击「扫描 Steam 游戏库」</span></li>
+        <li><span data-lang="en">Wait for the scan to complete (no data leaves your device)</span><span data-lang="ja">スキャン完了を待つ（データはデバイスの外に出ません）</span><span data-lang="zh-tw">等待掃描完成（資料不會離開你的裝置）</span><span data-lang="zh-cn">等待扫描完成（数据不会离开你的设备）</span></li>
+        <li><span data-lang="en">Done — Maida creates a "Demo Kata" with 3 random games to get you started</span><span data-lang="ja">完了 — Maida がランダムな 3 つのゲームで「デモ型」を作成します</span><span data-lang="zh-tw">完成 — Maida 會用 3 款隨機遊戲建立「示範型」讓你開始</span><span data-lang="zh-cn">完成 — Maida 会用 3 款随机游戏创建「示范型」让你开始</span></li>
+      </ol>
+      <figure class="screenshot">
+        <img src="../screenshots/Onboarding.png" alt="Maida onboarding screen on first launch" class="shot-dark">
+        <img src="../screenshots/Onboarding_l.png" alt="Maida onboarding screen on first launch" class="shot-light">
+        <figcaption class="caption"><span data-lang="en">First launch: onboarding</span><span data-lang="ja">初回起動：オンボーディング</span><span data-lang="zh-tw">首次啟動：引導畫面</span><span data-lang="zh-cn">首次启动：引导画面</span></figcaption>
+      </figure>
+      <p><span data-lang="en">Maida automatically detects your system language (English, Japanese, Simplified Chinese, Traditional Chinese). You can change it later in Settings.</span><span data-lang="ja">Maida はシステムの言語設定を自動検出します（英語、日本語、簡体字中国語、繁体字中国語）。後から設定で変更できます。</span><span data-lang="zh-tw">Maida 會自動偵測你的系統語言（英文、日文、簡體中文、繁體中文）。你可以之後在設定中更改。</span><span data-lang="zh-cn">Maida 会自动检测你的系统语言（英文、日文、简体中文、繁体中文）。你可以之后在设置中更改。</span></p>
+    </section>
+
+    <section id="tour" aria-labelledby="tour-title">
+      <h2 id="tour-title"><span data-lang="en">Guided tour</span><span data-lang="ja">ガイドツアー</span><span data-lang="zh-tw">引導導覽</span><span data-lang="zh-cn">引导导览</span></h2>
+      <p><span data-lang="en">When you first enter Rin, look for the <strong>?</strong> button in the top-right corner. Press it (or press <kbd>F1</kbd>) to start a guided tour.</span><span data-lang="ja">臨に初めて入ると、右上に <strong>?</strong> ボタンがあります。それを押す（または <kbd>F1</kbd> を押す）とガイドツアーが始まります。</span><span data-lang="zh-tw">第一次進入臨時，注意右上角的 <strong>?</strong> 按鈕。點擊它（或按 <kbd>F1</kbd>）可以啟動引導導覽。</span><span data-lang="zh-cn">第一次进入临时，注意右上角的 <strong>?</strong> 按钮。点击它（或按 <kbd>F1</kbd>）可以启动引导导览。</span></p>
+      <p><span data-lang="en">The tour covers: what the game title and prescription mean, how TRY and Not Now work, how to switch to Kamae mode, how to manage katas and games, how to switch back to Rin. The tour is available any time — press ? or F1 whenever you need a refresher.</span><span data-lang="ja">ツアーの内容：ゲームタイトルと処方箋の意味、「やる」と「パス」の仕組み、構への切替方法、構での型とゲームの管理方法、臨への切替方法。いつでも利用できます。</span><span data-lang="zh-tw">導覽內容：遊戲標題與處方籤的意思、「試試」與「現在不要」的運作方式、如何切換到構模式、如何在構中管理型與遊戲、如何切換回臨。隨時可用。</span><span data-lang="zh-cn">导览内容：游戏标题与处方签的意思、「试试」与「现在不要」的运作方式、如何切换到构模式、如何在构中管理型与游戏、如何切换回临。随时可用。</span></p>
+    </section>
+
+    <section id="rin" aria-labelledby="rin-title">
+      <h2 id="rin-title"><span data-lang="en">Rin (臨) — fast decision</span><span data-lang="ja">臨（Rin）：即時の決断</span><span data-lang="zh-tw">臨（Rin）：快速決策</span><span data-lang="zh-cn">临（Rin）：快速决策</span></h2>
+      <p><span data-lang="en">You'll see: a game title, a short reflection (called a "prescription"), and two buttons — TRY and Not Now.</span><span data-lang="ja">表示されるもの：ゲームタイトル、短い省察（「処方箋」と呼ばれる）、そして 2 つのボタン（「やる」と「パス」）。</span><span data-lang="zh-tw">你會看到：遊戲標題、一句反思（稱為「處方籤」），以及兩個按鈕：「試試」和「現在不要」。</span><span data-lang="zh-cn">你会看到：游戏标题、一句反思（称为「处方签」），以及两个按钮：「试试」和「现在不要」。</span></p>
+      <figure class="screenshot">
+        <img src="../screenshots/rinView.png" alt="Maida Rin view: one game with TRY and Not Now" class="shot-dark">
+        <img src="../screenshots/rinView_l.png" alt="Maida Rin view: one game with TRY and Not Now (light theme)" class="shot-light">
+        <figcaption class="caption"><span data-lang="en">Rin view: one game at a time</span><span data-lang="ja">臨画面：一度に 1 つのゲーム</span><span data-lang="zh-tw">臨面：每次一款遊戲</span><span data-lang="zh-cn">临面：每次一款游戏</span></figcaption>
+      </figure>
+      <h3><span data-lang="en">TRY</span><span data-lang="ja">やる</span><span data-lang="zh-tw">試試</span><span data-lang="zh-cn">试试</span></h3>
+      <p><span data-lang="en">If you're willing to play this game right now, tap TRY. The game launches immediately, Maida remembers you picked this (weight +1), and the screen enters freeze state.</span><span data-lang="ja">今このゲームをプレイしてもいいなら、「やる」をタップします。ゲームがすぐに起動し、Maida はあなたの選択を記憶し（重み +1）、画面がフリーズ状態になります。</span><span data-lang="zh-tw">如果你現在願意玩這款遊戲，點擊試試。遊戲立即啟動，Maida 記住你選擇了這款遊戲（權重 +1），畫面進入凍結狀態。</span><span data-lang="zh-cn">如果你现在愿意玩这款游戏，点击试试。游戏立即启动，Maida 记住你选择了这款游戏（权重 +1），画面进入冻结状态。</span></p>
+      <h3><span data-lang="en">Not Now</span><span data-lang="ja">パス</span><span data-lang="zh-tw">現在不要</span><span data-lang="zh-cn">现在不要</span></h3>
+      <p><span data-lang="en">If you don't want this game right now, tap Not Now. A different game appears, and this game won't appear again in the current session. Games you repeatedly refuse appear much less often.</span><span data-lang="ja">今プレイしたくないなら、「パス」をタップします。別のゲームが表示され、このゲームは今回のセッションでは表示されなくなります。繰り返しパスしたゲームは出現頻度が大幅に下がります。</span><span data-lang="zh-tw">如果你現在不想玩這款遊戲，點擊現在不要。顯示下一款遊戲，這款遊戲在本次 session 中不會再出現。重複拒絕的遊戲會越來越少出現。</span><span data-lang="zh-cn">如果你现在不想玩这款游戏，点击现在不要。显示下一款游戏，这款游戏在本次 session 中不会再出现。重复拒绝的游戏会越来越少出现。</span></p>
+    </section>
+
+    <section id="kamae" aria-labelledby="kamae-title">
+      <h2 id="kamae-title"><span data-lang="en">Kamae (構) — curation</span><span data-lang="ja">構（Kamae）：キュレーション</span><span data-lang="zh-tw">構（Kamae）：策展管理</span><span data-lang="zh-cn">构（Kamae）：策展管理</span></h2>
+      <p><span data-lang="en">Press the switch button on the right edge of Rin, or press <kbd>Ctrl+Tab</kbd> / <kbd>RB</kbd> to enter Kamae. In Kamae you can browse games in your showcase, search installed games and add them, and create/manage Katas.</span><span data-lang="ja">臨の画面右端の切替ボタンをタップするか、<kbd>Ctrl+Tab</kbd> / <kbd>RB</kbd> を押すと構に入ります。構ではショーケースのゲームを閲覧、インストール済みゲームを検索して追加、型の作成と管理ができます。</span><span data-lang="zh-tw">從臨的畫面點擊右側邊緣的切換按鈕，或按 <kbd>Ctrl+Tab</kbd> / <kbd>RB</kbd> 進入構。在構裡你可以瀏覽展示櫃、搜尋並加入已安裝遊戲、建立和管理「型」。</span><span data-lang="zh-cn">从临的画面点击右侧边缘的切换按钮，或按 <kbd>Ctrl+Tab</kbd> / <kbd>RB</kbd> 进入构。在构里你可以浏览展示柜、搜索并加入已安装游戏、建立和管理「型」。</span></p>
+      <figure class="screenshot">
+        <img src="../screenshots/kamaeView.png" alt="Maida Kamae view: game library with Kata groupings" class="shot-dark">
+        <img src="../screenshots/kamaeView_l.png" alt="Maida Kamae view: game library with Kata groupings (light)" class="shot-light">
+        <figcaption class="caption"><span data-lang="en">Kamae view: library and kata</span><span data-lang="ja">構画面：ライブラリと型</span><span data-lang="zh-tw">構面：遊戲庫與型</span><span data-lang="zh-cn">构面：游戏库与型</span></figcaption>
+      </figure>
+      <h3><span data-lang="en">Kata (型)</span><span data-lang="ja">型（Kata）</span><span data-lang="zh-tw">型（Kata）</span><span data-lang="zh-cn">型（Kata）</span></h3>
+      <p><span data-lang="en">Kata are named sub-groups within your showcase. Create them by mood or theme.</span><span data-lang="ja">型はショーケース内の名前付きサブグループです。気分やテーマごとに作成できます。</span><span data-lang="zh-tw">型是展示櫃的子分組。你可以依照心情或主題建立不同的型。</span><span data-lang="zh-cn">型是展示柜的子分组。你可以依照心情或主题建立不同的型。</span></p>
+      <ul>
+        <li><span data-lang="en">Up to 2 katas (each holds up to 15 games)</span><span data-lang="ja">最大 2 つの型（各型最大 15 ゲーム）</span><span data-lang="zh-tw">最多建立 2 個型（每個最多 15 款遊戲）</span><span data-lang="zh-cn">最多建立 2 个型（每个最多 15 款游戏）</span></li>
+        <li><span data-lang="en">In Rin, the dice only rolls from the active kata</span><span data-lang="ja">臨では、ダイスはアクティブな型からのみ選びます</span><span data-lang="zh-tw">在臨面中，骰子只會從啟用中的型裡挑選</span><span data-lang="zh-cn">在临面中，骰子只会从启用中的型里挑选</span></li>
+        <li><span data-lang="en">Select "All Games" to roll from the entire showcase</span><span data-lang="ja">「全ゲーム」を選ぶとショーケース全体から選びます</span><span data-lang="zh-tw">選擇「全部遊戲」則從整個展示櫃挑選</span><span data-lang="zh-cn">选择「全部游戏」则从整个展示柜挑选</span></li>
+        <li><span data-lang="en">Press <kbd>F2</kbd> or controller <kbd>Y</kbd> to rename a kata</span><span data-lang="ja"><kbd>F2</kbd> キーまたはコントローラーの <kbd>Y</kbd> で型の名前を変更できます</span><span data-lang="zh-tw">按 <kbd>F2</kbd> 或手把 <kbd>Y</kbd> 鍵重新命名型</span><span data-lang="zh-cn">按 <kbd>F2</kbd> 或手柄 <kbd>Y</kbd> 键重命名型</span></li>
+      </ul>
+      <figure class="screenshot">
+        <img src="../screenshots/kamaeView_kata_2.png" alt="Kamae with two katas side by side" class="shot-dark">
+        <img src="../screenshots/kamaeView_kata_2_l.png" alt="Kamae with two katas side by side (light)" class="shot-light">
+        <figcaption class="caption"><span data-lang="en">Two katas coexisting</span><span data-lang="ja">2 つの型が共存</span><span data-lang="zh-tw">兩個型並存</span><span data-lang="zh-cn">两个型并存</span></figcaption>
+      </figure>
+      <h4><span data-lang="en">Kata operations</span><span data-lang="ja">型の操作</span><span data-lang="zh-tw">型的操作</span><span data-lang="zh-cn">型的操作</span></h4>
+      <table>
+        <thead>
+          <tr>
+            <th><span data-lang="en">Action</span><span data-lang="ja">操作</span><span data-lang="zh-tw">操作</span><span data-lang="zh-cn">操作</span></th>
+            <th><span data-lang="en">Method</span><span data-lang="ja">方法</span><span data-lang="zh-tw">方法</span><span data-lang="zh-cn">方法</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span data-lang="en">Create kata</span><span data-lang="ja">型を作成</span><span data-lang="zh-tw">建立型</span><span data-lang="zh-cn">建立型</span></td>
+            <td><span data-lang="en">Press the "new kata" button</span><span data-lang="ja">「新しい型」ボタンを押す</span><span data-lang="zh-tw">按「新增型」按鈕</span><span data-lang="zh-cn">按「新增型」按钮</span></td>
+          </tr>
+          <tr>
+            <td><span data-lang="en">Delete kata</span><span data-lang="ja">型を削除</span><span data-lang="zh-tw">刪除型</span><span data-lang="zh-cn">删除型</span></td>
+            <td><span data-lang="en">Tap "x" button (confirm twice)</span><span data-lang="ja">「x」ボタンをタップ（2 回確認）</span><span data-lang="zh-tw">點擊「x」按鈕（需確認兩次）</span><span data-lang="zh-cn">点击「x」按钮（需确认两次）</span></td>
+          </tr>
+          <tr>
+            <td><span data-lang="en">Rename</span><span data-lang="ja">名前変更</span><span data-lang="zh-tw">重新命名</span><span data-lang="zh-cn">重命名</span></td>
+            <td><span data-lang="en">Press <kbd>F2</kbd> or controller <kbd>Y</kbd></span><span data-lang="ja"><kbd>F2</kbd> またはコントローラーの <kbd>Y</kbd></span><span data-lang="zh-tw">按 <kbd>F2</kbd> 或手把 <kbd>Y</kbd></span><span data-lang="zh-cn">按 <kbd>F2</kbd> 或手柄 <kbd>Y</kbd></span></td>
+          </tr>
+          <tr>
+            <td><span data-lang="en">Add game</span><span data-lang="ja">ゲーム追加</span><span data-lang="zh-tw">加入遊戲</span><span data-lang="zh-cn">加入游戏</span></td>
+            <td><span data-lang="en">Click "+" and tick the games to add, or search by name in the bar below</span><span data-lang="ja">「+」をタップしてチェックボックスでゲームを選ぶ、または下の検索バーで名前から検索</span><span data-lang="zh-tw">點擊「+」後用勾選框選遊戲，或用下方搜尋框按名稱搜尋</span><span data-lang="zh-cn">点击「+」后用勾选框选游戏，或用下方搜索框按名称搜索</span></td>
+          </tr>
+          <tr>
+            <td><span data-lang="en">Remove game</span><span data-lang="ja">ゲーム削除</span><span data-lang="zh-tw">移除遊戲</span><span data-lang="zh-cn">移除游戏</span></td>
+            <td><span data-lang="en">Press "Remove"; the button changes to "Confirm?", press again to confirm. Or hold "Remove" for 2.5 seconds.</span><span data-lang="ja">「外す」を押す。ボタンが「確認？」に変わったらもう一度押して確定。または「外す」を 2.5 秒長押し。</span><span data-lang="zh-tw">按「移除」，按鈕變成「確定？」後再按一次確認。或長按「移除」2.5 秒。</span><span data-lang="zh-cn">按「移除」，按钮变成「确定？」后再按一次确认。或长按「移除」2.5 秒。</span></td>
+          </tr>
+        </tbody>
+      </table>
+      <h3><span data-lang="en">Search in Kamae</span><span data-lang="ja">構内の検索</span><span data-lang="zh-tw">構面的搜尋</span><span data-lang="zh-cn">构面的搜索</span></h3>
+      <p><span data-lang="en">If your library is large, use search in Kamae to find specific games quickly.</span><span data-lang="ja">ライブラリが大きい場合は、構内の検索で特定のゲームをすばやく見つけられます。</span><span data-lang="zh-tw">如果你的遊戲庫很大，可以在構面中使用搜尋快速找到特定遊戲。</span><span data-lang="zh-cn">如果你的游戏库很大，可以在构面中使用搜索快速找到特定游戏。</span></p>
+      <figure class="screenshot">
+        <img src="../screenshots/kamaeView_search.png" alt="Kamae search panel" class="shot-dark">
+        <img src="../screenshots/kamaeView_search_l.png" alt="Kamae search panel" class="shot-light">
+        <figcaption class="caption"><span data-lang="en">Kamae search: find games in your library</span><span data-lang="ja">構の検索：ライブラリから探す</span><span data-lang="zh-tw">構面搜尋：在遊戲庫中尋找</span><span data-lang="zh-cn">构面搜索：在游戏库中寻找</span></figcaption>
+      </figure>
+      <p><em>
+        <span data-lang="en">That's literally it. You don't need to know anything else to use Maida. Everything below is optional.</span>
+        <span data-lang="ja">本当にこれだけです。Maida を使うために他に知る必要はありません。以下はすべてオプションです。</span>
+        <span data-lang="zh-tw">這樣就夠了。使用 Maida 不需要知道更多。以下都是選讀。</span>
+        <span data-lang="zh-cn">这样就够了。使用 Maida 不需要知道更多。以下都是选读。</span>
+      </em></p>
+    </section>
+
+    <section id="anchor" aria-labelledby="anchor-title">
+      <h2 id="anchor-title"><span data-lang="en">Anchoring (optional)</span><span data-lang="ja">アンカー（オプション）</span><span data-lang="zh-tw">錨定（選讀）</span><span data-lang="zh-cn">锚定（选读）</span></h2>
+      <p><span data-lang="en">Sometimes you want to decide now but play later. <strong>Hold the TRY button for 3 seconds.</strong></span><span data-lang="ja">今決めたいけど、後でプレイしたい場合。<strong>「やる」ボタンを 3 秒間長押しします。</strong></span><span data-lang="zh-tw">有時候你想先決定，但稍後再玩。<strong>長按「試試」按鈕 3 秒。</strong></span><span data-lang="zh-cn">有时候你想先决定，但稍后再玩。<strong>长按「试试」按钮 3 秒。</strong></span></p>
+      <ul>
+        <li><span data-lang="en">The game gets "anchored" to the screen</span><span data-lang="ja">ゲームが画面に「アンカー」されます</span><span data-lang="zh-tw">遊戲被「錨定」在畫面上</span><span data-lang="zh-cn">游戏被「锚定」在画面上</span></li>
+        <li><span data-lang="en">TRY becomes <strong>PLAY</strong></span><span data-lang="ja">「やる」が <strong>「プレイ」</strong> に変わります</span><span data-lang="zh-tw">「試試」按鈕變成「開打」</span><span data-lang="zh-cn">「试试」按钮变成「开打」</span></li>
+        <li><span data-lang="en">Not Now becomes <strong>Clear</strong></span><span data-lang="ja">「パス」が <strong>「解除」</strong> に変わります</span><span data-lang="zh-tw">「現在不要」按鈕變成「清除」</span><span data-lang="zh-cn">「现在不要」按钮变成「清除」</span></li>
+        <li><span data-lang="en">Next time you open Maida, this game is still here</span><span data-lang="ja">次回 Maida を開いても、このゲームがまだここにあります</span><span data-lang="zh-tw">下次開啟 Maida 時，這款遊戲仍然在這裡</span><span data-lang="zh-cn">下次打开 Maida 时，这款游戏仍然在这里</span></li>
+      </ul>
+      <p><span data-lang="en">Changed your mind? Tap <strong>Clear</strong>.</span><span data-lang="ja">気が変わりましたか？ 「解除」をタップしてください。</span><span data-lang="zh-tw">改主意了？點擊「清除」即可。</span><span data-lang="zh-cn">改主意了？点击「清除」即可。</span></p>
+    </section>
+
+    <section id="undo" aria-labelledby="undo-title">
+      <h2 id="undo-title"><span data-lang="en">Undo (optional)</span><span data-lang="ja">元に戻す（オプション）</span><span data-lang="zh-tw">復原（選讀）</span><span data-lang="zh-cn">撤销（选读）</span></h2>
+      <p><span data-lang="en">Made a mistake? Tap <strong>Undo (One Time Only)</strong> at the bottom. Goes back one step. Works once per decision.</span><span data-lang="ja">間違えましたか？ 画面下部の「元に戻す（一回限り）」ボタンをタップします。1 ステップ戻ります。決定ごとに 1 回だけ。</span><span data-lang="zh-tw">做錯了？點擊畫面底部的「復原（僅限一次）」按鈕。回到上一步。但每次決定只能用一次。</span><span data-lang="zh-cn">做错了？点击画面底部的「撤销（仅限一次）」按钮。回到上一步。但每次决定只能用一次。</span></p>
+      <figure class="screenshot">
+        <img src="../screenshots/rinView_undo.png" alt="Rin view with Undo button after Not Now" class="shot-dark">
+        <img src="../screenshots/rinView_undo_l.png" alt="Rin view with Undo button after Not Now (light)" class="shot-light">
+        <figcaption class="caption"><span data-lang="en">Undo a Not Now decision</span><span data-lang="ja">パスを元に戻す</span><span data-lang="zh-tw">復原一次現在不要</span><span data-lang="zh-cn">撤销一次现在不要</span></figcaption>
+      </figure>
+      <p><em><span data-lang="en">Note: Undo brings the game back on screen, but the −2 weight penalty is not reversed. The score recovers naturally via daily decay (~1 week).</span><span data-lang="ja">注意：元に戻すとゲームは画面に再表示されますが、−2 の重みペナルティは復元されません。スコアは毎日の減衰により約 1 週間で自然回復します。</span><span data-lang="zh-tw">注意：復原會讓遊戲重新出現在畫面上，但 −2 的權重扣分不會恢復。分數會在約一週內透過每日衰減自然恢復。</span><span data-lang="zh-cn">注意：撤销会让游戏重新出现在画面上，但 −2 的权重扣分不会恢复。分数会在约一周内通过每日衰减自然恢复。</span></em></p>
+    </section>
+
+    <section id="freeze" aria-labelledby="freeze-title">
+      <h2 id="freeze-title"><span data-lang="en">Freeze state</span><span data-lang="ja">フリーズ状態</span><span data-lang="zh-tw">凍結狀態</span><span data-lang="zh-cn">冻结状态</span></h2>
+      <p><span data-lang="en">After you tap TRY or PLAY to launch a game, Maida enters freeze state. You've made a commitment; the system stops showing new options; your decision is protected from interference.</span><span data-lang="ja">「やる」または「プレイ」をタップしてゲームを起動した後、Maida はフリーズ状態になります。コミットしました。システムは新しい選択肢を表示しません。あなたの決定を干渉から守ります。</span><span data-lang="zh-tw">點擊「試試」或「開打」啟動遊戲後，Maida 進入凍結狀態。你已經做出承諾，系統停止顯示新選項，保護你的決定不被其他選擇干擾。</span><span data-lang="zh-cn">点击「试试」或「开打」启动游戏后，Maida 进入冻结状态。你已经做出承诺，系统停止显示新选项，保护你的决定不被其他选择干扰。</span></p>
+      <blockquote>
+        <span data-lang="en">This isn't pause — it's protecting your focus.</span>
+        <span data-lang="ja">これは一時停止ではなく、集中を守ることです。</span>
+        <span data-lang="zh-tw">這不是暫停，是保護你的專注。</span>
+        <span data-lang="zh-cn">这不是暂停，是保护你的专注。</span>
+      </blockquote>
+      <h3><span data-lang="en">How to unfreeze?</span><span data-lang="ja">フリーズを解除するには？</span><span data-lang="zh-tw">如何解除凍結？</span><span data-lang="zh-cn">如何解除冻结？</span></h3>
+      <p><span data-lang="en">After playing, return to Maida and tap <strong>I'M BACK</strong>. The button activates after a cool-down period (default 15 seconds, adjustable in Settings → Accessibility → Cool-down duration, 5–30 seconds). This prevents accidental double-tap.</span><span data-lang="ja">プレイ後、Maida に戻って「再開」をタップします。クールダウン時間が経過してからボタンが有効になります（デフォルト 15 秒、設定 → アクセシビリティ → クールダウン時間で 5〜30 秒に調整可能）。誤操作防止のためです。</span><span data-lang="zh-tw">遊戲結束後，回到 Maida，點擊「再來一次」。按鈕會在休息時間後才啟用（預設 15 秒，可在設定 → 無障礙 → 休息秒數調整為 5 至 30 秒），防止意外連按。</span><span data-lang="zh-cn">游戏结束后，回到 Maida，点击「再来一次」。按钮会在休息时间后才启用（默认 15 秒，可在设置 → 无障碍 → 休息秒数调整为 5 至 30 秒），防止意外连按。</span></p>
+    </section>
+
+    <section id="picking" aria-labelledby="picking-title">
+      <h2 id="picking-title"><span data-lang="en">How Maida picks games</span><span data-lang="ja">Maida がゲームを選ぶ仕組み</span><span data-lang="zh-tw">Maida 如何挑選遊戲</span><span data-lang="zh-cn">Maida 如何挑选游戏</span></h2>
+      <p><span data-lang="en">Maida adjusts what appears based on your past choices. It's not recommending — it honestly reflects where your intention is leaning.</span><span data-lang="ja">Maida はこれまでの選択に応じて表示を調整します。レコメンドではなく、あなたの意図がどこに傾いているかを正直に反映するだけです。</span><span data-lang="zh-tw">Maida 會根據你過去的選擇調整顯示。這不是推薦，只是誠實地反映你的選擇傾向。</span><span data-lang="zh-cn">Maida 会根据你过去的选择调整显示。这不是推荐，只是诚实地反映你的选择倾向。</span></p>
+    </section>
+
+    <section id="controls" aria-labelledby="controls-title">
+      <h2 id="controls-title"><span data-lang="en">Keyboard &amp; gamepad controls</span><span data-lang="ja">キーボードとゲームパッド操作</span><span data-lang="zh-tw">鍵盤與手把操作</span><span data-lang="zh-cn">键盘与手柄操作</span></h2>
+      <h3><span data-lang="en">Navigation (all modes)</span><span data-lang="ja">ナビゲーション（全モード）</span><span data-lang="zh-tw">導覽（所有模式）</span><span data-lang="zh-cn">导览（所有模式）</span></h3>
+      <table>
+        <thead>
+          <tr>
+            <th><span data-lang="en">Action</span><span data-lang="ja">操作</span><span data-lang="zh-tw">操作</span><span data-lang="zh-cn">操作</span></th>
+            <th><span data-lang="en">Keyboard</span><span data-lang="ja">キーボード</span><span data-lang="zh-tw">鍵盤</span><span data-lang="zh-cn">键盘</span></th>
+            <th><span data-lang="en">Gamepad</span><span data-lang="ja">ゲームパッド</span><span data-lang="zh-tw">手把</span><span data-lang="zh-cn">手柄</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span data-lang="en">Move focus</span><span data-lang="ja">フォーカス移動</span><span data-lang="zh-tw">移動焦點</span><span data-lang="zh-cn">移动焦点</span></td>
+            <td><span data-lang="en">Arrow keys or <kbd>Tab</kbd></span><span data-lang="ja">矢印キーまたは <kbd>Tab</kbd></span><span data-lang="zh-tw">方向鍵或 <kbd>Tab</kbd></span><span data-lang="zh-cn">方向键或 <kbd>Tab</kbd></span></td>
+            <td><span data-lang="en">D-pad or left stick</span><span data-lang="ja">D-pad または左スティック</span><span data-lang="zh-tw">D-pad 或左類比搖桿</span><span data-lang="zh-cn">D-pad 或左摇杆</span></td>
+          </tr>
+          <tr>
+            <td><span data-lang="en">Scroll long pages</span><span data-lang="ja">長いページのスクロール</span><span data-lang="zh-tw">捲動長頁面</span><span data-lang="zh-cn">滚动长页面</span></td>
+            <td><span data-lang="en"><kbd>Page Up</kbd>/<kbd>Down</kbd></span><span data-lang="ja"><kbd>Page Up</kbd>/<kbd>Down</kbd></span><span data-lang="zh-tw"><kbd>Page Up</kbd>/<kbd>Down</kbd></span><span data-lang="zh-cn"><kbd>Page Up</kbd>/<kbd>Down</kbd></span></td>
+            <td><span data-lang="en">Right stick, or D-pad up/down on legal pages</span><span data-lang="ja">右スティック、または法律ページでは D-pad 上下</span><span data-lang="zh-tw">右類比搖桿，或在法律頁面可用 D-pad 上下</span><span data-lang="zh-cn">右摇杆，或在法律页面可用 D-pad 上下</span></td>
+          </tr>
+        </tbody>
+      </table>
+      <h3><span data-lang="en">Rin mode</span><span data-lang="ja">臨（Rin）モード</span><span data-lang="zh-tw">臨模式</span><span data-lang="zh-cn">临模式</span></h3>
+      <table>
+        <thead>
+          <tr>
+            <th><span data-lang="en">Action</span><span data-lang="ja">操作</span><span data-lang="zh-tw">操作</span><span data-lang="zh-cn">操作</span></th>
+            <th><span data-lang="en">Keyboard</span><span data-lang="ja">キーボード</span><span data-lang="zh-tw">鍵盤</span><span data-lang="zh-cn">键盘</span></th>
+            <th><span data-lang="en">Gamepad</span><span data-lang="ja">ゲームパッド</span><span data-lang="zh-tw">手把</span><span data-lang="zh-cn">手柄</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span data-lang="en">TRY</span><span data-lang="ja">やる</span><span data-lang="zh-tw">試試</span><span data-lang="zh-cn">试试</span></td><td><kbd>Enter</kbd></td><td><kbd>A</kbd></td></tr>
+          <tr><td><span data-lang="en">Not Now</span><span data-lang="ja">パス</span><span data-lang="zh-tw">現在不要</span><span data-lang="zh-cn">现在不要</span></td><td><kbd>Enter</kbd></td><td><kbd>A</kbd></td></tr>
+          <tr><td><span data-lang="en">Anchor</span><span data-lang="ja">アンカー</span><span data-lang="zh-tw">錨定</span><span data-lang="zh-cn">锚定</span></td><td><span data-lang="en">Hold <kbd>Enter</kbd> 3s</span><span data-lang="ja"><kbd>Enter</kbd> 3 秒長押し</span><span data-lang="zh-tw">長按 <kbd>Enter</kbd> 3 秒</span><span data-lang="zh-cn">长按 <kbd>Enter</kbd> 3 秒</span></td><td><span data-lang="en">Hold <kbd>A</kbd> 3s</span><span data-lang="ja"><kbd>A</kbd> 3 秒長押し</span><span data-lang="zh-tw">長按 <kbd>A</kbd> 3 秒</span><span data-lang="zh-cn">长按 <kbd>A</kbd> 3 秒</span></td></tr>
+          <tr><td><span data-lang="en">Undo</span><span data-lang="ja">元に戻す</span><span data-lang="zh-tw">復原</span><span data-lang="zh-cn">撤销</span></td><td><kbd>Enter</kbd></td><td><kbd>A</kbd></td></tr>
+          <tr><td><span data-lang="en">Switch to Kamae</span><span data-lang="ja">構に切替</span><span data-lang="zh-tw">切換到構</span><span data-lang="zh-cn">切换到构</span></td><td><kbd>Ctrl+Tab</kbd></td><td><kbd>RB</kbd></td></tr>
+        </tbody>
+      </table>
+      <h3><span data-lang="en">Kamae mode</span><span data-lang="ja">構（Kamae）モード</span><span data-lang="zh-tw">構模式</span><span data-lang="zh-cn">构模式</span></h3>
+      <table>
+        <thead>
+          <tr>
+            <th><span data-lang="en">Action</span><span data-lang="ja">操作</span><span data-lang="zh-tw">操作</span><span data-lang="zh-cn">操作</span></th>
+            <th><span data-lang="en">Keyboard</span><span data-lang="ja">キーボード</span><span data-lang="zh-tw">鍵盤</span><span data-lang="zh-cn">键盘</span></th>
+            <th><span data-lang="en">Gamepad</span><span data-lang="ja">ゲームパッド</span><span data-lang="zh-tw">手把</span><span data-lang="zh-cn">手柄</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span data-lang="en">Select kata</span><span data-lang="ja">型を選択</span><span data-lang="zh-tw">選擇型</span><span data-lang="zh-cn">选择型</span></td><td><kbd>Enter</kbd></td><td><kbd>A</kbd></td></tr>
+          <tr><td><span data-lang="en">Rename kata</span><span data-lang="ja">型の名前変更</span><span data-lang="zh-tw">重新命名型</span><span data-lang="zh-cn">重命名型</span></td><td><kbd>F2</kbd></td><td><kbd>Y</kbd></td></tr>
+          <tr><td><span data-lang="en">Delete kata</span><span data-lang="ja">型を削除</span><span data-lang="zh-tw">刪除型</span><span data-lang="zh-cn">删除型</span></td><td><span data-lang="en">x button (twice)</span><span data-lang="ja">x ボタン（2 回）</span><span data-lang="zh-tw">x 按鈕（按兩次）</span><span data-lang="zh-cn">x 按钮（按两次）</span></td><td><span data-lang="en"><kbd>A</kbd> on x (twice)</span><span data-lang="ja">x で <kbd>A</kbd>（2 回）</span><span data-lang="zh-tw">x 上按 <kbd>A</kbd>（兩次）</span><span data-lang="zh-cn">x 上按 <kbd>A</kbd>（两次）</span></td></tr>
+          <tr><td><span data-lang="en">Remove game</span><span data-lang="ja">ゲーム削除</span><span data-lang="zh-tw">移除遊戲</span><span data-lang="zh-cn">移除游戏</span></td><td><span data-lang="en">Hold <kbd>Enter</kbd> 2.5s, or <kbd>Enter</kbd> then <kbd>Enter</kbd> on "Confirm?"</span><span data-lang="ja"><kbd>Enter</kbd> 2.5 秒長押し、または <kbd>Enter</kbd> を押して「確認？」でもう一度 <kbd>Enter</kbd></span><span data-lang="zh-tw">長按 <kbd>Enter</kbd> 2.5 秒，或 <kbd>Enter</kbd> 後在「確定？」再按 <kbd>Enter</kbd></span><span data-lang="zh-cn">长按 <kbd>Enter</kbd> 2.5 秒，或 <kbd>Enter</kbd> 后在「确定？」再按 <kbd>Enter</kbd></span></td><td><span data-lang="en">Hold <kbd>A</kbd> 2.5s, or <kbd>A</kbd> then <kbd>A</kbd> on "Confirm?"</span><span data-lang="ja"><kbd>A</kbd> 2.5 秒長押し、または <kbd>A</kbd> を押して「確認？」でもう一度 <kbd>A</kbd></span><span data-lang="zh-tw">長按 <kbd>A</kbd> 2.5 秒，或 <kbd>A</kbd> 後在「確定？」再按 <kbd>A</kbd></span><span data-lang="zh-cn">长按 <kbd>A</kbd> 2.5 秒，或 <kbd>A</kbd> 后在「确定？」再按 <kbd>A</kbd></span></td></tr>
+          <tr><td><span data-lang="en">Switch to Rin</span><span data-lang="ja">臨に切替</span><span data-lang="zh-tw">切換到臨</span><span data-lang="zh-cn">切换到临</span></td><td><kbd>Ctrl+Tab</kbd></td><td><kbd>LB</kbd></td></tr>
+          <tr><td><span data-lang="en">Settings</span><span data-lang="ja">設定</span><span data-lang="zh-tw">設定</span><span data-lang="zh-cn">设置</span></td><td><kbd>Enter</kbd></td><td><kbd>A</kbd></td></tr>
+        </tbody>
+      </table>
+      <h3><span data-lang="en">General</span><span data-lang="ja">共通</span><span data-lang="zh-tw">通用</span><span data-lang="zh-cn">通用</span></h3>
+      <table>
+        <thead>
+          <tr>
+            <th><span data-lang="en">Action</span><span data-lang="ja">操作</span><span data-lang="zh-tw">操作</span><span data-lang="zh-cn">操作</span></th>
+            <th><span data-lang="en">Keyboard</span><span data-lang="ja">キーボード</span><span data-lang="zh-tw">鍵盤</span><span data-lang="zh-cn">键盘</span></th>
+            <th><span data-lang="en">Gamepad</span><span data-lang="ja">ゲームパッド</span><span data-lang="zh-tw">手把</span><span data-lang="zh-cn">手柄</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span data-lang="en">Switch light/dark</span><span data-lang="ja">ライト/ダーク切替</span><span data-lang="zh-tw">切換淺色/深色</span><span data-lang="zh-cn">切换浅色/深色</span></td><td><span data-lang="en">Click top-right button</span><span data-lang="ja">右上ボタン</span><span data-lang="zh-tw">右上角按鈕</span><span data-lang="zh-cn">右上角按钮</span></td><td><kbd>D-pad</kbd> + <kbd>A</kbd></td></tr>
+          <tr><td><span data-lang="en">Help / Tour</span><span data-lang="ja">ヘルプ／ツアー</span><span data-lang="zh-tw">說明／導覽</span><span data-lang="zh-cn">帮助／导览</span></td><td><span data-lang="en"><kbd>F1</kbd> or ? button</span><span data-lang="ja"><kbd>F1</kbd> または ? ボタン</span><span data-lang="zh-tw"><kbd>F1</kbd> 或 ? 按鈕</span><span data-lang="zh-cn"><kbd>F1</kbd> 或 ? 按钮</span></td><td>—</td></tr>
+          <tr><td><span data-lang="en">Back</span><span data-lang="ja">戻る</span><span data-lang="zh-tw">返回</span><span data-lang="zh-cn">返回</span></td><td><kbd>Escape</kbd></td><td><kbd>B</kbd></td></tr>
+        </tbody>
+      </table>
+      <p><em><span data-lang="en">NVDA screen reader supported (Windows). On Linux, Orca support is limited due to WebKitGTK constraints.</span><span data-lang="ja">NVDA スクリーンリーダー対応（Windows）。Linux では、WebKitGTK の制約により Orca の対応は限定的です。</span><span data-lang="zh-tw">支援 NVDA 螢幕閱讀器（Windows）。Linux 上由於 WebKitGTK 限制，Orca 支援有限。</span><span data-lang="zh-cn">支持 NVDA 屏幕阅读器（Windows）。Linux 上由于 WebKitGTK 限制，Orca 支援有限。</span></em></p>
+    </section>
+
+    <section id="settings" aria-labelledby="settings-title">
+      <h2 id="settings-title"><span data-lang="en">Settings</span><span data-lang="ja">設定</span><span data-lang="zh-tw">設定</span><span data-lang="zh-cn">设置</span></h2>
+      <p><span data-lang="en">In Kamae, tap "Settings". Each section can be expanded by tapping its title.</span><span data-lang="ja">構で「設定」をタップします。各セクションはタイトルをタップすると展開できます。</span><span data-lang="zh-tw">在構面中點擊「設定」。每個區塊都可以點擊標題展開。</span><span data-lang="zh-cn">在构面中点击「设置」。每个区块都可以点击标题展开。</span></p>
+      <figure class="screenshot">
+        <img src="../screenshots/setting1.png" alt="Settings screen 1" class="shot-dark">
+        <img src="../screenshots/setting1_l.png" alt="Settings screen 1" class="shot-light">
+        <figcaption class="caption"><span data-lang="en">Settings: general preferences</span><span data-lang="ja">設定：一般設定</span><span data-lang="zh-tw">設定：一般偏好</span><span data-lang="zh-cn">设置：一般偏好</span></figcaption>
+      </figure>
+      <figure class="screenshot">
+        <img src="../screenshots/setting2.png" alt="Settings screen 2" class="shot-dark">
+        <img src="../screenshots/setting2_l.png" alt="Settings screen 2" class="shot-light">
+        <figcaption class="caption"><span data-lang="en">Settings: accessibility and behavior</span><span data-lang="ja">設定：アクセシビリティと動作</span><span data-lang="zh-tw">設定：無障礙與行為</span><span data-lang="zh-cn">设置：无障碍与行为</span></figcaption>
+      </figure>
+      <figure class="screenshot">
+        <img src="../screenshots/setting3.png" alt="Settings screen 3" class="shot-dark">
+        <img src="../screenshots/setting3_l.png" alt="Settings screen 3" class="shot-light">
+        <figcaption class="caption"><span data-lang="en">Settings: data and telemetry</span><span data-lang="ja">設定：データとテレメトリ</span><span data-lang="zh-tw">設定：資料與遙測</span><span data-lang="zh-cn">设置：数据与遥测</span></figcaption>
+      </figure>
+      <ul>
+        <li><strong><span data-lang="en">Language</span><span data-lang="ja">言語</span><span data-lang="zh-tw">語言</span><span data-lang="zh-cn">语言</span></strong><span data-lang="en"> — Choose from English, Japanese, Simplified Chinese, or Traditional Chinese. Select a language, then press again to confirm.</span><span data-lang="ja">：英語、日本語、簡体字中国語、繁体字中国語から選択。言語を選んだ後、もう一度押して確定します。</span><span data-lang="zh-tw">：選擇英文、日文、簡體中文或繁體中文。選擇語言後再按一次確認。</span><span data-lang="zh-cn">：选择英文、日文、简体中文或繁体中文。选择语言后再按一次确认。</span></li>
+        <li><strong><span data-lang="en">Accessibility</span><span data-lang="ja">アクセシビリティ</span><span data-lang="zh-tw">無障礙</span><span data-lang="zh-cn">无障碍</span></strong><span data-lang="en"> — expandable section with three preferences:</span><span data-lang="ja">：展開セクション、3 つの設定を含みます：</span><span data-lang="zh-tw">：展開區塊含三項偏好設定：</span><span data-lang="zh-cn">：展开区块含三项偏好设置：</span>
+          <ul>
+            <li><strong><span data-lang="en">Haptic feedback</span><span data-lang="ja">振動フィードバック</span><span data-lang="zh-tw">震動回饋</span><span data-lang="zh-cn">振动回馈</span></strong><span data-lang="en">: Off / Low / Medium / High. Changes apply immediately. (Gamepad only)</span><span data-lang="ja">：オフ / 弱 / 中 / 強。変更は即座に反映されます。（ゲームパッドのみ）</span><span data-lang="zh-tw">：關閉 / 低 / 中 / 高。變更立即生效。（僅手把）</span><span data-lang="zh-cn">：关闭 / 低 / 中 / 高。变更立即生效。（仅手柄）</span></li>
+            <li><strong><span data-lang="en">Cool-down duration</span><span data-lang="ja">クールダウン時間</span><span data-lang="zh-tw">休息秒數</span><span data-lang="zh-cn">休息秒数</span></strong><span data-lang="en">: how long the post-TRY rest screen stays before "I'M BACK" activates. Slide between 5 and 30 seconds (default 15s). Value persists across launches.</span><span data-lang="ja">：「やる」後に「再開」ボタンが有効になるまでの休憩時間。5〜30 秒のスライダー（デフォルト 15 秒）。値は起動を跨いで保存されます。</span><span data-lang="zh-tw">：試試後「再來一次」按鈕啟用前的休息時間。5 到 30 秒的滑桿（預設 15 秒）。數值會跨啟動持續保留。</span><span data-lang="zh-cn">：试试后「再来一次」按钮启用前的休息时间。5 到 30 秒的滑杆（默认 15 秒）。数值会跨启动持续保留。</span></li>
+            <li><strong><span data-lang="en">View full Accessibility statement</span><span data-lang="ja">アクセシビリティ声明を表示</span><span data-lang="zh-tw">查看完整無障礙聲明</span><span data-lang="zh-cn">查看完整无障碍声明</span></strong><span data-lang="en">: opens the accessibility policy page.</span><span data-lang="ja">：アクセシビリティポリシーページを開きます。</span><span data-lang="zh-tw">：開啟無障礙政策頁面。</span><span data-lang="zh-cn">：打开无障碍政策页面。</span></li>
+          </ul>
+        </li>
+        <li><strong><span data-lang="en">Controls</span><span data-lang="ja">操作方法</span><span data-lang="zh-tw">操控說明</span><span data-lang="zh-cn">操控说明</span></strong><span data-lang="en"> — Full list of keyboard and gamepad shortcuts.</span><span data-lang="ja">：キーボードとゲームパッドのショートカット一覧。</span><span data-lang="zh-tw">：完整的鍵盤與手把快捷鍵列表。</span><span data-lang="zh-cn">：完整的键盘与手柄快捷键列表。</span></li>
+        <li><strong><span data-lang="en">Theme</span><span data-lang="ja">テーマ</span><span data-lang="zh-tw">主題</span><span data-lang="zh-cn">主题</span></strong><span data-lang="en"> — Toggle light/dark mode.</span><span data-lang="ja">：ライト/ダークモードの切り替え。</span><span data-lang="zh-tw">：切換淺色/深色模式。</span><span data-lang="zh-cn">：切换浅色/深色模式。</span></li>
+        <li><strong><span data-lang="en">IGDB Game Duration</span><span data-lang="ja">IGDB ゲーム時間データ</span><span data-lang="zh-tw">IGDB 遊戲時長資料</span><span data-lang="zh-cn">IGDB 游戏时长数据</span></strong><span data-lang="en"> — Optional. Enter Twitch Developer credentials to show estimated play time below game titles.</span><span data-lang="ja">：任意。Twitch Developer の認証情報を入力すると、ゲームタイトルの下に推定プレイ時間が表示されます。</span><span data-lang="zh-tw">：選填。輸入 Twitch Developer 憑證後，遊戲標題下方會顯示預估遊玩時長。</span><span data-lang="zh-cn">：选填。输入 Twitch Developer 凭证后，游戏标题下方会显示预估游玩时长。</span></li>
+        <li><strong><span data-lang="en">Anonymous Usage Data</span><span data-lang="ja">匿名利用データ</span><span data-lang="zh-tw">匿名使用數據</span><span data-lang="zh-cn">匿名使用数据</span></strong><span data-lang="en"> — Each launch sends a small anonymous signal (random ID + install day count + version). Toggle off anytime. See the <a href="https://brightraven.world/privacy.html">Privacy Policy</a> for details.</span><span data-lang="ja">：起動ごとに小さな匿名シグナル（ランダム ID・インストール日数・バージョン）を送信。いつでもオフにできます。詳細は <a href="https://brightraven.world/privacy.html">プライバシーポリシー</a> を参照。</span><span data-lang="zh-tw">：每次啟動時發送一個小型匿名訊號（隨機 ID、安裝天數、版本號）。可隨時關閉。詳見<a href="https://brightraven.world/privacy.html">隱私政策</a>。</span><span data-lang="zh-cn">：每次启动时发送一个小型匿名信号（随机 ID、安装天数、版本号）。可随时关闭。详见<a href="https://brightraven.world/privacy.html">隐私政策</a>。</span></li>
+      </ul>
+    </section>
+
+    <section id="faq" aria-labelledby="faq-title">
+      <h2 id="faq-title"><span data-lang="en">Common questions</span><span data-lang="ja">よくある質問</span><span data-lang="zh-tw">常見問題</span><span data-lang="zh-cn">常见问题</span></h2>
+      <h3><span data-lang="en">Why do I keep seeing the same game?</span><span data-lang="ja">同じゲームが繰り返し表示されるのはなぜ？</span><span data-lang="zh-tw">為什麼一直出現同一款遊戲？</span><span data-lang="zh-cn">为什么一直出现同一款游戏？</span></h3>
+      <p><span data-lang="en">You've chosen TRY multiple times before. Maida doesn't track playtime — only your choices. Tap Not Now if you're done with it.</span><span data-lang="ja">以前に「やる」を複数回選んだからです。Maida はプレイ時間を追跡しません。選択のみを記録します。もう見たくなければ「パス」を選んでください。</span><span data-lang="zh-tw">你之前多次選擇了「試試」。Maida 不追蹤遊玩時間，只記錄你的選擇。如果不想再看到，選「現在不要」。</span><span data-lang="zh-cn">你之前多次选择了「试试」。Maida 不追踪游玩时间，只记录你的选择。如果不想再看到，选「现在不要」。</span></p>
+      <h3><span data-lang="en">Can I search for a specific game?</span><span data-lang="ja">特定のゲームを検索できますか？</span><span data-lang="zh-tw">可以搜尋特定遊戲嗎？</span><span data-lang="zh-cn">可以搜索特定游戏吗？</span></h3>
+      <p><span data-lang="en">In Kamae, yes — search and add to your showcase. In Rin, no — that's the dice's job.</span><span data-lang="ja">構では可能です。検索してショーケースに追加できます。臨では不可。それはダイスの仕事です。</span><span data-lang="zh-tw">在構面中可以搜尋並加入展示櫃。在臨面中不行，那是骰子的工作。</span><span data-lang="zh-cn">在构面中可以搜索并加入展示柜。在临面中不行，那是骰子的工作。</span></p>
+      <h3><span data-lang="en">Does it track how long I play?</span><span data-lang="ja">プレイ時間を追跡しますか？</span><span data-lang="zh-tw">追蹤遊玩時間嗎？</span><span data-lang="zh-cn">追踪游玩时间吗？</span></h3>
+      <p><span data-lang="en">No. It only knows whether you chose TRY or Not Now.</span><span data-lang="ja">いいえ。「やる」か「パス」かの選択のみです。</span><span data-lang="zh-tw">不會。只知道你選了「試試」還是「現在不要」。</span><span data-lang="zh-cn">不会。只知道你选了「试试」还是「现在不要」。</span></p>
+      <h3><span data-lang="en">Is my data uploaded anywhere?</span><span data-lang="ja">データはどこかにアップロードされますか？</span><span data-lang="zh-tw">資料會上傳嗎？</span><span data-lang="zh-cn">数据会上传吗？</span></h3>
+      <p><span data-lang="en">No. All data stays on your device.</span><span data-lang="ja">いいえ。すべてのデータはデバイス上に保存されます。</span><span data-lang="zh-tw">不會。所有資料存在你的裝置上。</span><span data-lang="zh-cn">不会。所有数据存在你的设备上。</span></p>
+    </section>
+
+    <section id="trouble" aria-labelledby="trouble-title">
+      <h2 id="trouble-title"><span data-lang="en">Troubleshooting</span><span data-lang="ja">トラブルシューティング</span><span data-lang="zh-tw">疑難排解</span><span data-lang="zh-cn">疑难排解</span></h2>
+      <h3><span data-lang="en">"Steam Not Detected"</span><span data-lang="ja">「Steam が検出されません」</span><span data-lang="zh-tw">「偵測不到 Steam」</span><span data-lang="zh-cn">「检测不到 Steam」</span></h3>
+      <p><span data-lang="en">Steam isn't running. Start Steam, then retry.</span><span data-lang="ja">Steam が起動していません。Steam を起動してから再試行してください。</span><span data-lang="zh-tw">Steam 沒在執行。啟動 Steam 後重試。</span><span data-lang="zh-cn">Steam 没在运行。启动 Steam 后重试。</span></p>
+      <h3><span data-lang="en">Button doesn't respond</span><span data-lang="ja">ボタンが反応しない</span><span data-lang="zh-tw">按鈕沒反應</span><span data-lang="zh-cn">按钮没反应</span></h3>
+      <p><span data-lang="en">You might be pressing in the "dead zone" (not quick enough, not long enough). Either tap quickly or hold firmly for 3+ seconds.</span><span data-lang="ja">「デッドゾーン」で押している可能性があります。素早くタップするか、3 秒以上しっかり長押ししてください。</span><span data-lang="zh-tw">可能按在「死區」裡（不夠快也不夠久）。快速點擊，或長按超過 3 秒。</span><span data-lang="zh-cn">可能按在「死区」里（不够快也不够久）。快速点击，或长按超过 3 秒。</span></p>
+      <h3><span data-lang="en">Windows says "This app might be unsafe"</span><span data-lang="ja">Windows が「このアプリは安全ではない可能性があります」と表示する</span><span data-lang="zh-tw">Windows 說「這個應用程式可能不安全」</span><span data-lang="zh-cn">Windows 说「这个应用程序可能不安全」</span></h3>
+      <p><span data-lang="en">Click "More info" then "Run anyway". Maida is free software without a paid certificate. It's safe.</span><span data-lang="ja">「詳細情報」→「実行」をクリック。Maida は有料証明書のない無料ソフトウェアです。安全です。</span><span data-lang="zh-tw">點擊「其他資訊」→「仍要執行」。Maida 是沒有付費憑證的免費軟體，是安全的。</span><span data-lang="zh-cn">点击「其他信息」→「仍要运行」。Maida 是没有付费凭证的免费软件，是安全的。</span></p>
+      <h3><span data-lang="en">Game didn't launch</span><span data-lang="ja">ゲームが起動しない</span><span data-lang="zh-tw">遊戲沒有啟動</span><span data-lang="zh-cn">游戏没有启动</span></h3>
+      <p><span data-lang="en">Check if Steam can launch the game normally. Some games need manual setup before first launch.</span><span data-lang="ja">Steam が通常そのゲームを起動できるか確認してください。一部のゲームは初回起動前に手動セットアップが必要です。</span><span data-lang="zh-tw">確認 Steam 能正常啟動該遊戲。某些遊戲需要首次手動設定。</span><span data-lang="zh-cn">确认 Steam 能正常启动该游戏。某些游戏需要首次手动设置。</span></p>
+    </section>
+
+    <section id="philosophy" aria-labelledby="philosophy-title">
+      <h2 id="philosophy-title"><span data-lang="en">Design philosophy (if you're curious)</span><span data-lang="ja">設計思想（興味があれば）</span><span data-lang="zh-tw">設計理念（有興趣的話）</span><span data-lang="zh-cn">设计理念（有兴趣的话）</span></h2>
+      <p><span data-lang="en">Most game launchers help you browse. Browsing your library creates decision fatigue. Maida removes browsing entirely. One game. One choice. Move on.</span><span data-lang="ja">ほとんどのゲームランチャーは閲覧を支援します。ライブラリの閲覧は決定疲労を引き起こします。Maida は閲覧を完全に排除します。1 つのゲーム。1 つの選択。前に進む。</span><span data-lang="zh-tw">大多數遊戲啟動器幫你瀏覽。瀏覽你的遊戲庫會產生決策疲勞。Maida 完全移除瀏覽。一款遊戲。一個選擇。繼續前進。</span><span data-lang="zh-cn">大多数游戏启动器帮你浏览。浏览你的游戏库会产生决策疲劳。Maida 完全移除浏览。一款游戏。一个选择。继续前进。</span></p>
+      <blockquote>maida is the space you pass through before you begin.</blockquote>
+    </section>
+
+    <footer>
+      <p>
+        <span data-lang="en">Contact: <a href="mailto:bertram@brightraven.world">bertram@brightraven.world</a></span>
+        <span data-lang="ja">連絡先：<a href="mailto:bertram@brightraven.world">bertram@brightraven.world</a></span>
+        <span data-lang="zh-tw">聯絡：<a href="mailto:bertram@brightraven.world">bertram@brightraven.world</a></span>
+        <span data-lang="zh-cn">联系：<a href="mailto:bertram@brightraven.world">bertram@brightraven.world</a></span>
+      </p>
+      <p>App Version: v0.4.3 | Manual Version: v0.4.3 | <span data-lang="en">Last updated: 2026-04-20</span><span data-lang="ja">最終更新：2026-04-20</span><span data-lang="zh-tw">最後更新：2026-04-20</span><span data-lang="zh-cn">最后更新：2026-04-20</span></p>
+      <p><a href="https://brightraven.world" class="footer-back">&larr; Bright Raven World</a></p>
+      <p>&copy; 2026 Bright Raven World</p>
+    </footer>
+
+  </main>
+  <script>
+    const map={en:'en',ja:'ja','zh-tw':'zh-TW','zh-cn':'zh-CN'};
+    const root=document.documentElement;
+    const themeBtn=document.getElementById('theme-toggle');
+    const themes=['dark','light'];
+    const applyLang=(k)=>{root.className='lang-'+k;root.lang=map[k]||'en';document.querySelectorAll('.lang-switch button[data-set-lang]').forEach(b=>{const on=b.dataset.setLang===k; b.classList.toggle('active',on); b.setAttribute('aria-pressed', on ? 'true' : 'false');}); localStorage.setItem('maida-sample-lang',k);};
+    const applyTheme=(mode)=>{
+      if(mode==='light'){
+        root.setAttribute('data-theme','light');
+        themeBtn.textContent='Dark';
+        themeBtn.setAttribute('aria-label','Switch to dark theme');
+      } else {
+        root.removeAttribute('data-theme');
+        themeBtn.textContent='Light';
+        themeBtn.setAttribute('aria-label','Switch to light theme');
+      }
+      localStorage.setItem('maida-sample-theme',mode);
+      themeBtn.dataset.mode = mode;
+    };
+    document.querySelectorAll('.lang-switch button[data-set-lang]').forEach(btn=>btn.addEventListener('click',()=>applyLang(btn.dataset.setLang)));
+    themeBtn.addEventListener('click',()=>{
+      const current = themeBtn.dataset.mode || 'dark';
+      const idx = themes.indexOf(current);
+      const next = themes[(idx+1)%themes.length];
+      applyTheme(next);
+    });
+    const savedLang = localStorage.getItem('maida-sample-lang') || 'en';
+    const savedTheme = localStorage.getItem('maida-sample-theme') || 'dark';
+    applyLang(savedLang);
+    applyTheme(savedTheme);
+  </script>
+</body>
+</html>
