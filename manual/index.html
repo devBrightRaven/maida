@@ -57,6 +57,10 @@
     .lang-switch button:hover{border-color:var(--text);background:var(--text);color:var(--bg)}
     .lang-switch button:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
     #theme-toggle{min-width:80px;text-align:center}
+    .cta{display:inline-block;margin-top:12px;background:var(--accent);color:#111;text-decoration:none;padding:14px 20px;border-radius:6px;font-weight:600;font-size:16px}.cta:hover{filter:brightness(1.04)}.cta:focus-visible{outline:3px solid var(--focus);outline-offset:4px}.cta:active{transform:scale(.98)}
+    .cta-ghost{background:transparent;color:var(--accent);border:1px solid var(--accent);font-weight:500}.cta-ghost:hover{background:var(--accent);color:#111;filter:none}
+    html[data-theme='light'] .cta.cta-ghost{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+    html[data-theme='light'] .cta.cta-ghost:hover{background:var(--accent);color:var(--bg)}
     footer{margin-top:48px;padding-top:48px;border-top:1px solid var(--line);text-align:center;color:var(--ghost);font-size:14px}
     .toc{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 22px;margin:16px 0 24px}
     .toc ul{margin:0;padding-left:20px;font-size:15px}
@@ -431,12 +435,12 @@
     </section>
 
     <footer>
-      <p>
-        <span data-lang="en">Contact: <a href="mailto:bertram@brightraven.world">bertram@brightraven.world</a></span>
-        <span data-lang="ja">連絡先：<a href="mailto:bertram@brightraven.world">bertram@brightraven.world</a></span>
-        <span data-lang="zh-tw">聯絡：<a href="mailto:bertram@brightraven.world">bertram@brightraven.world</a></span>
-        <span data-lang="zh-cn">联系：<a href="mailto:bertram@brightraven.world">bertram@brightraven.world</a></span>
-      </p>
+      <a href="mailto:bertram@brightraven.world" class="cta cta-ghost">
+        <span data-lang="en">Contact me</span>
+        <span data-lang="ja">お問い合わせ</span>
+        <span data-lang="zh-tw">聯絡我</span>
+        <span data-lang="zh-cn">联系我</span>
+      </a>
       <p>App Version: v0.4.3 | Manual Version: v0.4.3 | <span data-lang="en">Last updated: 2026-04-20</span><span data-lang="ja">最終更新：2026-04-20</span><span data-lang="zh-tw">最後更新：2026-04-20</span><span data-lang="zh-cn">最后更新：2026-04-20</span></p>
       <p><a href="https://brightraven.world" class="footer-back">&larr; Bright Raven World</a></p>
       <p>&copy; 2026 Bright Raven World</p>
