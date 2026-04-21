@@ -33,7 +33,7 @@
     .screenshot img.shot-light{display:none}
     html[data-theme='light'] .screenshot img.shot-dark{display:none}
     html[data-theme='light'] .screenshot img.shot-light{display:block}
-    .caption{font-size:14px;color:var(--ghost);margin-top:8px;text-align:center;font-style:italic}
+    .caption{font-size:14px;color:var(--ghost);margin-top:8px;text-align:center}
     .back-home{position:fixed;top:16px;left:16px;color:var(--ghost);text-decoration:none;font-size:14px;z-index:10;letter-spacing:.03em;transition:color .2s,border-color .2s;background:var(--bg);padding:6px 10px;border-radius:6px;border:1px solid var(--line)}
     .back-home:hover{color:var(--text);border-color:var(--text)}
     .footer-back{display:inline-block;padding:6px 10px;border:1px solid transparent;border-radius:6px;transition:border-color .2s,color .2s}
@@ -44,7 +44,7 @@
     table{width:100%;border-collapse:collapse;margin:16px 0;font-size:15px;color:var(--muted)}
     th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
     th{color:var(--text);font-weight:500;background:var(--panel)}
-    blockquote{margin:20px 0;padding:14px 20px;border-left:3px solid var(--accent);color:var(--text);font-style:italic;background:var(--panel);border-radius:0 8px 8px 0}
+    blockquote{margin:20px 0;padding:14px 20px;border-left:3px solid var(--accent);color:var(--text);background:var(--panel);border-radius:0 8px 8px 0}
     .skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;text-decoration:none}
     .skip-link:focus{left:16px;top:64px;width:auto;height:auto;padding:12px 16px;background:var(--accent);color:#111;border-radius:8px;z-index:9999;outline:4px solid var(--focus);outline-offset:3px}
     .skip-link[data-lang]{display:none!important}
@@ -114,8 +114,8 @@
           <li><a href="#tour"><span data-lang="en">Guided tour</span><span data-lang="ja">ガイドツアー</span><span data-lang="zh-tw">引導導覽</span><span data-lang="zh-cn">引导导览</span></a></li>
           <li><a href="#rin"><span data-lang="en">Rin (臨) — fast decision</span><span data-lang="ja">臨（Rin）：即時の決断</span><span data-lang="zh-tw">臨（Rin）：快速決策</span><span data-lang="zh-cn">临（Rin）：快速决策</span></a></li>
           <li><a href="#kamae"><span data-lang="en">Kamae (構) — curation</span><span data-lang="ja">構（Kamae）：キュレーション</span><span data-lang="zh-tw">構（Kamae）：策展管理</span><span data-lang="zh-cn">构（Kamae）：策展管理</span></a></li>
-          <li><a href="#anchor"><span data-lang="en">Anchoring (optional)</span><span data-lang="ja">アンカー（オプション）</span><span data-lang="zh-tw">錨定（選讀）</span><span data-lang="zh-cn">锚定（选读）</span></a></li>
-          <li><a href="#undo"><span data-lang="en">Undo (optional)</span><span data-lang="ja">元に戻す（オプション）</span><span data-lang="zh-tw">復原（選讀）</span><span data-lang="zh-cn">撤销（选读）</span></a></li>
+          <li><a href="#anchor"><span data-lang="en">Anchoring (advanced)</span><span data-lang="ja">アンカー（応用）</span><span data-lang="zh-tw">錨定（進階）</span><span data-lang="zh-cn">锚定（进阶）</span></a></li>
+          <li><a href="#undo"><span data-lang="en">Undo (advanced)</span><span data-lang="ja">元に戻す（応用）</span><span data-lang="zh-tw">復原（進階）</span><span data-lang="zh-cn">撤销（进阶）</span></a></li>
           <li><a href="#freeze"><span data-lang="en">Freeze state</span><span data-lang="ja">フリーズ状態</span><span data-lang="zh-tw">凍結狀態</span><span data-lang="zh-cn">冻结状态</span></a></li>
           <li><a href="#picking"><span data-lang="en">How Maida picks games</span><span data-lang="ja">Maida がゲームを選ぶ仕組み</span><span data-lang="zh-tw">Maida 如何挑選遊戲</span><span data-lang="zh-cn">Maida 如何挑选游戏</span></a></li>
           <li><a href="#controls"><span data-lang="en">Keyboard &amp; gamepad controls</span><span data-lang="ja">キーボードとゲームパッド操作</span><span data-lang="zh-tw">鍵盤與手把操作</span><span data-lang="zh-cn">键盘与手柄操作</span></a></li>
@@ -244,16 +244,16 @@
         <img src="../screenshots/kamaeView_search_l.png" alt="Kamae search panel" class="shot-light">
         <figcaption class="caption"><span data-lang="en">Kamae search: find games in your library</span><span data-lang="ja">構の検索：ライブラリから探す</span><span data-lang="zh-tw">構面搜尋：在遊戲庫中尋找</span><span data-lang="zh-cn">构面搜索：在游戏库中寻找</span></figcaption>
       </figure>
-      <p><em>
-        <span data-lang="en">That's literally it. You don't need to know anything else to use Maida. Everything below is optional.</span>
-        <span data-lang="ja">本当にこれだけです。Maida を使うために他に知る必要はありません。以下はすべてオプションです。</span>
-        <span data-lang="zh-tw">這樣就夠了。使用 Maida 不需要知道更多。以下都是選讀。</span>
-        <span data-lang="zh-cn">这样就够了。使用 Maida 不需要知道更多。以下都是选读。</span>
-      </em></p>
+      <p>
+        <span data-lang="en">That's literally it. You don't need to know anything else to use Maida. Everything below is advanced.</span>
+        <span data-lang="ja">本当にこれだけです。Maida を使うために他に知る必要はありません。以下はすべて応用です。</span>
+        <span data-lang="zh-tw">這樣就夠了。使用 Maida 不需要知道更多。以下都是進階功能。</span>
+        <span data-lang="zh-cn">这样就够了。使用 Maida 不需要知道更多。以下都是进阶功能。</span>
+      </p>
     </section>
 
     <section id="anchor" aria-labelledby="anchor-title">
-      <h2 id="anchor-title"><span data-lang="en">Anchoring (optional)</span><span data-lang="ja">アンカー（オプション）</span><span data-lang="zh-tw">錨定（選讀）</span><span data-lang="zh-cn">锚定（选读）</span></h2>
+      <h2 id="anchor-title"><span data-lang="en">Anchoring (advanced)</span><span data-lang="ja">アンカー（応用）</span><span data-lang="zh-tw">錨定（進階）</span><span data-lang="zh-cn">锚定（进阶）</span></h2>
       <p><span data-lang="en">Sometimes you want to decide now but play later. <strong>Hold the TRY button for 3 seconds.</strong></span><span data-lang="ja">今決めたいけど、後でプレイしたい場合。<strong>「やる」ボタンを 3 秒間長押しします。</strong></span><span data-lang="zh-tw">有時候你想先決定，但稍後再玩。<strong>長按「試試」按鈕 3 秒。</strong></span><span data-lang="zh-cn">有时候你想先决定，但稍后再玩。<strong>长按「试试」按钮 3 秒。</strong></span></p>
       <ul>
         <li><span data-lang="en">The game gets "anchored" to the screen</span><span data-lang="ja">ゲームが画面に「アンカー」されます</span><span data-lang="zh-tw">遊戲被「錨定」在畫面上</span><span data-lang="zh-cn">游戏被「锚定」在画面上</span></li>
@@ -265,14 +265,14 @@
     </section>
 
     <section id="undo" aria-labelledby="undo-title">
-      <h2 id="undo-title"><span data-lang="en">Undo (optional)</span><span data-lang="ja">元に戻す（オプション）</span><span data-lang="zh-tw">復原（選讀）</span><span data-lang="zh-cn">撤销（选读）</span></h2>
+      <h2 id="undo-title"><span data-lang="en">Undo (advanced)</span><span data-lang="ja">元に戻す（応用）</span><span data-lang="zh-tw">復原（進階）</span><span data-lang="zh-cn">撤销（进阶）</span></h2>
       <p><span data-lang="en">Made a mistake? Tap <strong>Undo (One Time Only)</strong> at the bottom. Goes back one step. Works once per decision.</span><span data-lang="ja">間違えましたか？ 画面下部の「元に戻す（一回限り）」ボタンをタップします。1 ステップ戻ります。決定ごとに 1 回だけ。</span><span data-lang="zh-tw">做錯了？點擊畫面底部的「復原（僅限一次）」按鈕。回到上一步。但每次決定只能用一次。</span><span data-lang="zh-cn">做错了？点击画面底部的「撤销（仅限一次）」按钮。回到上一步。但每次决定只能用一次。</span></p>
       <figure class="screenshot">
         <img src="../screenshots/rinView_undo.png" alt="Rin view with Undo button after Not Now" class="shot-dark">
         <img src="../screenshots/rinView_undo_l.png" alt="Rin view with Undo button after Not Now (light)" class="shot-light">
         <figcaption class="caption"><span data-lang="en">Undo a Not Now decision</span><span data-lang="ja">パスを元に戻す</span><span data-lang="zh-tw">復原一次現在不要</span><span data-lang="zh-cn">撤销一次现在不要</span></figcaption>
       </figure>
-      <p><em><span data-lang="en">Note: Undo brings the game back on screen, but the −2 weight penalty is not reversed. The score recovers naturally via daily decay (~1 week).</span><span data-lang="ja">注意：元に戻すとゲームは画面に再表示されますが、−2 の重みペナルティは復元されません。スコアは毎日の減衰により約 1 週間で自然回復します。</span><span data-lang="zh-tw">注意：復原會讓遊戲重新出現在畫面上，但 −2 的權重扣分不會恢復。分數會在約一週內透過每日衰減自然恢復。</span><span data-lang="zh-cn">注意：撤销会让游戏重新出现在画面上，但 −2 的权重扣分不会恢复。分数会在约一周内通过每日衰减自然恢复。</span></em></p>
+      <p><span data-lang="en">Note: Undo brings the game back on screen, but the −2 weight penalty is not reversed. The score recovers naturally via daily decay (~1 week).</span><span data-lang="ja">注意：元に戻すとゲームは画面に再表示されますが、−2 の重みペナルティは復元されません。スコアは毎日の減衰により約 1 週間で自然回復します。</span><span data-lang="zh-tw">注意：復原會讓遊戲重新出現在畫面上，但 −2 的權重扣分不會恢復。分數會在約一週內透過每日衰減自然恢復。</span><span data-lang="zh-cn">注意：撤销会让游戏重新出现在画面上，但 −2 的权重扣分不会恢复。分数会在约一周内通过每日衰减自然恢复。</span></p>
     </section>
 
     <section id="freeze" aria-labelledby="freeze-title">
@@ -367,7 +367,7 @@
           <tr><td><span data-lang="en">Back</span><span data-lang="ja">戻る</span><span data-lang="zh-tw">返回</span><span data-lang="zh-cn">返回</span></td><td><kbd>Escape</kbd></td><td><kbd>B</kbd></td></tr>
         </tbody>
       </table>
-      <p><em><span data-lang="en">NVDA screen reader supported (Windows). On Linux, Orca support is limited due to WebKitGTK constraints.</span><span data-lang="ja">NVDA スクリーンリーダー対応（Windows）。Linux では、WebKitGTK の制約により Orca の対応は限定的です。</span><span data-lang="zh-tw">支援 NVDA 螢幕閱讀器（Windows）。Linux 上由於 WebKitGTK 限制，Orca 支援有限。</span><span data-lang="zh-cn">支持 NVDA 屏幕阅读器（Windows）。Linux 上由于 WebKitGTK 限制，Orca 支援有限。</span></em></p>
+      <p><span data-lang="en">NVDA screen reader supported (Windows). On Linux, Orca support is limited due to WebKitGTK constraints.</span><span data-lang="ja">NVDA スクリーンリーダー対応（Windows）。Linux では、WebKitGTK の制約により Orca の対応は限定的です。</span><span data-lang="zh-tw">支援 NVDA 螢幕閱讀器（Windows）。Linux 上由於 WebKitGTK 限制，Orca 支援有限。</span><span data-lang="zh-cn">支持 NVDA 屏幕阅读器（Windows）。Linux 上由于 WebKitGTK 限制，Orca 支援有限。</span></p>
     </section>
 
     <section id="settings" aria-labelledby="settings-title">
