@@ -14,7 +14,7 @@ A round of accessibility and transparency polish across the legal pages, plus a 
 
 ### Linux updater
 
-- **tauri-plugin-process registration**: the updater's auto-relaunch path threw a silent error on Linux because the Rust side never registered the plugin — users saw "install" succeed but had to quit and reopen manually. The plugin is now registered so relaunch fires automatically on both `.deb` and AppImage.
+- **tauri-plugin-process registration**: the updater's auto-relaunch path threw a silent error on Linux because the Rust side never registered the plugin — users saw "install" succeed but had to quit and reopen manually. The plugin is now registered so relaunch fires automatically on both `.deb` and AppImage. **Caveat**: the 0.4.2 → 0.4.3 update on Linux may still require a manual restart — relaunch is initiated by the outgoing version (v0.4.2), which does not carry this fix. The fix takes full effect for updates from v0.4.3 onward.
 - **Updater errors are no longer silent**: both the background version check and the install flow previously used bare `catch {}` that hid every failure (including the registration bug above). They now log to the console so "Update failed" in the UI is debuggable.
 - **Dev-mode AppImage env guard**: running `tauri dev` from inside an AppImage-based terminal (e.g. BetterAgentTerminal) could confuse Tauri into treating the dev binary as an AppImage, causing restart to launch the terminal instead of Maida. The dev binary now clears `APPIMAGE` / `APPDIR` at startup. Production AppImage behavior is unchanged.
 
