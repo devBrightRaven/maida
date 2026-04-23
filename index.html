@@ -15,7 +15,7 @@
       --accent:#6a5535; --line:#cfc5bb; --focus:#9a6f00;
     }
     *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-    main{max-width:820px;margin:0 auto;padding:72px 24px 96px} section{padding:48px 0;border-top:1px solid var(--line)} section:first-of-type{border-top:0;padding-top:12px}
+    main{max-width:820px;margin:0 auto;padding:84px 24px 96px} section{padding:48px 0;border-top:1px solid var(--line)} section:first-of-type{border-top:0;padding-top:12px}
     h1,h2,h3{line-height:1.12;margin:0 0 18px;font-weight:500} h1{font-size:clamp(40px,7vw,72px)} h2{font-size:clamp(28px,4vw,40px)} h3{font-size:22px;margin-bottom:8px}
     p{margin:0 0 16px;color:var(--muted);font-size:16px} html.lang-en p{font-size:16px} .lead{color:var(--text);font-size:clamp(24px,3vw,32px);line-height:1.35;margin:20px 0 28px} html.lang-en .lead{font-size:clamp(24px,3vw,30px)}
     .strong{color:var(--text)} .label{color:var(--accent);font-size:16px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px} html.lang-en .label{font-size:16px;letter-spacing:.14em}
@@ -27,23 +27,47 @@
     html[data-theme='light'] .cta.cta-ghost{background:transparent;color:var(--accent);border:1px solid var(--accent)}
     html[data-theme='light'] .cta.cta-ghost:hover{background:var(--accent);color:var(--bg)}
     html[data-theme='light'] .kanji{color:rgba(106,85,53,.50)}
-    html[data-theme='light'] .lang-switch button:not(.active):not(.is-active-theme){color:var(--muted)}
     .cta-small{padding:8px 14px;font-size:14px;font-weight:500;margin:0 4px}
     .download-aux{margin-top:20px}.manual-label{font-size:14px;color:var(--muted);margin-right:8px;vertical-align:middle}
-    .skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;text-decoration:none}.skip-link:focus{left:16px;top:16px;width:auto;height:auto;padding:12px 16px;background:var(--accent);color:#111;border-radius:8px;z-index:9999;outline:4px solid var(--focus);outline-offset:3px;box-shadow:0 0 0 6px rgba(0,0,0,.45)}
+    .skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;text-decoration:none}.skip-link:focus{left:50%;top:8px;transform:translateX(-50%);width:auto;height:auto;padding:12px 16px;background:var(--accent);color:#111;border-radius:8px;z-index:9999;outline:4px solid var(--focus);outline-offset:3px;box-shadow:0 0 0 6px rgba(0,0,0,.45)}
     .skip-link[data-lang]{display:none!important}
-    .back-home{position:fixed;top:16px;left:16px;color:var(--ghost);text-decoration:none;font-size:14px;z-index:10;letter-spacing:.03em;transition:color .2s,border-color .2s;background:var(--bg);padding:6px 10px;border-radius:6px;border:1px solid var(--line)}.back-home:hover{color:var(--text);border-color:var(--text)}
-    .footer-back{display:inline-block;padding:6px 10px;border:1px solid transparent;border-radius:6px;transition:border-color .2s,color .2s}.footer-back:hover{border-color:var(--text);color:var(--text)}
     html.lang-en .skip-link[data-lang="en"],html.lang-ja .skip-link[data-lang="ja"],html.lang-zh-tw .skip-link[data-lang="zh-tw"],html.lang-zh-cn .skip-link[data-lang="zh-cn"]{display:block!important}
     [data-lang]{display:none!important} html.lang-en [data-lang="en"],html.lang-ja [data-lang="ja"],html.lang-zh-tw [data-lang="zh-tw"],html.lang-zh-cn [data-lang="zh-cn"]{display:revert!important}
-    .lang-switch{position:fixed;top:16px;right:16px;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.lang-switch button{background:none;border:1px solid #5b5248;color:#cfc7bd;padding:8px 10px;cursor:pointer;border-radius:6px;min-width:44px;min-height:32px}.lang-switch button.active,.lang-switch button.is-active-theme{background:var(--text);color:var(--bg);border-color:var(--text)}.lang-switch button:hover{border-color:var(--text);background:var(--text);color:var(--bg)}.lang-switch button:focus-visible{outline:3px solid var(--focus);outline-offset:2px;box-shadow:0 0 0 4px rgba(0,0,0,.35)}#theme-toggle{min-width:80px;text-align:center} html[data-theme='light'] .cta{background:#4a3a20;color:#f5f0eb} html[data-theme='light'] .mock-title{color:#b9b0a5} html[data-theme='light'] .pill{color:#d2cbc2;border-color:#5b5248} @media (prefers-reduced-motion: reduce){.cta:active{transform:none}.cta:hover{filter:none}}
-    .sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}@media (max-width:720px){.grid{grid-template-columns:1fr}.kanji{font-size:44px}}
+    /* Site nav bar */
+    .site-nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:var(--bg);border-bottom:1px solid var(--line);z-index:100;height:60px;gap:8px}
+    .nav-right{display:flex;align-items:center;gap:6px}
+    .back-home{color:var(--ghost);text-decoration:none;font-size:14px;letter-spacing:.03em;transition:color .2s;display:flex;align-items:center;min-height:44px;padding:0 10px;border-radius:6px;white-space:nowrap}.back-home:hover{color:var(--text)}.back-home:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+    .footer-back{display:inline-block;padding:6px 10px;border:1px solid transparent;border-radius:6px;transition:border-color .2s,color .2s}.footer-back:hover{border-color:var(--text);color:var(--text)}
+    /* Nav buttons (shared) */
+    .nav-btn{background:none;border:1px solid #5b5248;color:#cfc7bd;cursor:pointer;border-radius:6px;min-width:44px;min-height:44px;padding:8px 10px;font:inherit;font-size:14px;transition:background .15s,border-color .15s,color .15s;display:flex;align-items:center;justify-content:center;gap:4px}
+    .nav-btn:hover,.nav-btn.active{background:var(--text);color:var(--bg);border-color:var(--text)}
+    .nav-btn:focus-visible{outline:3px solid var(--focus);outline-offset:2px;box-shadow:0 0 0 4px rgba(0,0,0,.35)}
+    html[data-theme='light'] .nav-btn:not(.active){color:var(--muted)}
+    /* Desktop segmented lang (hide on mobile) */
+    .lang-segmented{display:flex;gap:4px}
+    @media(max-width:640px){.lang-segmented{display:none}}
+    /* Mobile dropdown (hide on desktop) */
+    .lang-dropdown{position:relative;display:none}
+    @media(max-width:640px){.lang-dropdown{display:block}}
+    .lang-toggle .chevron{font-size:10px;line-height:1;transition:transform .15s}
+    .lang-toggle[aria-expanded="true"] .chevron{transform:rotate(180deg)}
+    .lang-menu{position:absolute;top:calc(100% + 6px);right:0;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:4px;list-style:none;margin:0;min-width:160px;box-shadow:0 4px 16px rgba(0,0,0,.35);z-index:101}
+    .lang-menu[hidden]{display:none}
+    .lang-option{display:flex;align-items:center;width:100%;text-align:left;background:none;border:none;color:var(--text);cursor:pointer;padding:10px 14px;min-height:44px;border-radius:6px;font:inherit;font-size:14px;transition:background .1s}
+    .lang-option:hover{background:var(--panel)}.lang-option:focus-visible{outline:3px solid var(--focus);outline-offset:-2px}
+    .lang-option[aria-current="true"]{color:var(--accent);font-weight:600}
+    html[data-theme='light'] .lang-menu{box-shadow:0 4px 16px rgba(0,0,0,.15)}
+    /* 間 note */
+    .ma-note{font-size:15px;color:var(--ghost);font-style:italic;margin:-4px 0 20px}
+    @media(prefers-reduced-motion:reduce){.cta:active{transform:none}.cta:hover{filter:none}.lang-toggle .chevron{transition:none}}
+    .sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}@media(max-width:720px){.grid{grid-template-columns:1fr}.kanji{font-size:44px}}
     .screenshot{margin:24px 0;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:var(--panel)}
     .screenshot img{width:100%;height:auto;display:block}
     .screenshot img.shot-light{display:none}
     html[data-theme='light'] .screenshot img.shot-dark{display:none}
     html[data-theme='light'] .screenshot img.shot-light{display:block}
     .screenshot-caption{font-size:14px;color:var(--ghost);margin-top:8px;text-align:center;font-style:italic}
+    html[data-theme='light'] .cta{background:#4a3a20;color:#f5f0eb} html[data-theme='light'] .mock-title{color:#b9b0a5} html[data-theme='light'] .pill{color:#d2cbc2;border-color:#5b5248}
   </style>
 </head>
 <body>
@@ -51,14 +75,36 @@
   <a href="#main" class="skip-link skip-ja" data-lang="ja">メインコンテンツへスキップ</a>
   <a href="#main" class="skip-link skip-zh-tw" data-lang="zh-tw">跳到主要內容</a>
   <a href="#main" class="skip-link skip-zh-cn" data-lang="zh-cn">跳到主要内容</a>
-  <a href="https://brightraven.world" class="back-home" aria-label="Back to Bright Raven World">← Back</a>
-  <nav class="lang-switch" aria-label="Language switcher and theme toggle" role="navigation">
-    <button class="active" data-set-lang="en">EN</button>
-    <button data-set-lang="ja">JA</button>
-    <button data-set-lang="zh-cn">简</button>
-    <button data-set-lang="zh-tw">繁</button>
-    <button id="theme-toggle" aria-label="Switch theme">Dark</button>
-  </nav>
+  <header class="site-nav">
+    <a href="https://brightraven.world" class="back-home" aria-label="Back to Bright Raven World">← Back</a>
+    <div class="nav-right">
+      <!-- Desktop: segmented buttons (>640px) -->
+      <div class="lang-segmented" role="group" aria-label="Language">
+        <button class="nav-btn active" data-set-lang="en" aria-pressed="true">EN</button>
+        <button class="nav-btn" data-set-lang="ja" aria-pressed="false">JA</button>
+        <button class="nav-btn" data-set-lang="zh-cn" aria-pressed="false">简</button>
+        <button class="nav-btn" data-set-lang="zh-tw" aria-pressed="false">繁</button>
+      </div>
+      <!-- Mobile: dropdown (<=640px) -->
+      <div class="lang-dropdown">
+        <button id="lang-toggle" class="nav-btn lang-toggle"
+                aria-expanded="false" aria-controls="lang-menu"
+                aria-haspopup="true"
+                aria-label="Change language, current: English">
+          <span class="lang-current">EN</span>
+          <span class="chevron" aria-hidden="true">▾</span>
+        </button>
+        <ul id="lang-menu" class="lang-menu" hidden role="list">
+          <li><button type="button" class="lang-option" data-set-lang="en" aria-current="true">English</button></li>
+          <li><button type="button" class="lang-option" data-set-lang="ja" aria-current="false">日本語</button></li>
+          <li><button type="button" class="lang-option" data-set-lang="zh-cn" aria-current="false">简体中文</button></li>
+          <li><button type="button" class="lang-option" data-set-lang="zh-tw" aria-current="false">繁體中文</button></li>
+        </ul>
+      </div>
+      <!-- Theme toggle -->
+      <button id="theme-toggle" class="nav-btn active" style="min-width:60px" aria-label="Switch theme">Dark</button>
+    </div>
+  </header>
   <main id="main">
     <section aria-labelledby="hero-title">
       <div class="label">Maida</div>
@@ -110,6 +156,12 @@
         <span data-lang="zh-tw">Maida 是短暫的「間」。然後去玩。</span>
         <span data-lang="zh-cn">Maida 是短暂的「间」。然后去玩。</span>
       </h2>
+      <p class="ma-note">
+        <span data-lang="en">間 (ma) is Japanese — the interval between moments. Not empty, but the breath before you begin.</span>
+        <span data-lang="ja">束の間(つかのま)——儚く過ぎゆく、でも確かにある時間のこと。間(ま)は、始まりの手前にある静けさ。</span>
+        <span data-lang="zh-tw">「間」(ま)是日文的美學詞——事物之間的靜默，不是空無，是你開始之前的那口氣。</span>
+        <span data-lang="zh-cn">「间」(ま)是日文的美学词——事物之间的静默，不是空无，是你开始之前的那口气。</span>
+      </p>
       <p><span data-lang="en">Maida shows you one game at a time. From what you already have installed. You answer: play it now, or not now.</span><span data-lang="ja">Maida は一度に一本だけ見せる。インストール済みのゲームの中から。答えは二つ：今やる、か、今はやらない。</span><span data-lang="zh-tw">Maida 每次只給你看一款遊戲。從你已經安裝的遊戲中。你回答：現在玩，或現在不要。</span><span data-lang="zh-cn">Maida 每次只给你看一款游戏。从你已经安装的游戏中。你回答：现在玩，或现在不要。</span></p>
       <p><span data-lang="en">It's not a recommendation engine. Not a backlog tracker. Not a system that pretends to know you better than you know yourself.</span><span data-lang="ja">レコメンドエンジンじゃない。バックログ管理ツールでもない。あなたより「あなたをわかっている」ふりをするシステムでもない。</span><span data-lang="zh-tw">它不是推薦引擎。不是待辦清單。不是一個假裝比你更懂你的系統。</span><span data-lang="zh-cn">它不是推荐引擎。不是待办清单。不是一个假装比你更懂你的系统。</span></p>
       <figure class="screenshot">
@@ -220,24 +272,93 @@
       <p><a href="https://brightraven.world" class="footer-back" style="color:var(--accent);text-decoration:none">&larr; Bright Raven World</a></p><p>&copy; 2026 Bright Raven World</p>
     </footer>
   </main>
+  <!-- SR live region for language change announcements -->
+  <div id="a11y-live" aria-live="polite" aria-atomic="true" class="sr-only"></div>
   <script>
     const map={en:'en',ja:'ja','zh-tw':'zh-TW','zh-cn':'zh-CN'};
+    const langNames={en:'English',ja:'日本語','zh-cn':'简体中文','zh-tw':'繁體中文'};
+    const langLabels={en:'EN',ja:'JA','zh-cn':'简','zh-tw':'繁'};
     const root=document.documentElement;
     const themeBtn=document.getElementById('theme-toggle');
+    const langToggle=document.getElementById('lang-toggle');
+    const langMenu=document.getElementById('lang-menu');
+    const liveRegion=document.getElementById('a11y-live');
     const themes=['dark','light'];
     const themeVars={
       dark:{'--bg':'#0b0b0b','--panel':'#121212','--text':'#f1ebe3','--muted':'#d2cbc2','--ghost':'#b9b0a5','--accent':'#dcc4a0','--line':'#2a2622','--focus':'#e8c840'},
       light:{'--bg':'#f5f0eb','--panel':'#ebe5de','--text':'#1c1712','--muted':'#4f4942','--ghost':'#584f45','--accent':'#6a5535','--line':'#cfc5bb','--focus':'#9a6f00'}
     };
     const setThemeVars=(mode)=>{const vars=themeVars[mode]||themeVars.dark; Object.entries(vars).forEach(([k,v])=>root.style.setProperty(k,v));};
-    const applyLang=(k)=>{root.className='lang-'+k;root.lang=map[k]||'en';document.querySelectorAll('.lang-switch button[data-set-lang]').forEach(b=>{const on=b.dataset.setLang===k; b.classList.toggle('active',on); b.setAttribute('aria-pressed', on ? 'true' : 'false');}); localStorage.setItem('maida-sample-lang',k);};
+    const applyLang=(k)=>{
+      root.className='lang-'+k;
+      root.lang=map[k]||'en';
+      // Segmented buttons
+      document.querySelectorAll('.lang-segmented [data-set-lang]').forEach(b=>{
+        const on=b.dataset.setLang===k;
+        b.classList.toggle('active',on);
+        b.setAttribute('aria-pressed',on?'true':'false');
+      });
+      // Dropdown options
+      document.querySelectorAll('.lang-option').forEach(b=>{
+        b.setAttribute('aria-current',b.dataset.setLang===k?'true':'false');
+      });
+      // Update toggle label
+      if(langToggle){
+        const curr=langToggle.querySelector('.lang-current');
+        if(curr) curr.textContent=langLabels[k]||k.toUpperCase();
+        langToggle.setAttribute('aria-label','Change language, current: '+(langNames[k]||k));
+      }
+      // Announce to SR (skip on initial load to avoid noise)
+      if(liveRegion && liveRegion.dataset.ready) liveRegion.textContent='Language changed to '+(langNames[k]||k);
+      localStorage.setItem('maida-sample-lang',k);
+    };
+    // Dropdown open/close
+    const openLangMenu=()=>{
+      langMenu.hidden=false;
+      langToggle.setAttribute('aria-expanded','true');
+      const first=langMenu.querySelector('.lang-option');
+      if(first) first.focus();
+    };
+    const closeLangMenu=(returnFocus=false)=>{
+      langMenu.hidden=true;
+      langToggle.setAttribute('aria-expanded','false');
+      if(returnFocus) langToggle.focus();
+    };
+    if(langToggle){
+      langToggle.addEventListener('click',()=>{
+        langToggle.getAttribute('aria-expanded')==='true'?closeLangMenu():openLangMenu();
+      });
+    }
+    if(langMenu){
+      langMenu.addEventListener('keydown',(e)=>{
+        const opts=[...langMenu.querySelectorAll('.lang-option')];
+        const idx=opts.indexOf(document.activeElement);
+        if(e.key==='Escape'){e.preventDefault();closeLangMenu(true);}
+        else if(e.key==='ArrowDown'){e.preventDefault();opts[(idx+1)%opts.length]?.focus();}
+        else if(e.key==='ArrowUp'){e.preventDefault();opts[(idx-1+opts.length)%opts.length]?.focus();}
+        else if(e.key==='Home'){e.preventDefault();opts[0]?.focus();}
+        else if(e.key==='End'){e.preventDefault();opts[opts.length-1]?.focus();}
+      });
+    }
+    document.addEventListener('click',(e)=>{
+      if(langToggle&&langMenu&&!langToggle.contains(e.target)&&!langMenu.contains(e.target)){
+        closeLangMenu();
+      }
+    });
+    // Language selection (segmented + dropdown)
+    document.querySelectorAll('.lang-segmented [data-set-lang]').forEach(btn=>{
+      btn.addEventListener('click',()=>applyLang(btn.dataset.setLang));
+    });
+    document.querySelectorAll('.lang-option').forEach(btn=>{
+      btn.addEventListener('click',()=>{applyLang(btn.dataset.setLang);closeLangMenu(true);});
+    });
     const applyTheme=(mode)=>{
       if(mode==='system'){
         root.removeAttribute('data-theme');
-        const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
-        setThemeVars(prefersLight ? 'light' : 'dark');
-        themeBtn.textContent = prefersLight ? 'Dark' : 'Light';
-        themeBtn.setAttribute('aria-label', prefersLight ? 'Switch to dark theme' : 'Switch to light theme');
+        const prefersLight=window.matchMedia('(prefers-color-scheme: light)').matches;
+        setThemeVars(prefersLight?'light':'dark');
+        themeBtn.textContent=prefersLight?'Dark':'Light';
+        themeBtn.setAttribute('aria-label',prefersLight?'Switch to dark theme':'Switch to light theme');
       } else if(mode==='light'){
         root.setAttribute('data-theme','light');
         setThemeVars('light');
@@ -249,23 +370,23 @@
         themeBtn.textContent='Light';
         themeBtn.setAttribute('aria-label','Switch to light theme');
       }
-      themeBtn.classList.toggle('is-active-theme', true);
       localStorage.setItem('maida-sample-theme',mode);
-      themeBtn.dataset.mode = mode;
+      themeBtn.dataset.mode=mode;
     };
-    document.querySelectorAll('.lang-switch button[data-set-lang]').forEach(btn=>btn.addEventListener('click',()=>applyLang(btn.dataset.setLang)));
     themeBtn.addEventListener('click',()=>{
-      const current = themeBtn.dataset.mode || 'system';
-      const idx = themes.indexOf(current);
-      const next = themes[(idx+1)%themes.length];
-      applyTheme(next);
+      const current=themeBtn.dataset.mode||'system';
+      const idx=themes.indexOf(current);
+      applyTheme(themes[(idx+1)%themes.length]);
     });
-    const savedLang = localStorage.getItem('maida-sample-lang') || 'en';
-    const savedTheme = localStorage.getItem('maida-sample-theme') || 'dark';
+    const savedLang=localStorage.getItem('maida-sample-lang')||'en';
+    const savedTheme=localStorage.getItem('maida-sample-theme')||'dark';
     applyLang(savedLang);
     applyTheme(savedTheme);
-    window.matchMedia('(prefers-color-scheme: light)').addEventListener?.('change',()=>{ if((themeBtn.dataset.mode||'system')==='system') applyTheme('system'); });
+    // Mark live region ready after initial load (prevent double-announce on load)
+    if(liveRegion) liveRegion.dataset.ready='1';
+    window.matchMedia('(prefers-color-scheme: light)').addEventListener?.('change',()=>{
+      if((themeBtn.dataset.mode||'system')==='system') applyTheme('system');
+    });
   </script>
 </body>
 </html>
-
