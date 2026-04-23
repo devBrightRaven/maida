@@ -16,7 +16,7 @@
     }
     *{box-sizing:border-box}
     body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-    main{max-width:820px;margin:0 auto;padding:72px 24px 96px}
+    main{max-width:820px;margin:0 auto;padding:84px 24px 96px}
     section{padding:40px 0;border-top:1px solid var(--line)}
     section:first-of-type{border-top:0;padding-top:12px}
     h1,h2,h3{line-height:1.2;margin:0 0 18px;font-weight:500}
@@ -34,10 +34,28 @@
     html[data-theme='light'] .screenshot img.shot-dark{display:none}
     html[data-theme='light'] .screenshot img.shot-light{display:block}
     .caption{font-size:14px;color:var(--ghost);margin-top:8px;text-align:center}
-    .back-home{position:fixed;top:16px;left:16px;color:var(--ghost);text-decoration:none;font-size:14px;z-index:10;letter-spacing:.03em;transition:color .2s,border-color .2s;background:var(--bg);padding:6px 10px;border-radius:6px;border:1px solid var(--line)}
-    .back-home:hover{color:var(--text);border-color:var(--text)}
+    .back-home{color:var(--ghost);text-decoration:none;font-size:14px;letter-spacing:.03em;transition:color .2s;display:flex;align-items:center;min-height:44px;padding:0 10px;border-radius:6px;white-space:nowrap}.back-home:hover{color:var(--text)}.back-home:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
     .footer-back{display:inline-block;padding:6px 10px;border:1px solid transparent;border-radius:6px;transition:border-color .2s,color .2s}
     .footer-back:hover{border-color:var(--text);color:var(--text)}
+    .site-nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:var(--bg);border-bottom:1px solid var(--line);z-index:100;height:60px;gap:8px}
+    .nav-right{display:flex;align-items:center;gap:6px}
+    .nav-btn{background:none;border:1px solid #5b5248;color:#cfc7bd;cursor:pointer;border-radius:6px;min-width:44px;min-height:44px;padding:8px 10px;font:inherit;font-size:14px;transition:background .15s,border-color .15s,color .15s;display:flex;align-items:center;justify-content:center;gap:4px}
+    .nav-btn:hover,.nav-btn.active{background:var(--text);color:var(--bg);border-color:var(--text)}
+    .nav-btn:focus-visible{outline:3px solid var(--focus);outline-offset:2px;box-shadow:0 0 0 4px rgba(0,0,0,.35)}
+    html[data-theme='light'] .nav-btn:not(.active){color:var(--muted)}
+    .lang-segmented{display:flex;gap:4px}
+    @media(max-width:767px){.lang-segmented{display:none}}
+    .lang-dropdown{position:relative;display:none}
+    @media(max-width:767px){.lang-dropdown{display:block}}
+    .lang-toggle .chevron{font-size:10px;line-height:1;transition:transform .15s}
+    .lang-toggle[aria-expanded="true"] .chevron{transform:rotate(180deg)}
+    .lang-menu{position:absolute;top:calc(100% + 6px);right:0;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:4px;list-style:none;margin:0;min-width:160px;box-shadow:0 4px 16px rgba(0,0,0,.35);z-index:101}
+    .lang-menu[hidden]{display:none}
+    .lang-option{display:flex;align-items:center;width:100%;text-align:left;background:none;border:none;color:var(--text);cursor:pointer;padding:10px 14px;min-height:44px;border-radius:6px;font:inherit;font-size:14px;transition:background .1s}
+    .lang-option:hover{background:var(--panel)}.lang-option:focus-visible{outline:3px solid var(--focus);outline-offset:-2px}
+    .lang-option[aria-current="true"]{color:var(--accent);font-weight:600}
+    html[data-theme='light'] .lang-menu{box-shadow:0 4px 16px rgba(0,0,0,.15)}
+    @media(prefers-reduced-motion:reduce){.lang-toggle .chevron{transition:none}}
     a{color:var(--accent)}
     a:hover{color:var(--text)}
     kbd{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:2px 6px;font-size:14px;font-family:monospace;color:var(--text)}
@@ -46,17 +64,11 @@
     th{color:var(--text);font-weight:500;background:var(--panel)}
     blockquote{margin:20px 0;padding:14px 20px;border-left:3px solid var(--accent);color:var(--text);background:var(--panel);border-radius:0 8px 8px 0}
     .skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;text-decoration:none}
-    .skip-link:focus{left:16px;top:64px;width:auto;height:auto;padding:12px 16px;background:var(--accent);color:#111;border-radius:8px;z-index:9999;outline:4px solid var(--focus);outline-offset:3px}
+    .skip-link:focus{left:50%;top:8px;transform:translateX(-50%);width:auto;height:auto;padding:12px 16px;background:var(--accent);color:#111;border-radius:8px;z-index:9999;outline:4px solid var(--focus);outline-offset:3px}
     .skip-link[data-lang]{display:none!important}
     html.lang-en .skip-link[data-lang="en"],html.lang-ja .skip-link[data-lang="ja"],html.lang-zh-tw .skip-link[data-lang="zh-tw"],html.lang-zh-cn .skip-link[data-lang="zh-cn"]{display:block!important}
     [data-lang]{display:none!important}
     html.lang-en [data-lang="en"],html.lang-ja [data-lang="ja"],html.lang-zh-tw [data-lang="zh-tw"],html.lang-zh-cn [data-lang="zh-cn"]{display:revert!important}
-    .lang-switch{position:fixed;top:16px;right:16px;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;z-index:10}
-    .lang-switch button{background:var(--bg);border:1px solid #5b5248;color:var(--muted);padding:8px 10px;cursor:pointer;border-radius:6px;min-width:44px;min-height:32px}
-    .lang-switch button.active,.lang-switch button.is-active-theme{background:var(--text);color:var(--bg);border-color:var(--text)}
-    .lang-switch button:hover{border-color:var(--text);background:var(--text);color:var(--bg)}
-    .lang-switch button:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
-    #theme-toggle{min-width:80px;text-align:center}
     .cta{display:inline-block;margin-top:12px;background:var(--accent);color:#111;text-decoration:none;padding:14px 20px;border-radius:6px;font-weight:600;font-size:16px}.cta:hover{filter:brightness(1.04)}.cta:focus-visible{outline:3px solid var(--focus);outline-offset:4px}.cta:active{transform:scale(.98)}
     .cta-ghost{background:transparent;color:var(--accent);border:1px solid var(--accent);font-weight:500}.cta-ghost:hover{background:var(--accent);color:#111;filter:none}
     html[data-theme='light'] .cta.cta-ghost{background:transparent;color:var(--accent);border:1px solid var(--accent)}
@@ -72,14 +84,33 @@
   <a href="#main" class="skip-link" data-lang="ja">メインコンテンツへスキップ</a>
   <a href="#main" class="skip-link" data-lang="zh-tw">跳到主要內容</a>
   <a href="#main" class="skip-link" data-lang="zh-cn">跳到主要内容</a>
-  <a href="../" class="back-home" aria-label="Back to Maida intro">← Maida</a>
-  <nav class="lang-switch" aria-label="Language switcher and theme toggle">
-    <button class="active" data-set-lang="en">EN</button>
-    <button data-set-lang="ja">JA</button>
-    <button data-set-lang="zh-cn">简</button>
-    <button data-set-lang="zh-tw">繁</button>
-    <button id="theme-toggle" aria-label="Switch theme">Dark</button>
-  </nav>
+  <header class="site-nav">
+    <a href="../" class="back-home" aria-label="Back to Maida">← Maida</a>
+    <div class="nav-right">
+      <div class="lang-segmented" role="group" aria-label="Language">
+        <button class="nav-btn active" data-set-lang="en" aria-pressed="true">EN</button>
+        <button class="nav-btn" data-set-lang="ja" aria-pressed="false">JA</button>
+        <button class="nav-btn" data-set-lang="zh-cn" aria-pressed="false">简</button>
+        <button class="nav-btn" data-set-lang="zh-tw" aria-pressed="false">繁</button>
+      </div>
+      <div class="lang-dropdown">
+        <button id="lang-toggle" class="nav-btn lang-toggle"
+                aria-expanded="false" aria-controls="lang-menu"
+                aria-haspopup="true"
+                aria-label="Change language, current: English">
+          <span class="lang-current">EN</span>
+          <span class="chevron" aria-hidden="true">▾</span>
+        </button>
+        <ul id="lang-menu" class="lang-menu" hidden role="list">
+          <li><button type="button" class="lang-option" data-set-lang="en" aria-current="true">English</button></li>
+          <li><button type="button" class="lang-option" data-set-lang="ja" aria-current="false">日本語</button></li>
+          <li><button type="button" class="lang-option" data-set-lang="zh-cn" aria-current="false">简体中文</button></li>
+          <li><button type="button" class="lang-option" data-set-lang="zh-tw" aria-current="false">繁體中文</button></li>
+        </ul>
+      </div>
+      <button id="theme-toggle" class="nav-btn active" style="min-width:60px" aria-label="Switch theme">Dark</button>
+    </div>
+  </header>
   <main id="main">
 
     <section aria-labelledby="title">
@@ -114,7 +145,7 @@
           <li><a href="#tour"><span data-lang="en">Guided tour</span><span data-lang="ja">ガイドツアー</span><span data-lang="zh-tw">引導導覽</span><span data-lang="zh-cn">引导导览</span></a></li>
           <li><a href="#rin"><span data-lang="en">Rin (臨) — fast decision</span><span data-lang="ja">臨（Rin）：即時の決断</span><span data-lang="zh-tw">臨（Rin）：快速決策</span><span data-lang="zh-cn">临（Rin）：快速决策</span></a></li>
           <li><a href="#kamae"><span data-lang="en">Kamae (構) — curation</span><span data-lang="ja">構（Kamae）：キュレーション</span><span data-lang="zh-tw">構（Kamae）：策展管理</span><span data-lang="zh-cn">构（Kamae）：策展管理</span></a></li>
-          <li><a href="#anchor"><span data-lang="en">Anchoring (advanced)</span><span data-lang="ja">アンカー（応用）</span><span data-lang="zh-tw">錨定（進階）</span><span data-lang="zh-cn">锚定（进阶）</span></a></li>
+          <li><a href="#anchor"><span data-lang="en">ANCHORING (advanced)</span><span data-lang="ja">アンカー（応用）</span><span data-lang="zh-tw">錨定（進階）</span><span data-lang="zh-cn">锚定（进阶）</span></a></li>
           <li><a href="#undo"><span data-lang="en">Undo (advanced)</span><span data-lang="ja">元に戻す（応用）</span><span data-lang="zh-tw">復原（進階）</span><span data-lang="zh-cn">撤销（进阶）</span></a></li>
           <li><a href="#freeze"><span data-lang="en">Freeze state</span><span data-lang="ja">フリーズ状態</span><span data-lang="zh-tw">凍結狀態</span><span data-lang="zh-cn">冻结状态</span></a></li>
           <li><a href="#picking"><span data-lang="en">How Maida picks games</span><span data-lang="ja">Maida がゲームを選ぶ仕組み</span><span data-lang="zh-tw">Maida 如何挑選遊戲</span><span data-lang="zh-cn">Maida 如何挑选游戏</span></a></li>
@@ -133,7 +164,7 @@
       <ul>
         <li>
           <strong><span data-lang="en">Rin</span><span data-lang="ja">臨（Rin）</span><span data-lang="zh-tw">臨（Rin）</span><span data-lang="zh-cn">临（Rin）</span></strong>
-          <span data-lang="en"> — fast decision. A dice roll shows one game; you choose TRY or Not Now.</span>
+          <span data-lang="en"> — fast decision. A dice roll shows one game; you choose TRY or NOT NOW.</span>
           <span data-lang="ja">：即時の決断。ダイスが 1 つのゲームを出し、「やる」か「パス」かを選びます。</span>
           <span data-lang="zh-tw">：快速決策。骰子轉出一款遊戲，你選擇試試或現在不要。</span>
           <span data-lang="zh-cn">：快速决策。骰子转出一款游戏，你选择试试或现在不要。</span>
@@ -168,21 +199,21 @@
     <section id="tour" aria-labelledby="tour-title">
       <h2 id="tour-title"><span data-lang="en">Guided tour</span><span data-lang="ja">ガイドツアー</span><span data-lang="zh-tw">引導導覽</span><span data-lang="zh-cn">引导导览</span></h2>
       <p><span data-lang="en">When you first enter Rin, look for the <strong>?</strong> button in the top-right corner. Press it (or press <kbd>F1</kbd>) to start a guided tour.</span><span data-lang="ja">臨に初めて入ると、右上に <strong>?</strong> ボタンがあります。それを押す（または <kbd>F1</kbd> を押す）とガイドツアーが始まります。</span><span data-lang="zh-tw">第一次進入臨時，注意右上角的 <strong>?</strong> 按鈕。點擊它（或按 <kbd>F1</kbd>）可以啟動引導導覽。</span><span data-lang="zh-cn">第一次进入临时，注意右上角的 <strong>?</strong> 按钮。点击它（或按 <kbd>F1</kbd>）可以启动引导导览。</span></p>
-      <p><span data-lang="en">The tour covers: what the game title and prescription mean, how TRY and Not Now work, how to switch to Kamae mode, how to manage katas and games, how to switch back to Rin. The tour is available any time — press ? or F1 whenever you need a refresher.</span><span data-lang="ja">ツアーの内容：ゲームタイトルと処方箋の意味、「やる」と「パス」の仕組み、構への切替方法、構での型とゲームの管理方法、臨への切替方法。いつでも利用できます。</span><span data-lang="zh-tw">導覽內容：遊戲標題與處方籤的意思、「試試」與「現在不要」的運作方式、如何切換到構模式、如何在構中管理型與遊戲、如何切換回臨。隨時可用。</span><span data-lang="zh-cn">导览内容：游戏标题与处方签的意思、「试试」与「现在不要」的运作方式、如何切换到构模式、如何在构中管理型与游戏、如何切换回临。随时可用。</span></p>
+      <p><span data-lang="en">The tour covers: what the game title and prescription mean, how TRY and NOT NOW work, how to switch to Kamae mode, how to manage katas and games, how to switch back to Rin. The tour is available any time — press ? or F1 whenever you need a refresher.</span><span data-lang="ja">ツアーの内容：ゲームタイトルと処方箋の意味、「やる」と「パス」の仕組み、構への切替方法、構での型とゲームの管理方法、臨への切替方法。いつでも利用できます。</span><span data-lang="zh-tw">導覽內容：遊戲標題與處方籤的意思、「試試」與「現在不要」的運作方式、如何切換到構模式、如何在構中管理型與遊戲、如何切換回臨。隨時可用。</span><span data-lang="zh-cn">导览内容：游戏标题与处方签的意思、「试试」与「现在不要」的运作方式、如何切换到构模式、如何在构中管理型与游戏、如何切换回临。随时可用。</span></p>
     </section>
 
     <section id="rin" aria-labelledby="rin-title">
       <h2 id="rin-title"><span data-lang="en">Rin (臨) — fast decision</span><span data-lang="ja">臨（Rin）：即時の決断</span><span data-lang="zh-tw">臨（Rin）：快速決策</span><span data-lang="zh-cn">临（Rin）：快速决策</span></h2>
-      <p><span data-lang="en">You'll see: a game title, a short reflection (called a "prescription"), and two buttons — TRY and Not Now.</span><span data-lang="ja">表示されるもの：ゲームタイトル、短い省察（「処方箋」と呼ばれる）、そして 2 つのボタン（「やる」と「パス」）。</span><span data-lang="zh-tw">你會看到：遊戲標題、一句反思（稱為「處方籤」），以及兩個按鈕：「試試」和「現在不要」。</span><span data-lang="zh-cn">你会看到：游戏标题、一句反思（称为「处方签」），以及两个按钮：「试试」和「现在不要」。</span></p>
+      <p><span data-lang="en">You'll see: a game title, a short reflection (called a "prescription"), and two buttons — TRY and NOT NOW.</span><span data-lang="ja">表示されるもの：ゲームタイトル、短い省察（「処方箋」と呼ばれる）、そして 2 つのボタン（「やる」と「パス」）。</span><span data-lang="zh-tw">你會看到：遊戲標題、一句反思（稱為「處方籤」），以及兩個按鈕：「試試」和「現在不要」。</span><span data-lang="zh-cn">你会看到：游戏标题、一句反思（称为「处方签」），以及两个按钮：「试试」和「现在不要」。</span></p>
       <figure class="screenshot">
-        <img src="../screenshots/rinView.png" alt="Maida Rin view: one game with TRY and Not Now" class="shot-dark">
-        <img src="../screenshots/rinView_l.png" alt="Maida Rin view: one game with TRY and Not Now (light theme)" class="shot-light">
+        <img src="../screenshots/rinView.png" alt="Maida Rin view: one game with TRY and NOT NOW" class="shot-dark">
+        <img src="../screenshots/rinView_l.png" alt="Maida Rin view: one game with TRY and NOT NOW (light theme)" class="shot-light">
         <figcaption class="caption"><span data-lang="en">Rin view: one game at a time</span><span data-lang="ja">臨画面：一度に 1 つのゲーム</span><span data-lang="zh-tw">臨面：每次一款遊戲</span><span data-lang="zh-cn">临面：每次一款游戏</span></figcaption>
       </figure>
       <h3><span data-lang="en">TRY</span><span data-lang="ja">やる</span><span data-lang="zh-tw">試試</span><span data-lang="zh-cn">试试</span></h3>
       <p><span data-lang="en">If you're willing to play this game right now, tap TRY. The game launches immediately, Maida remembers you picked this (weight +1), and the screen enters freeze state.</span><span data-lang="ja">今このゲームをプレイしてもいいなら、「やる」をタップします。ゲームがすぐに起動し、Maida はあなたの選択を記憶し（重み +1）、画面がフリーズ状態になります。</span><span data-lang="zh-tw">如果你現在願意玩這款遊戲，點擊試試。遊戲立即啟動，Maida 記住你選擇了這款遊戲（權重 +1），畫面進入凍結狀態。</span><span data-lang="zh-cn">如果你现在愿意玩这款游戏，点击试试。游戏立即启动，Maida 记住你选择了这款游戏（权重 +1），画面进入冻结状态。</span></p>
-      <h3><span data-lang="en">Not Now</span><span data-lang="ja">パス</span><span data-lang="zh-tw">現在不要</span><span data-lang="zh-cn">现在不要</span></h3>
-      <p><span data-lang="en">If you don't want this game right now, tap Not Now. A different game appears, and this game won't appear again in the current session. Games you repeatedly refuse appear much less often.</span><span data-lang="ja">今プレイしたくないなら、「パス」をタップします。別のゲームが表示され、このゲームは今回のセッションでは表示されなくなります。繰り返しパスしたゲームは出現頻度が大幅に下がります。</span><span data-lang="zh-tw">如果你現在不想玩這款遊戲，點擊現在不要。顯示下一款遊戲，這款遊戲在本次 session 中不會再出現。重複拒絕的遊戲會越來越少出現。</span><span data-lang="zh-cn">如果你现在不想玩这款游戏，点击现在不要。显示下一款游戏，这款游戏在本次 session 中不会再出现。重复拒绝的游戏会越来越少出现。</span></p>
+      <h3><span data-lang="en">NOT NOW</span><span data-lang="ja">パス</span><span data-lang="zh-tw">現在不要</span><span data-lang="zh-cn">现在不要</span></h3>
+      <p><span data-lang="en">If you don't want this game right now, tap NOT NOW. A different game appears, and this game won't appear again in the current session. Games you repeatedly refuse appear much less often.</span><span data-lang="ja">今プレイしたくないなら、「パス」をタップします。別のゲームが表示され、このゲームは今回のセッションでは表示されなくなります。繰り返しパスしたゲームは出現頻度が大幅に下がります。</span><span data-lang="zh-tw">如果你現在不想玩這款遊戲，點擊現在不要。顯示下一款遊戲，這款遊戲在本次 session 中不會再出現。重複拒絕的遊戲會越來越少出現。</span><span data-lang="zh-cn">如果你现在不想玩这款游戏，点击现在不要。显示下一款游戏，这款游戏在本次 session 中不会再出现。重复拒绝的游戏会越来越少出现。</span></p>
     </section>
 
     <section id="kamae" aria-labelledby="kamae-title">
@@ -253,12 +284,12 @@
     </section>
 
     <section id="anchor" aria-labelledby="anchor-title">
-      <h2 id="anchor-title"><span data-lang="en">Anchoring (advanced)</span><span data-lang="ja">アンカー（応用）</span><span data-lang="zh-tw">錨定（進階）</span><span data-lang="zh-cn">锚定（进阶）</span></h2>
+      <h2 id="anchor-title"><span data-lang="en">ANCHORING (advanced)</span><span data-lang="ja">アンカー（応用）</span><span data-lang="zh-tw">錨定（進階）</span><span data-lang="zh-cn">锚定（进阶）</span></h2>
       <p><span data-lang="en">Sometimes you want to decide now but play later. <strong>Hold the TRY button for 3 seconds.</strong></span><span data-lang="ja">今決めたいけど、後でプレイしたい場合。<strong>「やる」ボタンを 3 秒間長押しします。</strong></span><span data-lang="zh-tw">有時候你想先決定，但稍後再玩。<strong>長按「試試」按鈕 3 秒。</strong></span><span data-lang="zh-cn">有时候你想先决定，但稍后再玩。<strong>长按「试试」按钮 3 秒。</strong></span></p>
       <ul>
-        <li><span data-lang="en">The game gets "anchored" to the screen</span><span data-lang="ja">ゲームが画面に「アンカー」されます</span><span data-lang="zh-tw">遊戲被「錨定」在畫面上</span><span data-lang="zh-cn">游戏被「锚定」在画面上</span></li>
+        <li><span data-lang="en">The game gets "ANCHORED" to the screen</span><span data-lang="ja">ゲームが画面に「アンカー」されます</span><span data-lang="zh-tw">遊戲被「錨定」在畫面上</span><span data-lang="zh-cn">游戏被「锚定」在画面上</span></li>
         <li><span data-lang="en">TRY becomes <strong>PLAY</strong></span><span data-lang="ja">「やる」が <strong>「プレイ」</strong> に変わります</span><span data-lang="zh-tw">「試試」按鈕變成「開打」</span><span data-lang="zh-cn">「试试」按钮变成「开打」</span></li>
-        <li><span data-lang="en">Not Now becomes <strong>Clear</strong></span><span data-lang="ja">「パス」が <strong>「解除」</strong> に変わります</span><span data-lang="zh-tw">「現在不要」按鈕變成「清除」</span><span data-lang="zh-cn">「现在不要」按钮变成「清除」</span></li>
+        <li><span data-lang="en">NOT NOW becomes <strong>CLEAR</strong></span><span data-lang="ja">「パス」が <strong>「解除」</strong> に変わります</span><span data-lang="zh-tw">「現在不要」按鈕變成「清除」</span><span data-lang="zh-cn">「现在不要」按钮变成「清除」</span></li>
         <li><span data-lang="en">Next time you open Maida, this game is still here</span><span data-lang="ja">次回 Maida を開いても、このゲームがまだここにあります</span><span data-lang="zh-tw">下次開啟 Maida 時，這款遊戲仍然在這裡</span><span data-lang="zh-cn">下次打开 Maida 时，这款游戏仍然在这里</span></li>
       </ul>
       <p><span data-lang="en">Changed your mind? Tap <strong>Clear</strong>.</span><span data-lang="ja">気が変わりましたか？ 「解除」をタップしてください。</span><span data-lang="zh-tw">改主意了？點擊「清除」即可。</span><span data-lang="zh-cn">改主意了？点击「清除」即可。</span></p>
@@ -268,9 +299,9 @@
       <h2 id="undo-title"><span data-lang="en">Undo (advanced)</span><span data-lang="ja">元に戻す（応用）</span><span data-lang="zh-tw">復原（進階）</span><span data-lang="zh-cn">撤销（进阶）</span></h2>
       <p><span data-lang="en">Made a mistake? Tap <strong>Undo (One Time Only)</strong> at the bottom. Goes back one step. Works once per decision.</span><span data-lang="ja">間違えましたか？ 画面下部の「元に戻す（一回限り）」ボタンをタップします。1 ステップ戻ります。決定ごとに 1 回だけ。</span><span data-lang="zh-tw">做錯了？點擊畫面底部的「復原（僅限一次）」按鈕。回到上一步。但每次決定只能用一次。</span><span data-lang="zh-cn">做错了？点击画面底部的「撤销（仅限一次）」按钮。回到上一步。但每次决定只能用一次。</span></p>
       <figure class="screenshot">
-        <img src="../screenshots/rinView_undo.png" alt="Rin view with Undo button after Not Now" class="shot-dark">
-        <img src="../screenshots/rinView_undo_l.png" alt="Rin view with Undo button after Not Now (light)" class="shot-light">
-        <figcaption class="caption"><span data-lang="en">Undo a Not Now decision</span><span data-lang="ja">パスを元に戻す</span><span data-lang="zh-tw">復原一次現在不要</span><span data-lang="zh-cn">撤销一次现在不要</span></figcaption>
+        <img src="../screenshots/rinView_undo.png" alt="Rin view with Undo button after NOT NOW" class="shot-dark">
+        <img src="../screenshots/rinView_undo_l.png" alt="Rin view with Undo button after NOT NOW (light)" class="shot-light">
+        <figcaption class="caption"><span data-lang="en">Undo a NOT NOW decision</span><span data-lang="ja">パスを元に戻す</span><span data-lang="zh-tw">復原一次現在不要</span><span data-lang="zh-cn">撤销一次现在不要</span></figcaption>
       </figure>
       <p><span data-lang="en">Note: Undo brings the game back on screen, but the −2 weight penalty is not reversed. The score recovers naturally via daily decay (~1 week).</span><span data-lang="ja">注意：元に戻すとゲームは画面に再表示されますが、−2 の重みペナルティは復元されません。スコアは毎日の減衰により約 1 週間で自然回復します。</span><span data-lang="zh-tw">注意：復原會讓遊戲重新出現在畫面上，但 −2 的權重扣分不會恢復。分數會在約一週內透過每日衰減自然恢復。</span><span data-lang="zh-cn">注意：撤销会让游戏重新出现在画面上，但 −2 的权重扣分不会恢复。分数会在约一周内通过每日衰减自然恢复。</span></p>
     </section>
@@ -328,7 +359,7 @@
         </thead>
         <tbody>
           <tr><td><span data-lang="en">TRY</span><span data-lang="ja">やる</span><span data-lang="zh-tw">試試</span><span data-lang="zh-cn">试试</span></td><td><kbd>Enter</kbd></td><td><kbd>A</kbd></td></tr>
-          <tr><td><span data-lang="en">Not Now</span><span data-lang="ja">パス</span><span data-lang="zh-tw">現在不要</span><span data-lang="zh-cn">现在不要</span></td><td><kbd>Enter</kbd></td><td><kbd>A</kbd></td></tr>
+          <tr><td><span data-lang="en">NOT NOW</span><span data-lang="ja">パス</span><span data-lang="zh-tw">現在不要</span><span data-lang="zh-cn">现在不要</span></td><td><kbd>Enter</kbd></td><td><kbd>A</kbd></td></tr>
           <tr><td><span data-lang="en">Anchor</span><span data-lang="ja">アンカー</span><span data-lang="zh-tw">錨定</span><span data-lang="zh-cn">锚定</span></td><td><span data-lang="en">Hold <kbd>Enter</kbd> 3s</span><span data-lang="ja"><kbd>Enter</kbd> 3 秒長押し</span><span data-lang="zh-tw">長按 <kbd>Enter</kbd> 3 秒</span><span data-lang="zh-cn">长按 <kbd>Enter</kbd> 3 秒</span></td><td><span data-lang="en">Hold <kbd>A</kbd> 3s</span><span data-lang="ja"><kbd>A</kbd> 3 秒長押し</span><span data-lang="zh-tw">長按 <kbd>A</kbd> 3 秒</span><span data-lang="zh-cn">长按 <kbd>A</kbd> 3 秒</span></td></tr>
           <tr><td><span data-lang="en">Undo</span><span data-lang="ja">元に戻す</span><span data-lang="zh-tw">復原</span><span data-lang="zh-cn">撤销</span></td><td><kbd>Enter</kbd></td><td><kbd>A</kbd></td></tr>
           <tr><td><span data-lang="en">Switch to Kamae</span><span data-lang="ja">構に切替</span><span data-lang="zh-tw">切換到構</span><span data-lang="zh-cn">切换到构</span></td><td><kbd>Ctrl+Tab</kbd></td><td><kbd>RB</kbd></td></tr>
@@ -407,11 +438,11 @@
     <section id="faq" aria-labelledby="faq-title">
       <h2 id="faq-title"><span data-lang="en">Common questions</span><span data-lang="ja">よくある質問</span><span data-lang="zh-tw">常見問題</span><span data-lang="zh-cn">常见问题</span></h2>
       <h3><span data-lang="en">Why do I keep seeing the same game?</span><span data-lang="ja">同じゲームが繰り返し表示されるのはなぜ？</span><span data-lang="zh-tw">為什麼一直出現同一款遊戲？</span><span data-lang="zh-cn">为什么一直出现同一款游戏？</span></h3>
-      <p><span data-lang="en">You've chosen TRY multiple times before. Maida doesn't track playtime — only your choices. Tap Not Now if you're done with it.</span><span data-lang="ja">以前に「やる」を複数回選んだからです。Maida はプレイ時間を追跡しません。選択のみを記録します。もう見たくなければ「パス」を選んでください。</span><span data-lang="zh-tw">你之前多次選擇了「試試」。Maida 不追蹤遊玩時間，只記錄你的選擇。如果不想再看到，選「現在不要」。</span><span data-lang="zh-cn">你之前多次选择了「试试」。Maida 不追踪游玩时间，只记录你的选择。如果不想再看到，选「现在不要」。</span></p>
+      <p><span data-lang="en">You've chosen TRY multiple times before. Maida doesn't track playtime — only your choices. Tap NOT NOW if you're done with it.</span><span data-lang="ja">以前に「やる」を複数回選んだからです。Maida はプレイ時間を追跡しません。選択のみを記録します。もう見たくなければ「パス」を選んでください。</span><span data-lang="zh-tw">你之前多次選擇了「試試」。Maida 不追蹤遊玩時間，只記錄你的選擇。如果不想再看到，選「現在不要」。</span><span data-lang="zh-cn">你之前多次选择了「试试」。Maida 不追踪游玩时间，只记录你的选择。如果不想再看到，选「现在不要」。</span></p>
       <h3><span data-lang="en">Can I search for a specific game?</span><span data-lang="ja">特定のゲームを検索できますか？</span><span data-lang="zh-tw">可以搜尋特定遊戲嗎？</span><span data-lang="zh-cn">可以搜索特定游戏吗？</span></h3>
       <p><span data-lang="en">In Kamae, yes — search and add to your showcase. In Rin, no — that's the dice's job.</span><span data-lang="ja">構では可能です。検索してショーケースに追加できます。臨では不可。それはダイスの仕事です。</span><span data-lang="zh-tw">在構面中可以搜尋並加入展示櫃。在臨面中不行，那是骰子的工作。</span><span data-lang="zh-cn">在构面中可以搜索并加入展示柜。在临面中不行，那是骰子的工作。</span></p>
       <h3><span data-lang="en">Does it track how long I play?</span><span data-lang="ja">プレイ時間を追跡しますか？</span><span data-lang="zh-tw">追蹤遊玩時間嗎？</span><span data-lang="zh-cn">追踪游玩时间吗？</span></h3>
-      <p><span data-lang="en">No. It only knows whether you chose TRY or Not Now.</span><span data-lang="ja">いいえ。「やる」か「パス」かの選択のみです。</span><span data-lang="zh-tw">不會。只知道你選了「試試」還是「現在不要」。</span><span data-lang="zh-cn">不会。只知道你选了「试试」还是「现在不要」。</span></p>
+      <p><span data-lang="en">No. It only knows whether you chose TRY or NOT NOW.</span><span data-lang="ja">いいえ。「やる」か「パス」かの選択のみです。</span><span data-lang="zh-tw">不會。只知道你選了「試試」還是「現在不要」。</span><span data-lang="zh-cn">不会。只知道你选了「试试」还是「现在不要」。</span></p>
       <h3><span data-lang="en">Is my data uploaded anywhere?</span><span data-lang="ja">データはどこかにアップロードされますか？</span><span data-lang="zh-tw">資料會上傳嗎？</span><span data-lang="zh-cn">数据会上传吗？</span></h3>
       <p><span data-lang="en">No. All data stays on your device.</span><span data-lang="ja">いいえ。すべてのデータはデバイス上に保存されます。</span><span data-lang="zh-tw">不會。所有資料存在你的裝置上。</span><span data-lang="zh-cn">不会。所有数据存在你的设备上。</span></p>
     </section>
@@ -444,36 +475,63 @@
     </footer>
 
   </main>
+  <div id="a11y-live" aria-live="polite" aria-atomic="true" class="sr-only"></div>
   <script>
     const map={en:'en',ja:'ja','zh-tw':'zh-TW','zh-cn':'zh-CN'};
+    const langNames={en:'English',ja:'日本語','zh-cn':'简体中文','zh-tw':'繁體中文'};
+    const langLabels={en:'EN',ja:'JA','zh-cn':'简','zh-tw':'繁'};
     const root=document.documentElement;
     const themeBtn=document.getElementById('theme-toggle');
+    const langToggle=document.getElementById('lang-toggle');
+    const langMenu=document.getElementById('lang-menu');
+    const liveRegion=document.getElementById('a11y-live');
     const themes=['dark','light'];
-    const applyLang=(k)=>{root.className='lang-'+k;root.lang=map[k]||'en';document.querySelectorAll('.lang-switch button[data-set-lang]').forEach(b=>{const on=b.dataset.setLang===k; b.classList.toggle('active',on); b.setAttribute('aria-pressed', on ? 'true' : 'false');}); localStorage.setItem('maida-sample-lang',k);};
-    const applyTheme=(mode)=>{
-      if(mode==='light'){
-        root.setAttribute('data-theme','light');
-        themeBtn.textContent='Dark';
-        themeBtn.setAttribute('aria-label','Switch to dark theme');
-      } else {
-        root.removeAttribute('data-theme');
-        themeBtn.textContent='Light';
-        themeBtn.setAttribute('aria-label','Switch to light theme');
+    const applyLang=(k)=>{
+      root.className='lang-'+k;
+      root.lang=map[k]||'en';
+      document.querySelectorAll('.lang-segmented [data-set-lang]').forEach(b=>{
+        const on=b.dataset.setLang===k;
+        b.classList.toggle('active',on);
+        b.setAttribute('aria-pressed',on?'true':'false');
+      });
+      document.querySelectorAll('.lang-option').forEach(b=>{
+        b.setAttribute('aria-current',b.dataset.setLang===k?'true':'false');
+      });
+      if(langToggle){
+        const curr=langToggle.querySelector('.lang-current');
+        if(curr) curr.textContent=langLabels[k]||k.toUpperCase();
+        langToggle.setAttribute('aria-label','Change language, current: '+(langNames[k]||k));
       }
-      localStorage.setItem('maida-sample-theme',mode);
-      themeBtn.dataset.mode = mode;
+      if(liveRegion&&liveRegion.dataset.ready) liveRegion.textContent='Language changed to '+(langNames[k]||k);
+      localStorage.setItem('maida-sample-lang',k);
     };
-    document.querySelectorAll('.lang-switch button[data-set-lang]').forEach(btn=>btn.addEventListener('click',()=>applyLang(btn.dataset.setLang)));
-    themeBtn.addEventListener('click',()=>{
-      const current = themeBtn.dataset.mode || 'dark';
-      const idx = themes.indexOf(current);
-      const next = themes[(idx+1)%themes.length];
-      applyTheme(next);
+    const openLangMenu=()=>{langMenu.hidden=false;langToggle.setAttribute('aria-expanded','true');langMenu.querySelector('.lang-option')?.focus();};
+    const closeLangMenu=(ret=false)=>{langMenu.hidden=true;langToggle.setAttribute('aria-expanded','false');if(ret)langToggle.focus();};
+    if(langToggle) langToggle.addEventListener('click',()=>langToggle.getAttribute('aria-expanded')==='true'?closeLangMenu():openLangMenu());
+    if(langMenu) langMenu.addEventListener('keydown',(e)=>{
+      const opts=[...langMenu.querySelectorAll('.lang-option')];
+      const idx=opts.indexOf(document.activeElement);
+      if(e.key==='Escape'){e.preventDefault();closeLangMenu(true);}
+      else if(e.key==='ArrowDown'){e.preventDefault();opts[(idx+1)%opts.length]?.focus();}
+      else if(e.key==='ArrowUp'){e.preventDefault();opts[(idx-1+opts.length)%opts.length]?.focus();}
+      else if(e.key==='Home'){e.preventDefault();opts[0]?.focus();}
+      else if(e.key==='End'){e.preventDefault();opts[opts.length-1]?.focus();}
     });
-    const savedLang = localStorage.getItem('maida-sample-lang') || 'en';
-    const savedTheme = localStorage.getItem('maida-sample-theme') || 'dark';
+    document.addEventListener('click',(e)=>{if(langToggle&&langMenu&&!langToggle.contains(e.target)&&!langMenu.contains(e.target))closeLangMenu();});
+    document.querySelectorAll('.lang-segmented [data-set-lang]').forEach(btn=>btn.addEventListener('click',()=>applyLang(btn.dataset.setLang)));
+    document.querySelectorAll('.lang-option').forEach(btn=>btn.addEventListener('click',()=>{applyLang(btn.dataset.setLang);closeLangMenu(true);}));
+    const applyTheme=(mode)=>{
+      if(mode==='light'){root.setAttribute('data-theme','light');themeBtn.textContent='Dark';themeBtn.setAttribute('aria-label','Switch to dark theme');}
+      else{root.removeAttribute('data-theme');themeBtn.textContent='Light';themeBtn.setAttribute('aria-label','Switch to light theme');}
+      localStorage.setItem('maida-sample-theme',mode);
+      themeBtn.dataset.mode=mode;
+    };
+    themeBtn.addEventListener('click',()=>{const c=themeBtn.dataset.mode||'dark';applyTheme(themes[(themes.indexOf(c)+1)%themes.length]);});
+    const savedLang=localStorage.getItem('maida-sample-lang')||'en';
+    const savedTheme=localStorage.getItem('maida-sample-theme')||'dark';
     applyLang(savedLang);
     applyTheme(savedTheme);
+    if(liveRegion) liveRegion.dataset.ready='1';
   </script>
 </body>
 </html>
