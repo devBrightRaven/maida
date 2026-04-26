@@ -141,6 +141,7 @@
         </strong></p>
         <ul>
           <li><a href="#what"><span data-lang="en">What is this?</span><span data-lang="ja">これは何ですか？</span><span data-lang="zh-tw">這是什麼？</span><span data-lang="zh-cn">这是什么？</span></a></li>
+          <li><a href="#install"><span data-lang="en">Before you install</span><span data-lang="ja">インストール前に</span><span data-lang="zh-tw">安裝前須知</span><span data-lang="zh-cn">安装前须知</span></a></li>
           <li><a href="#setup"><span data-lang="en">First time setup</span><span data-lang="ja">初回セットアップ</span><span data-lang="zh-tw">首次設定</span><span data-lang="zh-cn">首次设置</span></a></li>
           <li><a href="#tour"><span data-lang="en">Guided tour</span><span data-lang="ja">ガイドツアー</span><span data-lang="zh-tw">引導導覽</span><span data-lang="zh-cn">引导导览</span></a></li>
           <li><a href="#rin"><span data-lang="en">Rin (臨) — fast decision</span><span data-lang="ja">臨（Rin）：即時の決断</span><span data-lang="zh-tw">臨（Rin）：快速決策</span><span data-lang="zh-cn">临（Rin）：快速决策</span></a></li>
@@ -177,6 +178,63 @@
           <span data-lang="zh-cn">：策展管理。整理你的展示柜，决定哪些游戏进入骰子池。</span>
         </li>
       </ul>
+    </section>
+
+    <section id="install" aria-labelledby="install-title">
+      <h2 id="install-title"><span data-lang="en">Before you install</span><span data-lang="ja">インストール前に</span><span data-lang="zh-tw">安裝前須知</span><span data-lang="zh-cn">安装前须知</span></h2>
+
+      <h3><span data-lang="en">Windows: SmartScreen warning</span><span data-lang="ja">Windows：SmartScreen 警告</span><span data-lang="zh-tw">Windows：SmartScreen 警告</span><span data-lang="zh-cn">Windows：SmartScreen 警告</span></h3>
+
+      <p>
+        <span data-lang="en">The first time you run Maida, Windows will show <strong>"Windows protected your PC"</strong>. This happens because Maida isn't code-signed. Those certificates cost $300+/year, which doesn't make sense for free software made by one person.</span>
+        <span data-lang="ja">Maida を初めて起動するとき、Windows は <strong>「Windows によって PC が保護されました」</strong> と表示します。これは Maida がコード署名されていないためです。証明書は年間 300 ドル以上かかり、個人が作る無料ソフトには合いません。</span>
+        <span data-lang="zh-tw">第一次執行 Maida 時，Windows 會顯示 <strong>「Windows 已保護您的電腦」</strong>。這是因為 Maida 沒有經過程式碼簽署。付費憑證每年要 300 美元以上，對一人開發的免費軟體並不合理。</span>
+        <span data-lang="zh-cn">第一次运行 Maida 时，Windows 会显示 <strong>「Windows 已保护你的电脑」</strong>。这是因为 Maida 没有经过代码签署。付费证书每年要 300 美元以上，对一人开发的免费软件并不合理。</span>
+      </p>
+
+      <p>
+        <span data-lang="en">To proceed: click <strong>More info</strong> &rarr; <strong>Run anyway</strong>. The warning will stop appearing after Windows learns the file (SmartScreen reputation builds with download count, no action needed from you).</span>
+        <span data-lang="ja">続行するには：<strong>詳細情報</strong> &rarr; <strong>実行</strong> をクリック。Windows がダウンロード数を学習すれば警告は出なくなります（SmartScreen の評価は自動的に積み上がり、あなたが操作する必要はありません）。</span>
+        <span data-lang="zh-tw">繼續安裝：點擊 <strong>其他資訊</strong> &rarr; <strong>仍要執行</strong>。Windows 累積足夠下載量後就不會再顯示這個警告（SmartScreen 信譽會自動建立，你不需要做任何事）。</span>
+        <span data-lang="zh-cn">继续安装：点击 <strong>其他信息</strong> &rarr; <strong>仍要运行</strong>。Windows 累积足够下载量后就不会再显示这个警告（SmartScreen 信誉会自动建立，你不需要做任何事）。</span>
+      </p>
+
+      <p>
+        <span data-lang="en">If you'd rather verify before trusting:</span>
+        <span data-lang="ja">信頼する前に検証したい場合：</span>
+        <span data-lang="zh-tw">如果你想在信任前先驗證：</span>
+        <span data-lang="zh-cn">如果你想在信任前先验证：</span>
+      </p>
+
+      <ul>
+        <li>
+          <span data-lang="en">Source code: <a href="https://github.com/devBrightRaven/maida">github.com/devBrightRaven/maida</a> (MIT licensed, you can read every line)</span>
+          <span data-lang="ja">ソースコード公開：<a href="https://github.com/devBrightRaven/maida">github.com/devBrightRaven/maida</a>（MIT ライセンス、すべての行を読めます）</span>
+          <span data-lang="zh-tw">原始碼公開：<a href="https://github.com/devBrightRaven/maida">github.com/devBrightRaven/maida</a>（MIT 授權，每一行都可以讀）</span>
+          <span data-lang="zh-cn">源代码公开：<a href="https://github.com/devBrightRaven/maida">github.com/devBrightRaven/maida</a>（MIT 授权，每一行都可以读）</span>
+        </li>
+        <li>
+          <span data-lang="en">No telemetry by default; opt-in only sends an anonymous version ping</span>
+          <span data-lang="ja">既定ではテレメトリ送信なし；オプトイン時のみ匿名のバージョン ping を送信</span>
+          <span data-lang="zh-tw">預設不收集任何資料；選擇加入後只會送出匿名的版本 ping</span>
+          <span data-lang="zh-cn">默认不收集任何数据；选择加入后只会送出匿名的版本 ping</span>
+        </li>
+        <li>
+          <span data-lang="en">Built and contactable: bertram@brightraven.world</span>
+          <span data-lang="ja">開発者に連絡可能：bertram@brightraven.world</span>
+          <span data-lang="zh-tw">開發者可聯繫：bertram@brightraven.world</span>
+          <span data-lang="zh-cn">开发者可联系：bertram@brightraven.world</span>
+        </li>
+      </ul>
+
+      <h3><span data-lang="en">ROG Ally: gamepad mode</span><span data-lang="ja">ROG Ally：ゲームパッドモード</span><span data-lang="zh-tw">ROG Ally：手把模式</span><span data-lang="zh-cn">ROG Ally：手柄模式</span></h3>
+
+      <p>
+        <span data-lang="en">If you're on a ROG Ally and the buttons don't work in Maida, set <strong>Armoury Crate</strong> to <strong>gamepad mode</strong>, or add Maida as a game profile. This makes the buttons send gamepad input instead of keyboard/mouse mapping.</span>
+        <span data-lang="ja">ROG Ally でボタンが Maida に効かない場合、<strong>Armoury Crate</strong> を <strong>ゲームパッドモード</strong> に設定するか、Maida をゲームプロファイルに追加してください。これでボタンがキーボード／マウス割当てではなく、ゲームパッド信号として送信されます。</span>
+        <span data-lang="zh-tw">若使用 ROG Ally 而按鍵在 Maida 中沒有反應，請將 <strong>Armoury Crate</strong> 設為 <strong>手把模式（gamepad mode）</strong>，或將 Maida 加入遊戲 profile。這樣按鍵才會以 gamepad 訊號送入，而非鍵盤滑鼠對應。</span>
+        <span data-lang="zh-cn">若使用 ROG Ally 而按键在 Maida 中没有反应，请将 <strong>Armoury Crate</strong> 设为 <strong>手柄模式（gamepad mode）</strong>，或将 Maida 加入游戏 profile。这样按键才会以 gamepad 信号送入，而非键盘鼠标映射。</span>
+      </p>
     </section>
 
     <section id="setup" aria-labelledby="setup-title">
@@ -450,11 +508,78 @@
     <section id="trouble" aria-labelledby="trouble-title">
       <h2 id="trouble-title"><span data-lang="en">Troubleshooting</span><span data-lang="ja">トラブルシューティング</span><span data-lang="zh-tw">疑難排解</span><span data-lang="zh-cn">疑难排解</span></h2>
       <h3><span data-lang="en">"Steam Not Detected"</span><span data-lang="ja">「Steam が検出されません」</span><span data-lang="zh-tw">「偵測不到 Steam」</span><span data-lang="zh-cn">「检测不到 Steam」</span></h3>
-      <p><span data-lang="en">Steam isn't running. Start Steam, then retry.</span><span data-lang="ja">Steam が起動していません。Steam を起動してから再試行してください。</span><span data-lang="zh-tw">Steam 沒在執行。啟動 Steam 後重試。</span><span data-lang="zh-cn">Steam 没在运行。启动 Steam 后重试。</span></p>
+      <p>
+        <span data-lang="en">Maida couldn't find your Steam installation on disk. It looks for the file <code>steamapps/libraryfolders.vdf</code> in standard locations:</span>
+        <span data-lang="ja">Maida がディスク上で Steam のインストールを見つけられませんでした。<code>steamapps/libraryfolders.vdf</code> ファイルを以下の標準的な場所で探します：</span>
+        <span data-lang="zh-tw">Maida 在磁碟上找不到你的 Steam 安裝目錄。它會在標準位置尋找 <code>steamapps/libraryfolders.vdf</code> 這個檔案：</span>
+        <span data-lang="zh-cn">Maida 在磁盘上找不到你的 Steam 安装目录。它会在标准位置寻找 <code>steamapps/libraryfolders.vdf</code> 这个文件：</span>
+      </p>
+      <ul>
+        <li>
+          <span data-lang="en">Windows: <code>C:\Program Files (x86)\Steam</code>, <code>C:\Steam</code>, <code>D:\Steam</code>, <code>E:\Steam</code></span>
+          <span data-lang="ja">Windows：<code>C:\Program Files (x86)\Steam</code>、<code>C:\Steam</code>、<code>D:\Steam</code>、<code>E:\Steam</code></span>
+          <span data-lang="zh-tw">Windows：<code>C:\Program Files (x86)\Steam</code>、<code>C:\Steam</code>、<code>D:\Steam</code>、<code>E:\Steam</code></span>
+          <span data-lang="zh-cn">Windows：<code>C:\Program Files (x86)\Steam</code>、<code>C:\Steam</code>、<code>D:\Steam</code>、<code>E:\Steam</code></span>
+        </li>
+        <li>
+          <span data-lang="en">Linux: <code>~/.steam/steam</code>, <code>~/.local/share/Steam</code>, and Flatpak paths</span>
+          <span data-lang="ja">Linux：<code>~/.steam/steam</code>、<code>~/.local/share/Steam</code>、および Flatpak のパス</span>
+          <span data-lang="zh-tw">Linux：<code>~/.steam/steam</code>、<code>~/.local/share/Steam</code>、以及 Flatpak 路徑</span>
+          <span data-lang="zh-cn">Linux：<code>~/.steam/steam</code>、<code>~/.local/share/Steam</code>、以及 Flatpak 路径</span>
+        </li>
+        <li>
+          <span data-lang="en">(Windows also checks the registry for a custom install path)</span>
+          <span data-lang="ja">（Windows ではレジストリのカスタムインストールパスもチェックします）</span>
+          <span data-lang="zh-tw">（Windows 還會檢查 registry 中的自訂安裝路徑）</span>
+          <span data-lang="zh-cn">（Windows 还会检查 registry 中的自定义安装路径）</span>
+        </li>
+      </ul>
+      <p>
+        <span data-lang="en">Common causes:</span>
+        <span data-lang="ja">主な原因：</span>
+        <span data-lang="zh-tw">常見原因：</span>
+        <span data-lang="zh-cn">常见原因：</span>
+      </p>
+      <ul>
+        <li>
+          <span data-lang="en">Steam isn't installed &rarr; install from store.steampowered.com</span>
+          <span data-lang="ja">Steam がインストールされていない &rarr; store.steampowered.com からインストール</span>
+          <span data-lang="zh-tw">Steam 沒安裝 &rarr; 從 store.steampowered.com 安裝</span>
+          <span data-lang="zh-cn">Steam 没安装 &rarr; 从 store.steampowered.com 安装</span>
+        </li>
+        <li>
+          <span data-lang="en">Steam is installed in a non-standard location &rarr; set environment variable <code>MAIDA_WINDOWS_STEAM_ROOT</code> to your Steam folder before launching Maida</span>
+          <span data-lang="ja">Steam が非標準の場所にインストールされている &rarr; Maida を起動する前に環境変数 <code>MAIDA_WINDOWS_STEAM_ROOT</code> を Steam フォルダに設定</span>
+          <span data-lang="zh-tw">Steam 裝在非標準位置 &rarr; 在啟動 Maida 前設定環境變數 <code>MAIDA_WINDOWS_STEAM_ROOT</code> 指向你的 Steam 資料夾</span>
+          <span data-lang="zh-cn">Steam 装在非标准位置 &rarr; 在启动 Maida 前设置环境变量 <code>MAIDA_WINDOWS_STEAM_ROOT</code> 指向你的 Steam 文件夹</span>
+        </li>
+      </ul>
+      <p>
+        <span data-lang="en">Steam does not need to be running. Maida reads your library directly from disk and launches games via Steam URLs (which auto-start Steam if needed).</span>
+        <span data-lang="ja">Steam は起動している必要はありません。Maida はディスクから直接ライブラリを読み取り、ゲーム起動時には Steam URL を使います（必要であれば Steam を自動的に起動します）。</span>
+        <span data-lang="zh-tw">Steam 不需要在執行中。Maida 直接從磁碟讀取你的遊戲庫，啟動遊戲時透過 Steam URL（會在需要時自動喚醒 Steam）。</span>
+        <span data-lang="zh-cn">Steam 不需要在运行中。Maida 直接从磁盘读取你的游戏库，启动游戏时通过 Steam URL（会在需要时自动唤醒 Steam）。</span>
+      </p>
       <h3><span data-lang="en">Button doesn't respond</span><span data-lang="ja">ボタンが反応しない</span><span data-lang="zh-tw">按鈕沒反應</span><span data-lang="zh-cn">按钮没反应</span></h3>
-      <p><span data-lang="en">You might be pressing in the "dead zone" (not quick enough, not long enough). Either tap quickly or hold firmly for 3+ seconds.</span><span data-lang="ja">「デッドゾーン」で押している可能性があります。素早くタップするか、3 秒以上しっかり長押ししてください。</span><span data-lang="zh-tw">可能按在「死區」裡（不夠快也不夠久）。快速點擊，或長按超過 3 秒。</span><span data-lang="zh-cn">可能按在「死区」里（不够快也不够久）。快速点击，或长按超过 3 秒。</span></p>
+      <p>
+        <span data-lang="en">Most buttons (TRY, Not Now, PLAY, Clear, I'm Back) react to a quick tap. Anchor needs a 3-second hold on TRY. This is deliberate, to prevent accidental launches from shaky fingers or bumped gamepads.</span>
+        <span data-lang="ja">ほとんどのボタン（TRY、Not Now、PLAY、Clear、I'm Back）は素早いタップで反応します。アンカー（Anchor）は TRY の 3 秒長押しが必要です。これは意図的な設計で、手の震えやゲームパッドの誤タッチによる誤起動を防ぐためです。</span>
+        <span data-lang="zh-tw">大多數按鈕（TRY、Not Now、PLAY、Clear、I'm Back）只需要快速點擊。錨定（Anchor）需要在 TRY 上長按 3 秒。這是刻意設計，防止手抖或手把碰撞造成的誤啟動。</span>
+        <span data-lang="zh-cn">大多数按钮（TRY、Not Now、PLAY、Clear、I'm Back）只需要快速点击。锚定（Anchor）需要在 TRY 上长按 3 秒。这是刻意设计，防止手抖或手柄碰撞造成的误启动。</span>
+      </p>
+      <p>
+        <span data-lang="en">If a button isn't reacting, you're probably mid-way: too long for a tap, too short for the 3-second anchor hold. Try a faster tap, or commit to a full 3-second hold.</span>
+        <span data-lang="ja">ボタンが反応しないときは、おそらく中間にいます：タップには長すぎ、3 秒長押しには短すぎる。もっと速いタップ、または 3 秒の完全な長押しを試してください。</span>
+        <span data-lang="zh-tw">如果按鈕沒反應，你大概卡在中間區段：太久不算 tap，又沒到 3 秒不算 hold。試著更快地 tap，或確實長按完整 3 秒。</span>
+        <span data-lang="zh-cn">如果按钮没反应，你大概卡在中间区段：太久不算 tap，又没到 3 秒不算 hold。试着更快地 tap，或确实长按完整 3 秒。</span>
+      </p>
       <h3><span data-lang="en">Windows says "This app might be unsafe"</span><span data-lang="ja">Windows が「このアプリは安全ではない可能性があります」と表示する</span><span data-lang="zh-tw">Windows 說「這個應用程式可能不安全」</span><span data-lang="zh-cn">Windows 说「这个应用程序可能不安全」</span></h3>
-      <p><span data-lang="en">Click "More info" then "Run anyway". Maida is free software without a paid certificate. It's safe.</span><span data-lang="ja">「詳細情報」→「実行」をクリック。Maida は有料証明書のない無料ソフトウェアです。安全です。</span><span data-lang="zh-tw">點擊「其他資訊」→「仍要執行」。Maida 是沒有付費憑證的免費軟體，是安全的。</span><span data-lang="zh-cn">点击「其他信息」→「仍要运行」。Maida 是没有付费凭证的免费软件，是安全的。</span></p>
+      <p>
+        <span data-lang="en">This is the SmartScreen warning. See the <a href="#install"><strong>Before you install</strong></a> section above for the full explanation and how to proceed.</span>
+        <span data-lang="ja">これは SmartScreen 警告です。詳しい説明と対処方法は上の <a href="#install"><strong>インストール前に</strong></a> セクションをご覧ください。</span>
+        <span data-lang="zh-tw">這是 SmartScreen 警告。完整說明與處理方式請見上方的 <a href="#install"><strong>安裝前須知</strong></a> 段落。</span>
+        <span data-lang="zh-cn">这是 SmartScreen 警告。完整说明与处理方式请见上方的 <a href="#install"><strong>安装前须知</strong></a> 段落。</span>
+      </p>
       <h3><span data-lang="en">Game didn't launch</span><span data-lang="ja">ゲームが起動しない</span><span data-lang="zh-tw">遊戲沒有啟動</span><span data-lang="zh-cn">游戏没有启动</span></h3>
       <p><span data-lang="en">Check if Steam can launch the game normally. Some games need manual setup before first launch.</span><span data-lang="ja">Steam が通常そのゲームを起動できるか確認してください。一部のゲームは初回起動前に手動セットアップが必要です。</span><span data-lang="zh-tw">確認 Steam 能正常啟動該遊戲。某些遊戲需要首次手動設定。</span><span data-lang="zh-cn">确认 Steam 能正常启动该游戏。某些游戏需要首次手动设置。</span></p>
     </section>
