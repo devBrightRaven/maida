@@ -29,6 +29,25 @@ Maida has two faces:
 
 ---
 
+## Before You Install
+
+### Windows: SmartScreen warning
+
+The first time you run Maida, Windows will show **"Windows protected your PC"**. This happens because Maida isn't code-signed — those certificates cost $300+/year, which doesn't make sense for free software made by one person.
+
+To proceed: click **More info** → **Run anyway**. The warning will stop appearing after Windows learns the file (SmartScreen reputation builds with download count, no action needed from you).
+
+If you'd rather verify before trusting:
+- Source code: [github.com/devBrightRaven/maida](https://github.com/devBrightRaven/maida) (MIT licensed, you can read every line)
+- No telemetry by default; opt-in only sends an anonymous version ping
+- Built and contactable: bertram@brightraven.world
+
+### ROG Ally: gamepad mode
+
+If you're on a ROG Ally and the buttons don't work in Maida, set **Armoury Crate** to **gamepad mode**, or add Maida as a game profile. This makes the buttons send gamepad input instead of keyboard/mouse mapping.
+
+---
+
 ## First Time Setup
 
 1. Make sure **Steam is running**
@@ -261,7 +280,7 @@ Steam isn't running. Start Steam, then retry.
 You might be pressing in the "dead zone" (not quick enough, not long enough). Either tap quickly or hold firmly for 3+ seconds.
 
 ### Windows says "This app might be unsafe"
-Click "More info" then "Run anyway". Maida is free software without a paid certificate. It's safe.
+This is the SmartScreen warning. See the **Before You Install** section above for the full explanation and how to proceed.
 
 ### Game didn't launch
 Check if Steam can launch the game normally. Some games need manual setup before first launch.
@@ -281,4 +300,4 @@ Maida removes browsing entirely. One game. One choice. Move on.
 Contact: bertram@brightraven.world
 
 App Version: v0.4.3 | Manual Version: v0.4.3
-Last updated: 2026-04-20
+Last updated: 2026-04-26

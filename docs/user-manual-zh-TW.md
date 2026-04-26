@@ -29,6 +29,25 @@ Maida 有兩個面：
 
 ---
 
+## 安裝前須知
+
+### Windows：SmartScreen 警告
+
+第一次執行 Maida 時，Windows 會顯示**「Windows 已保護您的電腦」**。這是因為 Maida 沒有經過程式碼簽署 — 付費憑證每年要 300 美元以上，對一人開發的免費軟體並不合理。
+
+繼續安裝：點擊 **其他資訊** → **仍要執行**。Windows 累積足夠下載量後就不會再顯示這個警告（SmartScreen 信譽會自動建立，你不需要做任何事）。
+
+如果你想在信任前先驗證：
+- 原始碼公開：[github.com/devBrightRaven/maida](https://github.com/devBrightRaven/maida)（MIT 授權，每一行都可以讀）
+- 預設不收集任何資料；選擇加入後只會送出匿名的版本 ping
+- 開發者可聯繫：bertram@brightraven.world
+
+### ROG Ally：手把模式
+
+若使用 ROG Ally 而按鍵在 Maida 中沒有反應，請將 **Armoury Crate** 設為 **手把模式（gamepad mode）**，或將 Maida 加入遊戲 profile。這樣按鍵才會以 gamepad 訊號送入，而非鍵盤滑鼠對應。
+
+---
+
 ## 首次設定
 
 1. 確保 **Steam 正在執行**
@@ -261,7 +280,7 @@ Steam 沒在執行。啟動 Steam 後重試。
 可能按在「死區」裡（不夠快也不夠久）。快速點擊，或長按超過 3 秒。
 
 ### Windows 說「這個應用程式可能不安全」
-點擊「其他資訊」→「仍要執行」。Maida 是沒有付費憑證的免費軟體，是安全的。
+這是 SmartScreen 警告。完整說明與處理方式請見上方的 **安裝前須知** 段落。
 
 ### 遊戲沒有啟動
 確認 Steam 能正常啟動該遊戲。某些遊戲需要首次手動設定。
@@ -281,4 +300,4 @@ Maida 完全移除瀏覽。一款遊戲。一個選擇。繼續前進。
 聯絡：bertram@brightraven.world
 
 App Version: v0.4.3 | Manual Version: v0.4.3
-最後更新：2026-04-20
+最後更新：2026-04-26

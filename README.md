@@ -10,6 +10,10 @@ Maida shows you one game at a time. Try it or skip it. No browsing, no scrolling
 
 **[Download Maida](https://github.com/devBrightRaven/maida/releases/latest)** for Windows (.exe) and Linux (.deb, .AppImage).
 
+> **First time on Windows?** SmartScreen will warn you because Maida isn't code-signed (those certs cost $300+/year). Click **More info** → **Run anyway**. Source is open ([MIT](LICENSE)), no telemetry by default. Full explanation in the [user manual](https://maida.brightraven.world/manual/#before-you-install).
+>
+> **On a ROG Ally?** Set Armoury Crate to gamepad mode, or add Maida to a game profile, so the buttons send gamepad input.
+
 ![Rin mode](screenshot/trimmed/rinView.png)
 
 ## How It Works
