@@ -1,0 +1,8 @@
+# Maida — robots.txt
+# Maida is open source (MIT). Open for indexing, training, and AI citation.
+
+User-agent: *
+Allow: /
+Content-Signal: ai-train=yes, search=yes, ai-input=yes
+
+Sitemap: https://maida.brightraven.world/sitemap.xml
