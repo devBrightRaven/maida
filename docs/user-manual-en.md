@@ -274,10 +274,25 @@ No. All data stays on your device.
 ## Troubleshooting
 
 ### "Steam Not Detected"
-Steam isn't running. Start Steam, then retry.
+
+Maida couldn't find your Steam installation on disk. It looks for the file `steamapps/libraryfolders.vdf` in standard locations:
+
+- Windows: `C:\Program Files (x86)\Steam`, `C:\Steam`, `D:\Steam`, `E:\Steam`
+- Linux: `~/.steam/steam`, `~/.local/share/Steam`, and Flatpak paths
+- (Windows also checks the registry for a custom install path)
+
+Common causes:
+
+- Steam isn't installed → install from store.steampowered.com
+- Steam is installed in a non-standard location → set environment variable `MAIDA_WINDOWS_STEAM_ROOT` to your Steam folder before launching Maida
+
+Steam does not need to be running. Maida reads your library directly from disk and launches games via Steam URLs (which auto-start Steam if needed).
 
 ### Button doesn't respond
-You might be pressing in the "dead zone" (not quick enough, not long enough). Either tap quickly or hold firmly for 3+ seconds.
+
+Most buttons (TRY, Not Now, PLAY, Clear, I'm Back) react to a quick tap. Anchor needs a 3-second hold on TRY. This is deliberate, to prevent accidental launches from shaky fingers or bumped gamepads.
+
+If a button isn't reacting, you're probably mid-way: too long for a tap, too short for the 3-second anchor hold. Try a faster tap, or commit to a full 3-second hold.
 
 ### Windows says "This app might be unsafe"
 This is the SmartScreen warning. See the **Before You Install** section above for the full explanation and how to proceed.

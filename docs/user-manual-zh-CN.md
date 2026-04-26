@@ -274,10 +274,25 @@ Maida 观察你的选择：
 ## 疑难排解
 
 ### 「检测不到 Steam」
-Steam 没在运行。启动 Steam 后重试。
+
+Maida 在磁盘上找不到你的 Steam 安装目录。它会在标准位置寻找 `steamapps/libraryfolders.vdf` 这个文件：
+
+- Windows：`C:\Program Files (x86)\Steam`、`C:\Steam`、`D:\Steam`、`E:\Steam`
+- Linux：`~/.steam/steam`、`~/.local/share/Steam`、以及 Flatpak 路径
+- （Windows 还会检查 registry 中的自定义安装路径）
+
+常见原因：
+
+- Steam 没安装 → 从 store.steampowered.com 安装
+- Steam 装在非标准位置 → 在启动 Maida 前设置环境变量 `MAIDA_WINDOWS_STEAM_ROOT` 指向你的 Steam 文件夹
+
+Steam 不需要在运行中。Maida 直接从磁盘读取你的游戏库，启动游戏时通过 Steam URL（会在需要时自动唤醒 Steam）。
 
 ### 按钮没反应
-可能按在「死区」里（不够快也不够久）。快速点击，或长按超过 3 秒。
+
+大多数按钮（TRY、Not Now、PLAY、Clear、I'm Back）只需要快速点击。锚定（Anchor）需要在 TRY 上长按 3 秒。这是刻意设计，防止手抖或手柄碰撞造成的误启动。
+
+如果按钮没反应，你大概卡在中间区段：太久不算 tap，又没到 3 秒不算 hold。试着更快地 tap，或确实长按完整 3 秒。
 
 ### Windows 说「这个应用程序可能不安全」
 这是 SmartScreen 警告。完整说明与处理方式请见上方的 **安装前须知** 段落。
