@@ -15,7 +15,6 @@ src-tauri/gen/schemas/
 CLAUDE.md
 .claude/
 .mcp.json
-AGENTS.md
 .codex/
 .gemini/
 .copilot/
