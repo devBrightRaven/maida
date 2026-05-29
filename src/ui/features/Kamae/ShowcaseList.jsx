@@ -2,6 +2,7 @@ import { useState, useRef, useCallback, useEffect, useId } from 'react';
 import { t } from '../../../i18n';
 import { MAX_KATA_GAMES } from '../../../core/katas';
 import { vibrate, vibrateProgress } from '../../../services/haptics';
+import { getDurationMeta, getSizeMeta, isRecent } from '../../../utils/gameMeta';
 
 function getSteamHeaderUrl(steamAppId) {
     if (!steamAppId) return null;
@@ -257,6 +258,63 @@ function HoldButton({ onConfirm, label, ariaLabel }) {
 }
 
 /**
+ * Build a full accessible label for a game list item.
+ * Includes the title followed by metadata descriptions when available.
+ */
+function buildItemAriaLabel(game) {
+    const parts = [game.title];
+
+    const duration = getDurationMeta(game);
+    if (duration) {
+        parts.push(t('ui.kamae.badge_duration_aria', { value: duration.display }));
+    }
+
+    const size = getSizeMeta(game);
+    if (size) {
+        parts.push(t('ui.kamae.badge_size_aria', { value: size.display }));
+    }
+
+    if (isRecent(game)) {
+        parts.push(t('ui.kamae.badge_recent_aria'));
+    }
+
+    return parts.join(' ');
+}
+
+/**
+ * MetadataBadges — visual-only chips for duration, size, and recency.
+ * The entire group is aria-hidden; the parent <li> aria-label carries the
+ * equivalent text for screen readers.
+ */
+function MetadataBadges({ game }) {
+    const duration = getDurationMeta(game);
+    const size = getSizeMeta(game);
+    const recent = isRecent(game);
+
+    if (!duration && !size && !recent) return null;
+
+    return (
+        <div className="showcase-item-badges" aria-hidden="true">
+            {duration && (
+                <span className={`showcase-badge showcase-badge--duration showcase-badge--${duration.level}`}>
+                    {t(`ui.kamae.badge_${duration.level}`)} {duration.display}
+                </span>
+            )}
+            {size && (
+                <span className={`showcase-badge showcase-badge--size showcase-badge--size-${size.level}`}>
+                    {t(`ui.kamae.badge_size_${size.level}`)} {size.display}
+                </span>
+            )}
+            {recent && (
+                <span className="showcase-badge showcase-badge--recent">
+                    {t('ui.kamae.badge_recent')}
+                </span>
+            )}
+        </div>
+    );
+}
+
+/**
  * ShowcaseList — displays curated games with cover images.
  * "put back to the shelf" requires holding for 3 seconds.
  */
@@ -277,18 +335,18 @@ export default function ShowcaseList({ games, onRemove, isKataMode }) {
             <ul className="showcase-list">
             {games.map(game => {
                 const id = game.id || game.steamAppId;
-                const headerUrl = getSteamHeaderUrl(game.steamAppId);
                 return (
                     <li
                         key={id}
                         className={`showcase-item ${!game.installed ? 'showcase-item--dimmed' : ''}`}
                         tabIndex={-1}
-                        aria-label={game.title}
+                        aria-label={buildItemAriaLabel(game)}
                     >
                         <GameCover steamAppId={game.steamAppId} title={game.title} />
                         <div className="showcase-item-info">
                             <span className="showcase-item-title">{game.title}</span>
                             {!game.installed && <span className="showcase-item-uninstalled">{t('ui.kamae.not_installed')}</span>}
+                            <MetadataBadges game={game} />
                         </div>
                         {isKataMode && (
                             <div className="showcase-item-actions">

@@ -111,7 +111,17 @@
             "remove_confirm_aria": "Press again to confirm removal. Press Escape to cancel.",
             "remove_progress_aria": "Hold to remove. Release to cancel.",
             "explore_more": "explore more",
-            "sr_guide": "Organize which games appear. Ctrl+Tab to switch to Rin mode and pick a game to play."
+            "sr_guide": "Organize which games appear. Ctrl+Tab to switch to Rin mode and pick a game to play.",
+            "badge_short": "short",
+            "badge_medium": "medium",
+            "badge_long": "long",
+            "badge_size_small": "small",
+            "badge_size_medium": "medium",
+            "badge_size_large": "large",
+            "badge_recent": "recent",
+            "badge_duration_aria": "Estimated normal duration: {value}.",
+            "badge_size_aria": "Installed size: {value}.",
+            "badge_recent_aria": "Recently added."
         },
         "explore": {
             "later": "later",
@@ -153,7 +163,7 @@
             "theme_light": "Switch to Light Mode",
             "theme_dark": "Switch to Dark Mode",
             "igdb_title": "IGDB (Game Duration Data)",
-            "igdb_desc": "Optional. Enter your Twitch Developer credentials to show estimated play time.",
+            "igdb_desc": "Optional. Install size badges come from local Steam data and need no account. Enter Twitch Developer credentials here to also show estimated play time.",
             "igdb_howto": "Get your credentials at dev.twitch.tv — create an app, then copy the Client ID and Secret here.",
             "igdb_note": "Not all games have duration data. After saving credentials, restart Maida to begin fetching.",
             "client_id": "Client ID",

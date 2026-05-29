@@ -166,6 +166,9 @@ pub fn scan_steam_library() -> Result<Vec<Value>, String> {
                 _ => continue,
             };
 
+            let size_on_disk: Option<u64> = vdf::extract_field(&content, "SizeOnDisk")
+                .and_then(|s| s.parse().ok());
+
             // Dedup
             if seen_appids.contains(&appid) {
                 continue;
@@ -195,6 +198,7 @@ pub fn scan_steam_library() -> Result<Vec<Value>, String> {
                 "installed": true,
                 "steamAppId": appid,
                 "steamUrl": format!("steam://rungameid/{}", appid),
+                "sizeOnDisk": size_on_disk,
                 "importedAt": now
             }));
         }
@@ -237,5 +241,22 @@ mod tests {
         let set: HashSet<&str> = ALWAYS_EXCLUDE_APPIDS.iter().copied().collect();
         assert!(set.contains("228980"));
         assert!(!set.contains("730"));
+    }
+
+    #[test]
+    fn test_size_on_disk_field_parsing() {
+        // Verify that SizeOnDisk is correctly extracted from a typical ACF.
+        let acf = "\"appid\"\t\"570\"\n\"name\"\t\"Dota 2\"\n\"SizeOnDisk\"\t\"42000000000\"";
+        let parsed: Option<u64> = vdf::extract_field(acf, "SizeOnDisk")
+            .and_then(|s| s.parse().ok());
+        assert_eq!(parsed, Some(42_000_000_000u64));
+    }
+
+    #[test]
+    fn test_size_on_disk_absent_yields_none() {
+        let acf = "\"appid\"\t\"570\"\n\"name\"\t\"Dota 2\"";
+        let parsed: Option<u64> = vdf::extract_field(acf, "SizeOnDisk")
+            .and_then(|s| s.parse().ok());
+        assert_eq!(parsed, None);
     }
 }
