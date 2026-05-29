@@ -111,7 +111,17 @@
             "remove_confirm_aria": "再按一次确认移除,按 Escape 取消。",
             "remove_progress_aria": "按住以移除,松开取消。",
             "explore_more": "探索",
-            "sr_guide": "整理你想让哪些游戏出现。Ctrl+Tab 切换到临模式，选择游戏游玩。"
+            "sr_guide": "整理你想让哪些游戏出现。Ctrl+Tab 切换到临模式，选择游戏游玩。",
+            "badge_short": "短",
+            "badge_medium": "中等",
+            "badge_long": "长",
+            "badge_size_small": "小",
+            "badge_size_medium": "中",
+            "badge_size_large": "大",
+            "badge_recent": "最近添加",
+            "badge_duration_aria": "预计正常游玩时长：{value}。",
+            "badge_size_aria": "安装大小：{value}。",
+            "badge_recent_aria": "最近添加。"
         },
         "explore": {
             "later": "以后再说",
@@ -153,7 +163,7 @@
             "theme_light": "切换为浅色模式",
             "theme_dark": "切换为深色模式",
             "igdb_title": "IGDB（游戏时长数据）",
-            "igdb_desc": "选填。输入 Twitch Developer 凭证以显示预估游玩时长。",
+            "igdb_desc": "选填。安装大小标签来自本地 Steam 数据，无需帐户。若要同时显示预估游玩时长，请输入 Twitch Developer 凭证。",
             "igdb_howto": "前往 dev.twitch.tv 获取凭证 — 创建应用程序后，复制 Client ID 和 Secret 到此处。",
             "igdb_note": "并非所有游戏都有时长数据。保存凭证后，需要重新启动 Maida 才会开始抓取。",
             "client_id": "Client ID",
