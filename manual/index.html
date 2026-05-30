@@ -34,15 +34,17 @@
     html[data-theme='light'] .screenshot img.shot-dark{display:none}
     html[data-theme='light'] .screenshot img.shot-light{display:block}
     .caption{font-size:14px;color:var(--ghost);margin-top:8px;text-align:center}
-    .back-home{color:var(--ghost);text-decoration:none;font-size:14px;letter-spacing:.03em;transition:color .2s;display:flex;align-items:center;min-height:44px;padding:0 10px;border-radius:6px;white-space:nowrap}.back-home:hover{color:var(--text)}.back-home:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
-    .footer-back{display:inline-block;padding:6px 10px;border:1px solid transparent;border-radius:6px;transition:border-color .2s,color .2s}
-    .footer-back:hover{border-color:var(--text);color:var(--text)}
+    .back-home{color:var(--ghost);text-decoration:none;font-size:14px;letter-spacing:.03em;transition:color .2s,background .2s,border-color .2s;display:flex;align-items:center;min-height:44px;padding:0 10px;border:1px solid transparent;border-radius:6px;white-space:nowrap}.back-home:hover{background:var(--panel);border-color:var(--line);color:var(--text)}.back-home:focus,.back-home:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+    .footer-back{display:inline-block;padding:6px 10px;border:1px solid transparent;border-radius:6px;color:var(--accent);text-decoration:none;transition:background .2s,border-color .2s,color .2s}
+    .footer-back:hover{background:var(--panel);border-color:var(--accent);color:var(--text)}
+    .footer-back:focus,.footer-back:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
     .site-nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:var(--bg);border-bottom:1px solid var(--line);z-index:100;height:60px;gap:8px}
     .nav-right{display:flex;align-items:center;gap:6px}
     .nav-btn{background:none;border:1px solid #5b5248;color:#cfc7bd;cursor:pointer;border-radius:6px;min-width:44px;min-height:44px;padding:8px 10px;font:inherit;font-size:14px;transition:background .15s,border-color .15s,color .15s;display:flex;align-items:center;justify-content:center;gap:4px}
     .nav-btn:hover,.nav-btn.active{background:var(--text);color:var(--bg);border-color:var(--text)}
-    .nav-btn:focus-visible{outline:3px solid var(--focus);outline-offset:2px;box-shadow:0 0 0 4px rgba(0,0,0,.35)}
+    .nav-btn:focus,.nav-btn:focus-visible{outline:3px solid var(--focus);outline-offset:2px;box-shadow:0 0 0 4px rgba(0,0,0,.35)}
     html[data-theme='light'] .nav-btn:not(.active){color:var(--muted)}
+    html[data-theme='light'] .nav-btn:not(.active):hover{background:var(--text);border-color:var(--text);color:var(--bg)}
     .lang-segmented{display:flex;gap:4px}
     @media(max-width:767px){.lang-segmented{display:none}}
     .lang-dropdown{position:relative;display:none}
@@ -52,12 +54,12 @@
     .lang-menu{position:absolute;top:calc(100% + 6px);right:0;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:4px;list-style:none;margin:0;min-width:160px;box-shadow:0 4px 16px rgba(0,0,0,.35);z-index:101}
     .lang-menu[hidden]{display:none}
     .lang-option{display:flex;align-items:center;width:100%;text-align:left;background:none;border:none;color:var(--text);cursor:pointer;padding:10px 14px;min-height:44px;border-radius:6px;font:inherit;font-size:14px;transition:background .1s}
-    .lang-option:hover{background:var(--panel)}.lang-option:focus-visible{outline:3px solid var(--focus);outline-offset:-2px}
+    .lang-option:hover{background:var(--panel)}.lang-option:focus,.lang-option:focus-visible{outline:3px solid var(--focus);outline-offset:-2px}
     .lang-option[aria-current="true"]{color:var(--accent);font-weight:600}
     html[data-theme='light'] .lang-menu{box-shadow:0 4px 16px rgba(0,0,0,.15)}
     @media(prefers-reduced-motion:reduce){.lang-toggle .chevron{transition:none}}
-    a{color:var(--accent)}
-    a:hover{color:var(--text)}
+    a:not(.cta):not(.back-home):not(.footer-back){color:var(--accent);text-decoration-thickness:1px;text-underline-offset:.18em;transition:color .15s,text-decoration-thickness .15s,text-decoration-color .15s}
+    a:not(.cta):not(.back-home):not(.footer-back):hover{color:var(--text);text-decoration-thickness:2px}
     kbd{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:2px 6px;font-size:14px;font-family:monospace;color:var(--text)}
     table{width:100%;border-collapse:collapse;margin:16px 0;font-size:15px;color:var(--muted)}
     th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
@@ -69,7 +71,7 @@
     html.lang-en .skip-link[data-lang="en"],html.lang-ja .skip-link[data-lang="ja"],html.lang-zh-tw .skip-link[data-lang="zh-tw"],html.lang-zh-cn .skip-link[data-lang="zh-cn"]{display:block!important}
     [data-lang]{display:none!important}
     html.lang-en [data-lang="en"],html.lang-ja [data-lang="ja"],html.lang-zh-tw [data-lang="zh-tw"],html.lang-zh-cn [data-lang="zh-cn"]{display:revert!important}
-    .cta{display:inline-block;margin-top:12px;background:var(--accent);color:#111;text-decoration:none;padding:14px 20px;border-radius:6px;font-weight:600;font-size:16px}.cta:hover{filter:brightness(1.04)}.cta:focus-visible{outline:3px solid var(--focus);outline-offset:4px}.cta:active{transform:scale(.98)}
+    .cta{display:inline-block;margin-top:12px;background:var(--accent);color:#111;text-decoration:none;padding:14px 20px;border-radius:6px;font-weight:600;font-size:16px}.cta:hover{filter:brightness(1.04)}.cta:focus,.cta:focus-visible{outline:3px solid var(--focus);outline-offset:4px}.cta:active{transform:scale(.98)}
     .cta-ghost{background:transparent;color:var(--accent);border:1px solid var(--accent);font-weight:500}.cta-ghost:hover{background:var(--accent);color:#111;filter:none}
     html[data-theme='light'] .cta.cta-ghost{background:transparent;color:var(--accent);border:1px solid var(--accent)}
     html[data-theme='light'] .cta.cta-ghost:hover{background:var(--accent);color:var(--bg)}
@@ -596,7 +598,7 @@
       <a href="mailto:bertram@brightraven.world" class="cta cta-ghost"><span data-lang="en">Contact me</span><span data-lang="ja">お問い合わせ</span><span data-lang="zh-tw">聯絡我</span><span data-lang="zh-cn">联系我</span></a>
     </section>
     <footer style="padding:48px 0 0;border-top:1px solid var(--line);text-align:center;color:var(--ghost);font-size:13px">
-      <p><a href="../" class="footer-back" style="color:var(--accent);text-decoration:none">&larr; Maida</a></p><p>&copy; 2026 Bright Raven World</p>
+      <p><a href="../" class="footer-back">&larr; Maida</a></p><p>&copy; 2026 Bright Raven World</p>
     </footer>
 
   </main>
