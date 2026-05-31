@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Maida -- User Manual</title>
   <meta name="description" content="How to use Maida: Rin, Kamae, Kata, anchoring, freeze state, controls, settings.">
+  <link rel="icon" href="../favicon.ico" sizes="any">
   <style>
     :root {
       --bg:#0b0b0b; --panel:#121212; --text:#f1ebe3; --muted:#d2cbc2; --ghost:#b9b0a5;
@@ -129,10 +130,10 @@
         <span data-lang="zh-cn">版本：v0.4.3</span>
       </strong></p>
       <p class="lead">
-        <span data-lang="en">Maida shows you one game at a time from your Steam library. You answer: play it now, or see something else.</span>
-        <span data-lang="ja">Maida はあなたの Steam ライブラリから一度に 1 つのゲームを表示します。あなたが決めます：今プレイするか、別のものを見るか。</span>
-        <span data-lang="zh-tw">Maida 從你的 Steam 遊戲庫中，每次只顯示一款遊戲。你來決定：現在玩，或者看看別的。</span>
-        <span data-lang="zh-cn">Maida 从你的 Steam 游戏库中，每次只显示一款游戏。你来决定：现在玩，或者看看别的。</span>
+        <span data-lang="en">One game from your Steam library appears at a time. You answer: play it now, or see something else.</span>
+        <span data-lang="ja">Steam ライブラリから一度に 1 つのゲームが現れます。今プレイするか、別のものを見るかは、あなたが決めます。</span>
+        <span data-lang="zh-tw">你的 Steam 遊戲庫中，每次會出現一款遊戲。現在玩，或者看看別的，由你決定。</span>
+        <span data-lang="zh-cn">你的 Steam 游戏库中，每次会出现一款游戏。现在玩，或者看看别的，由你决定。</span>
       </p>
       <nav class="toc" aria-labelledby="toc-title">
         <p id="toc-title"><strong>
@@ -151,7 +152,7 @@
           <li><a href="#anchor"><span data-lang="en">ANCHORING (advanced)</span><span data-lang="ja">アンカー（応用）</span><span data-lang="zh-tw">錨定（進階）</span><span data-lang="zh-cn">锚定（进阶）</span></a></li>
           <li><a href="#undo"><span data-lang="en">Undo (advanced)</span><span data-lang="ja">元に戻す（応用）</span><span data-lang="zh-tw">復原（進階）</span><span data-lang="zh-cn">撤销（进阶）</span></a></li>
           <li><a href="#freeze"><span data-lang="en">Freeze state</span><span data-lang="ja">フリーズ状態</span><span data-lang="zh-tw">凍結狀態</span><span data-lang="zh-cn">冻结状态</span></a></li>
-          <li><a href="#picking"><span data-lang="en">How Maida picks games</span><span data-lang="ja">Maida がゲームを選ぶ仕組み</span><span data-lang="zh-tw">Maida 如何挑選遊戲</span><span data-lang="zh-cn">Maida 如何挑选游戏</span></a></li>
+          <li><a href="#picking"><span data-lang="en">How games appear</span><span data-lang="ja">ゲームが現れる仕組み</span><span data-lang="zh-tw">遊戲如何出現</span><span data-lang="zh-cn">游戏如何出现</span></a></li>
           <li><a href="#controls"><span data-lang="en">Keyboard &amp; gamepad controls</span><span data-lang="ja">キーボードとゲームパッド操作</span><span data-lang="zh-tw">鍵盤與手把操作</span><span data-lang="zh-cn">键盘与手柄操作</span></a></li>
           <li><a href="#settings"><span data-lang="en">Settings</span><span data-lang="ja">設定</span><span data-lang="zh-tw">設定</span><span data-lang="zh-cn">设置</span></a></li>
           <li><a href="#faq"><span data-lang="en">Common questions</span><span data-lang="ja">よくある質問</span><span data-lang="zh-tw">常見問題</span><span data-lang="zh-cn">常见问题</span></a></li>
@@ -249,8 +250,8 @@
         <li><span data-lang="en">Done — Maida creates a "Demo Kata" with 3 random games to get you started</span><span data-lang="ja">完了 — Maida がランダムな 3 つのゲームで「デモ型」を作成します</span><span data-lang="zh-tw">完成 — Maida 會用 3 款隨機遊戲建立「示範型」讓你開始</span><span data-lang="zh-cn">完成 — Maida 会用 3 款随机游戏创建「示范型」让你开始</span></li>
       </ol>
       <figure class="screenshot">
-        <img src="../screenshots/Onboarding.png" alt="Maida onboarding screen on first launch" class="shot-dark">
-        <img src="../screenshots/Onboarding_l.png" alt="Maida onboarding screen on first launch" class="shot-light">
+        <img src="../screenshots/web/Onboarding.png" alt="Maida onboarding screen on first launch" class="shot-dark" loading="lazy" decoding="async">
+        <img src="../screenshots/web/Onboarding_l.png" alt="Maida onboarding screen on first launch" class="shot-light" loading="lazy" decoding="async">
         <figcaption class="caption"><span data-lang="en">First launch: onboarding</span><span data-lang="ja">初回起動：オンボーディング</span><span data-lang="zh-tw">首次啟動：引導畫面</span><span data-lang="zh-cn">首次启动：引导画面</span></figcaption>
       </figure>
       <p><span data-lang="en">Maida automatically detects your system language (English, Japanese, Simplified Chinese, Traditional Chinese). You can change it later in Settings.</span><span data-lang="ja">Maida はシステムの言語設定を自動検出します（英語、日本語、簡体字中国語、繁体字中国語）。後から設定で変更できます。</span><span data-lang="zh-tw">Maida 會自動偵測你的系統語言（英文、日文、簡體中文、繁體中文）。你可以之後在設定中更改。</span><span data-lang="zh-cn">Maida 会自动检测你的系统语言（英文、日文、简体中文、繁体中文）。你可以之后在设置中更改。</span></p>
@@ -266,8 +267,8 @@
       <h2 id="rin-title"><span data-lang="en">Rin (臨) — fast decision</span><span data-lang="ja">臨（Rin）：即時の決断</span><span data-lang="zh-tw">臨（Rin）：快速決策</span><span data-lang="zh-cn">临（Rin）：快速决策</span></h2>
       <p><span data-lang="en">You'll see: a game title, a short reflection (called a "prescription"), and two buttons — TRY and NOT NOW.</span><span data-lang="ja">表示されるもの：ゲームタイトル、短い省察（「処方箋」と呼ばれる）、そして 2 つのボタン（「やる」と「パス」）。</span><span data-lang="zh-tw">你會看到：遊戲標題、一句反思（稱為「處方籤」），以及兩個按鈕：「試試」和「現在不要」。</span><span data-lang="zh-cn">你会看到：游戏标题、一句反思（称为「处方签」），以及两个按钮：「试试」和「现在不要」。</span></p>
       <figure class="screenshot">
-        <img src="../screenshots/rinView.png" alt="Maida Rin view: one game with TRY and NOT NOW" class="shot-dark">
-        <img src="../screenshots/rinView_l.png" alt="Maida Rin view: one game with TRY and NOT NOW (light theme)" class="shot-light">
+        <img src="../screenshots/web/rinView.png" alt="Maida Rin view: one game with TRY and NOT NOW" class="shot-dark" loading="lazy" decoding="async">
+        <img src="../screenshots/web/rinView_l.png" alt="Maida Rin view: one game with TRY and NOT NOW (light theme)" class="shot-light" loading="lazy" decoding="async">
         <figcaption class="caption"><span data-lang="en">Rin view: one game at a time</span><span data-lang="ja">臨画面：一度に 1 つのゲーム</span><span data-lang="zh-tw">臨面：每次一款遊戲</span><span data-lang="zh-cn">临面：每次一款游戏</span></figcaption>
       </figure>
       <h3><span data-lang="en">TRY</span><span data-lang="ja">やる</span><span data-lang="zh-tw">試試</span><span data-lang="zh-cn">试试</span></h3>
@@ -280,8 +281,8 @@
       <h2 id="kamae-title"><span data-lang="en">Kamae (構) — curation</span><span data-lang="ja">構（Kamae）：キュレーション</span><span data-lang="zh-tw">構（Kamae）：策展管理</span><span data-lang="zh-cn">构（Kamae）：策展管理</span></h2>
       <p><span data-lang="en">Press the switch button on the right edge of Rin, or press <kbd>Ctrl+Tab</kbd> / <kbd>RB</kbd> to enter Kamae. In Kamae you can browse games in your showcase, search installed games and add them, and create/manage Katas.</span><span data-lang="ja">臨の画面右端の切替ボタンをタップするか、<kbd>Ctrl+Tab</kbd> / <kbd>RB</kbd> を押すと構に入ります。構ではショーケースのゲームを閲覧、インストール済みゲームを検索して追加、型の作成と管理ができます。</span><span data-lang="zh-tw">從臨的畫面點擊右側邊緣的切換按鈕，或按 <kbd>Ctrl+Tab</kbd> / <kbd>RB</kbd> 進入構。在構裡你可以瀏覽展示櫃、搜尋並加入已安裝遊戲、建立和管理「型」。</span><span data-lang="zh-cn">从临的画面点击右侧边缘的切换按钮，或按 <kbd>Ctrl+Tab</kbd> / <kbd>RB</kbd> 进入构。在构里你可以浏览展示柜、搜索并加入已安装游戏、建立和管理「型」。</span></p>
       <figure class="screenshot">
-        <img src="../screenshots/kamaeView.png" alt="Maida Kamae view: game library with Kata groupings" class="shot-dark">
-        <img src="../screenshots/kamaeView_l.png" alt="Maida Kamae view: game library with Kata groupings (light)" class="shot-light">
+        <img src="../screenshots/web/kamaeView.png" alt="Maida Kamae view: game library with Kata groupings" class="shot-dark" loading="lazy" decoding="async">
+        <img src="../screenshots/web/kamaeView_l.png" alt="Maida Kamae view: game library with Kata groupings (light)" class="shot-light" loading="lazy" decoding="async">
         <figcaption class="caption"><span data-lang="en">Kamae view: library and kata</span><span data-lang="ja">構画面：ライブラリと型</span><span data-lang="zh-tw">構面：遊戲庫與型</span><span data-lang="zh-cn">构面：游戏库与型</span></figcaption>
       </figure>
       <h3><span data-lang="en">Kata (型)</span><span data-lang="ja">型（Kata）</span><span data-lang="zh-tw">型（Kata）</span><span data-lang="zh-cn">型（Kata）</span></h3>
@@ -293,8 +294,8 @@
         <li><span data-lang="en">Press <kbd>F2</kbd> or controller <kbd>Y</kbd> to rename a kata</span><span data-lang="ja"><kbd>F2</kbd> キーまたはコントローラーの <kbd>Y</kbd> で型の名前を変更できます</span><span data-lang="zh-tw">按 <kbd>F2</kbd> 或手把 <kbd>Y</kbd> 鍵重新命名型</span><span data-lang="zh-cn">按 <kbd>F2</kbd> 或手柄 <kbd>Y</kbd> 键重命名型</span></li>
       </ul>
       <figure class="screenshot">
-        <img src="../screenshots/kamaeView_kata_2.png" alt="Kamae with two katas side by side" class="shot-dark">
-        <img src="../screenshots/kamaeView_kata_2_l.png" alt="Kamae with two katas side by side (light)" class="shot-light">
+        <img src="../screenshots/web/kamaeView_kata_2.png" alt="Kamae with two katas side by side" class="shot-dark" loading="lazy" decoding="async">
+        <img src="../screenshots/web/kamaeView_kata_2_l.png" alt="Kamae with two katas side by side (light)" class="shot-light" loading="lazy" decoding="async">
         <figcaption class="caption"><span data-lang="en">Two katas coexisting</span><span data-lang="ja">2 つの型が共存</span><span data-lang="zh-tw">兩個型並存</span><span data-lang="zh-cn">两个型并存</span></figcaption>
       </figure>
       <h4><span data-lang="en">Kata operations</span><span data-lang="ja">型の操作</span><span data-lang="zh-tw">型的操作</span><span data-lang="zh-cn">型的操作</span></h4>
@@ -331,8 +332,8 @@
       <h3><span data-lang="en">Search in Kamae</span><span data-lang="ja">構内の検索</span><span data-lang="zh-tw">構面的搜尋</span><span data-lang="zh-cn">构面的搜索</span></h3>
       <p><span data-lang="en">If your library is large, use search in Kamae to find specific games quickly.</span><span data-lang="ja">ライブラリが大きい場合は、構内の検索で特定のゲームをすばやく見つけられます。</span><span data-lang="zh-tw">如果你的遊戲庫很大，可以在構面中使用搜尋快速找到特定遊戲。</span><span data-lang="zh-cn">如果你的游戏库很大，可以在构面中使用搜索快速找到特定游戏。</span></p>
       <figure class="screenshot">
-        <img src="../screenshots/kamaeView_search.png" alt="Kamae search panel" class="shot-dark">
-        <img src="../screenshots/kamaeView_search_l.png" alt="Kamae search panel" class="shot-light">
+        <img src="../screenshots/web/kamaeView_search.png" alt="Kamae search panel" class="shot-dark" loading="lazy" decoding="async">
+        <img src="../screenshots/web/kamaeView_search_l.png" alt="Kamae search panel" class="shot-light" loading="lazy" decoding="async">
         <figcaption class="caption"><span data-lang="en">Kamae search: find games in your library</span><span data-lang="ja">構の検索：ライブラリから探す</span><span data-lang="zh-tw">構面搜尋：在遊戲庫中尋找</span><span data-lang="zh-cn">构面搜索：在游戏库中寻找</span></figcaption>
       </figure>
       <p>
@@ -359,8 +360,8 @@
       <h2 id="undo-title"><span data-lang="en">Undo (advanced)</span><span data-lang="ja">元に戻す（応用）</span><span data-lang="zh-tw">復原（進階）</span><span data-lang="zh-cn">撤销（进阶）</span></h2>
       <p><span data-lang="en">Made a mistake? Tap <strong>Undo (One Time Only)</strong> at the bottom. Goes back one step. Works once per decision.</span><span data-lang="ja">間違えましたか？ 画面下部の「元に戻す（一回限り）」ボタンをタップします。1 ステップ戻ります。決定ごとに 1 回だけ。</span><span data-lang="zh-tw">做錯了？點擊畫面底部的「復原（僅限一次）」按鈕。回到上一步。但每次決定只能用一次。</span><span data-lang="zh-cn">做错了？点击画面底部的「撤销（仅限一次）」按钮。回到上一步。但每次决定只能用一次。</span></p>
       <figure class="screenshot">
-        <img src="../screenshots/rinView_undo.png" alt="Rin view with Undo button after NOT NOW" class="shot-dark">
-        <img src="../screenshots/rinView_undo_l.png" alt="Rin view with Undo button after NOT NOW (light)" class="shot-light">
+        <img src="../screenshots/web/rinView_undo.png" alt="Rin view with Undo button after NOT NOW" class="shot-dark" loading="lazy" decoding="async">
+        <img src="../screenshots/web/rinView_undo_l.png" alt="Rin view with Undo button after NOT NOW (light)" class="shot-light" loading="lazy" decoding="async">
         <figcaption class="caption"><span data-lang="en">Undo a NOT NOW decision</span><span data-lang="ja">パスを元に戻す</span><span data-lang="zh-tw">復原一次現在不要</span><span data-lang="zh-cn">撤销一次现在不要</span></figcaption>
       </figure>
       <p><span data-lang="en">Note: Undo brings the game back on screen, but the −2 weight penalty is not reversed. The score recovers naturally via daily decay (~1 week).</span><span data-lang="ja">注意：元に戻すとゲームは画面に再表示されますが、−2 の重みペナルティは復元されません。スコアは毎日の減衰により約 1 週間で自然回復します。</span><span data-lang="zh-tw">注意：復原會讓遊戲重新出現在畫面上，但 −2 的權重扣分不會恢復。分數會在約一週內透過每日衰減自然恢復。</span><span data-lang="zh-cn">注意：撤销会让游戏重新出现在画面上，但 −2 的权重扣分不会恢复。分数会在约一周内通过每日衰减自然恢复。</span></p>
@@ -380,8 +381,8 @@
     </section>
 
     <section id="picking" aria-labelledby="picking-title">
-      <h2 id="picking-title"><span data-lang="en">How Maida picks games</span><span data-lang="ja">Maida がゲームを選ぶ仕組み</span><span data-lang="zh-tw">Maida 如何挑選遊戲</span><span data-lang="zh-cn">Maida 如何挑选游戏</span></h2>
-      <p><span data-lang="en">Maida adjusts what appears based on your past choices. It's not recommending — it honestly reflects where your intention is leaning.</span><span data-lang="ja">Maida はこれまでの選択に応じて表示を調整します。レコメンドではなく、あなたの意図がどこに傾いているかを正直に反映するだけです。</span><span data-lang="zh-tw">Maida 會根據你過去的選擇調整顯示。這不是推薦，只是誠實地反映你的選擇傾向。</span><span data-lang="zh-cn">Maida 会根据你过去的选择调整显示。这不是推荐，只是诚实地反映你的选择倾向。</span></p>
+      <h2 id="picking-title"><span data-lang="en">How games appear</span><span data-lang="ja">ゲームが現れる仕組み</span><span data-lang="zh-tw">遊戲如何出現</span><span data-lang="zh-cn">游戏如何出现</span></h2>
+      <p><span data-lang="en">What appears can shift based on your past choices. This is not a recommendation system; it only reflects the choices you made on this device.</span><span data-lang="ja">画面に現れる内容は、これまでの選択に応じて変わることがあります。これはレコメンドではなく、この端末でのあなたの選択を反映しているだけです。</span><span data-lang="zh-tw">畫面上出現的內容，會依照你過去的選擇有所調整。這不是推薦系統，只是反映你在這台裝置上做過的選擇。</span><span data-lang="zh-cn">画面上出现的内容，会依照你过去的选择有所调整。这不是推荐系统，只是反映你在这台设备上做过的选择。</span></p>
     </section>
 
     <section id="controls" aria-labelledby="controls-title">
@@ -465,18 +466,18 @@
       <h2 id="settings-title"><span data-lang="en">Settings</span><span data-lang="ja">設定</span><span data-lang="zh-tw">設定</span><span data-lang="zh-cn">设置</span></h2>
       <p><span data-lang="en">In Kamae, tap "Settings". Each section can be expanded by tapping its title.</span><span data-lang="ja">構で「設定」をタップします。各セクションはタイトルをタップすると展開できます。</span><span data-lang="zh-tw">在構面中點擊「設定」。每個區塊都可以點擊標題展開。</span><span data-lang="zh-cn">在构面中点击「设置」。每个区块都可以点击标题展开。</span></p>
       <figure class="screenshot">
-        <img src="../screenshots/setting1.png" alt="Settings screen 1" class="shot-dark">
-        <img src="../screenshots/setting1_l.png" alt="Settings screen 1" class="shot-light">
+        <img src="../screenshots/web/setting1.png" alt="Settings screen 1" class="shot-dark" loading="lazy" decoding="async">
+        <img src="../screenshots/web/setting1_l.png" alt="Settings screen 1" class="shot-light" loading="lazy" decoding="async">
         <figcaption class="caption"><span data-lang="en">Settings: general preferences</span><span data-lang="ja">設定：一般設定</span><span data-lang="zh-tw">設定：一般偏好</span><span data-lang="zh-cn">设置：一般偏好</span></figcaption>
       </figure>
       <figure class="screenshot">
-        <img src="../screenshots/setting2.png" alt="Settings screen 2" class="shot-dark">
-        <img src="../screenshots/setting2_l.png" alt="Settings screen 2" class="shot-light">
+        <img src="../screenshots/web/setting2.png" alt="Settings screen 2" class="shot-dark" loading="lazy" decoding="async">
+        <img src="../screenshots/web/setting2_l.png" alt="Settings screen 2" class="shot-light" loading="lazy" decoding="async">
         <figcaption class="caption"><span data-lang="en">Settings: accessibility and behavior</span><span data-lang="ja">設定：アクセシビリティと動作</span><span data-lang="zh-tw">設定：無障礙與行為</span><span data-lang="zh-cn">设置：无障碍与行为</span></figcaption>
       </figure>
       <figure class="screenshot">
-        <img src="../screenshots/setting3.png" alt="Settings screen 3" class="shot-dark">
-        <img src="../screenshots/setting3_l.png" alt="Settings screen 3" class="shot-light">
+        <img src="../screenshots/web/setting3.png" alt="Settings screen 3" class="shot-dark" loading="lazy" decoding="async">
+        <img src="../screenshots/web/setting3_l.png" alt="Settings screen 3" class="shot-light" loading="lazy" decoding="async">
         <figcaption class="caption"><span data-lang="en">Settings: data and telemetry</span><span data-lang="ja">設定：データとテレメトリ</span><span data-lang="zh-tw">設定：資料與遙測</span><span data-lang="zh-cn">设置：数据与遥测</span></figcaption>
       </figure>
       <ul>

@@ -5,17 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Maida — the space you pass through before you begin</title>
   <meta name="description" content="Maida is a Steam-first Windows and Linux launcher that presents one installed game at a time, without the browsing loop.">
+  <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="canonical" href="https://maida.brightraven.world/">
   <link rel="sitemap" type="application/xml" href="/sitemap.xml">
   <meta property="og:title" content="Maida — the space you pass through before you begin">
   <meta property="og:description" content="A Steam-first launcher for Windows and Linux: one installed game at a time, no browsing loop.">
-  <meta property="og:image" content="https://maida.brightraven.world/screenshots/rinView.png">
+  <meta property="og:image" content="https://maida.brightraven.world/screenshots/web/rinView.png">
   <meta property="og:url" content="https://maida.brightraven.world/">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Maida — the space you pass through before you begin">
   <meta name="twitter:description" content="A Steam-first launcher for Windows and Linux: one installed game at a time, no browsing loop.">
-  <meta name="twitter:image" content="https://maida.brightraven.world/screenshots/rinView.png">
+  <meta name="twitter:image" content="https://maida.brightraven.world/screenshots/web/rinView.png">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -27,7 +28,7 @@
     "description": "Maida is a Steam-first Windows and Linux launcher that presents one installed game at a time, without the browsing loop.",
     "url": "https://maida.brightraven.world/",
     "author": { "@type": "Organization", "name": "Bright Raven World", "url": "https://brightraven.world/" },
-    "image": "https://maida.brightraven.world/screenshots/rinView.png"
+    "image": "https://maida.brightraven.world/screenshots/web/rinView.png"
   }
   </script>
   <style>
@@ -165,8 +166,7 @@
         <a href="#how-title" class="cta cta-ghost"><span data-lang="en">See how it works</span><span data-lang="ja">使い方を見る</span><span data-lang="zh-tw">看它如何運作</span><span data-lang="zh-cn">看它如何运作</span></a>
       </div>
       <figure class="screenshot hero-proof">
-        <img src="screenshots/web/rinView.png" alt="Maida Rin view with one game on screen and TRY and NOT NOW actions" class="shot-dark">
-        <img src="screenshots/web/rinView_l.png" alt="Maida Rin view with one game on screen and TRY and NOT NOW actions" class="shot-light">
+        <img src="screenshots/web/rinView.png" data-dark-src="screenshots/web/rinView.png" data-light-src="screenshots/web/rinView_l.png" alt="Maida Rin view with one game on screen and TRY and NOT NOW actions" class="theme-shot" decoding="async" fetchpriority="high">
       </figure>
     </section>
 
@@ -210,8 +210,7 @@
         <div class="card"><h3><span aria-hidden="true">2</span><span class="sr-only">Step 2</span></h3><p><span data-lang="en">Optional: narrow today's pool. Maida calls that a kata.</span><span data-lang="ja">必要なら、今日向き合う範囲を絞ります。Maida ではそれを kata と呼びます。</span><span data-lang="zh-tw">可選：縮小今天要面對的範圍。Maida 稱它為 kata。</span><span data-lang="zh-cn">可选：缩小今天要面对的范围。Maida 称它为 kata。</span></p></div>
       </div>
       <figure class="screenshot">
-        <img src="screenshots/web/kamaeView_kata_2.png" alt="Maida Kamae view showing two katas side by side with one active, search bar, and Steam game covers" class="shot-dark">
-        <img src="screenshots/web/kamaeView_kata_2_l.png" alt="Maida Kamae view showing two katas side by side with one active, search bar, and Steam game covers" class="shot-light">
+        <img src="screenshots/web/kamaeView_kata_2.png" data-dark-src="screenshots/web/kamaeView_kata_2.png" data-light-src="screenshots/web/kamaeView_kata_2_l.png" alt="Maida Kamae view showing two katas side by side with one active, search bar, and Steam game covers" class="theme-shot" loading="lazy" decoding="async">
       </figure>
       <div class="phase" aria-hidden="true">臨 / rin</div>
       <div class="grid" aria-label="Rin steps">
@@ -219,8 +218,7 @@
         <div class="card"><h3><span aria-hidden="true">4</span><span class="sr-only">Step 4</span></h3><p><span data-lang="en">TRY opens it. Not Now moves on. Hold only when you mean to anchor.</span><span data-lang="ja">TRY で開く。Not Now で次へ。アンカーするときだけ、意図して長押しします。</span><span data-lang="zh-tw">TRY 會開啟遊戲。Not Now 會往下一款。只有要 anchor 時才刻意長按。</span><span data-lang="zh-cn">TRY 会打开游戏。Not Now 会往下一款。只有要 anchor 时才刻意长按。</span></p></div>
       </div>
       <figure class="screenshot">
-        <img src="screenshots/web/rinView_undo.png" alt="Rin view showing TRY and a crossed-out NOT NOW, with a one-time-only UNDO button below" class="shot-dark">
-        <img src="screenshots/web/rinView_undo_l.png" alt="Rin view showing TRY and a crossed-out NOT NOW, with a one-time-only UNDO button below" class="shot-light">
+        <img src="screenshots/web/rinView_undo.png" data-dark-src="screenshots/web/rinView_undo.png" data-light-src="screenshots/web/rinView_undo_l.png" alt="Rin view showing TRY and a crossed-out NOT NOW, with a one-time-only UNDO button below" class="theme-shot" loading="lazy" decoding="async">
       </figure>
     </section>
 
@@ -370,6 +368,12 @@
       light:{'--bg':'#f5f0eb','--panel':'#ebe5de','--text':'#1c1712','--muted':'#4f4942','--ghost':'#584f45','--accent':'#6a5535','--line':'#cfc5bb','--focus':'#9a6f00'}
     };
     const setThemeVars=(mode)=>{const vars=themeVars[mode]||themeVars.dark; Object.entries(vars).forEach(([k,v])=>root.style.setProperty(k,v));};
+    const updateThemeImages=(activeTheme)=>{
+      document.querySelectorAll('img[data-dark-src][data-light-src]').forEach(img=>{
+        const next=activeTheme==='light'?img.dataset.lightSrc:img.dataset.darkSrc;
+        if(img.getAttribute('src')!==next) img.setAttribute('src',next);
+      });
+    };
     const applyLang=(k)=>{
       root.className='lang-'+k;
       root.lang=map[k]||'en';
@@ -434,23 +438,28 @@
       btn.addEventListener('click',()=>{applyLang(btn.dataset.setLang);closeLangMenu(true);});
     });
     const applyTheme=(mode)=>{
+      let activeTheme='dark';
       if(mode==='system'){
         root.removeAttribute('data-theme');
         const prefersLight=window.matchMedia('(prefers-color-scheme: light)').matches;
-        setThemeVars(prefersLight?'light':'dark');
+        activeTheme=prefersLight?'light':'dark';
+        setThemeVars(activeTheme);
         themeBtn.textContent=prefersLight?'Dark':'Light';
         themeBtn.setAttribute('aria-label',prefersLight?'Switch to dark theme':'Switch to light theme');
       } else if(mode==='light'){
         root.setAttribute('data-theme','light');
         setThemeVars('light');
+        activeTheme='light';
         themeBtn.textContent='Dark';
         themeBtn.setAttribute('aria-label','Switch to dark theme');
       } else {
         root.removeAttribute('data-theme');
         setThemeVars('dark');
+        activeTheme='dark';
         themeBtn.textContent='Light';
         themeBtn.setAttribute('aria-label','Switch to light theme');
       }
+      updateThemeImages(activeTheme);
       localStorage.setItem('maida-sample-theme',mode);
       themeBtn.dataset.mode=mode;
     };
