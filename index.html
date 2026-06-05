@@ -4,18 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Maida — the space you pass through before you begin</title>
-  <meta name="description" content="Maida helps you get back the time and attention you meant to spend playing.">
+  <meta name="description" content="Maida helps you get back the time and attention you meant to spend playing: one installed game at a time, no browsing loop.">
+  <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="canonical" href="https://maida.brightraven.world/">
   <link rel="sitemap" type="application/xml" href="/sitemap.xml">
   <meta property="og:title" content="Maida — the space you pass through before you begin">
-  <meta property="og:description" content="Maida helps you get back the time and attention you meant to spend playing.">
-  <meta property="og:image" content="https://maida.brightraven.world/screenshots/rinView.png">
+  <meta property="og:description" content="Get back the time and attention you meant to spend playing. One installed Steam game at a time, no browsing loop.">
+  <meta property="og:image" content="https://maida.brightraven.world/screenshots/web/rinView.png">
   <meta property="og:url" content="https://maida.brightraven.world/">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Maida — the space you pass through before you begin">
-  <meta name="twitter:description" content="Maida helps you get back the time and attention you meant to spend playing.">
-  <meta name="twitter:image" content="https://maida.brightraven.world/screenshots/rinView.png">
+  <meta name="twitter:description" content="Get back the time and attention you meant to spend playing. One installed Steam game at a time, no browsing loop.">
+  <meta name="twitter:image" content="https://maida.brightraven.world/screenshots/web/rinView.png">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -24,10 +25,10 @@
     "operatingSystem": "Windows, Linux",
     "applicationCategory": "UtilitiesApplication",
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-    "description": "Maida helps you get back the time and attention you meant to spend playing.",
+    "description": "Maida helps you get back the time and attention you meant to spend playing: one installed game at a time, no browsing loop.",
     "url": "https://maida.brightraven.world/",
     "author": { "@type": "Organization", "name": "Bright Raven World", "url": "https://brightraven.world/" },
-    "image": "https://maida.brightraven.world/screenshots/rinView.png"
+    "image": "https://maida.brightraven.world/screenshots/web/rinView.png"
   }
   </script>
   <style>
@@ -44,16 +45,23 @@
     h1,h2,h3{line-height:1.12;margin:0 0 18px;font-weight:500} h1{font-size:clamp(40px,7vw,72px)} h2{font-size:clamp(28px,4vw,40px)} h3{font-size:22px;margin-bottom:8px}
     p{margin:0 0 16px;color:var(--muted);font-size:16px} html.lang-en p{font-size:16px} .lead{color:var(--text);font-size:clamp(24px,3vw,32px);line-height:1.35;margin:20px 0 28px} html.lang-en .lead{font-size:clamp(24px,3vw,30px)}
     .strong{color:var(--text)} .label{color:var(--accent);font-size:16px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px} html.lang-en .label{font-size:16px;letter-spacing:.14em}
+    .hero h1{font-size:clamp(38px,6vw,68px)}
+    .product-line{color:var(--text);font-size:clamp(19px,2.4vw,24px);line-height:1.4;margin:18px 0 10px}
+    .hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin:20px 0 24px}
+    .hero-actions .cta{margin-top:0}
+    .hero-proof{margin:18px 0 0;overflow:hidden}
     .kanji{color:rgba(220,196,160,.30);font-size:56px;line-height:1; margin:8px 0 20px} .kanji-reading{display:block;font-size:14px;color:var(--ghost);letter-spacing:.35em;margin-top:8px;font-weight:400;opacity:.75} .phase{color:var(--accent);font-size:16px;letter-spacing:.10em;text-transform:uppercase;margin:22px 0 10px} html.lang-en .phase{font-size:16px;letter-spacing:.12em}
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}.card{background:var(--panel);border:1px solid var(--line);padding:24px;border-radius:10px}.reading{color:#e0d6ca;font-size:16px;margin-bottom:12px} html.lang-en .reading{font-size:16px}
     .visual-anchor{background:linear-gradient(180deg,#171717,#101010);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:24px 0}.mock-window{border:1px solid #3b342e;border-radius:10px;padding:18px;background:#0e0e0e}.mock-title{font-size:16px;color:var(--ghost);margin-bottom:12px} html.lang-en .mock-title{font-size:16px}.mock-game{font-size:26px;color:var(--text);margin-bottom:14px}.mock-actions{display:flex;gap:12px}.pill{padding:8px 14px;border:1px solid #4a4239;border-radius:999px;color:var(--muted);font-size:16px} html.lang-en .pill{font-size:16px}
-    .cta{display:inline-block;margin-top:12px;background:var(--accent);color:#111;text-decoration:none;padding:14px 20px;border-radius:6px;font-weight:600;font-size:16px}.cta:hover{filter:brightness(1.04)} .cta:focus-visible{outline:3px solid var(--focus);outline-offset:4px} .cta:active{transform:scale(.98)} html.lang-en .cta{font-size:16px}
+    .cta{display:inline-block;margin-top:12px;background:var(--accent);color:#111;text-decoration:none;padding:14px 20px;border-radius:6px;font-weight:600;font-size:16px}.cta:hover{filter:brightness(1.04)} .cta:focus,.cta:focus-visible{outline:3px solid var(--focus);outline-offset:4px} .cta:active{transform:scale(.98)} html.lang-en .cta{font-size:16px}
     .cta-ghost{background:transparent;color:var(--accent);border:1px solid var(--accent);font-weight:500}.cta-ghost:hover{background:var(--accent);color:#111;filter:none}
     html[data-theme='light'] .cta.cta-ghost{background:transparent;color:var(--accent);border:1px solid var(--accent)}
     html[data-theme='light'] .cta.cta-ghost:hover{background:var(--accent);color:var(--bg)}
     html[data-theme='light'] .kanji{color:rgba(106,85,53,.50)}
     .cta-small{padding:8px 14px;font-size:14px;font-weight:500;margin:0 4px}
     .download-aux{margin-top:20px}.manual-label{font-size:14px;color:var(--muted);margin-right:8px;vertical-align:middle}
+    main a:not(.cta):not(.footer-back){color:var(--accent);text-decoration-thickness:1px;text-underline-offset:.18em;transition:color .15s,text-decoration-thickness .15s,text-decoration-color .15s}
+    main a:not(.cta):not(.footer-back):hover{color:var(--text);text-decoration-thickness:2px}
     .skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;text-decoration:none}.skip-link:focus{left:50%;top:8px;transform:translateX(-50%);width:auto;height:auto;padding:12px 16px;background:var(--accent);color:#111;border-radius:8px;z-index:9999;outline:4px solid var(--focus);outline-offset:3px;box-shadow:0 0 0 6px rgba(0,0,0,.45)}
     .skip-link[data-lang]{display:none!important}
     html.lang-en .skip-link[data-lang="en"],html.lang-ja .skip-link[data-lang="ja"],html.lang-zh-tw .skip-link[data-lang="zh-tw"],html.lang-zh-cn .skip-link[data-lang="zh-cn"]{display:block!important}
@@ -61,13 +69,14 @@
     /* Site nav bar */
     .site-nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:var(--bg);border-bottom:1px solid var(--line);z-index:100;height:60px;gap:8px}
     .nav-right{display:flex;align-items:center;gap:6px}
-    .back-home{color:var(--ghost);text-decoration:none;font-size:14px;letter-spacing:.03em;transition:color .2s;display:flex;align-items:center;min-height:44px;padding:0 10px;border-radius:6px;white-space:nowrap}.back-home:hover{color:var(--text)}.back-home:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
-    .footer-back{display:inline-block;padding:6px 10px;border:1px solid transparent;border-radius:6px;transition:border-color .2s,color .2s}.footer-back:hover{border-color:var(--text);color:var(--text)}
+    .back-home{color:var(--ghost);text-decoration:none;font-size:14px;letter-spacing:.03em;transition:color .2s,background .2s,border-color .2s;display:flex;align-items:center;min-height:44px;padding:0 10px;border:1px solid transparent;border-radius:6px;white-space:nowrap}.back-home:hover{background:var(--panel);border-color:var(--line);color:var(--text)}.back-home:focus,.back-home:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+    .footer-back{display:inline-block;padding:6px 10px;border:1px solid transparent;border-radius:6px;color:var(--accent);text-decoration:none;transition:background .2s,border-color .2s,color .2s}.footer-back:hover{background:var(--panel);border-color:var(--accent);color:var(--text)}.footer-back:focus,.footer-back:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
     /* Nav buttons (shared) */
     .nav-btn{background:none;border:1px solid #5b5248;color:#cfc7bd;cursor:pointer;border-radius:6px;min-width:44px;min-height:44px;padding:8px 10px;font:inherit;font-size:14px;transition:background .15s,border-color .15s,color .15s;display:flex;align-items:center;justify-content:center;gap:4px}
     .nav-btn:hover,.nav-btn.active{background:var(--text);color:var(--bg);border-color:var(--text)}
-    .nav-btn:focus-visible{outline:3px solid var(--focus);outline-offset:2px;box-shadow:0 0 0 4px rgba(0,0,0,.35)}
+    .nav-btn:focus,.nav-btn:focus-visible{outline:3px solid var(--focus);outline-offset:2px;box-shadow:0 0 0 4px rgba(0,0,0,.35)}
     html[data-theme='light'] .nav-btn:not(.active){color:var(--muted)}
+    html[data-theme='light'] .nav-btn:not(.active):hover{background:var(--text);border-color:var(--text);color:var(--bg)}
     /* Desktop segmented lang (hide on mobile) */
     .lang-segmented{display:flex;gap:4px}
     @media(max-width:767px){.lang-segmented{display:none}}
@@ -79,7 +88,7 @@
     .lang-menu{position:absolute;top:calc(100% + 6px);right:0;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:4px;list-style:none;margin:0;min-width:160px;box-shadow:0 4px 16px rgba(0,0,0,.35);z-index:101}
     .lang-menu[hidden]{display:none}
     .lang-option{display:flex;align-items:center;width:100%;text-align:left;background:none;border:none;color:var(--text);cursor:pointer;padding:10px 14px;min-height:44px;border-radius:6px;font:inherit;font-size:14px;transition:background .1s}
-    .lang-option:hover{background:var(--panel)}.lang-option:focus-visible{outline:3px solid var(--focus);outline-offset:-2px}
+    .lang-option:hover{background:var(--panel)}.lang-option:focus,.lang-option:focus-visible{outline:3px solid var(--focus);outline-offset:-2px}
     .lang-option[aria-current="true"]{color:var(--accent);font-weight:600}
     html[data-theme='light'] .lang-menu{box-shadow:0 4px 16px rgba(0,0,0,.15)}
     /* 間 note */
@@ -92,6 +101,7 @@
     html[data-theme='light'] .screenshot img.shot-dark{display:none}
     html[data-theme='light'] .screenshot img.shot-light{display:block}
     .screenshot-caption{font-size:14px;color:var(--ghost);margin-top:8px;text-align:center;font-style:italic}
+    @media(max-width:720px){.hero h1{font-size:clamp(38px,14vw,54px)}.product-line{font-size:20px}.hero-actions{display:grid;grid-template-columns:1fr}.hero-actions .cta{text-align:center}}
     html[data-theme='light'] .cta{background:#4a3a20;color:#f5f0eb} html[data-theme='light'] .mock-title{color:#b9b0a5} html[data-theme='light'] .pill{color:#d2cbc2;border-color:#5b5248}
   </style>
 </head>
@@ -131,7 +141,7 @@
     </div>
   </header>
   <main id="main">
-    <section aria-labelledby="hero-title">
+    <section class="hero" aria-labelledby="hero-title">
       <div class="label">Maida</div>
       <h1 id="hero-title">
         <span data-lang="en">You stared at your library for thirty minutes, then closed it.</span>
@@ -139,25 +149,25 @@
         <span data-lang="zh-tw">你盯著遊戲庫看了三十分鐘，然後把它關掉。</span>
         <span data-lang="zh-cn">你盯着游戏库看了三十分钟，然后把它关掉。</span>
       </h1>
-      <div class="kanji" aria-hidden="true">
-        間
-        <span class="kanji-reading" data-lang="ja">ま</span>
-        <span class="kanji-reading" data-lang="en">ma</span>
-        <span class="kanji-reading" data-lang="zh-tw">ま</span>
-        <span class="kanji-reading" data-lang="zh-cn">ま</span>
-      </div>
-      <p class="lead">
-        <span data-lang="en">You own hundreds of games. Tonight you launched the one you've already finished twice.<br>Not because it's the best.<br>Because choosing was harder than playing.</span>
-        <span data-lang="ja">何百本もある。今夜また、もうクリアしたあのゲームを起動した。<br>一番だからじゃない。<br>選ぶことのほうが、遊ぶことより疲れるから。</span>
-        <span data-lang="zh-tw">你有幾百款遊戲。你今晚又打開了那款已經玩過很多次的。<br>不是因為它最好。<br>是因為選擇本身讓你太累了。</span>
-        <span data-lang="zh-cn">你有几百款游戏。今晚你又打开了那款已经玩过很多次的。<br>不是因为它最好。<br>是因为选择本身让你太累了。</span>
+      <p class="product-line">
+        <span data-lang="en">Steam-first. One installed game at a time. No browsing loop.</span>
+        <span data-lang="ja">Steam 起点。インストール済みゲームを一度に一本。ブラウズのループなし。</span>
+        <span data-lang="zh-tw">以 Steam 為起點。一次只呈現一款已安裝遊戲。沒有瀏覽迴圈。</span>
+        <span data-lang="zh-cn">以 Steam 为起点。一次只呈现一款已安装游戏。没有浏览循环。</span>
       </p>
       <p class="strong">
-        <span data-lang="en">Maida doesn't help you choose better. Maida lets you stop choosing.</span>
-        <span data-lang="ja">Maida はより良い選択を助けない。選ぶことを止めさせる。</span>
-        <span data-lang="zh-tw">Maida 不幫你選得更好。Maida 讓你不用選。</span>
-        <span data-lang="zh-cn">Maida 不帮你选得更好。Maida 让你不用选。</span>
+        <span data-lang="en">One game appears from what you already have installed. You decide: play now, or move on.</span>
+        <span data-lang="ja">インストール済みの中から一本が現れる。今やるか、次へ進むかは、あなたが決める。</span>
+        <span data-lang="zh-tw">從你已安裝的遊戲裡出現一款。現在玩，或先往下一款，由你決定。</span>
+        <span data-lang="zh-cn">从你已安装的游戏里出现一款。现在玩，或先往下一款，由你决定。</span>
       </p>
+      <div class="hero-actions">
+        <a href="https://github.com/devBrightRaven/maida/releases/latest" class="cta"><span data-lang="en">Download Maida</span><span data-lang="ja">Maida をダウンロード</span><span data-lang="zh-tw">下載 Maida</span><span data-lang="zh-cn">下载 Maida</span></a>
+        <a href="#how-title" class="cta cta-ghost"><span data-lang="en">See how it works</span><span data-lang="ja">使い方を見る</span><span data-lang="zh-tw">看它如何運作</span><span data-lang="zh-cn">看它如何运作</span></a>
+      </div>
+      <figure class="screenshot hero-proof">
+        <img src="screenshots/web/rinView.png" data-dark-src="screenshots/web/rinView.png" data-light-src="screenshots/web/rinView_l.png" alt="Maida Rin view with one game on screen and TRY and NOT NOW actions" class="theme-shot" decoding="async" fetchpriority="high">
+      </figure>
     </section>
 
     <section aria-labelledby="problem-title">
@@ -168,53 +178,47 @@
         <span data-lang="zh-tw">找回玩遊戲的時間與注意力。</span>
         <span data-lang="zh-cn">找回玩游戏的时间与注意力。</span>
       </h2>
-      <p><span data-lang="en">This isn't laziness. It isn't pickiness. It isn't that you don't love games anymore.</span><span data-lang="ja">怠けじゃない。飽きたわけでもない。ゲームが嫌いになったわけでもない。</span><span data-lang="zh-tw">這不是懶惰。不是你變挑。不是你不再愛玩遊戲了。</span><span data-lang="zh-cn">这不是懒惰。不是你变挑了。不是你不爱玩游戏了。</span></p>
-      <p><span data-lang="en">More options doesn't always mean more freedom. Sometimes it just means paralysis.</span><span data-lang="ja">選択肢が多いほど自由とは限らない。ただ麻痺するだけのこともある。</span><span data-lang="zh-tw">選項越多，不一定越自由。有時候只是更麻痺。</span><span data-lang="zh-cn">选项越多，不一定越自由。有时候只是更麻痹。</span></p>
-      <p><span data-lang="en">You don't need more information to decide. You need fewer things asking for your attention at once.</span><span data-lang="ja">決めるための情報がもっと必要なんじゃない。一度に注意を求めるものが、もっと少なければいい。</span><span data-lang="zh-tw">你不是需要更多資訊來決定。你需要的是少一點東西同時拉走你的注意力。</span><span data-lang="zh-cn">你不是需要更多信息来决定。你需要的是少一点东西同时拉走你的注意力。</span></p>
+      <p><span data-lang="en">You own hundreds of games. Tonight you launched the one you've already finished twice.<br>Not because it's the best.<br>Because choosing was harder than playing.</span><span data-lang="ja">何百本もある。今夜また、もうクリアしたあのゲームを起動した。<br>一番だからじゃない。<br>選ぶことのほうが、遊ぶことより疲れるから。</span><span data-lang="zh-tw">你有幾百款遊戲。你今晚又打開了那款已經玩過很多次的。<br>不是因為它最好。<br>是因為選擇本身讓你太累了。</span><span data-lang="zh-cn">你有几百款游戏。今晚你又打开了那款已经玩过很多次的。<br>不是因为它最好。<br>是因为选择本身让你太累了。</span></p>
+      <p><span data-lang="en">This isn't laziness or pickiness. More options doesn't always mean more freedom. Sometimes it just means a longer scroll before you give up.</span><span data-lang="ja">怠けでも、わがままでもありません。選択肢が多いほど自由とは限らない。ただ諦めるまでのスクロールが長くなるだけのこともあります。</span><span data-lang="zh-tw">這不是懶惰，也不是你變挑。選項越多，不一定越自由。有時只是放棄前多滑一段。</span><span data-lang="zh-cn">这不是懒惰，也不是你变挑。选项越多，不一定越自由。有时只是放弃前多滑一段。</span></p>
+      <p><span data-lang="en">Maida removes the library scroll. It leaves one visible option, then gets out of the way.</span><span data-lang="ja">Maida はライブラリを眺め続ける流れを外します。見える選択肢を一本だけ残し、あとは静かに退きます。</span><span data-lang="zh-tw">Maida 移除遊戲庫瀏覽迴圈。畫面只留下眼前這一款，然後安靜退開。</span><span data-lang="zh-cn">Maida 移除游戏库浏览循环。画面只留下眼前这一款，然后安静退开。</span></p>
     </section>
 
     <section aria-labelledby="what-title">
       <div class="label"><span lang="en" data-lang="en">What Maida is</span><span data-lang="ja">Maida とは</span><span data-lang="zh-tw">Maida 是什麼</span><span data-lang="zh-cn">Maida 是什么</span></div>
       <h2 id="what-title">
-        <span data-lang="en">Maida is a brief 間(ma). Then you play.</span>
-        <span data-lang="ja">Maida は、束の間(ま)。そして、遊ぶ。</span>
-        <span data-lang="zh-tw">Maida 是短暫的「間」。然後去玩。</span>
-        <span data-lang="zh-cn">Maida 是短暂的「间」。然后去玩。</span>
+        <span data-lang="en">A small gate between your library and play.</span>
+        <span data-lang="ja">ライブラリとプレイの間にある小さな門。</span>
+        <span data-lang="zh-tw">遊戲庫與開始遊玩之間的一道小門。</span>
+        <span data-lang="zh-cn">游戏库与开始游玩之间的一道小门。</span>
       </h2>
       <p class="ma-note">
-        <span data-lang="en">間 (ma) — the space between. Doubt breaks, decision lands.</span>
-        <span data-lang="ja">間(ま)、余白一寸。迷い即断、答え一瞬。</span>
-        <span data-lang="zh-tw">「間」(ま)，留白一寸。猶豫立斷，決定一瞬。</span>
-        <span data-lang="zh-cn">「间」(ま)，留白一寸。犹豫立断，决定一瞬。</span>
+        <span data-lang="en">間 (ma) is the space between. Maida is meant to be brief.</span>
+        <span data-lang="ja">間(ま)は、ものごとの間にある余白。Maida は長居する場所ではありません。</span>
+        <span data-lang="zh-tw">「間」(ま) 是事物之間的留白。Maida 應該只是短暫經過的地方。</span>
+        <span data-lang="zh-cn">「间」(ま) 是事物之间的留白。Maida 应该只是短暂经过的地方。</span>
       </p>
-      <p><span data-lang="en">Maida shows you one game at a time. From what you already have installed. You answer: play it now, or not now.</span><span data-lang="ja">Maida は一度に一本だけ見せる。インストール済みのゲームの中から。答えは二つ：今やる、か、今はやらない。</span><span data-lang="zh-tw">Maida 每次只給你看一款遊戲。從你已經安裝的遊戲中。你回答：現在玩，或現在不要。</span><span data-lang="zh-cn">Maida 每次只给你看一款游戏。从你已经安装的游戏中。你回答：现在玩，或现在不要。</span></p>
+      <p><span data-lang="en">Maida reads your locally installed Steam games and keeps the flow narrow: one visible game, two answers.</span><span data-lang="ja">Maida はローカルにインストールされた Steam ゲームを読み取り、流れを狭く保ちます。見えるゲームは一本、答えは二つ。</span><span data-lang="zh-tw">Maida 讀取本機已安裝的 Steam 遊戲，讓流程保持很窄：畫面上一款遊戲，兩個回答。</span><span data-lang="zh-cn">Maida 读取本机已安装的 Steam 游戏，让流程保持很窄：画面上一款游戏，两个回答。</span></p>
       <p><span data-lang="en">It's not a recommendation engine. Not a backlog tracker. Not a system that pretends to know you better than you know yourself.</span><span data-lang="ja">レコメンドエンジンじゃない。バックログ管理ツールでもない。あなたより「あなたをわかっている」ふりをするシステムでもない。</span><span data-lang="zh-tw">它不是推薦引擎。不是待辦清單。不是一個假裝比你更懂你的系統。</span><span data-lang="zh-cn">它不是推荐引擎。不是待办清单。不是一个假装比你更懂你的系统。</span></p>
-      <figure class="screenshot">
-        <img src="screenshots/rinView.png" alt="Maida Rin view showing one game at a time with Play and NOT NOW options" class="shot-dark">
-        <img src="screenshots/rinView_l.png" alt="Maida Rin view showing one game at a time with Play and NOT NOW options" class="shot-light">
-      </figure>
     </section>
 
     <section aria-labelledby="how-title">
       <div class="label"><span lang="en" data-lang="en">How it works</span><span data-lang="ja">使い方</span><span data-lang="zh-tw">如何運作</span><span data-lang="zh-cn">如何运作</span></div>
-      <h2 id="how-title"><span data-lang="en">Eighty options become one.</span><span data-lang="ja">80の選択肢が、1つになる。</span><span data-lang="zh-tw">把 80 個選項變成 1 個。</span><span data-lang="zh-cn">把 80 个选项变成 1 个。</span></h2>
+      <h2 id="how-title"><span data-lang="en">Three steps. Then the app gets out of the way.</span><span data-lang="ja">三つの手順。そしてアプリは退く。</span><span data-lang="zh-tw">三個步驟。然後 app 退開。</span><span data-lang="zh-cn">三个步骤。然后 app 退开。</span></h2>
       <div class="phase" aria-hidden="true">構 / kamae</div>
       <div class="grid" aria-label="Kamae steps">
-        <div class="card"><h3><span aria-hidden="true">1</span><span class="sr-only">Step 1</span></h3><p><span data-lang="en">Open Maida. It reads your locally installed Steam games.</span><span data-lang="ja">Maidaを開く。ローカルのSteamゲームを読み取る。</span><span data-lang="zh-tw">打開 Maida。它讀取你本機已安裝的 Steam 遊戲。</span><span data-lang="zh-cn">打开 Maida。它读取你本机已安装的 Steam 游戏。</span></p></div>
-        <div class="card"><h3><span aria-hidden="true">2</span><span class="sr-only">Step 2</span></h3><p><span data-lang="en">Optionally, narrow the field. Use Kata to face only what you're willing to face today.</span><span data-lang="ja">必要なら場を整える。型で、今日向き合いたいものだけに絞る。</span><span data-lang="zh-tw">如果你想，先整理場域。用型，只面對你今天願意面對的。</span><span data-lang="zh-cn">如果你想，先整理场域。用型，只面对你今天愿意面对的。</span></p></div>
+        <div class="card"><h3><span aria-hidden="true">1</span><span class="sr-only">Step 1</span></h3><p><span data-lang="en">Scan the Steam games installed on this device.</span><span data-lang="ja">この端末にインストールされた Steam ゲームを読み取ります。</span><span data-lang="zh-tw">掃描這台裝置上已安裝的 Steam 遊戲。</span><span data-lang="zh-cn">扫描这台设备上已安装的 Steam 游戏。</span></p></div>
+        <div class="card"><h3><span aria-hidden="true">2</span><span class="sr-only">Step 2</span></h3><p><span data-lang="en">Optional: narrow today's pool. Maida calls that a kata.</span><span data-lang="ja">必要なら、今日向き合う範囲を絞ります。Maida ではそれを kata と呼びます。</span><span data-lang="zh-tw">可選：縮小今天要面對的範圍。Maida 稱它為 kata。</span><span data-lang="zh-cn">可选：缩小今天要面对的范围。Maida 称它为 kata。</span></p></div>
       </div>
       <figure class="screenshot">
-        <img src="screenshots/kamaeView_kata_2.png" alt="Maida Kamae view showing two katas side by side with one active, search bar, and Steam game covers" class="shot-dark">
-        <img src="screenshots/kamaeView_kata_2_l.png" alt="Maida Kamae view showing two katas side by side with one active, search bar, and Steam game covers" class="shot-light">
+        <img src="screenshots/web/kamaeView_kata_2.png" data-dark-src="screenshots/web/kamaeView_kata_2.png" data-light-src="screenshots/web/kamaeView_kata_2_l.png" alt="Maida Kamae view showing two katas side by side with one active, search bar, and Steam game covers" class="theme-shot" loading="lazy" decoding="async">
       </figure>
       <div class="phase" aria-hidden="true">臨 / rin</div>
       <div class="grid" aria-label="Rin steps">
-        <div class="card"><h3><span aria-hidden="true">3</span><span class="sr-only">Step 3</span></h3><p><span data-lang="en">One game appears. Not a list. Not a comparison. Just one.</span><span data-lang="ja">一本が現れる。リストじゃない。比較表でもない。ただ一本。</span><span data-lang="zh-tw">一款遊戲出現。不是清單。不是比較表。就是一款。</span><span data-lang="zh-cn">一款游戏出现。不是清单。不是比较表。就是一款。</span></p></div>
-        <div class="card"><h3><span aria-hidden="true">4</span><span class="sr-only">Step 4</span></h3><p><span data-lang="en">Then it steps back. A tool that did its job disappears quietly.</span><span data-lang="ja">そして退く。仕事を終えた道具は、静かに消える。</span><span data-lang="zh-tw">然後它退開。完成工作的工具安靜地退下。</span><span data-lang="zh-cn">然后它退开。完成工作的工具安静地退下。</span></p></div>
+        <div class="card"><h3><span aria-hidden="true">3</span><span class="sr-only">Step 3</span></h3><p><span data-lang="en">One game appears. No list, no comparison table.</span><span data-lang="ja">一本だけが現れます。リストも比較表もありません。</span><span data-lang="zh-tw">畫面出現一款遊戲。沒有清單，沒有比較表。</span><span data-lang="zh-cn">画面出现一款游戏。没有清单，没有比较表。</span></p></div>
+        <div class="card"><h3><span aria-hidden="true">4</span><span class="sr-only">Step 4</span></h3><p><span data-lang="en">TRY opens it. Not Now moves on. Hold only when you mean to anchor.</span><span data-lang="ja">TRY で開く。Not Now で次へ。アンカーするときだけ、意図して長押しします。</span><span data-lang="zh-tw">TRY 會開啟遊戲。Not Now 會往下一款。只有要 anchor 時才刻意長按。</span><span data-lang="zh-cn">TRY 会打开游戏。Not Now 会往下一款。只有要 anchor 时才刻意长按。</span></p></div>
       </div>
       <figure class="screenshot">
-        <img src="screenshots/rinView_undo.png" alt="Rin view showing TRY and a crossed-out NOT NOW, with a one-time-only UNDO button below" class="shot-dark">
-        <img src="screenshots/rinView_undo_l.png" alt="Rin view showing TRY and a crossed-out NOT NOW, with a one-time-only UNDO button below" class="shot-light">
+        <img src="screenshots/web/rinView_undo.png" data-dark-src="screenshots/web/rinView_undo.png" data-light-src="screenshots/web/rinView_undo_l.png" alt="Rin view showing TRY and a crossed-out NOT NOW, with a one-time-only UNDO button below" class="theme-shot" loading="lazy" decoding="async">
       </figure>
     </section>
 
@@ -234,16 +238,16 @@
         <span data-lang="zh-cn">出现的游戏是你本来就拥有的。没有「热门」，没有「你可能喜欢」。</span>
       </p>
       <h3>
-        <span data-lang="en">No tracking</span>
-        <span data-lang="ja">追跡なし</span>
-        <span data-lang="zh-tw">沒有追蹤</span>
-        <span data-lang="zh-cn">没有追踪</span>
+        <span data-lang="en">No gameplay tracking</span>
+        <span data-lang="ja">プレイ追跡なし</span>
+        <span data-lang="zh-tw">沒有遊玩追蹤</span>
+        <span data-lang="zh-cn">没有游玩追踪</span>
       </h3>
       <p>
-        <span data-lang="en">Maida only knows your TRY / NOT NOW choices, and those stay on your device.</span>
-        <span data-lang="ja">Maida が知るのは TRY か NOT NOW の選択のみで、端末内に留まります。</span>
-        <span data-lang="zh-tw">Maida 只知道你按了 TRY 還是 NOT NOW，這個紀錄只在你的裝置上。</span>
-        <span data-lang="zh-cn">Maida 只知道你按了 TRY 还是 NOT NOW，这个记录只在你的设备上。</span>
+        <span data-lang="en">Maida does not track playtime or upload your library. TRY / NOT NOW choices stay on your device.</span>
+        <span data-lang="ja">Maida はプレイ時間を追跡せず、ライブラリもアップロードしません。TRY / NOT NOW の選択は端末内に留まります。</span>
+        <span data-lang="zh-tw">Maida 不追蹤遊玩時間，也不上傳你的遊戲庫。TRY / NOT NOW 的選擇只留在你的裝置上。</span>
+        <span data-lang="zh-cn">Maida 不追踪游玩时间，也不上传你的游戏库。TRY / NOT NOW 的选择只留在你的设备上。</span>
       </p>
       <h3>
         <span data-lang="en">No streaks, no achievements</span>
@@ -283,34 +287,28 @@
       </h2>
       <ul>
         <li>
-          <span data-lang="en">State changes — TRY, NOT NOW, ANCHOR — are announced through your screen reader. Primary target: NVDA on Windows. Orca on Linux: partial support.</span>
-          <span data-lang="ja">状態変化（TRY、NOT NOW、アンカー）はスクリーンリーダーで読み上げられます。主な対象：Windows の NVDA。Linux の Orca は部分対応。</span>
-          <span data-lang="zh-tw">狀態變化（TRY、NOT NOW、ANCHOR）會透過螢幕閱讀器朗讀。主要測試對象：Windows 的 NVDA。Linux 的 Orca 部分支援。</span>
-          <span data-lang="zh-cn">状态变化（TRY、NOT NOW、ANCHOR）会透过屏幕阅读器朗读。主要测试对象：Windows 的 NVDA。Linux 的 Orca 部分支持。</span>
+          <span data-lang="en">Screen reader announcements cover TRY, NOT NOW, and ANCHOR state changes. Primary target: NVDA on Windows. Orca on Linux: partial support.</span>
+          <span data-lang="ja">TRY、NOT NOW、アンカーの状態変化はスクリーンリーダーで読み上げられます。主な対象：Windows の NVDA。Linux の Orca は部分対応。</span>
+          <span data-lang="zh-tw">TRY、NOT NOW、ANCHOR 的狀態變化會透過螢幕閱讀器朗讀。主要測試對象：Windows 的 NVDA。Linux 的 Orca 部分支援。</span>
+          <span data-lang="zh-cn">TRY、NOT NOW、ANCHOR 的状态变化会通过屏幕阅读器朗读。主要测试对象：Windows 的 NVDA。Linux 的 Orca 部分支持。</span>
         </li>
         <li>
-          <span data-lang="en">Designed to be navigated entirely with D-pad, stick, or keyboard — whether you're on a handheld, can't use a mouse, or just prefer not to.</span>
-          <span data-lang="ja">D-pad、スティック、キーボードだけで全体を操作できるよう設計されています — ハンドヘルドでも、マウスが使えなくても、使いたくないだけでも。</span>
-          <span data-lang="zh-tw">設計上可用 D-pad、搖桿、鍵盤完整操作 — 不管你在手持裝置上、用不了滑鼠、還是單純不想用。</span>
-          <span data-lang="zh-cn">设计上可用 D-pad、摇杆、键盘完整操作 — 不管你在手持设备上、用不了鼠标、还是单纯不想用。</span>
+          <span data-lang="en">Keyboard, D-pad, and stick navigation are supported across the main flow.</span>
+          <span data-lang="ja">キーボード、D-pad、スティックで主要な流れを操作できます。</span>
+          <span data-lang="zh-tw">主要流程支援鍵盤、D-pad 與搖桿操作。</span>
+          <span data-lang="zh-cn">主要流程支持键盘、D-pad 与摇杆操作。</span>
         </li>
         <li>
-          <span data-lang="en">Starting a game takes a deliberate hold, not a tap — built to absorb shaky fingers, bumped gamepads, or the occasional cat paw.</span>
-          <span data-lang="ja">ゲーム起動には意図的な長押しが必要 — 手が震える日、ポケットで当たったゲームパッド、キーボードの上を歩く猫、こうした状況を吸収するように作られています。</span>
-          <span data-lang="zh-tw">啟動遊戲需要刻意的長按，不能只是點擊 — 設計上用來吸收手抖、口袋誤觸的手把、或走過鍵盤的貓。</span>
-          <span data-lang="zh-cn">启动游戏需要刻意的长按，不能只是点击 — 设计上用来吸收手抖、口袋误触的手柄、或走过键盘的猫。</span>
+          <span data-lang="en">Anchoring uses a deliberate hold instead of a stray tap.</span>
+          <span data-lang="ja">アンカーは、うっかりタップではなく意図的な長押しで行います。</span>
+          <span data-lang="zh-tw">Anchor 需要刻意長按，不會因為隨手一點就發生。</span>
+          <span data-lang="zh-cn">Anchor 需要刻意长按，不会因为随手一点就发生。</span>
         </li>
         <li>
-          <span data-lang="en">If motion makes you dizzy, set reduced motion once in your OS. Maida respects it, and there is no in-app toggle to accidentally desync from your system.</span>
-          <span data-lang="ja">動きで気分が悪くなる方は、OS の「動きを減らす」設定を入れてください。Maida はそれを尊重し、システムと食い違いうるアプリ側トグルは用意していません。</span>
-          <span data-lang="zh-tw">如果動畫讓你頭暈，在 OS 設定一次「減少動態效果」即可。Maida 尊重這個設定，app 內沒有會跟系統打架的開關。</span>
-          <span data-lang="zh-cn">如果动画让你头晕，在 OS 设置一次「减少动态效果」即可。Maida 尊重这个设定，app 内没有会跟系统打架的开关。</span>
-        </li>
-        <li>
-          <span data-lang="en">Focus stays visible for keyboard and gamepad input — Chromium's default hides it for gamepad, so Maida pairs <code>:focus</code> with <code>:focus-visible</code> to keep the ring showing.</span>
-          <span data-lang="ja">フォーカス枠はキーボード／ゲームパッド入力で見えるようにしています — Chromium の初期設定ではゲームパッド操作時に枠が消えるため、Maida は <code>:focus</code> と <code>:focus-visible</code> を両方指定して表示を維持しています。</span>
-          <span data-lang="zh-tw">鍵盤跟手把操作時焦點框會保持可見 — Chromium 預設會在手把輸入時隱藏，Maida 同時指定 <code>:focus</code> 跟 <code>:focus-visible</code> 讓框保留。</span>
-          <span data-lang="zh-cn">键盘跟手柄操作时焦点框会保持可见 — Chromium 默认会在手柄输入时隐藏，Maida 同时指定 <code>:focus</code> 跟 <code>:focus-visible</code> 让框保留。</span>
+          <span data-lang="en">Motion follows your operating system's reduced-motion setting.</span>
+          <span data-lang="ja">動きの量は OS の「動きを減らす」設定に従います。</span>
+          <span data-lang="zh-tw">動態效果會跟隨作業系統的「減少動態效果」設定。</span>
+          <span data-lang="zh-cn">动态效果会跟随操作系统的「减少动态效果」设置。</span>
         </li>
       </ul>
       <p>
@@ -347,10 +345,10 @@
       </div>
     </section>
     <section aria-label="Tester feedback" style="margin-top:56px;text-align:center">
-      <a href="mailto:bertram@brightraven.world" class="cta cta-ghost"><span data-lang="en">Tell me how it went</span><span data-lang="ja">試したあとに、感想を聞かせて</span><span data-lang="zh-tw">試過之後，告訴我感想</span><span data-lang="zh-cn">试过之后，告诉我感想</span></a>
+      <a href="mailto:bertram@brightraven.world" class="cta cta-ghost"><span data-lang="en">Tell me how it went</span><span data-lang="ja">試したあとに、感想を聞かせて</span><span data-lang="zh-tw">試過之後，請告訴我感想</span><span data-lang="zh-cn">试过之后，请告诉我感想</span></a>
     </section>
     <footer style="padding:48px 0 0;border-top:1px solid var(--line);text-align:center;color:var(--ghost);font-size:13px">
-      <p><a href="https://brightraven.world" class="footer-back" style="color:var(--accent);text-decoration:none">&larr; Bright Raven World</a></p><p>&copy; 2026 Bright Raven World</p>
+      <p><a href="https://brightraven.world" class="footer-back">&larr; Bright Raven World</a></p><p>&copy; 2026 Bright Raven World</p>
     </footer>
   </main>
   <!-- SR live region for language change announcements -->
@@ -370,6 +368,12 @@
       light:{'--bg':'#f5f0eb','--panel':'#ebe5de','--text':'#1c1712','--muted':'#4f4942','--ghost':'#584f45','--accent':'#6a5535','--line':'#cfc5bb','--focus':'#9a6f00'}
     };
     const setThemeVars=(mode)=>{const vars=themeVars[mode]||themeVars.dark; Object.entries(vars).forEach(([k,v])=>root.style.setProperty(k,v));};
+    const updateThemeImages=(activeTheme)=>{
+      document.querySelectorAll('img[data-dark-src][data-light-src]').forEach(img=>{
+        const next=activeTheme==='light'?img.dataset.lightSrc:img.dataset.darkSrc;
+        if(img.getAttribute('src')!==next) img.setAttribute('src',next);
+      });
+    };
     const applyLang=(k)=>{
       root.className='lang-'+k;
       root.lang=map[k]||'en';
@@ -434,23 +438,28 @@
       btn.addEventListener('click',()=>{applyLang(btn.dataset.setLang);closeLangMenu(true);});
     });
     const applyTheme=(mode)=>{
+      let activeTheme='dark';
       if(mode==='system'){
         root.removeAttribute('data-theme');
         const prefersLight=window.matchMedia('(prefers-color-scheme: light)').matches;
-        setThemeVars(prefersLight?'light':'dark');
+        activeTheme=prefersLight?'light':'dark';
+        setThemeVars(activeTheme);
         themeBtn.textContent=prefersLight?'Dark':'Light';
         themeBtn.setAttribute('aria-label',prefersLight?'Switch to dark theme':'Switch to light theme');
       } else if(mode==='light'){
         root.setAttribute('data-theme','light');
         setThemeVars('light');
+        activeTheme='light';
         themeBtn.textContent='Dark';
         themeBtn.setAttribute('aria-label','Switch to dark theme');
       } else {
         root.removeAttribute('data-theme');
         setThemeVars('dark');
+        activeTheme='dark';
         themeBtn.textContent='Light';
         themeBtn.setAttribute('aria-label','Switch to light theme');
       }
+      updateThemeImages(activeTheme);
       localStorage.setItem('maida-sample-theme',mode);
       themeBtn.dataset.mode=mode;
     };
