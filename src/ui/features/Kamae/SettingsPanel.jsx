@@ -10,11 +10,15 @@ const FROZEN_GUARD_MIN = 5;
 const FROZEN_GUARD_MAX = 30;
 const FROZEN_GUARD_DEBOUNCE_MS = 300;
 
+const CARD_OPACITY_MIN = 40;
+const CARD_OPACITY_MAX = 100;
+const CARD_OPACITY_DEBOUNCE_MS = 300;
+
 /**
  * SettingsPanel — inline panel for IGDB credential management.
  * Renders inside KamaeView when settings is toggled open.
  */
-export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleChange, onTourStart, onNavigateLegal, replayTourBtnRef, updateCheck, updateAlertShown, onFrozenGuardChange }) {
+export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleChange, onTourStart, onNavigateLegal, replayTourBtnRef, updateCheck, updateAlertShown, onFrozenGuardChange, onMaida2PlayDelayChange, onMaida2PreviewAudioChange, onMaida2CardOpacityChange }) {
     const [clientId, setClientId] = useState('');
     const [clientSecret, setClientSecret] = useState('');
     const [hasExisting, setHasExisting] = useState(false);
@@ -36,6 +40,19 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
     const [frozenGuardSeconds, setFrozenGuardSeconds] = useState(15);
     const [frozenGuardAnnounce, setFrozenGuardAnnounce] = useState('');
     const frozenGuardSaveTimer = useRef(null);
+
+    // Maida 2.0 focus-expansion dwell-to-play delay (1 / 3 / 6 seconds)
+    const [playDelaySeconds, setPlayDelaySeconds] = useState(3);
+    const [playDelayAnnounce, setPlayDelayAnnounce] = useState('');
+
+    // Maida 2.0 dwell-to-play preview audio (default on, user ruling 2026-08-31)
+    const [previewAudio, setPreviewAudio] = useState(true);
+    const [previewAudioAnnounce, setPreviewAudioAnnounce] = useState('');
+
+    // Maida 2.0 card opacity (percent, 40..100, default 70)
+    const [cardOpacity, setCardOpacity] = useState(70);
+    const [cardOpacityAnnounce, setCardOpacityAnnounce] = useState('');
+    const cardOpacitySaveTimer = useRef(null);
 
     // Telemetry state
     const [telemetryEnabled, setTelemetryEnabled] = useState(true);
@@ -62,6 +79,12 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
             setTelemetryEnabled(telEnabled);
             const guard = await bridge.getFrozenGuardDuration();
             setFrozenGuardSeconds(guard);
+            const playDelay = await bridge.getMaida2PlayDelaySeconds();
+            setPlayDelaySeconds(playDelay);
+            const audioEnabled = await bridge.getMaida2PreviewAudio();
+            setPreviewAudio(audioEnabled);
+            const opacity = await bridge.getMaida2CardOpacity();
+            setCardOpacity(opacity);
         })();
     }, []);
 
@@ -85,6 +108,53 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
             if (frozenGuardSaveTimer.current) clearTimeout(frozenGuardSaveTimer.current);
         };
     }, []);
+
+    const handleCardOpacityChange = useCallback((raw) => {
+        const n = Math.max(CARD_OPACITY_MIN, Math.min(CARD_OPACITY_MAX, Number(raw) || CARD_OPACITY_MIN));
+        setCardOpacity(n);
+        if (onMaida2CardOpacityChange) onMaida2CardOpacityChange(n);
+        if (cardOpacitySaveTimer.current) clearTimeout(cardOpacitySaveTimer.current);
+        cardOpacitySaveTimer.current = setTimeout(() => {
+            bridge.setMaida2CardOpacity(n).catch((err) => {
+                console.warn('[Settings] failed to persist maida2 card opacity:', err);
+            });
+            setCardOpacityAnnounce(t('ui.settings.maida2_card_opacity_announce', { percent: n }));
+        }, CARD_OPACITY_DEBOUNCE_MS);
+    }, [onMaida2CardOpacityChange]);
+
+    useEffect(() => {
+        return () => {
+            if (cardOpacitySaveTimer.current) clearTimeout(cardOpacitySaveTimer.current);
+        };
+    }, []);
+
+    // Discrete 2-option control (3s / 5s) — no debounce needed, a button
+    // press is already a single discrete choice (unlike the guard slider's
+    // continuous drag above).
+    const handlePlayDelayChange = useCallback((n) => {
+        setPlayDelaySeconds(n);
+        if (onMaida2PlayDelayChange) onMaida2PlayDelayChange(n);
+        bridge.setMaida2PlayDelaySeconds(n).catch((err) => {
+            console.warn('[Settings] failed to persist maida2 play delay:', err);
+        });
+        setPlayDelayAnnounce(
+            t('ui.settings.maida2_play_delay_announce', { word: secondsToWord(n, getLocale()) })
+        );
+    }, [onMaida2PlayDelayChange]);
+
+    // Discrete 2-option control (on / off) — same shape as play delay above.
+    const handlePreviewAudioChange = useCallback((enabled) => {
+        setPreviewAudio(enabled);
+        if (onMaida2PreviewAudioChange) onMaida2PreviewAudioChange(enabled);
+        bridge.setMaida2PreviewAudio(enabled).catch((err) => {
+            console.warn('[Settings] failed to persist maida2 preview audio:', err);
+        });
+        setPreviewAudioAnnounce(
+            t('ui.settings.maida2_preview_audio_announce', {
+                state: enabled ? t('ui.settings.maida2_preview_audio_on') : t('ui.settings.maida2_preview_audio_off'),
+            })
+        );
+    }, [onMaida2PreviewAudioChange]);
 
     const handleTest = useCallback(async () => {
         setTesting(true);
@@ -314,6 +384,96 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
                                 aria-atomic="true"
                             >
                                 {frozenGuardAnnounce}
+                            </div>
+                        </div>
+
+                        <div className="kamae-settings-a11y-item">
+                            <h3 id="a11y-play-delay-heading" className="kamae-settings-a11y-heading">
+                                {t('ui.settings.maida2_play_delay_title')}
+                            </h3>
+                            <p className="kamae-settings-guard-desc">{t('ui.settings.maida2_play_delay_desc')}</p>
+                            <div className="kamae-settings-haptic-bar" role="radiogroup" aria-labelledby="a11y-play-delay-heading">
+                                {[1, 3, 6].map((n) => (
+                                    <button
+                                        key={n}
+                                        type="button"
+                                        role="radio"
+                                        aria-checked={playDelaySeconds === n}
+                                        className={`kamae-haptic-seg ${n === playDelaySeconds ? 'kamae-haptic-seg--filled' : ''}`}
+                                        onClick={() => handlePlayDelayChange(n)}
+                                    >
+                                        {t('ui.settings.maida2_play_delay_option', { seconds: n })}
+                                    </button>
+                                ))}
+                            </div>
+                            <div
+                                className="sr-only"
+                                role="status"
+                                aria-live="polite"
+                                aria-atomic="true"
+                            >
+                                {playDelayAnnounce}
+                            </div>
+                        </div>
+
+                        <div className="kamae-settings-a11y-item">
+                            <h3 id="a11y-preview-audio-heading" className="kamae-settings-a11y-heading">
+                                {t('ui.settings.maida2_preview_audio_title')}
+                            </h3>
+                            <p className="kamae-settings-guard-desc">{t('ui.settings.maida2_preview_audio_desc')}</p>
+                            <div className="kamae-settings-haptic-bar" role="radiogroup" aria-labelledby="a11y-preview-audio-heading">
+                                {[true, false].map((enabled) => (
+                                    <button
+                                        key={String(enabled)}
+                                        type="button"
+                                        role="radio"
+                                        aria-checked={previewAudio === enabled}
+                                        className={`kamae-haptic-seg ${enabled === previewAudio ? 'kamae-haptic-seg--filled' : ''}`}
+                                        onClick={() => handlePreviewAudioChange(enabled)}
+                                    >
+                                        {enabled ? t('ui.settings.maida2_preview_audio_on') : t('ui.settings.maida2_preview_audio_off')}
+                                    </button>
+                                ))}
+                            </div>
+                            <div
+                                className="sr-only"
+                                role="status"
+                                aria-live="polite"
+                                aria-atomic="true"
+                            >
+                                {previewAudioAnnounce}
+                            </div>
+                        </div>
+
+                        <div className="kamae-settings-a11y-item">
+                            <h3 id="a11y-card-opacity-heading" className="kamae-settings-a11y-heading">
+                                {t('ui.settings.maida2_card_opacity_title')}
+                                <span className="kamae-settings-guard-value" aria-hidden="true">
+                                    {t('ui.settings.maida2_card_opacity_value', { percent: cardOpacity })}
+                                </span>
+                            </h3>
+                            <p className="kamae-settings-guard-desc">{t('ui.settings.maida2_card_opacity_desc')}</p>
+                            <input
+                                type="range"
+                                className="kamae-settings-guard-slider"
+                                min={CARD_OPACITY_MIN}
+                                max={CARD_OPACITY_MAX}
+                                step={5}
+                                value={cardOpacity}
+                                aria-labelledby="a11y-card-opacity-heading"
+                                aria-valuemin={CARD_OPACITY_MIN}
+                                aria-valuemax={CARD_OPACITY_MAX}
+                                aria-valuenow={cardOpacity}
+                                aria-valuetext={t('ui.settings.maida2_card_opacity_value', { percent: cardOpacity })}
+                                onChange={(e) => handleCardOpacityChange(e.target.value)}
+                            />
+                            <div
+                                className="sr-only"
+                                role="status"
+                                aria-live="polite"
+                                aria-atomic="true"
+                            >
+                                {cardOpacityAnnounce}
                             </div>
                         </div>
 

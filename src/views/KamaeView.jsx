@@ -24,7 +24,7 @@ import './KamaeView.css';
  * Kamae (構) — slow curation face.
  * Kata selector + game list + search + explore entry.
  */
-export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleChange, tourStep, tourTotal, onTourStart, onTourReplay, onTourClose, onTourAdvance, onTourPrev, settingsRequested, onSettingsOpened, themeToggle, onFrozenGuardChange, updateCheck, updateAlertShown }) {
+export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleChange, tourStep, tourTotal, onTourStart, onTourReplay, onTourClose, onTourAdvance, onTourPrev, settingsRequested, onSettingsOpened, onSettingsClosed, themeToggle, onFrozenGuardChange, onMaida2PlayDelayChange, onMaida2PreviewAudioChange, onMaida2CardOpacityChange, updateCheck, updateAlertShown }) {
     // SR guide announces once per install, gated by localStorage to avoid
     // re-announcement on every re-render / face switch. See RinView for same pattern.
     const [showSrGuide] = useState(() => localStorage.getItem('maida-hasHeardKamaeGuide') !== 'true');
@@ -276,6 +276,7 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
             }
             setBackEscapeHint('');
             setShowSettings(false);
+            onSettingsClosed?.();
         } else if (exploring) {
             setExploring(false);
         } else if (expandedKataId) {
@@ -288,7 +289,7 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
                 if (active) active.focus();
             }
         }
-    }, [legalPage, showSettings, exploring, expandedKataId]);
+    }, [legalPage, showSettings, exploring, expandedKataId, onSettingsClosed]);
 
     // F1 opens Kamae tour
     useEffect(() => {
@@ -329,7 +330,7 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
                 <p className="sr-only" role="status" aria-live="polite">{backEscapeHint}</p>
                 <div className="kamae-content">
                     <SettingsPanel
-                        onClose={() => setShowSettings(false)}
+                        onClose={() => { setShowSettings(false); onSettingsClosed?.(); }}
                         theme={theme}
                         toggleTheme={toggleTheme}
                         onLocaleChange={onLocaleChange}
@@ -339,6 +340,9 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
                         updateCheck={updateCheck}
                         updateAlertShown={updateAlertShown}
                         onFrozenGuardChange={onFrozenGuardChange}
+                        onMaida2PlayDelayChange={onMaida2PlayDelayChange}
+                        onMaida2PreviewAudioChange={onMaida2PreviewAudioChange}
+                        onMaida2CardOpacityChange={onMaida2CardOpacityChange}
                     />
                 </div>
                 {/* Tour step 8 highlights the Replay-tour button inside Settings.

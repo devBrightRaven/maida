@@ -1,0 +1,402 @@
+/* Maida2View — three-zone prototype. Handheld 720p first: single column,
+   theme tokens only, 44px minimum touch targets. */
+
+.maida2-view {
+    min-height: 100vh;
+    background: var(--t-bg);
+    color: var(--t-text);
+    overflow-y: auto;
+    position: relative;
+}
+
+/* Focus-dwell hero backdrop — ambient, decorative, never affects layout.
+   Fixed to the viewport (KamaeView's calligraphy-watermark pattern) at
+   z-index 0 so .maida2-content (z-index 1) always paints above it; the
+   mask fades the image to transparent, revealing the view's own solid
+   --t-bg beneath rather than fighting it with a color gradient. */
+.m2-hero-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    pointer-events: none;
+    /* Recognition comes from a touch of saturation, not raw brightness —
+       keeps the image identifiable without competing with card text. */
+    filter: saturate(1.15) contrast(1.05);
+    -webkit-mask-image: linear-gradient(to bottom, black 0%, rgba(0, 0, 0, 0.5) 55%, transparent 94%);
+    mask-image: linear-gradient(to bottom, black 0%, rgba(0, 0, 0, 0.5) 55%, transparent 94%);
+    transition: opacity 0.2s ease;
+}
+
+/* Dark theme: dark ground swallows low-opacity imagery — needs more presence. */
+.m2-hero-backdrop--visible {
+    opacity: 0.42;
+}
+
+[data-theme='light'] .m2-hero-backdrop--visible {
+    opacity: 0.3;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .m2-hero-backdrop {
+        transition: none;
+    }
+}
+
+/* Full-window media backdrop (dwell-to-play video/slideshow) — plays
+   behind the frosted-glass cards, not a fullscreen takeover. Same fixed
+   + masked treatment as .m2-hero-backdrop, stacked above it (later in DOM
+   order, same z-index) since it supersedes the static hero once playing. */
+.m2-backdrop-media {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.55;
+    -webkit-mask-image: linear-gradient(to bottom, black 0%, rgba(0, 0, 0, 0.5) 55%, transparent 94%);
+    mask-image: linear-gradient(to bottom, black 0%, rgba(0, 0, 0, 0.5) 55%, transparent 94%);
+}
+
+.maida2-content {
+    position: relative;
+    z-index: 1;
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 2rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+}
+
+.m2-zone-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    color: var(--t-dim);
+    border-bottom: 1px solid var(--t-border-subtle);
+    padding-bottom: 0.375rem;
+    margin: 0 0 0.75rem;
+}
+
+.m2-zone-empty {
+    color: var(--t-text-faint);
+    font-size: 0.9375rem;
+    margin: 0;
+}
+
+/* "All installed" toggle — sits inside the section's <h2>, inherits its
+   text styling (font/color/letter-spacing) so it reads identically to the
+   other zone titles while staying a real interactive button. */
+.m2-all-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    min-height: 44px;
+    padding: 0;
+    background: transparent;
+    color: inherit;
+    border: none;
+    font: inherit;
+    letter-spacing: inherit;
+    cursor: pointer;
+}
+
+.m2-all-toggle:focus,
+.m2-all-toggle:focus-visible {
+    outline: none;
+    color: var(--t-text);
+    border-radius: 4px;
+    box-shadow: 0 0 0 2px var(--t-bg), 0 0 0 4px var(--t-focus-border);
+}
+
+.m2-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+}
+
+/* ── Card ───────────────────── */
+
+.m2-card {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    min-height: 44px;
+    display: flex;
+    flex-direction: column;
+    padding: 0.625rem 0.875rem;
+    /* Frosted glass: the hero backdrop reads through the gaps AND the
+       cards themselves, while the blur keeps text contrast intact.
+       --m2-card-alpha is set inline on .maida2-view from the user's card
+       opacity preference (40..100, default 70). */
+    background: color-mix(in srgb, var(--t-surface) calc(var(--m2-card-alpha, 70) * 1%), transparent);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    color: var(--t-text);
+    border: 1px solid var(--t-border);
+    border-radius: 6px;
+    text-align: left;
+    cursor: pointer;
+    font: inherit;
+    transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+/* Decorative imagery yields entirely under a high-contrast preference,
+   and cards return to fully opaque ground. Must appear AFTER the .m2-card
+   rule above: same specificity, so source order decides the winner and
+   this needs to win when the preference is active. */
+@media (prefers-contrast: more) {
+    .m2-hero-backdrop,
+    .m2-backdrop-media {
+        display: none;
+    }
+    .m2-card {
+        background: var(--t-surface);
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+    }
+}
+
+/* Compact row: thumb + text, exactly the previous .m2-card row layout —
+   wrapped so .m2-card-expand can grow open below it without affecting
+   this row's own size. */
+.m2-card-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+}
+
+/* Text block, unchanged visual stack (title/sub/badge) — now the row's
+   second cell so an optional .m2-card-art thumb can sit to its left. */
+.m2-card-body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+    min-width: 0;
+}
+
+/* Decorative capsule art (alt="" aria-hidden — title text remains the
+   card's only accessible name). No art = no element, no placeholder box. */
+.m2-card-art {
+    flex: 0 0 auto;
+    width: 64px;
+    height: 96px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.m2-card:hover {
+    background: var(--t-hover-bg);
+    color: var(--t-hover-text);
+}
+
+/* Red line 7.10: gamepad-driven .focus() is not :focus-visible in Chromium —
+   always pair both pseudo-classes. */
+.m2-card:focus,
+.m2-card:focus-visible {
+    outline: none;
+    border-color: var(--t-focus-border);
+    box-shadow: 0 0 0 2px var(--t-bg), 0 0 0 4px var(--t-focus-border);
+}
+
+.m2-card-title {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.m2-card-sub {
+    font-size: 0.8125rem;
+    color: var(--t-text-soft);
+}
+
+.m2-card-badge {
+    font-size: 0.6875rem;
+    color: var(--t-accent);
+    border: 1px solid var(--t-accent-border);
+    border-radius: 999px;
+    padding: 0.0625rem 0.5rem;
+}
+
+/* Focus-dwell expansion region (hero, or enlarged capsule fallback).
+   Collapsed by default (max-height 0, overflow hidden) so unfocused/
+   not-yet-dwelled cards are visually identical to before this feature —
+   only .m2-card-expand--open grows it. aria-hidden + pointer-events: none
+   because it never carries the card's accessible name or interaction. */
+.m2-card-expand {
+    position: relative;
+    width: 100%;
+    /* Children are absolutely positioned, so the box has no in-flow
+       content: an explicit height (not max-height, which only caps)
+       is what actually opens it. */
+    height: 0;
+    overflow: hidden;
+    opacity: 0;
+    background-size: cover;
+    background-position: center;
+    border-radius: 6px;
+    pointer-events: none;
+}
+
+.m2-card-expand--open {
+    height: clamp(160px, 28vh, 240px);
+    opacity: 1;
+    /* Breathing room between the compact row and the grown media area. */
+    margin-top: 0.625rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .m2-card-expand {
+        transition: height 0.2s ease-out, opacity 0.2s ease-out, margin-top 0.2s ease-out;
+    }
+}
+
+/* Dwell-to-play preview layer (CardMedia) — sits over the hero/capsule
+   backgroundImage already painted by .m2-card-expand, which keeps showing
+   through until media resolves (CardMedia renders null while loading).
+   Decorative only: aria-hidden, no controls, pointer-events none throughout
+   so the layer never intercepts the card's own press/focus handling. */
+.m2-card-media-video,
+.m2-card-media-slideshow {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+}
+
+.m2-card-media-slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+}
+
+.m2-card-media-slide--active {
+    opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .m2-card-media-slide {
+        transition: none;
+    }
+}
+
+.m2-card-progress {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 3px;
+    background: var(--t-accent);
+    pointer-events: none;
+}
+
+/* ── Hook actions (STILL HERE) ───────────────────── */
+
+.m2-hook-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.375rem;
+}
+
+.m2-state-group {
+    display: flex;
+    gap: 0.375rem;
+}
+
+.m2-hook-retract,
+.m2-state-btn,
+.m2-note-confirm {
+    min-height: 44px;
+    padding: 0.5rem 0.875rem;
+    background: transparent;
+    color: var(--t-text-soft);
+    border: 1px solid var(--t-border);
+    border-radius: 6px;
+    font: inherit;
+    font-size: 0.8125rem;
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.m2-hook-retract:hover,
+.m2-state-btn:hover,
+.m2-note-confirm:hover {
+    color: var(--t-hover-text);
+    border-color: var(--t-accent-border);
+}
+
+.m2-hook-retract:focus,
+.m2-hook-retract:focus-visible,
+.m2-state-btn:focus,
+.m2-state-btn:focus-visible,
+.m2-note-confirm:focus,
+.m2-note-confirm:focus-visible {
+    outline: none;
+    color: var(--t-text);
+    border-color: var(--t-focus-border);
+    box-shadow: 0 0 0 2px var(--t-bg), 0 0 0 4px var(--t-focus-border);
+}
+
+.m2-state-btn[aria-pressed="true"] {
+    color: var(--t-accent);
+    border-color: var(--t-accent-border);
+}
+
+/* ── Note editor ───────────────────── */
+
+.m2-note-editor {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.375rem;
+}
+
+.m2-note-label {
+    flex-basis: 100%;
+    font-size: 0.8125rem;
+    color: var(--t-text-soft);
+}
+
+.m2-note-input {
+    flex: 1;
+    min-width: 0;
+    min-height: 44px;
+    padding: 0.5rem 0.75rem;
+    background: var(--t-bg);
+    color: var(--t-text);
+    border: 1px solid var(--t-border);
+    border-radius: 6px;
+    font: inherit;
+    font-size: 1rem;
+}
+
+.m2-note-input:focus,
+.m2-note-input:focus-visible {
+    outline: none;
+    border-color: var(--t-focus-border);
+    box-shadow: 0 0 0 2px var(--t-bg), 0 0 0 4px var(--t-focus-border);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .m2-card,
+    .m2-hook-retract,
+    .m2-state-btn,
+    .m2-note-confirm {
+        transition: none;
+    }
+}

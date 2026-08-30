@@ -368,7 +368,7 @@ export function useGameInput({
                         aButtonDown = true;
                         aButtonTarget = getFocusedInteractive();
                         if (aButtonTarget) {
-                            const needsPointer = aButtonTarget.classList.contains('visit') || aButtonTarget.classList.contains('showcase-hold-btn');
+                            const needsPointer = aButtonTarget.classList.contains('visit') || aButtonTarget.classList.contains('showcase-hold-btn') || aButtonTarget.classList.contains('m2-hold');
                             if (needsPointer) {
                                 aButtonTarget.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
                             }
@@ -378,7 +378,7 @@ export function useGameInput({
                     } else if (!aPressed && aButtonDown) {
                         aButtonDown = false;
                         if (aButtonTarget) {
-                            const needsPointer = aButtonTarget.classList.contains('visit') || aButtonTarget.classList.contains('showcase-hold-btn');
+                            const needsPointer = aButtonTarget.classList.contains('visit') || aButtonTarget.classList.contains('showcase-hold-btn') || aButtonTarget.classList.contains('m2-hold');
                             if (needsPointer) {
                                 aButtonTarget.dispatchEvent(new PointerEvent('pointerup', { bubbles: true }));
                             } else if (aButtonTarget.tagName === 'INPUT') {

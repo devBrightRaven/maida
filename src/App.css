@@ -45,6 +45,27 @@
     z-index: 2;
 }
 
+/* Post-launch prescription line. Static text between the subtitle (48%) and
+ * the resume button (65%); deliberately no animation, so it is inherently
+ * prefers-reduced-motion safe. */
+.frozen-prescription {
+    position: absolute;
+    top: 56%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: 36rem;
+    padding: 0 1.5rem;
+    box-sizing: border-box;
+    color: var(--t-text-faint); /* muted but keeps 4.5:1 in light mode (ghost is borderline) */
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+    line-height: 1.6;
+    text-align: center;
+    font-weight: 300;
+    z-index: 2;
+}
+
 /* Restart Selection Button (Ghost Style - Silent Exit) */
 .restart-selection-btn {
     position: absolute;
