@@ -1,3 +1,4 @@
+pub mod appinfo;
 pub mod vdf;
 
 use chrono::Utc;
@@ -160,6 +161,10 @@ pub fn scan_steam_library() -> Result<Vec<Value>, String> {
 
             let appid = vdf::extract_field(&content, "appid");
             let name = vdf::extract_field(&content, "name");
+            // Steam-recorded last-play epoch; missing or unparseable = 0.
+            let steam_last_played: i64 = vdf::extract_field(&content, "LastPlayed")
+                .and_then(|v| v.parse().ok())
+                .unwrap_or(0);
 
             let (appid, name) = match (appid, name) {
                 (Some(a), Some(n)) => (a, n),
@@ -195,6 +200,7 @@ pub fn scan_steam_library() -> Result<Vec<Value>, String> {
                 "installed": true,
                 "steamAppId": appid,
                 "steamUrl": format!("steam://rungameid/{}", appid),
+                "steamLastPlayed": steam_last_played,
                 "importedAt": now
             }));
         }

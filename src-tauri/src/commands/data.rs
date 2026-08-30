@@ -12,6 +12,7 @@ const ALLOWED_DATA_TYPES: &[&str] = &[
     "constraints",
     "showcase",
     "config",
+    "hooks",
 ];
 
 #[tauri::command]

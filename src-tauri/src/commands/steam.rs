@@ -114,6 +114,9 @@ pub async fn perform_background_snapshot(app: AppHandle) -> Result<Value, String
                 if let Some(new_title) = scanned_game.get("title") {
                     game["title"] = new_title.clone();
                 }
+                if let Some(last_played) = scanned_game.get("steamLastPlayed") {
+                    game["steamLastPlayed"] = last_played.clone();
+                }
             }
         }
 

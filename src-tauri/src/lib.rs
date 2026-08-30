@@ -72,6 +72,9 @@ pub fn run() {
             // Session log
             commands::session_log::append_session_log,
             commands::session_log::export_session_log,
+            // Trace (append-only, never pruned)
+            commands::trace::append_trace,
+            commands::trace::export_trace,
             // Window
             commands::window::minimize_window,
             commands::window::close_window,
@@ -81,6 +84,13 @@ pub fn run() {
             commands::steam::check_steam_available,
             commands::steam::request_onboarding_sync,
             commands::steam::perform_background_snapshot,
+            // Capsule/hero art (local Steam librarycache only, no network)
+            commands::capsule::get_art,
+            // Localized titles (local appinfo.vdf only, no network)
+            commands::titles::get_localized_titles,
+            // Official screenshots + microtrailer metadata (Maida 2.0 focus-expansion)
+            commands::media::get_game_media,
+            commands::media::get_screenshot,
             // IGDB
             commands::igdb::save_igdb_credentials,
             commands::igdb::load_igdb_credentials,
@@ -96,6 +106,12 @@ pub fn run() {
             // Preferences
             preferences::get_frozen_guard_duration,
             preferences::set_frozen_guard_duration,
+            preferences::get_maida2_play_delay_seconds,
+            preferences::set_maida2_play_delay_seconds,
+            preferences::get_maida2_preview_audio,
+            preferences::set_maida2_preview_audio,
+            preferences::get_maida2_card_opacity,
+            preferences::set_maida2_card_opacity,
         ])
         .run(tauri::generate_context!())
         .expect("error while running Maida");

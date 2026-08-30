@@ -50,6 +50,45 @@ mod tests {
     }
 
     #[test]
+    fn test_extract_last_played() {
+        let acf = "\"appid\"\t\"570\"\n\"LastPlayed\"\t\"1724800000\"";
+        assert_eq!(
+            extract_field(acf, "LastPlayed"),
+            Some("1724800000".to_string())
+        );
+        assert_eq!(
+            extract_field(acf, "LastPlayed")
+                .and_then(|v| v.parse::<i64>().ok())
+                .unwrap_or(0),
+            1724800000
+        );
+    }
+
+    #[test]
+    fn test_extract_last_played_missing() {
+        let acf = "\"appid\"\t\"570\"";
+        assert_eq!(extract_field(acf, "LastPlayed"), None);
+        assert_eq!(
+            extract_field(acf, "LastPlayed")
+                .and_then(|v| v.parse::<i64>().ok())
+                .unwrap_or(0),
+            0
+        );
+    }
+
+    #[test]
+    fn test_extract_last_played_zero() {
+        let acf = "\"appid\"\t\"570\"\n\"LastPlayed\"\t\"0\"";
+        assert_eq!(extract_field(acf, "LastPlayed"), Some("0".to_string()));
+        assert_eq!(
+            extract_field(acf, "LastPlayed")
+                .and_then(|v| v.parse::<i64>().ok())
+                .unwrap_or(0),
+            0
+        );
+    }
+
+    #[test]
     fn test_extract_from_libraryfolders() {
         let vdf = r#"
 "libraryfolders"

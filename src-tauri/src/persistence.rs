@@ -79,6 +79,10 @@ pub fn user_data_default(data_type: &str) -> Value {
                 "enabled": true
             }
         }),
+        "hooks" => serde_json::json!({
+            "hooks": [],
+            "gameStates": {}
+        }),
         _ => serde_json::json!(null),
     }
 }
@@ -87,13 +91,18 @@ pub fn user_data_default(data_type: &str) -> Value {
 pub fn is_user_data(data_type: &str) -> bool {
     matches!(
         data_type,
-        "anchor" | "returnPenalties" | "constraints" | "showcase" | "config"
+        "anchor" | "returnPenalties" | "constraints" | "showcase" | "config" | "hooks"
     )
 }
 
 /// Session log path.
 pub fn session_log_path(base: &Path) -> PathBuf {
     base.join("session-log.jsonl")
+}
+
+/// Trace log path (append-only, never pruned).
+pub fn trace_path(base: &Path) -> PathBuf {
+    base.join("trace.jsonl")
 }
 
 #[cfg(test)]
@@ -164,7 +173,14 @@ mod tests {
         assert!(is_user_data("anchor"));
         assert!(is_user_data("showcase"));
         assert!(is_user_data("config"));
+        assert!(is_user_data("hooks"));
         assert!(!is_user_data("games"));
         assert!(!is_user_data("prescriptions"));
+    }
+
+    #[test]
+    fn test_trace_path_mapping() {
+        let base = Path::new("/data");
+        assert_eq!(trace_path(base), PathBuf::from("/data/trace.jsonl"));
     }
 }
