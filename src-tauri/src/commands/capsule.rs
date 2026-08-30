@@ -145,6 +145,12 @@ async fn fetch_art_from_cdn(app_id: &str, kind: &str) -> Option<Vec<u8>> {
         if !is_image {
             continue;
         }
+        // Content-Length precheck: bail before reading the body when the
+        // server announces an oversized response. The post-read len check
+        // below stays as a backstop for chunked responses with no header.
+        if resp.content_length().is_some_and(|len| len > MAX_ART_BYTES) {
+            continue;
+        }
         let Ok(bytes) = resp.bytes().await else {
             continue;
         };

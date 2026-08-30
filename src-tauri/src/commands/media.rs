@@ -174,25 +174,45 @@ fn read_image_as_data_url(path: &Path) -> Option<String> {
     ))
 }
 
-/// Fetch + extract, once. Any network error, timeout, non-200, or
-/// unparseable body is silently None — same "offline must fail fast and
-/// quiet" posture as capsule.rs's fetch_art_from_cdn.
-async fn fetch_and_extract(app_id: &str, lang: &str) -> Option<MediaInfo> {
+/// Fetch + extract, once. `Err(())` means the round-trip itself failed
+/// (client build, send, non-200 incl. 429, unparseable body) — a transport
+/// problem that should NOT be cached, so a later dwell retries. `Ok(None)`
+/// means Steam actually answered and said there's nothing to show
+/// (success:false, or a page with no screenshots/movie) — that IS the
+/// negative result callers may cache forever.
+async fn fetch_and_extract(app_id: &str, lang: &str) -> Result<Option<MediaInfo>, ()> {
     let lang_key = steam_lang_key(lang).unwrap_or("english");
     let client = reqwest::Client::builder()
         .timeout(Duration::from_secs(5))
         .build()
-        .ok()?;
+        .map_err(|_| ())?;
     let url = format!(
         "https://store.steampowered.com/api/appdetails?appids={}&l={}",
         app_id, lang_key
     );
-    let resp = client.get(&url).send().await.ok()?;
+    let resp = client.get(&url).send().await.map_err(|_| ())?;
     if !resp.status().is_success() {
-        return None;
+        return Err(());
     }
-    let body: Value = resp.json().await.ok()?;
-    extract_media(app_id, &body)
+    let body: Value = resp.json().await.map_err(|_| ())?;
+    Ok(extract_media(app_id, &body))
+}
+
+/// Whitelist for screenshot URLs pulled from Steam metadata/cache before
+/// they're fetched: https only, and only Steam's own CDN hosts. Guards
+/// against a poisoned/corrupt cache entry sending this app's network client
+/// somewhere unexpected.
+fn is_trusted_media_url(url_str: &str) -> bool {
+    let Ok(parsed) = reqwest::Url::parse(url_str) else {
+        return false;
+    };
+    if parsed.scheme() != "https" {
+        return false;
+    }
+    match parsed.host_str() {
+        Some(host) => host == "steamcdn-a.akamaihd.net" || host.ends_with(".steamstatic.com"),
+        None => false,
+    }
 }
 
 fn validate_app_id(app_id: &str) -> Result<(), String> {
@@ -246,13 +266,17 @@ pub async fn get_game_media(
         // through and refetch.
     }
 
-    let Some(info) = fetch_and_extract(&appId, &lang).await else {
-        write_negative_media_cache(&app, &appId);
-        return Ok(None);
-    };
-
-    write_media_cache(&app, &appId, &info);
-    Ok(Some(info))
+    match fetch_and_extract(&appId, &lang).await {
+        Ok(Some(info)) => {
+            write_media_cache(&app, &appId, &info);
+            Ok(Some(info))
+        }
+        Ok(None) => {
+            write_negative_media_cache(&app, &appId);
+            Ok(None)
+        }
+        Err(()) => Ok(None), // transport failure: no cache write, so a later dwell retries
+    }
 }
 
 /// One screenshot image, downloaded + cached on first request. Reuses
@@ -287,18 +311,22 @@ pub async fn get_screenshot(
     let info = match info {
         Some(i) => i,
         None => {
-            let Some(fresh) = fetch_and_extract(&appId, "en").await else {
-                write_negative_media_cache(&app, &appId);
-                return Ok(None);
-            };
-            write_media_cache(&app, &appId, &fresh);
-            fresh
+            // Transient fetch only (M7): hardcoded "en" here would poison
+            // language-specific movie URLs if persisted. Only get_game_media
+            // (called with the real locale) writes media_cache_path.
+            match fetch_and_extract(&appId, "en").await {
+                Ok(Some(fresh)) => fresh,
+                Ok(None) | Err(()) => return Ok(None),
+            }
         }
     };
 
     let Some(url) = info.screenshots.get(index) else {
         return Ok(None);
     };
+    if !is_trusted_media_url(url) {
+        return Ok(None);
+    }
 
     let client = reqwest::Client::builder()
         .timeout(Duration::from_secs(5))
@@ -317,6 +345,12 @@ pub async fn get_screenshot(
         .map(|ct| ct.starts_with("image/"))
         .unwrap_or(false);
     if !is_image {
+        return Ok(None);
+    }
+    // Content-Length precheck: bail before reading the body when the server
+    // announces an oversized response. The post-read len check below stays
+    // as a backstop for chunked responses with no Content-Length header.
+    if resp.content_length().is_some_and(|len| len > MAX_MEDIA_BYTES) {
         return Ok(None);
     }
     let Ok(bytes) = resp.bytes().await else {

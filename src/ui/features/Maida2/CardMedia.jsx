@@ -148,7 +148,14 @@ export default function CardMedia({ appId, reducedMotion, audioEnabled }) {
         // Explicit play() (redundant with the autoplay attribute when it
         // succeeds) so an autoplay-policy rejection is a promise we can
         // catch, rather than a silently-paused video with no signal.
-        v.play()?.catch(() => setVideoFailed(true));
+        // Unmuted autoplay only works where the platform's browser engine
+        // allows it (here, Windows dev/prod via additionalBrowserArgs's
+        // --autoplay-policy flag) — elsewhere the first play() rejects, so
+        // retry once muted before falling back to the slideshow.
+        v.play()?.catch(() => {
+            v.muted = true;
+            v.play()?.catch(() => setVideoFailed(true));
+        });
     };
 
     if (showVideo) {

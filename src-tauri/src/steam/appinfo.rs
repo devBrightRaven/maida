@@ -44,6 +44,13 @@ const TYPE_END: u8 = 0x08;
 const TYPE_INT64: u8 = 0x0a;
 const TYPE_END_ALT: u8 = 0x0b;
 
+// A run of 0x00 bytes decodes as TYPE_NODE + empty name every 2 bytes in V28
+// mode, so skip_object/skip_value's mutual recursion has no natural bound.
+// 64 levels is far beyond any real appinfo.vdf's KV nesting and cheap to
+// unwind; anything deeper is treated as malformed (caught by parse_inner's
+// per-entry error handling, which resyncs via the size field).
+const MAX_KV_DEPTH: u32 = 64;
+
 /// appid -> { steam lang key -> localized title }.
 pub type LocalizedTitles = HashMap<String, HashMap<String, String>>;
 
@@ -77,9 +84,18 @@ fn parse_inner(path: &Path) -> io::Result<LocalizedTitles> {
         }
         let mut table_cur = Cursor::new(&buf[offset as usize..]);
         let count = read_u32_le(&mut table_cur)?;
-        let mut strings = Vec::with_capacity((count as usize).min(200_000));
-        for _ in 0..count {
-            strings.push(read_cstr(&mut table_cur)?);
+        // A corrupt count shouldn't balloon memory/CPU: cap the loop itself
+        // (not just the preallocation), and stop early on EOF/corruption —
+        // a truncated string table is tolerated the same way the rest of
+        // this parser tolerates malformed input.
+        const MAX_STRING_TABLE_ENTRIES: u32 = 2_000_000;
+        let capped_count = count.min(MAX_STRING_TABLE_ENTRIES);
+        let mut strings = Vec::with_capacity(capped_count as usize);
+        for _ in 0..capped_count {
+            match read_cstr(&mut table_cur) {
+                Ok(s) => strings.push(s),
+                Err(_) => break,
+            }
         }
         Some(strings)
     } else if magic == MAGIC_V28 {
@@ -102,7 +118,10 @@ fn parse_inner(path: &Path) -> io::Result<LocalizedTitles> {
         if appid == 0 {
             break; // well-formed terminator
         }
-        let size = read_u32_le(&mut cur)? as u64;
+        let size = match read_u32_le(&mut cur) {
+            Ok(v) => v as u64,
+            Err(_) => break, // EOF mid-header: same partial-file tolerance as the appid read above
+        };
         let entry_end = cur.position() + size;
         if entry_end > buf.len() as u64 {
             log::warn!(
@@ -180,7 +199,7 @@ fn extract_app(
     skip_name(cur, table)?;
     if ty != TYPE_NODE {
         // Malformed/unexpected shape: not a node, nothing to recurse into.
-        skip_value(cur, ty, table)?;
+        skip_value(cur, ty, table, 0)?;
         return Ok((None, HashMap::new()));
     }
 
@@ -194,7 +213,7 @@ fn extract_app(
             // Found what we want; no need to walk extended/depots/config/etc.
             return extract_common_fields(cur, table);
         }
-        skip_value(cur, ty2, table)?;
+        skip_value(cur, ty2, table, 0)?;
     }
     Ok((None, HashMap::new()))
 }
@@ -225,30 +244,36 @@ fn extract_common_fields(
                     if ty2 == TYPE_STRING {
                         localized.insert(lang, read_cstr(cur)?);
                     } else {
-                        skip_value(cur, ty2, table)?;
+                        skip_value(cur, ty2, table, 0)?;
                     }
                 }
             }
-            _ => skip_value(cur, ty, table)?,
+            _ => skip_value(cur, ty, table, 0)?,
         }
     }
     Ok((name, localized))
 }
 
-fn skip_object(cur: &mut Cursor<&[u8]>, table: Option<&[String]>) -> io::Result<()> {
+fn skip_object(cur: &mut Cursor<&[u8]>, table: Option<&[String]>, depth: u32) -> io::Result<()> {
+    if depth > MAX_KV_DEPTH {
+        return Err(io::Error::new(
+            io::ErrorKind::InvalidData,
+            "KV nesting too deep",
+        ));
+    }
     loop {
         let ty = read_u8(cur)?;
         if ty == TYPE_END || ty == TYPE_END_ALT {
             return Ok(());
         }
         skip_name(cur, table)?;
-        skip_value(cur, ty, table)?;
+        skip_value(cur, ty, table, depth + 1)?;
     }
 }
 
-fn skip_value(cur: &mut Cursor<&[u8]>, ty: u8, table: Option<&[String]>) -> io::Result<()> {
+fn skip_value(cur: &mut Cursor<&[u8]>, ty: u8, table: Option<&[String]>, depth: u32) -> io::Result<()> {
     match ty {
-        TYPE_NODE => skip_object(cur, table),
+        TYPE_NODE => skip_object(cur, table, depth),
         TYPE_STRING => skip_cstr(cur),
         TYPE_INT32 | TYPE_POINTER | TYPE_COLOR | TYPE_FLOAT32 => skip_bytes(cur, 4),
         TYPE_UINT64 | TYPE_INT64 => skip_bytes(cur, 8),
@@ -489,6 +514,29 @@ mod tests {
         let app = result.get("730").expect("app 730 should be present");
         assert_eq!(app.get("tchinese").map(String::as_str), Some("測試遊戲"));
         assert_eq!(app.get("english").map(String::as_str), Some("Test Game"));
+    }
+
+    #[test]
+    fn test_deeply_nested_zeros_does_not_overflow_stack() {
+        // A run of 0x00 bytes decodes as TYPE_NODE + empty name every 2
+        // bytes in V28 mode (table=None), nesting skip_object/skip_value's
+        // mutual recursion arbitrarily deep. Without MAX_KV_DEPTH this
+        // overflows the stack (reproduced at ~16KiB); 64KiB proves the
+        // bound holds well past that.
+        let body = vec![0u8; 64 * 1024];
+
+        let mut buf = Vec::new();
+        buf.extend_from_slice(&MAGIC_V28.to_le_bytes());
+        buf.extend_from_slice(&1u32.to_le_bytes());
+        buf.extend(frame_entry(730, &body));
+        buf.extend_from_slice(&0u32.to_le_bytes()); // terminator
+
+        let dir = tempdir().unwrap();
+        let path = dir.path().join("appinfo.vdf");
+        fs::write(&path, &buf).unwrap();
+
+        // Must return (not crash) and yield nothing usable for the malformed entry.
+        assert!(parse_appinfo_file(&path).is_empty());
     }
 
     /// Runs only when this machine actually has a real appinfo.vdf (per the

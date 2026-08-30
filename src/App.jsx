@@ -142,11 +142,12 @@ function FrozenScreen({ onResume, guardMs = 5000, prescriptionLine = null, onCyc
             </p>
             {/* Static text, deliberately NOT a live region and not adjacent to the
                 sr-only announcer below — red line 7.5 keeps exactly two live regions. */}
-            {prescriptionLine && <p className="frozen-prescription">{prescriptionLine}</p>}
+            {prescriptionLine && <p id="frozen-prescription" className="frozen-prescription">{prescriptionLine}</p>}
             <button
                 ref={btnRef}
                 className="restart-selection-btn"
                 aria-label={ready ? t('ui.button.im_back') : t('ui.button.im_back_wait')}
+                aria-describedby={prescriptionLine ? 'frozen-prescription' : undefined}
                 onClick={guardedResume}
                 disabled={!ready}
             >
@@ -358,8 +359,8 @@ function App() {
         setResumeGuard(seconds * 1000);
     }, []);
 
-    // Maida 2.0 focus-expansion dwell-to-play delay (3 or 5 seconds; default 5)
-    const [maida2PlayDelaySeconds, setMaida2PlayDelaySeconds] = useState(5);
+    // Maida 2.0 focus-expansion dwell-to-play delay (1 / 3 / 6 seconds; default 3)
+    const [maida2PlayDelaySeconds, setMaida2PlayDelaySeconds] = useState(3);
     useEffect(() => {
         let cancelled = false;
         bridge.getMaida2PlayDelaySeconds().then((seconds) => {

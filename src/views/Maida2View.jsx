@@ -67,7 +67,7 @@ function lastPlayedSubline(game) {
  * Accessibility shell cloned from KamaeView; per-card hold cloned from
  * RinView's visit-button wiring (pointer events + Enter keydown/keyup).
  */
-export default function Maida2View({ games, hooksState, onHookAction, onLaunch, themeToggle, onNavigateLegal, playDelaySeconds = 5, previewAudio = true, cardOpacity = 70 }) {
+export default function Maida2View({ games, hooksState, onHookAction, onLaunch, themeToggle, onNavigateLegal, playDelaySeconds = 3, previewAudio = true, cardOpacity = 70 }) {
     const prefersReducedMotion = usePrefersReducedMotion();
     // SR guide announces once per install, gated by localStorage to avoid
     // re-announcement on every re-render / face switch. See KamaeView.
@@ -228,6 +228,7 @@ export default function Maida2View({ games, hooksState, onHookAction, onLaunch, 
     const handleCardBlur = useCallback((e) => {
         const related = e.relatedTarget;
         if (related && related.closest && related.closest('.m2-card')) return;
+        if (dwellTimerRef.current) clearTimeout(dwellTimerRef.current);
         if (playTimerRef.current) clearTimeout(playTimerRef.current);
         focusedCardKeyRef.current = null;
         setExpandedKey(null);

@@ -80,11 +80,11 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
             const guard = await bridge.getFrozenGuardDuration();
             setFrozenGuardSeconds(guard);
             const playDelay = await bridge.getMaida2PlayDelaySeconds();
-            setPlayDelaySeconds(playDelay);
+            if (typeof playDelay === 'number') setPlayDelaySeconds(playDelay);
             const audioEnabled = await bridge.getMaida2PreviewAudio();
-            setPreviewAudio(audioEnabled);
+            if (typeof audioEnabled === 'boolean') setPreviewAudio(audioEnabled);
             const opacity = await bridge.getMaida2CardOpacity();
-            setCardOpacity(opacity);
+            if (typeof opacity === 'number') setCardOpacity(opacity);
         })();
     }, []);
 
@@ -128,9 +128,9 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
         };
     }, []);
 
-    // Discrete 2-option control (3s / 5s) — no debounce needed, a button
-    // press is already a single discrete choice (unlike the guard slider's
-    // continuous drag above).
+    // Discrete 3-option control (1s / 3s / 6s) — no debounce needed, a
+    // button press is already a single discrete choice (unlike the guard
+    // slider's continuous drag above).
     const handlePlayDelayChange = useCallback((n) => {
         setPlayDelaySeconds(n);
         if (onMaida2PlayDelayChange) onMaida2PlayDelayChange(n);
