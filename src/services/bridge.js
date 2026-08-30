@@ -34,6 +34,28 @@ const bridge = {
 
     performBackgroundSnapshot: () => call('perform_background_snapshot'),
 
+    // Local Steam librarycache art only — zero network. kind is "capsule"
+    // (portrait/landscape cover) or "hero" (wide banner). Missing art
+    // (Ok(None)), an invalid kind (Err), or a failed invoke all degrade to
+    // null via call().
+    getArt: (appId, kind) => call('get_art', { appId, kind }),
+
+    // Localized Steam titles, parsed locally from appinfo.vdf. Returns only
+    // appIds that have a name in `lang`; a failed invoke degrades to null
+    // (Maida2View then falls back to each game's own title, same as a
+    // missing per-appid entry).
+    getLocalizedTitles: (appIds, lang) => call('get_localized_titles', { appIds, lang }),
+
+    // Official screenshot + microtrailer metadata (Maida 2.0 focus-expansion
+    // preview). null covers both "no media available" (Ok(None)) and a
+    // failed invoke — callers can't tell them apart, same as getArt.
+    getGameMedia: (appId, lang) => call('get_game_media', { appId, lang }),
+
+    // One screenshot image as a base64 data URL, downloaded + cached on
+    // first request. index is 0-based against the list getGameMedia
+    // returned; null covers "no such screenshot" and a failed invoke.
+    getScreenshot: (appId, index) => call('get_screenshot', { appId, index }),
+
     // --- Showcase & Warehouse ---
     getShowcase: async () => {
         const result = await call('get_showcase');
@@ -55,6 +77,13 @@ const bridge = {
     appendSessionLog: (entry) => call('append_session_log', { entry }),
 
     exportSessionLog: () => call('export_session_log'),
+
+    // --- Trace (Maida 2.0) ---
+    // Direct invoke on purpose: trace writes must surface failures, not
+    // swallow them into null (setFrozenGuardDuration precedent).
+    appendTrace: (entry) => invoke('append_trace', { entry }),
+
+    exportTrace: () => call('export_trace'),
 
     // --- Game launch ---
     launchGame: (steamUrl) => call('launch_game', { url: steamUrl }),
@@ -117,6 +146,48 @@ const bridge = {
             throw new Error(`frozen guard duration out of range: ${seconds} (expected 5..30)`);
         }
         const result = await call('set_frozen_guard_duration', { seconds: n });
+        return result ?? { success: false, error: 'not implemented' };
+    },
+
+    // Maida 2.0 focus-expansion dwell-to-play delay. Only 3 or 5 seconds are
+    // valid — a discrete either/or, not a range like the frozen guard above.
+    getMaida2PlayDelaySeconds: async () => {
+        const result = await call('get_maida2_play_delay_seconds');
+        return result === 3 || result === 5 ? result : 5;
+    },
+
+    setMaida2PlayDelaySeconds: async (seconds) => {
+        const n = Math.round(Number(seconds));
+        if (n !== 3 && n !== 5) {
+            throw new Error(`maida2 play delay out of range: ${seconds} (expected 3 or 5)`);
+        }
+        const result = await call('set_maida2_play_delay_seconds', { seconds: n });
+        return result ?? { success: false, error: 'not implemented' };
+    },
+
+    // Maida 2.0 dwell-to-play preview audio (user ruling 2026-08-31: silence
+    // clause repealed). Boolean, default on — unlike the discrete/range
+    // preferences above, there's nothing to clamp.
+    getMaida2PreviewAudio: async () => {
+        const result = await call('get_maida2_preview_audio');
+        return typeof result === 'boolean' ? result : true;
+    },
+
+    setMaida2PreviewAudio: (enabled) => call('set_maida2_preview_audio', { enabled: Boolean(enabled) }),
+
+    // Maida 2.0 card opacity (percent, 40..=100, default 70) — continuous
+    // range like the frozen guard above, not a discrete either/or.
+    getMaida2CardOpacity: async () => {
+        const result = await call('get_maida2_card_opacity');
+        return typeof result === 'number' ? result : 70;
+    },
+
+    setMaida2CardOpacity: async (percent) => {
+        const n = Math.round(Number(percent));
+        if (!Number.isFinite(n) || n < 40 || n > 100) {
+            throw new Error(`maida2 card opacity out of range: ${percent} (expected 40..100)`);
+        }
+        const result = await call('set_maida2_card_opacity', { percent: n });
         return result ?? { success: false, error: 'not implemented' };
     },
 };

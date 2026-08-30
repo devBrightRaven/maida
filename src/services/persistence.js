@@ -9,6 +9,10 @@ const USER_DATA_DEFAULTS = {
         exclude_vr_only: false,
         exclude_appids: [],
         exclude_family_share: false
+    },
+    hooks: {                // Maida 2.0 hooks state (state authority; trace is history)
+        hooks: [],
+        gameStates: {}
     }
 };
 
