@@ -144,7 +144,9 @@ export default function CardMedia({ appId, reducedMotion, audioEnabled }) {
     const handleVideoReady = () => {
         const v = videoRef.current;
         if (!v) return;
-        if (audioEnabled) v.volume = 0.35;
+        // Always set, not only when audible now: the muted prop can flip to
+        // false later (window regains focus) and must not jump to volume 1.
+        v.volume = 0.35;
         // Explicit play() (redundant with the autoplay attribute when it
         // succeeds) so an autoplay-policy rejection is a promise we can
         // catch, rather than a silently-paused video with no signal.

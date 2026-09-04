@@ -7,6 +7,17 @@
     color: var(--t-text);
     overflow-y: auto;
     position: relative;
+    /* Effective glass values for the cards. --m2-card-alpha (40..100) is the
+       user's opacity preference, set inline on this element. */
+    --m2-alpha-eff: calc(var(--m2-card-alpha, 70) * 1%);
+    --m2-card-blur: 10px;
+}
+
+/* While the backdrop video plays, the cards must actually read as glass:
+   halve the tint and thin the blur so the video shows through them. */
+.maida2-view--playing {
+    --m2-alpha-eff: calc(var(--m2-card-alpha, 70) * 0.45%);
+    --m2-card-blur: 3px;
 }
 
 /* Focus-dwell hero backdrop — ambient, decorative, never affects layout.
@@ -54,9 +65,19 @@
     inset: 0;
     z-index: 0;
     pointer-events: none;
+    /* Black backing: the layer's partial opacity composites against this
+       instead of the page bg. Over a light page bg the old bare layer
+       averaged the video toward white — a hazy, washed-out picture. */
+    background: #000;
     opacity: 0.55;
     -webkit-mask-image: linear-gradient(to bottom, black 0%, rgba(0, 0, 0, 0.5) 55%, transparent 94%);
     mask-image: linear-gradient(to bottom, black 0%, rgba(0, 0, 0, 0.5) 55%, transparent 94%);
+}
+
+/* Light theme still mixes (1 - opacity) of white into every pixel; a higher
+   opacity keeps the video legible instead of fog. */
+[data-theme='light'] .m2-backdrop-media {
+    opacity: 0.85;
 }
 
 .maida2-content {
@@ -78,6 +99,13 @@
     border-bottom: 1px solid var(--t-border-subtle);
     padding-bottom: 0.375rem;
     margin: 0 0 0.75rem;
+}
+
+/* Zone titles sit on bare background; while the video backdrop plays they
+   sit on moving imagery — a bg-colored glow keeps them legible without
+   giving them a card of their own. */
+.maida2-view--playing .m2-zone-title {
+    text-shadow: 0 1px 4px var(--t-bg), 0 0 12px var(--t-bg);
 }
 
 .m2-zone-empty {
@@ -134,9 +162,9 @@
        cards themselves, while the blur keeps text contrast intact.
        --m2-card-alpha is set inline on .maida2-view from the user's card
        opacity preference (40..100, default 70). */
-    background: color-mix(in srgb, var(--t-surface) calc(var(--m2-card-alpha, 70) * 1%), transparent);
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
+    background: color-mix(in srgb, var(--t-surface) var(--m2-alpha-eff, 70%), transparent);
+    -webkit-backdrop-filter: blur(var(--m2-card-blur, 10px));
+    backdrop-filter: blur(var(--m2-card-blur, 10px));
     color: var(--t-text);
     border: 1px solid var(--t-border);
     border-radius: 6px;
@@ -144,22 +172,6 @@
     cursor: pointer;
     font: inherit;
     transition: border-color 0.15s ease, background 0.15s ease;
-}
-
-/* Decorative imagery yields entirely under a high-contrast preference,
-   and cards return to fully opaque ground. Must appear AFTER the .m2-card
-   rule above: same specificity, so source order decides the winner and
-   this needs to win when the preference is active. */
-@media (prefers-contrast: more) {
-    .m2-hero-backdrop,
-    .m2-backdrop-media {
-        display: none;
-    }
-    .m2-card {
-        background: var(--t-surface);
-        -webkit-backdrop-filter: none;
-        backdrop-filter: none;
-    }
 }
 
 /* Compact row: thumb + text, exactly the previous .m2-card row layout —
@@ -193,8 +205,11 @@
     border-radius: 6px;
 }
 
+/* Hover keeps the glass alpha. An opaque hover fill was the "cards never
+   look translucent" bug: hover-dwell focus means the card being looked at
+   is always hovered, so it was always painted solid. */
 .m2-card:hover {
-    background: var(--t-hover-bg);
+    background: color-mix(in srgb, var(--t-hover-bg) var(--m2-alpha-eff, 70%), transparent);
     color: var(--t-hover-text);
 }
 
@@ -205,6 +220,26 @@
     outline: none;
     border-color: var(--t-focus-border);
     box-shadow: 0 0 0 2px var(--t-bg), 0 0 0 4px var(--t-focus-border);
+}
+
+/* Decorative imagery yields entirely under a high-contrast preference, and
+   cards return to fully opaque ground. Must appear AFTER the .m2-card and
+   .m2-card:hover rules above: same specificity, so source order decides
+   the winner and this needs to win when the preference is active. */
+@media (prefers-contrast: more) {
+    .m2-hero-backdrop,
+    .m2-backdrop-media {
+        display: none;
+    }
+    .m2-card,
+    .m2-card:hover {
+        background: var(--t-surface);
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+    }
+    .m2-card:hover {
+        background: var(--t-hover-bg);
+    }
 }
 
 .m2-card-title {
@@ -226,35 +261,45 @@
 }
 
 /* Focus-dwell expansion region (hero, or enlarged capsule fallback).
-   Collapsed by default (max-height 0, overflow hidden) so unfocused/
-   not-yet-dwelled cards are visually identical to before this feature —
-   only .m2-card-expand--open grows it. aria-hidden + pointer-events: none
-   because it never carries the card's accessible name or interaction. */
+   An OVERLAY, not in-flow: it hangs below the card and paints over the
+   following cards instead of pushing them. In-flow expansion reflowed the
+   whole list on every focus change, yanking the next card out from under
+   a stationary mouse cursor (hover-dwell then re-fired down the list).
+   aria-hidden + pointer-events: none because it never carries the card's
+   accessible name or interaction. */
 .m2-card-expand {
-    position: relative;
-    width: 100%;
-    /* Children are absolutely positioned, so the box has no in-flow
-       content: an explicit height (not max-height, which only caps)
-       is what actually opens it. */
+    position: absolute;
+    top: calc(100% + 0.375rem);
+    left: 0;
+    right: 0;
     height: 0;
     overflow: hidden;
     opacity: 0;
+    /* Solid backing so the translucent card underneath never bleeds
+       through while the image/video loads. */
+    background-color: var(--t-bg);
     background-size: cover;
     background-position: center;
     border-radius: 6px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
     pointer-events: none;
 }
 
 .m2-card-expand--open {
     height: clamp(160px, 28vh, 240px);
     opacity: 1;
-    /* Breathing room between the compact row and the grown media area. */
-    margin-top: 0.625rem;
+}
+
+/* The expanded card must let its overlay escape (overflow) and paint above
+   its sibling cards (z-index; .m2-card is already position: relative). */
+.m2-card--expanded {
+    overflow: visible;
+    z-index: 2;
 }
 
 @media (prefers-reduced-motion: no-preference) {
     .m2-card-expand {
-        transition: height 0.2s ease-out, opacity 0.2s ease-out, margin-top 0.2s ease-out;
+        transition: height 0.2s ease-out, opacity 0.2s ease-out;
     }
 }
 
@@ -297,8 +342,11 @@
     position: absolute;
     left: 0;
     bottom: 0;
-    height: 3px;
+    height: 5px;
     background: var(--t-accent);
+    /* A bg-colored hairline above the fill separates it from the card's
+       own accent-colored focus border, which it otherwise blended into. */
+    box-shadow: 0 -1px 0 var(--t-bg);
     pointer-events: none;
 }
 

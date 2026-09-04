@@ -337,6 +337,11 @@ export default function Maida2View({ games, hooksState, onHookAction, onLaunch, 
     // still there when it fires, and nothing else claims input focus right
     // now, move real focus onto the card (captured via currentTarget before
     // the timeout, not re-read from the event after it's gone stale).
+    // Deliberately NOT gated on document.hasFocus(): DOM focus inside an
+    // inactive window steals nothing from the OS, and a window launched
+    // from the Start Menu is routinely still inactive when the mouse first
+    // reaches it. What an inactive window must not do is make noise —
+    // that's windowFocused below, which only governs preview audio.
     const hoverTimerRef = useRef(null);
     const handleCardMouseEnter = useCallback((e) => {
         const el = e.currentTarget;
@@ -347,10 +352,25 @@ export default function Maida2View({ games, hooksState, onHookAction, onLaunch, 
             const activeTag = active?.tagName;
             const inputFocused = activeTag === 'INPUT' || activeTag === 'TEXTAREA';
             const noteEditorOpen = document.querySelector('.m2-note-editor');
-            if (document.hasFocus() && !noteEditorOpen && !inputFocused) {
+            if (!noteEditorOpen && !inputFocused) {
                 el.focus();
             }
         }, HOVER_FOCUS_MS);
+    }, []);
+
+    // Preview audio follows OS window focus: a background window may show
+    // a silent preview, never a loud one. Unmutes live when the window is
+    // activated (CardMedia's muted prop tracks this).
+    const [windowFocused, setWindowFocused] = useState(() => document.hasFocus());
+    useEffect(() => {
+        const onFocus = () => setWindowFocused(true);
+        const onBlur = () => setWindowFocused(false);
+        window.addEventListener('focus', onFocus);
+        window.addEventListener('blur', onBlur);
+        return () => {
+            window.removeEventListener('focus', onFocus);
+            window.removeEventListener('blur', onBlur);
+        };
     }, []);
     const handleCardMouseLeave = useCallback(() => {
         if (hoverTimerRef.current) {
@@ -523,7 +543,7 @@ export default function Maida2View({ games, hooksState, onHookAction, onLaunch, 
             <li key={game.id} className="m2-item">
                 <button
                     type="button"
-                    className="m2-card m2-hold"
+                    className={`m2-card m2-hold${expandedKey === cardKey ? ' m2-card--expanded' : ''}`}
                     data-game-id={game.id}
                     aria-describedby="m2-hold-hint"
                     onPointerDown={() => pressStart(game, cardKey)}
@@ -575,12 +595,16 @@ export default function Maida2View({ games, hooksState, onHookAction, onLaunch, 
     };
 
     return (
-        <main className="maida2-view" ref={containerRef} style={{ '--m2-card-alpha': cardOpacity }}>
+        <main
+            className={`maida2-view${playFor ? ' maida2-view--playing' : ''}`}
+            ref={containerRef}
+            style={{ '--m2-card-alpha': cardOpacity }}
+        >
             {/* Ambient focus-dwell hero backdrop — purely decorative, never
                 the accessible name/description of anything. CSS background-
                 image (not <img>) so there's no alt text to get wrong. */}
             <div
-                className={`m2-hero-backdrop${heroUrl ? ' m2-hero-backdrop--visible' : ''}`}
+                className={`m2-hero-backdrop${heroUrl && !playFor ? ' m2-hero-backdrop--visible' : ''}`}
                 aria-hidden="true"
                 style={heroUrl ? { backgroundImage: `url(${heroUrl})` } : undefined}
             />
@@ -589,7 +613,7 @@ export default function Maida2View({ games, hooksState, onHookAction, onLaunch, 
                 CardMedia's own reducedMotion check keeps it from autoplaying. */}
             {playFor && (
                 <div className="m2-backdrop-media" aria-hidden="true">
-                    <CardMedia appId={playFor.appId} reducedMotion={prefersReducedMotion} audioEnabled={previewAudio} />
+                    <CardMedia appId={playFor.appId} reducedMotion={prefersReducedMotion} audioEnabled={previewAudio && windowFocused} />
                 </div>
             )}
             {showSrGuide && (
@@ -634,7 +658,7 @@ export default function Maida2View({ games, hooksState, onHookAction, onLaunch, 
                                         class routes gamepad A through PointerEvents. */}
                                     <button
                                         type="button"
-                                        className="m2-card m2-hold"
+                                        className={`m2-card m2-hold${expandedKey === cardKey ? ' m2-card--expanded' : ''}`}
                                         data-game-id={game.id}
                                         aria-describedby="m2-hold-hint"
                                         onPointerDown={() => pressStart(game, cardKey)}
