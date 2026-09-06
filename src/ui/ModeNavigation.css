@@ -268,7 +268,13 @@ main:has(> .mode-navigation) {
     height: auto;
     min-height: 0;
     padding: 4rem 1.5rem 2rem;
-    overflow: clip;
+    /* Clip only the horizontal axis. The vertical axis must stay visible so
+       .app-root (below) is the one scroll container, as in the 1.x layout:
+       body is overflow:hidden, so a clip here would leave no scrollable
+       ancestor at all (mouse wheel, PageDown and the R-stick scroll in
+       utils/scroll.js, which only accepts auto/scroll, would all stop). */
+    overflow-x: clip;
+    overflow-y: visible;
 }
 main:has(> .mode-navigation) > .mode-navigation {
     grid-column: 1;
@@ -348,7 +354,7 @@ main:has(> .mode-navigation) { transition: none; }
 .rin-stage .primary-actions .mvp-btn { font-size: 1rem; }
 .rin-title-block, .kamae-title-block { display: none; }
 main:has(> .mode-navigation) > .trace-save-warning { grid-column: 1 / -1; grid-row: 2; }
-.app-root:has(main > .mode-navigation) { width: 100%; height: auto; overflow: clip; }
+.app-root:has(main > .mode-navigation) { width: 100%; height: 100vh; overflow-x: clip; overflow-y: auto; }
 .app-root:has(main > .mode-navigation) .global-version-tag { position: static; padding: 1rem; text-align: right; }
 @keyframes mode-mark { from { transform: scaleY(.15); } to { transform: scaleY(1); } }
 @keyframes mode-open { from { transform: scale(.65) rotate(-45deg); } to { transform: scale(1) rotate(0); } }
