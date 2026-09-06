@@ -96,5 +96,23 @@ export function resetAllScores(games) {
     return games.map(g => ({ ...g, score: 0 }));
 }
 
+/**
+ * Compare two showcase (kata) pools. null = no pool (all games).
+ * Order-insensitive: the pool is a set of game IDs for the engine's
+ * candidatePool, so a reordered kata is the same pool.
+ * Returns true when Rin must re-roll because the pool changed.
+ */
+export function showcasePoolChanged(prevIds, nextIds) {
+    if (prevIds === nextIds) return false;
+    if (!prevIds || !nextIds) return true;
+    const prev = new Set(prevIds);
+    const next = new Set(nextIds);
+    if (prev.size !== next.size) return true;
+    for (const id of next) {
+        if (!prev.has(id)) return true;
+    }
+    return false;
+}
+
 // Export constants for tests
 export { SCORE_MAX, SCORE_MIN, TRY_DELTA, SKIP_DELTA, PENALTY_CAP };

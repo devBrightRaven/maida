@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getActiveGame, getPrescription } from '../core/engine';
 import { applyConstraints } from '../core/constraints';
-import { applyTryScore, applySkipScore, updateGameScore, mergePenalties, removeFromSkipSets, mergeExcludeAppId, isFirstRun, resetAllScores } from '../core/session-logic';
+import { applyTryScore, applySkipScore, updateGameScore, mergePenalties, removeFromSkipSets, mergeExcludeAppId, isFirstRun, resetAllScores, showcasePoolChanged } from '../core/session-logic';
 import { debugStore } from '../core/debugStore';
 import { loadData, saveData } from '../services/persistence';
 import bridge from '../services/bridge';
@@ -337,7 +337,10 @@ export function useMaidaSession() {
         }
     };
 
-    // Reload showcase and re-roll (called when switching back from Kamae)
+    // Reload showcase on entering Rin. Re-roll only when the kata pool
+    // actually changed (Kamae switched or edited a kata). Passing through
+    // Rin via L1/R1, F8 or the sidebar with an unchanged pool keeps the
+    // game already on screen (user ruling 2026-09-06).
     const reloadShowcase = async () => {
         // Don't re-roll if a game is anchored
         if (isAnchored) return;
@@ -347,6 +350,7 @@ export function useMaidaSession() {
         const katas = showcaseData?.katas || [];
         const activeKata = activeKataId ? katas.find(k => k.id === activeKataId) : null;
         const newIds = activeKata?.gameIds?.length > 0 ? activeKata.gameIds : null;
+        if (session.game && !showcasePoolChanged(showcaseIds, newIds)) return;
         setShowcaseIds(newIds);
         // Re-roll with updated pool
         const gamesSource = data.games;

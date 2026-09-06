@@ -8,6 +8,7 @@ import {
     mergeExcludeAppId,
     isFirstRun,
     resetAllScores,
+    showcasePoolChanged,
     SCORE_MAX,
     SCORE_MIN,
     PENALTY_CAP
@@ -219,5 +220,50 @@ describe('resetAllScores', () => {
         const result = resetAllScores(games);
         expect(result[0].title).toBe('Test');
         expect(result[0].steamAppId).toBe('123');
+    });
+});
+
+// =============================================================
+// showcasePoolChanged
+// =============================================================
+describe('showcasePoolChanged', () => {
+    it('no pool before and after: unchanged', () => {
+        expect(showcasePoolChanged(null, null)).toBe(false);
+    });
+
+    it('same ids in same order: unchanged', () => {
+        expect(showcasePoolChanged(['a', 'b'], ['a', 'b'])).toBe(false);
+    });
+
+    it('same ids reordered: unchanged', () => {
+        expect(showcasePoolChanged(['a', 'b', 'c'], ['c', 'a', 'b'])).toBe(false);
+    });
+
+    it('same ids with duplicates: unchanged', () => {
+        expect(showcasePoolChanged(['a', 'b'], ['a', 'b', 'b'])).toBe(false);
+    });
+
+    it('pool gained a game: changed', () => {
+        expect(showcasePoolChanged(['a'], ['a', 'b'])).toBe(true);
+    });
+
+    it('pool lost a game: changed', () => {
+        expect(showcasePoolChanged(['a', 'b'], ['a'])).toBe(true);
+    });
+
+    it('pool swapped a game: changed', () => {
+        expect(showcasePoolChanged(['a', 'b'], ['a', 'c'])).toBe(true);
+    });
+
+    it('no pool -> kata pool: changed', () => {
+        expect(showcasePoolChanged(null, ['a'])).toBe(true);
+    });
+
+    it('kata pool -> no pool: changed', () => {
+        expect(showcasePoolChanged(['a'], null)).toBe(true);
+    });
+
+    it('no pool vs empty array: changed (callers normalise [] to null)', () => {
+        expect(showcasePoolChanged(null, [])).toBe(true);
     });
 });
