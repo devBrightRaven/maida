@@ -284,6 +284,14 @@ main:has(> .mode-navigation) > .mode-navigation {
     align-items: stretch;
     gap: 1.25rem;
     margin: 0;
+    /* The rail stays put while the content column scrolls inside .app-root.
+       `top` equals main's padding-top so the rail never moves from where it
+       first renders. The hero/media backdrops are position: fixed, so they
+       stay whole behind both columns. Disabled in the stacked layout below
+       (40rem), where a pinned rail would eat the little vertical space left. */
+    position: sticky;
+    top: 4rem;
+    align-self: start;
 }
 .mode-navigation__tabs, .mode-navigation__pager, .mode-navigation__utilities {
     flex-direction: column;
@@ -362,6 +370,7 @@ main:has(> .mode-navigation) > .trace-save-warning { grid-column: 1 / -1; grid-r
 @media (max-width: 40rem) {
     main:has(> .mode-navigation) { grid-template-columns: minmax(min(100%, 20rem), 1fr); padding: 3.5rem 1rem 2rem; gap: 1.5rem; }
     main:has(> .mode-navigation) > :is(.maida2-content, .kamae-content, .rin-stage) { grid-column: 1; grid-row: 2; }
+    main:has(> .mode-navigation) > .mode-navigation { position: static; }
     main:has(> .mode-navigation) > .trace-save-warning { grid-row: 3; }
     .rin-stage .primary-actions { flex-wrap: wrap; gap: .75rem; }
     .rin-stage .primary-actions .mvp-btn { width: 100%; }
