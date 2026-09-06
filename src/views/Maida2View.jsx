@@ -67,7 +67,7 @@ function lastPlayedSubline(game) {
  * Accessibility shell cloned from KamaeView; per-card hold cloned from
  * RinView's visit-button wiring (pointer events + Enter keydown/keyup).
  */
-export default function Maida2View({ games, hooksState, onHookAction, onLaunch, themeToggle, onNavigateLegal, playDelaySeconds = 3, previewAudio = true, cardOpacity = 70 }) {
+export default function Maida2View({ navigation, games, hooksState, onHookAction, onLaunch, onHistory, themeToggle, onNavigateLegal, playDelaySeconds = 3, previewAudio = true, cardOpacity = 70 }) {
     const prefersReducedMotion = usePrefersReducedMotion();
     // SR guide announces once per install, gated by localStorage to avoid
     // re-announcement on every re-render / face switch. See KamaeView.
@@ -275,6 +275,9 @@ export default function Maida2View({ games, hooksState, onHookAction, onLaunch, 
     // Inline hook-note editor (opened by a completed hold): { game, key }
     const [noteFor, setNoteFor] = useState(null);
     const [note, setNote] = useState('');
+    const [hookBusy, setHookBusy] = useState(false);
+    const [hookError, setHookError] = useState('');
+    const hookBusyRef = useRef(false);
     const noteInputRef = useRef(null);
 
     const resetHold = useCallback(() => {
@@ -288,6 +291,10 @@ export default function Maida2View({ games, hooksState, onHookAction, onLaunch, 
     }, []);
 
     const animateHold = useCallback(() => {
+        if (hookBusyRef.current) {
+            resetHold();
+            return;
+        }
         if (!holdStart.current) return;
         const elapsed = Date.now() - holdStart.current;
         const progress = Math.min(elapsed / HOLD_THRESHOLD, 1);
@@ -311,7 +318,7 @@ export default function Maida2View({ games, hooksState, onHookAction, onLaunch, 
     }, [resetHold]);
 
     const pressStart = useCallback((game, key) => {
-        if (holdStart.current) return;
+        if (hookBusyRef.current || holdStart.current) return;
         holdStart.current = Date.now();
         lastHaptic.current = Date.now();
         holdGameRef.current = game;
@@ -321,6 +328,10 @@ export default function Maida2View({ games, hooksState, onHookAction, onLaunch, 
     }, [animateHold]);
 
     const pressEnd = useCallback(() => {
+        if (hookBusyRef.current) {
+            resetHold();
+            return;
+        }
         if (!holdStart.current) return;
         const elapsed = Date.now() - holdStart.current;
         const game = holdGameRef.current;
@@ -398,7 +409,9 @@ export default function Maida2View({ games, hooksState, onHookAction, onLaunch, 
     const focusPrimary = useCallback(() => {
         const container = containerRef.current;
         if (!container) return;
-        const primary = container.querySelector('.m2-card') || container.querySelector('.theme-toggle');
+        const primary = container.querySelector('.m2-card')
+            || container.querySelector('.mode-navigation button')
+            || container.querySelector('.theme-toggle');
         primary?.focus();
     }, []);
 
@@ -413,8 +426,8 @@ export default function Maida2View({ games, hooksState, onHookAction, onLaunch, 
         requestAnimationFrame(() => focusPrimary());
     }, [focusPrimary]);
 
-    const confirmNote = useCallback(() => {
-        if (!noteFor) return;
+    const confirmNote = useCallback(async () => {
+        if (!noteFor || hookBusyRef.current) return;
         const trimmed = note.trim();
         if (!trimmed) {
             // createHook no-ops on an empty note: keep the editor open and ask
@@ -423,30 +436,75 @@ export default function Maida2View({ games, hooksState, onHookAction, onLaunch, 
             return;
         }
         const game = noteFor.game;
-        const result = onHookAction({ type: 'create', gameId: game.id, note: trimmed, title: game.title });
-        setNoteFor(null);
-        setNote('');
-        if (result) announce(t('ui.maida2.hook_created_status'));
-        requestAnimationFrame(() => focusCard(game.id));
+        setHookError('');
+        hookBusyRef.current = true;
+        setHookBusy(true);
+        try {
+            const result = await onHookAction({ type: 'create', gameId: game.id, note: trimmed, title: game.title });
+            if (result == null) {
+                setHookError(t('ui.history.save_error'));
+                return;
+            }
+            setNoteFor(null);
+            setNote('');
+            announce(t('ui.maida2.hook_created_status'));
+            requestAnimationFrame(() => focusCard(game.id));
+        } catch {
+            setHookError(t('ui.history.save_error'));
+        } finally {
+            hookBusyRef.current = false;
+            setHookBusy(false);
+        }
     }, [noteFor, note, onHookAction, announce, focusCard]);
 
     const cancelNote = useCallback(() => {
-        if (!noteFor) return;
+        if (!noteFor || hookBusyRef.current) return;
         const gameId = noteFor.game.id;
+        setHookError('');
         setNoteFor(null);
         setNote('');
         requestAnimationFrame(() => focusCard(gameId));
     }, [noteFor, focusCard]);
 
-    const handleRetract = useCallback((hook) => {
-        onHookAction({ type: 'retract', hookId: hook.id });
-        announce(t('ui.maida2.hook_retracted_status'));
-        requestAnimationFrame(() => focusPrimary());
+    const handleRetract = useCallback(async (hook) => {
+        if (hookBusyRef.current) return;
+        setHookError('');
+        hookBusyRef.current = true;
+        setHookBusy(true);
+        try {
+            const result = await onHookAction({ type: 'retract', hookId: hook.id });
+            if (result == null) {
+                setHookError(t('ui.history.save_error'));
+                return;
+            }
+            announce(t('ui.maida2.hook_retracted_status'));
+            requestAnimationFrame(() => focusPrimary());
+        } catch {
+            setHookError(t('ui.history.save_error'));
+        } finally {
+            hookBusyRef.current = false;
+            setHookBusy(false);
+        }
     }, [onHookAction, announce, focusPrimary]);
 
-    const handleSetState = useCallback((gameId, state) => {
-        onHookAction({ type: 'setState', gameId, state });
-        announce(t('ui.maida2.state_set_status', { state: t(`ui.maida2.state_${state}`) }));
+    const handleSetState = useCallback(async (gameId, state) => {
+        if (hookBusyRef.current) return;
+        setHookError('');
+        hookBusyRef.current = true;
+        setHookBusy(true);
+        try {
+            const result = await onHookAction({ type: 'setState', gameId, state });
+            if (result == null) {
+                setHookError(t('ui.history.save_error'));
+                return;
+            }
+            announce(t('ui.maida2.state_set_status', { state: t(`ui.maida2.state_${state}`) }));
+        } catch {
+            setHookError(t('ui.history.save_error'));
+        } finally {
+            hookBusyRef.current = false;
+            setHookBusy(false);
+        }
     }, [onHookAction, announce]);
 
     // D-pad navigation: cycle through interactive elements, KamaeView shape.
@@ -497,6 +555,7 @@ export default function Maida2View({ games, hooksState, onHookAction, onLaunch, 
 
     // B: close the note editor if open, otherwise return focus to primary
     const handleBack = useCallback(() => {
+        if (hookBusyRef.current) return;
         if (noteFor) {
             cancelNote();
             return;
@@ -519,6 +578,7 @@ export default function Maida2View({ games, hooksState, onHookAction, onLaunch, 
                 className="m2-note-input"
                 type="text"
                 value={note}
+                disabled={hookBusy}
                 onChange={(e) => setNote(e.target.value)}
                 onKeyDown={(e) => {
                     // e.repeat guard: the Enter still held from the 3s hold
@@ -527,7 +587,7 @@ export default function Maida2View({ games, hooksState, onHookAction, onLaunch, 
                     if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); cancelNote(); }
                 }}
             />
-            <button type="button" className="m2-note-confirm" onClick={confirmNote}>
+            <button type="button" className="m2-note-confirm" onClick={confirmNote} disabled={hookBusy}>
                 {t('ui.settings.save')}
             </button>
         </div>
@@ -545,6 +605,7 @@ export default function Maida2View({ games, hooksState, onHookAction, onLaunch, 
                     type="button"
                     className={`m2-card m2-hold${expandedKey === cardKey ? ' m2-card--expanded' : ''}`}
                     data-game-id={game.id}
+                    disabled={hookBusy}
                     aria-describedby="m2-hold-hint"
                     onPointerDown={() => pressStart(game, cardKey)}
                     onPointerUp={pressEnd}
@@ -599,6 +660,7 @@ export default function Maida2View({ games, hooksState, onHookAction, onLaunch, 
             className={`maida2-view${playFor ? ' maida2-view--playing' : ''}`}
             ref={containerRef}
             style={{ '--m2-card-alpha': cardOpacity }}
+            aria-busy={hookBusy}
         >
             {/* Ambient focus-dwell hero backdrop — purely decorative, never
                 the accessible name/description of anything. CSS background-
@@ -624,10 +686,12 @@ export default function Maida2View({ games, hooksState, onHookAction, onLaunch, 
             <p className="sr-only" role="status" aria-live="polite">{holdAnnounce}</p>
             {/* Shared polite status for hook/state changes */}
             <p className="sr-only" role="status" aria-live="polite">{statusMsg}</p>
+            {hookError && <p className="m2-save-error" role="alert">{hookError}</p>}
             <h1 className="sr-only">{t('ui.maida2.title')}</h1>
             <p id="m2-hold-hint" className="sr-only">
                 {t('ui.maida2.launch_hint')} {t('ui.maida2.hook_hold_hint')}
             </p>
+            {navigation}
             <div className="maida2-content">
                 <section className="m2-zone" aria-labelledby="m2-zone-now">
                     <h2 id="m2-zone-now" className="m2-zone-title">{t('ui.maida2.zone_now')}</h2>
@@ -660,6 +724,7 @@ export default function Maida2View({ games, hooksState, onHookAction, onLaunch, 
                                         type="button"
                                         className={`m2-card m2-hold${expandedKey === cardKey ? ' m2-card--expanded' : ''}`}
                                         data-game-id={game.id}
+                                        disabled={hookBusy}
                                         aria-describedby="m2-hold-hint"
                                         onPointerDown={() => pressStart(game, cardKey)}
                                         onPointerUp={pressEnd}
@@ -707,6 +772,7 @@ export default function Maida2View({ games, hooksState, onHookAction, onLaunch, 
                                             type="button"
                                             className="m2-hook-retract"
                                             onClick={() => handleRetract(hook)}
+                                            disabled={hookBusy}
                                         >
                                             {t('ui.maida2.hook_retract')}
                                         </button>
@@ -718,11 +784,22 @@ export default function Maida2View({ games, hooksState, onHookAction, onLaunch, 
                                                     className="m2-state-btn"
                                                     aria-pressed={gameStates[game.id] === s}
                                                     onClick={() => handleSetState(game.id, s)}
+                                                    disabled={hookBusy}
                                                 >
                                                     {t(`ui.maida2.state_${s}`)}
                                                 </button>
                                             ))}
                                         </div>
+                                        {onHistory && (
+                                            <button
+                                                type="button"
+                                                className="m2-history-btn"
+                                                data-history-game={String(game.id)}
+                                                onClick={() => onHistory(game)}
+                                            >
+                                                {t('ui.navigation.history')}
+                                            </button>
+                                        )}
                                     </div>
                                 </li>
                                 );

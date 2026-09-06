@@ -5,6 +5,7 @@ import { applyTryScore, applySkipScore, updateGameScore, mergePenalties, removeF
 import { debugStore } from '../core/debugStore';
 import { loadData, saveData } from '../services/persistence';
 import bridge from '../services/bridge';
+import { recordMicroChoice } from '../services/decisionHistory';
 import { loadShowcase } from '../services/persistence';
 import bundledPrescriptions from '../data/prescriptions.json';
 
@@ -192,6 +193,7 @@ export function useMaidaSession() {
             if (isAnchored) {
                 // PLAY: Launch anchored game (no weight change, no behavioral signal)
                 debugStore.log('PLAY', { gameId: session.game.id, title: session.game.title });
+            recordMicroChoice(session.game, 'play', { silent: !!options.silent });
                 console.log('[Maida PLAY] options:', options, 'steamUrl:', session.game.steamUrl);
 
                 if (!options.silent && session.game.steamUrl) {
@@ -209,6 +211,7 @@ export function useMaidaSession() {
             const oldScore = session.game.score || 0;
             const newScore = applyTryScore(oldScore);
             debugStore.log('TRY', { gameId: session.game.id, title: session.game.title, change: `${oldScore.toFixed(2)} -> ${newScore.toFixed(2)}` });
+            recordMicroChoice(session.game, 'try', { silent: !!options.silent });
             const updatedGames = updateGameScore(data.games.games, session.game.id, applyTryScore);
 
             const nextData = { ...data.games, games: updatedGames };
@@ -265,6 +268,7 @@ export function useMaidaSession() {
             const oldScore = session.game.score || 0;
             const newSkipScore = applySkipScore(oldScore);
             debugStore.log('NOT_NOW', { gameId: currentId, title: session.game.title, change: `${oldScore.toFixed(2)} -> ${newSkipScore.toFixed(2)}` });
+            recordMicroChoice(session.game, 'not_now');
             const updatedGames = updateGameScore(data.games.games, currentId, applySkipScore);
 
             const nextData = { ...data.games, games: updatedGames };
@@ -309,6 +313,7 @@ export function useMaidaSession() {
                 setSession(prev);
 
                 debugStore.log('UNDO', { gameId: restoredId, title: prev.game.title });
+            recordMicroChoice(prev.game, 'undo');
             }
         } else if (type === 'anchor') {
             const anchorPayload = {
@@ -321,12 +326,14 @@ export function useMaidaSession() {
             await saveData('anchor', anchorPayload);
             console.log('[Maida] Anchor data saved successfully');
             debugStore.log('ANCHOR', { gameId: session.game.id, title: session.game.title });
+            recordMicroChoice(session.game, 'anchor');
         } else if (type === 'release') {
             setIsAnchored(false);
             setHistory(null);
             // Clear persisted anchor
             await saveData('anchor', null);
             debugStore.log('CLEAR', { gameId: session.game.id, title: session.game.title });
+            recordMicroChoice(session.game, 'unanchor');
         }
     };
 

@@ -1,0 +1,366 @@
+.mode-navigation {
+    width: 100%;
+    min-width: 0;
+    display: grid;
+    grid-template-columns: minmax(min(100%, 20rem), 1fr) auto;
+    align-items: center;
+    gap: 0.75rem 1rem;
+    color: var(--t-text);
+    font-family: 'Inter', Arial, 'Noto Sans TC', 'Microsoft JhengHei', 'Noto Sans JP', 'Yu Gothic UI', sans-serif;
+    overflow-wrap: anywhere;
+    position: relative;
+    z-index: 20;
+}
+
+.mode-navigation__tabs,
+.mode-navigation__pager,
+.mode-navigation__utilities {
+    min-width: 0;
+    display: flex;
+    align-items: stretch;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+}
+
+.mode-navigation__tabs {
+    justify-content: center;
+}
+
+.mode-navigation__pager {
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.mode-navigation__utilities {
+    justify-content: flex-end;
+}
+
+.mode-navigation__button,
+.navigation-layout-option,
+.m2-history-btn {
+    min-width: 0;
+    min-height: 44px;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid var(--t-border-subtle);
+    border-radius: 6px;
+    background: color-mix(in srgb, var(--t-surface) 78%, transparent);
+    color: var(--t-text);
+    font-family: 'Inter', Arial, 'Noto Sans TC', 'Microsoft JhengHei', 'Noto Sans JP', 'Yu Gothic UI', sans-serif;
+    font-size: 0.8125rem;
+    line-height: 1.25;
+    cursor: pointer;
+    overflow-wrap: anywhere;
+}
+
+.mode-navigation__button:hover,
+.navigation-layout-option:hover,
+.m2-history-btn:hover {
+    color: var(--t-hover-text);
+    background: var(--t-hover-bg);
+    border-color: var(--t-hover-bg);
+}
+
+.mode-navigation__button:focus,
+.mode-navigation__button:focus-visible,
+.navigation-layout-option:focus,
+.navigation-layout-option:focus-visible,
+.m2-history-btn:focus,
+.m2-history-btn:focus-visible {
+    outline: 2px solid var(--t-focus-border);
+    outline-offset: 2px;
+}
+
+.mode-navigation__tab {
+    flex: 1 1 7.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.mode-navigation__tab[aria-current='page'],
+.navigation-layout-option[aria-pressed='true'] {
+    color: var(--t-accent);
+    background: var(--t-accent-soft);
+    border-color: var(--t-accent-border);
+}
+
+.mode-navigation__glyph {
+    color: var(--t-dim);
+    font-size: 0.75rem;
+}
+
+.mode-navigation__tab[aria-current='page'] .mode-navigation__glyph {
+    color: var(--t-accent);
+}
+
+.mode-navigation__pager-button {
+    flex: 1 1 8rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.125rem;
+    text-align: left;
+}
+
+.mode-navigation__pager-button--next {
+    align-items: flex-end;
+    text-align: right;
+}
+
+.mode-navigation__direction {
+    color: var(--t-accent);
+    font-size: 0.6875rem;
+    letter-spacing: 0.04em;
+}
+.mode-navigation__pager-button:hover .mode-navigation__direction { color: inherit; }
+
+.mode-navigation__current {
+    flex: 1 1 7rem;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.125rem;
+    text-align: center;
+}
+
+.mode-navigation__current strong {
+    font-size: 0.9375rem;
+    font-weight: 600;
+}
+
+.mode-navigation__current span {
+    color: var(--t-dim);
+    font-size: 0.6875rem;
+    letter-spacing: 0.12em;
+}
+
+.mode-navigation__utility {
+    flex: 1 1 6rem;
+}
+
+.rin-main-content {
+    grid-area: content;
+    width: min(100%, 40rem);
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(0.75rem, 2vh, 1.25rem);
+}
+
+.rin-prescription {
+    width: 100%;
+    min-width: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.rin-main-content > .mode-navigation,
+.maida2-content > .mode-navigation,
+.kamae-content > .mode-navigation {
+    margin-bottom: 0.75rem;
+}
+
+.navigation-layout-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.navigation-layout-option {
+    flex: 1 1 9rem;
+}
+
+.m2-history-btn {
+    flex: 1 1 6rem;
+}
+
+.m2-hook-retract:disabled,
+.m2-state-btn:disabled,
+.m2-note-confirm:disabled,
+.m2-note-input:disabled,
+.m2-card:disabled {
+    cursor: wait;
+    opacity: 0.55;
+}
+
+.m2-save-error {
+    width: min(calc(100% - 2rem), 40rem);
+    margin: 1rem auto 0;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--t-error);
+    border-radius: 6px;
+    background: var(--t-surface);
+    color: var(--t-error);
+    font-family: 'Inter', Arial, 'Noto Sans TC', 'Microsoft JhengHei', 'Noto Sans JP', 'Yu Gothic UI', sans-serif;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+/* Keep visually hidden Maida2 labels within their 1px box so element-level
+   overflow checks stay true without changing what assistive technology reads. */
+.maida2-view .sr-only {
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 48rem) {
+    .mode-navigation {
+        grid-template-columns: minmax(min(100%, 20rem), 1fr);
+    }
+
+    .mode-navigation__utilities {
+        justify-content: stretch;
+        padding-inline-end: 3.5rem;
+    }
+
+    .mode-navigation__utility {
+        flex-basis: 6rem;
+    }
+}
+
+@media (max-width: 24rem) {
+    .mode-navigation__tab {
+        flex-basis: 5rem;
+        flex-direction: column;
+        gap: 0.125rem;
+        padding-inline: 0.375rem;
+    }
+
+    .mode-navigation__pager-button {
+        flex-basis: 6.5rem;
+        padding-inline: 0.5rem;
+    }
+
+    .mode-navigation__current {
+        flex-basis: 4rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .mode-navigation__button,
+    .navigation-layout-option,
+    .m2-history-btn {
+        transition: none;
+    }
+}
+
+[data-theme='light'] .mode-navigation,[data-theme='light'] .navigation-layout-options { --t-accent:#75501f; }
+[data-theme='light'] main:has(> .mode-navigation) .m2-card-sub { color: #626262; }
+[data-theme='light'] main:has(> .mode-navigation) :is(.m2-card-badge, .kata-item-badge) { color: #75501f; }
+[data-theme='light'] main:has(> .mode-navigation) .kata-item:is(:focus, :focus-visible, :hover) .kata-item-badge { color: inherit; }
+
+/* One navigation rail, owned by each view's existing gamepad focus scope. */
+main:has(> .mode-navigation) {
+    display: grid;
+    grid-template-columns: 11.5rem minmax(min(100%, 20rem), 1fr);
+    grid-template-rows: auto;
+    grid-template-areas: none;
+    align-items: start;
+    align-content: start;
+    gap: 1.5rem;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    padding: 4rem 1.5rem 2rem;
+    overflow: clip;
+}
+main:has(> .mode-navigation) > .mode-navigation {
+    grid-column: 1;
+    grid-row: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.25rem;
+    margin: 0;
+}
+.mode-navigation__tabs, .mode-navigation__pager, .mode-navigation__utilities {
+    flex-direction: column;
+    align-items: stretch;
+    flex-wrap: nowrap;
+    padding: 0;
+}
+.mode-navigation__utilities {
+    border-top: 1px solid var(--t-border-subtle);
+    padding-top: .75rem;
+}
+.mode-navigation__tab, .mode-navigation__pager-button, .mode-navigation__utility,
+.mode-navigation__current {
+    flex: none;
+    width: 100%;
+    min-height: 44px;
+    text-align: left;
+    justify-content: flex-start;
+    align-items: center;
+}
+.mode-navigation__tab {
+    position: relative;
+    flex-direction: row;
+    gap: .625rem;
+    min-height: 64px;
+    padding: .75rem;
+    transition: background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+.mode-navigation__copy { display: flex; flex-direction: column; gap: .25rem; min-width: 0; }
+.mode-navigation__glyph { font-size: .6875rem; line-height: 1.4; }
+.mode-navigation__symbol { width: 1.75rem; flex-shrink: 0; font-size: 1.5rem; text-align: center; }
+.mode-navigation__tab::before {
+    content: ''; position: absolute; inset: .75rem auto .75rem 0;
+    width: 3px; border-radius: 3px; background: var(--t-accent);
+    transform: scaleY(0); transition: transform 220ms ease;
+}
+.mode-navigation__tab[aria-current='page']::before { transform: scaleY(1); animation: mode-mark 260ms ease both; }
+.mode-navigation__tab:focus, .mode-navigation__tab:focus-visible { box-shadow: 0 0 0 4px var(--t-accent-soft); }
+.mode-navigation__tab:active .mode-navigation__symbol { transform: scale(.85); }
+.mode-navigation__tab .mode-navigation__symbol { transition: transform 140ms ease; }
+.mode-navigation__tab[data-face='maida2'][aria-current='page'] .mode-navigation__symbol { animation: mode-open 380ms ease both; }
+.mode-navigation__tab[data-face='rin'][aria-current='page'] .mode-navigation__symbol { animation: mode-mark 300ms ease both; }
+.mode-navigation__tab[data-face='kamae'][aria-current='page'] .mode-navigation__symbol { animation: mode-settle 340ms ease both; }
+.mode-navigation__utility { background: transparent; border-color: transparent; padding-inline: .75rem; font-size: .75rem; }
+.mode-navigation__pager-button, .mode-navigation__current { align-items: flex-start; padding: .625rem .75rem; }
+.mode-navigation__current { border-left: 3px solid var(--t-accent); background: var(--t-accent-soft); }
+main:has(> .mode-navigation) > :is(.maida2-content, .kamae-content, .rin-stage) {
+    grid-column: 2; grid-row: 1; width: 100%; min-width: 0;
+    max-width: 48rem; margin: 0 auto; padding: 0; position: relative; z-index: 1;
+}
+.rin-stage { display: flex; flex-direction: column; gap: 2rem; text-align: left; }
+.rin-stage .mvp-header { text-align: left; width: 100%; }
+.rin-stage .game-label { font-size: clamp(1.5rem, 3vw, 2.5rem); letter-spacing: .01em; text-transform: none; font-weight: 500; line-height: 1.2; overflow-wrap: anywhere; }
+.rin-stage .rin-main-content { width: 100%; gap: 0; }
+.rin-stage .mvp-btn { min-height: 64px; padding: .75rem 1rem; letter-spacing: .02em; }
+.rin-stage .visit-btn-title { font-size: 1.125rem; }
+.rin-stage .visit-btn-subtitle { font-size: .75rem; }
+main:has(> .mode-navigation) :not(code, pre) { font-family: 'Inter', Arial, 'Noto Sans TC', 'Microsoft JhengHei', 'Noto Sans JP', 'Yu Gothic UI', sans-serif; }
+main:has(> .mode-navigation) > .app-footer { grid-column: 1 / -1; padding-top: 1rem; }
+main:has(> .mode-navigation) .app-footer-copyright { overflow-wrap: anywhere; }
+main:has(> .mode-navigation) .rin-calligraphy-bg { opacity: .045; }
+main:has(> .mode-navigation) > .bg-glow { max-width: 100%; transform: translate(-50%, -50%); }
+main:has(> .mode-navigation) .theme-toggle { top: .5rem; right: 1rem; }
+main:has(> .mode-navigation) .help-tour-btn { top: .5rem; right: 4rem; }
+main:has(> .mode-navigation) { transition: none; }
+.rin-stage .mvp-content { max-width: none; justify-content: flex-start; }
+.rin-stage .primary-actions { flex-direction: row; align-items: stretch; gap: 1rem; }
+.rin-stage .primary-actions .mvp-btn { font-size: 1rem; }
+.rin-title-block, .kamae-title-block { display: none; }
+main:has(> .mode-navigation) > .trace-save-warning { grid-column: 1 / -1; grid-row: 2; }
+.app-root:has(main > .mode-navigation) { width: 100%; height: auto; overflow: clip; }
+.app-root:has(main > .mode-navigation) .global-version-tag { position: static; padding: 1rem; text-align: right; }
+@keyframes mode-mark { from { transform: scaleY(.15); } to { transform: scaleY(1); } }
+@keyframes mode-open { from { transform: scale(.65) rotate(-45deg); } to { transform: scale(1) rotate(0); } }
+@keyframes mode-settle { from { transform: translateY(-4px) rotate(-20deg); } to { transform: translateY(0) rotate(0); } }
+@media (max-width: 40rem) {
+    main:has(> .mode-navigation) { grid-template-columns: minmax(min(100%, 20rem), 1fr); padding: 3.5rem 1rem 2rem; gap: 1.5rem; }
+    main:has(> .mode-navigation) > :is(.maida2-content, .kamae-content, .rin-stage) { grid-column: 1; grid-row: 2; }
+    main:has(> .mode-navigation) > .trace-save-warning { grid-row: 3; }
+    .rin-stage .primary-actions { flex-wrap: wrap; gap: .75rem; }
+    .rin-stage .primary-actions .mvp-btn { width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .mode-navigation *, .mode-navigation *::before { animation: none !important; transition: none !important; }
+    .mode-navigation__tab:active .mode-navigation__symbol { transform: none; }
+}

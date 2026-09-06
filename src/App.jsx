@@ -1,9 +1,12 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useSyncExternalStore } from 'react';
 import RinView from './views/RinView';
 import KamaeView from './views/KamaeView';
 import Maida2View from './views/Maida2View';
 import OnboardingView from './views/OnboardingView';
 import FaceSwitchButton from './ui/FaceSwitchButton';
+import ModeNavigation from './ui/ModeNavigation';
+import DecisionHistoryView from './views/DecisionHistoryView';
+import { appendTraceEvents, subscribeTraceStatus, getTraceFailure } from './services/decisionHistory';
 import VersionTag from './ui/VersionTag';
 import AccessibilityPage from './ui/pages/AccessibilityPage';
 import PrivacyPage from './ui/pages/PrivacyPage';
@@ -31,25 +34,6 @@ import './App.css';
 
 // Load prescription translations for detected locale (fire-and-forget)
 loadPrescriptionTranslations();
-
-// Maida 2.0 trace append with pending retry. Failed events are queued and
-// retried before the next append. hooks.json is the state authority; trace
-// is history only, so a failure is logged, never blocking.
-const pendingTraceEvents = [];
-async function appendTraceEvents(events) {
-    const batch = [...pendingTraceEvents.splice(0), ...events];
-    for (let i = 0; i < batch.length; i++) {
-        try {
-            await bridge.appendTrace(batch[i]);
-        } catch (e) {
-            // Queue the failed event AND everything after it, so per-writer
-            // order is preserved on retry (no later event jumps the queue).
-            pendingTraceEvents.push(...batch.slice(i));
-            console.error('[Maida2] appendTrace failed (queued for retry):', e);
-            return;
-        }
-    }
-}
 
 // One maida.decision.presented + maida.playtime.snapshot per app boot.
 let bootTraceSent = false;
@@ -117,16 +101,11 @@ function FrozenScreen({ onResume, guardMs = 5000, prescriptionLine = null, onCyc
                 onCyclePrescription(dir === 'right' ? 1 : -1);
                 return;
             }
-            const current = document.activeElement;
-            const themeToggle = document.querySelector('.theme-toggle');
-            if (current === themeToggle) {
-                if (ready && btnRef.current) btnRef.current.focus();
-            } else if (current === btnRef.current) {
-                themeToggle?.focus();
-            } else {
-                if (ready && btnRef.current) btnRef.current.focus();
-                else themeToggle?.focus();
-            }
+            const focusable = [document.querySelector('.trace-save-warning button'), document.querySelector('.theme-toggle'), ready ? btnRef.current : null].filter(Boolean);
+            if (!focusable.length) return;
+            const index = focusable.indexOf(document.activeElement);
+            const delta = dir === 'up' || dir === 'left' ? -1 : 1;
+            focusable[(index + delta + focusable.length) % focusable.length]?.focus();
         }
     });
 
@@ -236,6 +215,26 @@ function App() {
 
     // Face switching (Maida2 ↔ Kamae; Rin stays reachable via tour/debug paths only)
     const [face, setFace] = useState('maida2');
+    const [historyGame, setHistoryGame] = useState(undefined);
+    const [navigationLayout, setNavigationLayout] = useState(() => localStorage.getItem('maida-navigation-layout') === 'pager' ? 'pager' : 'tabs');
+    const traceFailed = useSyncExternalStore(subscribeTraceStatus, getTraceFailure);
+    const handleNavigationLayoutChange = value => {
+        if (!['tabs', 'pager'].includes(value)) return;
+        setNavigationLayout(value);
+        localStorage.setItem('maida-navigation-layout', value);
+    };
+    const historyReturnRef = useRef(null);
+    const openHistory = (game = null) => {
+        historyReturnRef.current = document.activeElement?.getAttribute('data-history-game') || '';
+        setHistoryGame(game);
+    };
+    const closeHistory = () => {
+        setHistoryGame(undefined);
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+            const buttons = [...document.querySelectorAll('[data-history-game]')];
+            (buttons.find(el => el.getAttribute('data-history-game') === historyReturnRef.current) || document.querySelector('.mode-navigation button'))?.focus();
+        }));
+    };
     const focusMain = useCallback(() => {
         requestAnimationFrame(() => {
             const main = document.querySelector('main');
@@ -270,6 +269,7 @@ function App() {
     // leaves this null so closing behaves exactly as today.
     const settingsReturnFaceRef = useRef(null);
     const openSettings = useCallback(() => {
+        if (document.querySelector('.decision-history, .m2-note-input, .maida2-view[aria-busy="true"]')) return;
         // Settings panel lives in KamaeView — switch there first if needed
         setSettingsRequested(true);
         if (face !== 'kamae') {
@@ -291,13 +291,21 @@ function App() {
         typeof document !== 'undefined' && (
             !!document.querySelector('main.legal-page') ||
             !!document.querySelector('.kamae-settings') ||
-            !!document.querySelector('.m2-note-input')
+            !!document.querySelector('.m2-note-input') ||
+            !!document.querySelector('.decision-history') ||
+            !!document.querySelector('.maida2-view[aria-busy="true"]')
         );
+
+    const switchMode = direction => {
+        const order = ['maida2', 'rin', 'kamae'];
+        const target = order[(order.indexOf(face) + direction + order.length) % order.length];
+        ({ maida2: switchToMaida2, rin: switchToRin, kamae: switchToKamae })[target]();
+    };
 
     // L1/R1 gamepad face switching + Menu button
     useGameInput({
-        onL1: () => { if (!isModalOpen()) switchToMaida2(); },
-        onR1: () => { if (!isModalOpen()) switchToKamae(); },
+        onL1: () => { if (!isModalOpen()) switchMode(-1); },
+        onR1: () => { if (!isModalOpen()) switchMode(1); },
         onMenu: openSettings,
     });
 
@@ -428,7 +436,9 @@ function App() {
         );
     }, [data.games]);
 
-    const handleHookAction = useCallback((action) => {
+    const hookSaveBusy = useRef(false);
+    const handleHookAction = useCallback(async (action) => {
+        if (hookSaveBusy.current) return null;
         if (hooksState === null) {
             // hooks.json not loaded yet: acting on EMPTY state here would
             // overwrite the persisted file with a near-empty one.
@@ -440,10 +450,17 @@ function App() {
         else if (action.type === 'retract') result = retractHook(hooksState, action.hookId, buildHookTraceEvent);
         else if (action.type === 'setState') result = setGameState(hooksState, action.gameId, action.state, buildHookTraceEvent);
         if (!result || result.traceEvents.length === 0) return null; // unknown or no-op action
-        setHooksState(result.nextState);
-        saveData('hooks', result.nextState).catch((e) => console.error('[Maida2] saveData(hooks) failed:', e));
-        appendTraceEvents(result.traceEvents);
-        return result;
+        hookSaveBusy.current = true;
+        try {
+            await bridge.saveHooks(result.nextState);
+            setHooksState(result.nextState);
+            void appendTraceEvents(result.traceEvents);
+            return result;
+        } catch {
+            return null;
+        } finally {
+            hookSaveBusy.current = false;
+        }
     }, [hooksState, buildHookTraceEvent]);
 
     // Launch from Maida2: trace + Steam launch + freeze. Deliberately NOT via
@@ -634,6 +651,9 @@ function App() {
         }
     }, [status]);
 
+    const traceWarning = traceFailed ? <div className="trace-save-warning" role="alert">
+        <p>{t('ui.history.unsaved')}</p><button type="button" onClick={() => appendTraceEvents()}>{t('ui.history.retry')}</button>
+    </div> : null;
     if (status === 'loading') return (
         <React.Fragment key={localeVersion}>
             <div className="app-loading">
@@ -691,6 +711,7 @@ function App() {
         const line = pick ? localizePrescription(pick) : null;
         return (
             <React.Fragment key={localeVersion}>
+                {traceWarning}
                 <FrozenScreen
                     onResume={() => { setFrozenCycle(0); setStatus('active'); }}
                     guardMs={resumeGuard}
@@ -703,6 +724,11 @@ function App() {
     }
     frozenSeed.current.active = false;
 
+    if (historyGame !== undefined) return <><DecisionHistoryView warning={traceWarning} game={historyGame} games={data.games?.games || []} onClose={closeHistory} /></>;
+    const navigation = <>{traceWarning}<ModeNavigation face={face} layout={navigationLayout}
+        onSwitch={target => { if (!isModalOpen()) ({ maida2: switchToMaida2, rin: switchToRin, kamae: switchToKamae })[target]?.(); }}
+        onHistory={() => { if (!isModalOpen()) openHistory(); }} onSettings={openSettings} /></>;
+
     if (face === 'maida2') {
         if (m2LegalPage) {
             const pages = { accessibility: AccessibilityPage, privacy: PrivacyPage, terms: TermsPage };
@@ -710,8 +736,10 @@ function App() {
             return Page ? <Page onClose={() => { setM2LegalPage(null); requestAnimationFrame(() => m2LegalReturnRef.current?.focus()); }} /> : null;
         }
         return (
-            <div className="app-root" key={localeVersion}>
+            <div className="app-root app-root--maida2" key={localeVersion}>
                 <Maida2View
+                    navigation={navigation}
+                    onHistory={openHistory}
                     games={data.games?.games || []}
                     hooksState={hooksState || EMPTY_HOOKS_STATE}
                     onHookAction={handleHookAction}
@@ -731,7 +759,7 @@ function App() {
     if (face === 'kamae') {
         return (
             <div className="app-root" key={localeVersion}>
-                <KamaeView onSwitchToRin={switchToRin} theme={theme} toggleTheme={toggleTheme} onLocaleChange={handleLocaleChange}
+                <KamaeView navigation={navigation} navigationLayout={navigationLayout} onNavigationLayoutChange={handleNavigationLayoutChange} onSwitchToRin={switchToRin} theme={theme} toggleTheme={toggleTheme} onLocaleChange={handleLocaleChange}
                     tourStep={tourStep} tourTotal={TOUR_TOTAL} onTourStart={startKamaeTour} onTourReplay={startFullTour} onTourClose={closeTour} onTourAdvance={advanceTour} onTourPrev={prevTour}
                     settingsRequested={settingsRequested} onSettingsOpened={() => setSettingsRequested(false)} onSettingsClosed={handleSettingsClosed}
                     themeToggle={themeToggle}
@@ -749,6 +777,7 @@ function App() {
     return (
         <div className="app-root" key={localeVersion}>
             <RinView
+                navigation={navigation}
                 game={session.game}
                 prescription={session.prescription}
                 onAction={(type) => handleAction(type, { silent: silentMode })}

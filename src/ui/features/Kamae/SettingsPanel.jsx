@@ -18,7 +18,7 @@ const CARD_OPACITY_DEBOUNCE_MS = 300;
  * SettingsPanel — inline panel for IGDB credential management.
  * Renders inside KamaeView when settings is toggled open.
  */
-export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleChange, onTourStart, onNavigateLegal, replayTourBtnRef, updateCheck, updateAlertShown, onFrozenGuardChange, onMaida2PlayDelayChange, onMaida2PreviewAudioChange, onMaida2CardOpacityChange }) {
+export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleChange, onTourStart, onNavigateLegal, replayTourBtnRef, updateCheck, updateAlertShown, onFrozenGuardChange, onMaida2PlayDelayChange, onMaida2PreviewAudioChange, onMaida2CardOpacityChange, navigationLayout = 'tabs', onNavigationLayoutChange }) {
     const [clientId, setClientId] = useState('');
     const [clientSecret, setClientSecret] = useState('');
     const [hasExisting, setHasExisting] = useState(false);
@@ -257,6 +257,30 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
                     </button>
                 </section>
             )}
+
+            <section className="kamae-settings-section" aria-labelledby="settings-navigation-layout-title">
+                <h2 id="settings-navigation-layout-title" className="kamae-settings-section-title">
+                    {t('ui.navigation.layout')}
+                </h2>
+                <div className="navigation-layout-options" role="group" aria-labelledby="settings-navigation-layout-title">
+                    <button
+                        type="button"
+                        className="navigation-layout-option"
+                        aria-pressed={navigationLayout === 'tabs'}
+                        onClick={() => onNavigationLayoutChange?.('tabs')}
+                    >
+                        {t('ui.navigation.tabs')}
+                    </button>
+                    <button
+                        type="button"
+                        className="navigation-layout-option"
+                        aria-pressed={navigationLayout === 'pager'}
+                        onClick={() => onNavigationLayoutChange?.('pager')}
+                    >
+                        {t('ui.navigation.pager')}
+                    </button>
+                </div>
+            </section>
 
             <section className="kamae-settings-section">
                 <button

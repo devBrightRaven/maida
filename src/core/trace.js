@@ -9,9 +9,10 @@ import { version } from '../../package.json';
 export const WRITER_ID_KEY = 'maida2-writer-id';
 export const WRITER_SEQ_KEY = 'maida2-writer-seq';
 
-// The 7 allowed event types and their fixed authority/provenance kinds.
+// Allowed event types and their fixed authority/provenance kinds.
 // Maida never emits 'inference' / 'ai_hypothesis'.
 export const EVENT_KINDS = {
+    'maida.choice.recorded': { authorityKind: 'observed_behavior', provenanceKind: 'observed_interaction' },
     'maida.hook.created': { authorityKind: 'human_intent', provenanceKind: 'user_stated' },
     'maida.hook.superseded': { authorityKind: 'human_intent', provenanceKind: 'user_stated' },
     'maida.hook.retracted': { authorityKind: 'human_intent', provenanceKind: 'user_stated' },

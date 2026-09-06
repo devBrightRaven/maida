@@ -22,6 +22,8 @@ const bridge = {
 
     saveData: (type, data) => call('save_data', { dataType: type, data }),
 
+    saveHooks: (data) => invoke('save_data', { dataType: 'hooks', data }),
+
     resetGamesData: () => call('reset_games_data'),
 
     // --- Steam ---
@@ -84,6 +86,8 @@ const bridge = {
     appendTrace: (entry) => invoke('append_trace', { entry }),
 
     exportTrace: () => call('export_trace'),
+
+    readTracePage: (options = {}) => invoke('read_trace_page', options),
 
     // --- Game launch ---
     launchGame: (steamUrl) => call('launch_game', { url: steamUrl }),

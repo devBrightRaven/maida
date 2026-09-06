@@ -75,6 +75,7 @@ pub fn run() {
             // Trace (append-only, never pruned)
             commands::trace::append_trace,
             commands::trace::export_trace,
+            commands::trace::read_trace_page,
             // Window
             commands::window::minimize_window,
             commands::window::close_window,

@@ -24,7 +24,7 @@ import './KamaeView.css';
  * Kamae (構) — slow curation face.
  * Kata selector + game list + search + explore entry.
  */
-export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleChange, tourStep, tourTotal, onTourStart, onTourReplay, onTourClose, onTourAdvance, onTourPrev, settingsRequested, onSettingsOpened, onSettingsClosed, themeToggle, onFrozenGuardChange, onMaida2PlayDelayChange, onMaida2PreviewAudioChange, onMaida2CardOpacityChange, updateCheck, updateAlertShown }) {
+export default function KamaeView({ navigation, navigationLayout = 'tabs', onNavigationLayoutChange, onSwitchToRin, theme, toggleTheme, onLocaleChange, tourStep, tourTotal, onTourStart, onTourReplay, onTourClose, onTourAdvance, onTourPrev, settingsRequested, onSettingsOpened, onSettingsClosed, themeToggle, onFrozenGuardChange, onMaida2PlayDelayChange, onMaida2PreviewAudioChange, onMaida2CardOpacityChange, updateCheck, updateAlertShown }) {
     // SR guide announces once per install, gated by localStorage to avoid
     // re-announcement on every re-render / face switch. See RinView for same pattern.
     const [showSrGuide] = useState(() => localStorage.getItem('maida-hasHeardKamaeGuide') !== 'true');
@@ -343,6 +343,8 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
                         onMaida2PlayDelayChange={onMaida2PlayDelayChange}
                         onMaida2PreviewAudioChange={onMaida2PreviewAudioChange}
                         onMaida2CardOpacityChange={onMaida2CardOpacityChange}
+                        navigationLayout={navigationLayout}
+                        onNavigationLayoutChange={onNavigationLayoutChange}
                     />
                 </div>
                 {/* Tour step 8 highlights the Replay-tour button inside Settings.
@@ -402,6 +404,7 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
                 <p className="kamae-title-reading">{t('ui.kamae.reading')}</p>
                 <p className="kamae-title-desc">{t('ui.kamae.desc')}</p>
             </div>
+            {!showTour && navigation}
             <div className="kamae-content">
                 <h1 className="sr-only">{t('ui.kamae.mode_prefix')}構 Kamae</h1>
                 <button
@@ -452,18 +455,11 @@ export default function KamaeView({ onSwitchToRin, theme, toggleTheme, onLocaleC
                         {t('ui.kamae.explore_more')}
                     </button>
                 )}
-                <button
-                    type="button"
-                    className="kamae-settings-link"
-                    onClick={() => setShowSettings(true)}
-                >
-                    {t('ui.settings.title')} <span className="kamae-settings-shortcut">(F10 / Menu)</span>
-                </button>
                 {/* Face switch + Help + Theme placed inside .kamae-content,
                     BEFORE Footer, so Tab order matches Rin: ... → face → help
                     → theme → footer. Both buttons are absolute-positioned via
                     CSS so visual layout is unchanged by DOM placement. */}
-                <FaceSwitchButton ref={faceSwitchRef} direction="to-rin" onClick={onSwitchToRin} />
+                {showTour && <FaceSwitchButton ref={faceSwitchRef} direction="to-rin" onClick={onSwitchToRin} />}
                 <button
                     className="help-tour-btn"
                     aria-label={t('ui.tour.help_aria')}

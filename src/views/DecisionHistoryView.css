@@ -1,0 +1,21 @@
+.decision-history{box-sizing:border-box;width:100%;max-width:68rem;margin:0 auto;padding:clamp(1rem,4%,3rem);color:var(--t-text);background:var(--t-bg);font-family:'Inter','Arial','Noto Sans TC','Microsoft JhengHei','Noto Sans JP','Yu Gothic',sans-serif;overflow-wrap:anywhere}
+.decision-history *{box-sizing:border-box;min-width:0;overflow-wrap:anywhere}
+.history-header,.history-event-heading,.history-actions{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.decision-history h1{font-size:1.5rem;line-height:1.5;margin:0;flex:1 1 20rem}
+.decision-history h2{font-size:1.1rem;line-height:1.5;margin:0;flex:1 1 20rem}
+.decision-history p{line-height:1.7;margin:1rem 0}
+.history-events{list-style:none;margin:1.5rem 0;padding:0;display:grid;grid-template-columns:minmax(min(100%,20rem),1fr);gap:1rem}
+.history-events li{border:1px solid var(--t-border);border-radius:6px;padding:1.2rem}
+.decision-history blockquote{margin:1rem 0;padding:0 0 0 1rem;border-left:2px solid currentColor;white-space:pre-wrap;line-height:1.8}
+.history-meta{font-size:.9rem}
+.history-actions{justify-content:flex-start}
+.decision-history button,.trace-save-warning button{font:inherit;color:inherit;background:var(--t-bg);border:1px solid currentColor;border-radius:4px;padding:.65rem 1rem;min-height:44px;cursor:pointer}
+.decision-history button:disabled{opacity:.5;cursor:default}
+.decision-history :focus,.decision-history :focus-visible{outline:3px solid currentColor;outline-offset:4px}
+.trace-save-warning{padding:1rem;line-height:1.7;border:1px solid currentColor;color:var(--t-text);background:var(--t-bg);font-family:'Inter','Arial','Noto Sans TC','Microsoft JhengHei','Noto Sans JP','Yu Gothic',sans-serif}
+.app-root--maida2{width:100%;height:auto}
+.app-root--maida2 .maida2-view{min-height:0}
+.app-root--maida2 .global-version-tag{position:static;padding:1rem;text-align:right}
+/* Visually clipped SR text remains in the accessibility tree without creating
+   overflowing one-pixel scroll boxes. No display/visibility suppression. */
+.maida2-view .sr-only{width:max-content;max-width:100%;height:auto;white-space:normal;overflow:clip;overflow-wrap:anywhere}

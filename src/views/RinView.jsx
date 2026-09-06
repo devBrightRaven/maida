@@ -38,6 +38,7 @@ export default function RinView({
     resumeGuard,
     onHideGame,
     onSwitchToKamae,
+    navigation,
     tourStep,
     tourTotal,
     onTourStart,
@@ -71,6 +72,7 @@ export default function RinView({
     const backHidden = (!canUndo || isAnchored) && !(showTour && tourStep === STEP.RIN_UNDO);
 
     // Refs for Focus Management
+    const containerRef = React.useRef(null);
     const titleRef = React.useRef(null);
     const prescriptionRef = React.useRef(null);
     const helpBtnRef = React.useRef(null);
@@ -96,7 +98,7 @@ export default function RinView({
             if (titleRef.current) {
                 titleRef.current.focus();
             } else {
-                focusBtn('notToday');
+                containerRef.current?.querySelector('.mode-navigation button')?.focus();
             }
         }, 0);
         return () => clearTimeout(timer);
@@ -108,7 +110,8 @@ export default function RinView({
             const current = document.activeElement;
             // If nothing is focused, grab focus to primary button
             if (!current || current === document.body) {
-                focusBtn('notToday');
+                if (game) focusBtn('notToday');
+                else containerRef.current?.querySelector('.mode-navigation button')?.focus();
             }
         };
 
@@ -126,7 +129,8 @@ export default function RinView({
         if (!showTrace) {
             // Small delay to ensure panel is fully unmounted
             requestAnimationFrame(() => {
-                focusBtn('notToday');
+                if (game) focusBtn('notToday');
+                else containerRef.current?.querySelector('.mode-navigation button')?.focus();
             });
         }
     }, [showTrace, game]);
@@ -185,7 +189,7 @@ export default function RinView({
 
     // Input Hook for Gamepad & Keyboard
     const { longPressProgress, handlers } = useGameInput({
-        disabled: !game || showTrace || showTour, // Disable when no game, trace panel, or tour is open
+        disabled: showTrace || showTour,
         tapThreshold,
         anchorThreshold,
         onMainAction: () => {
@@ -200,11 +204,11 @@ export default function RinView({
                 }
                 return;
             }
-            onAction('visit'); // Short Press A
+            if (game) onAction('visit'); // Short Press A
         },
         onAnchor: () => {
             if (legalPage) return; // Anchor is a Rin-view-only action.
-            if (!isAnchored) onAction('anchor'); // Long Press A (3s)
+            if (game && !isAnchored) onAction('anchor'); // Long Press A (3s)
         },
         onBack: () => {
             if (legalPage) {
@@ -230,6 +234,8 @@ export default function RinView({
             }
             if (isAnchored) {
                 onAction('release'); // B -> Clear Anchor
+            } else if (!game) {
+                containerRef.current?.querySelector('.mode-navigation button')?.focus();
             } else {
                 // Two-step: B/Escape focuses NOT NOW, user must confirm with A/Enter
                 focusBtn('notToday');
@@ -270,97 +276,31 @@ export default function RinView({
                 return;
             }
 
-            const current = document.activeElement;
-
+            const container = containerRef.current;
+            if (!container) return;
+            const all = Array.from(container.querySelectorAll(
+                'button:not(:disabled), input:not(:disabled), [tabindex]:not([tabindex="-1"]), [role="button"]'
+            ));
+            const theme = all.find(el => el.classList.contains('theme-toggle'));
+            const help = all.find(el => el.classList.contains('help-tour-btn'));
+            const footerSet = new Set(Array.from(container.querySelectorAll('.app-footer button')));
+            const footerBtns = all.filter(el => footerSet.has(el));
+            const rest = all.filter(el => el !== theme && el !== help && !footerSet.has(el));
             const updateBtn = document.querySelector('.global-version-tag button:not(:disabled)');
-            const isVisit = current === btnRefs.visit.current;
-            const isNotToday = current === btnRefs.notToday.current;
-            const isBack = current === btnRefs.back.current;
-            const isTraceBtn = current?.classList?.contains('debug-trace-btn');
-            const isSwitchKamae = current === btnRefs.switchKamae.current;
-            const isHelpBtn = current === helpBtnRef.current;
-            const isThemeToggle = current?.classList?.contains('theme-toggle');
-            const isUpdateBtn = current === updateBtn;
-            const isFooterBtn = current?.closest('.app-footer');
-            const isKnownButton = isVisit || isNotToday || isBack || isTraceBtn || isSwitchKamae || isHelpBtn || isThemeToggle || isUpdateBtn || isFooterBtn;
-
-            // Fallback: If focus is lost, on body, or on unknown element, grab NOT NOW
-            if (!current || current === document.body || !isKnownButton) {
-                focusBtn('notToday');
-                return;
-            }
-
-            // themeToggle is rendered inside main but referenced here by class
-            // (no ref pass-through). Query when needed.
-            const themeToggleEl = document.querySelector('.theme-toggle');
-
-            // Cycle order (forwards): theme → help → TRY → NOT NOW →
-            // (BACK if canUndo) → switchKamae → updateBtn (if present) →
-            // footer... → wrap to theme. Meta controls (theme, help) lead
-            // so gamepad traversal scans top-to-bottom visually instead of
-            // jumping mid-screen to TRY first.
-
-            // Up / Left = Previous (backwards)
-            if (dir === 'left' || dir === 'up') {
-                if (isThemeToggle) {
-                    // theme up → wrap to last footer button (full backwards cycle)
-                    const footerBtns = Array.from(document.querySelectorAll('.app-footer button'));
-                    if (footerBtns.length > 0) footerBtns[footerBtns.length - 1].focus();
-                }
-                else if (isHelpBtn) themeToggleEl?.focus();
-                else if (isVisit) helpBtnRef.current?.focus();
-                else if (isNotToday) focusBtn('visit');
-                else if (isBack) focusBtn('notToday');
-                else if (isTraceBtn) focusBtn('visit');
-                else if (isSwitchKamae) canUndo ? focusBtn('back') : focusBtn('notToday');
-                else if (isUpdateBtn) focusBtn('switchKamae');
-                else {
-                    // Navigate within footer buttons or back to switchKamae / updateBtn
-                    const footerBtns = Array.from(document.querySelectorAll('.app-footer button'));
-                    const idx = footerBtns.indexOf(current);
-                    if (idx > 0) {
-                        footerBtns[idx - 1].focus();
-                    } else if (idx === 0) {
-                        // First footer button up: updateBtn (if present) sits
-                        // between switchKamae and footer, otherwise fall back
-                        // directly to switchKamae.
-                        if (updateBtn) updateBtn.focus();
-                        else focusBtn('switchKamae');
-                    }
-                }
-            }
-            // Down / Right = Next (forwards)
-            else if (dir === 'right' || dir === 'down') {
-                if (isThemeToggle) helpBtnRef.current?.focus();
-                else if (isHelpBtn) focusBtn('visit');
-                else if (isVisit) focusBtn('notToday');
-                else if (isNotToday && canUndo) focusBtn('back');
-                else if (isNotToday && !canUndo) focusBtn('switchKamae');
-                else if (isBack) focusBtn('switchKamae');
-                else if (isSwitchKamae) {
-                    // switchKamae down: if an Update button is showing,
-                    // stop there first before entering the footer strip.
-                    if (updateBtn) {
-                        updateBtn.focus();
-                    } else {
-                        const footer = document.querySelector('.app-footer button');
-                        if (footer) footer.focus();
-                    }
-                } else if (isUpdateBtn) {
-                    const footer = document.querySelector('.app-footer button');
-                    if (footer) footer.focus();
-                } else {
-                    // Navigate within footer buttons
-                    const footerBtns = Array.from(document.querySelectorAll('.app-footer button'));
-                    const idx = footerBtns.indexOf(current);
-                    if (idx >= 0 && idx < footerBtns.length - 1) {
-                        footerBtns[idx + 1].focus();
-                    } else if (idx === footerBtns.length - 1) {
-                        // Last footer down → wrap to theme (full forward cycle)
-                        themeToggleEl?.focus();
-                    }
-                }
-            }
+            const focusable = [
+                ...(theme ? [theme] : []),
+                ...(help ? [help] : []),
+                ...rest,
+                ...(updateBtn ? [updateBtn] : []),
+                ...footerBtns,
+            ];
+            if (focusable.length === 0) return;
+            const current = focusable.indexOf(document.activeElement);
+            const next = dir === 'down' || dir === 'right'
+                ? (current < focusable.length - 1 ? current + 1 : 0)
+                : (current > 0 ? current - 1 : focusable.length - 1);
+            focusable[next]?.focus();
+            focusable[next]?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
         }
     });
 
@@ -376,8 +316,6 @@ export default function RinView({
     useEffect(() => {
         if (isAnchored) setAnchorAnnounce(t('ui.status.anchored_announce'));
     }, [isAnchored]);
-
-    if (!prescription) return null;
 
     if (legalPage) {
         const pages = {
@@ -395,7 +333,7 @@ export default function RinView({
             if (game) {
                 focusBtn('visit');
             } else {
-                focusBtn('notToday');
+                containerRef.current?.querySelector('.mode-navigation button')?.focus();
             }
         }
 
@@ -412,6 +350,7 @@ export default function RinView({
             <p className="rin-title-desc">{t('ui.rin.desc')}</p>
         </div>
         <main
+            ref={containerRef}
             className={`mvp-container ${!game ? 'is-idle' : ''} ${debugMode ? 'debug-mode' : ''} ${expanded ? 'is-expanded' : ''} ${isAnchored ? 'is-anchored' : ''}`}
             onClick={handleContainerClick}
         >
@@ -426,6 +365,8 @@ export default function RinView({
                 <p className="sr-only" aria-live="polite">{t('ui.tour.sr_hint')}</p>
             )}
             <CalligraphyBg char="臨" className="rin-calligraphy-bg" />
+            {!showTour && navigation}
+            <div className="rin-stage">
             {game && (
                 <header className="mvp-header">
                     <div className="mvp-header-tap" onClick={onSecretTap} aria-hidden="true" />
@@ -445,14 +386,16 @@ export default function RinView({
                 <div className="idle-debug-trigger" onClick={onSecretTap}></div>
             )}
 
-            <div ref={prescriptionRef}>
-                <GameDisplay
-                    game={game}
-                    prescription={prescription}
-                    debugMode={debugMode}
-                    isExpanded={expanded}
-                    onSecretTap={onSecretTap}
-                />
+            <div className="rin-main-content">
+                <div ref={prescriptionRef} className="rin-prescription">
+                    <GameDisplay
+                        game={game}
+                        prescription={prescription}
+                        debugMode={debugMode}
+                        isExpanded={expanded}
+                        onSecretTap={onSecretTap}
+                    />
+                </div>
             </div>
 
             <footer className="mvp-footer">
@@ -526,6 +469,7 @@ export default function RinView({
                 </div>
 
             </footer>
+            </div>
 
             {debugMode && (
                 <div className="debug-controls">
@@ -555,7 +499,7 @@ export default function RinView({
                 />
             )}
 
-            {onSwitchToKamae && (
+            {showTour && onSwitchToKamae && (
                 <FaceSwitchButton ref={btnRefs.switchKamae} direction="to-kamae" onClick={onSwitchToKamae} />
             )}
 
