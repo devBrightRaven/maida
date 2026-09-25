@@ -37,8 +37,8 @@ function installNavigatorLanguage({ tag, languages }) {
     Object.defineProperty(navigator, 'languages', { configurable: true, get: () => languages || (tag ? [tag] : []) });
 }
 
-async function openOnboarding(browser, { navLang, navLanguages, storedLocale, theme, pad = false, viewport } = {}) {
-    const page = await browser.newPage(viewport ? { viewport } : {});
+async function openOnboarding(browser, { navLang, navLanguages, storedLocale, theme, pad = false, viewport, forcedColors } = {}) {
+    const page = await browser.newPage({ ...(viewport ? { viewport } : {}), ...(forcedColors ? { forcedColors } : {}) });
     page.on('pageerror', err => console.log('PAGEERROR', err.message));
     await page.addInitScript(installOnboardingFixture, { storedLocale, theme });
     if (navLang) await page.addInitScript(installNavigatorLanguage, { tag: navLang, languages: navLanguages });
@@ -65,9 +65,18 @@ async function pressPad(page, index) {
     await page.waitForTimeout(90);
 }
 
-const focusedText = (page) => page.evaluate(() => document.activeElement?.textContent ?? null);
+// Language option buttons now also carry an aria-hidden checkmark glyph
+// (review 2026-09-26 P3 R1); .onboarding-language-label is the visible text,
+// excluding that marker, so these helpers keep comparing against plain
+// language names instead of "✓English".
+const focusedText = (page) => page.evaluate(() => {
+    const el = document.activeElement;
+    if (!el) return null;
+    const label = el.querySelector('.onboarding-language-label');
+    return label ? label.textContent : (el.textContent ?? null);
+});
 const focusedClass = (page) => page.evaluate(() => document.activeElement?.className ?? '');
-const pressedLabel = (page) => page.locator('.onboarding-language-option[aria-pressed="true"]').textContent();
+const pressedLabel = (page) => page.locator('.onboarding-language-option[aria-pressed="true"] .onboarding-language-label').textContent();
 
 const results = [];
 function record(name, fn) {
@@ -188,7 +197,39 @@ async function main() {
             } finally { await page.close(); }
         });
 
-        // 7. Screenshots.
+        // 7. Review 2026-09-26 P3 R1: forced-colors strips the selected
+        // option's box-shadow/tint, and once focus moves away the focus
+        // outline is gone too — only the checkmark marker is left to show
+        // which option is selected.
+        await record('forced-colors: selected option keeps a non-color marker after focus moves away', async () => {
+            const page = await openOnboarding(browser, { navLang: 'en-US', viewport: { width: 320, height: 720 }, forcedColors: 'active' });
+            try {
+                // Mount focus lands on English (index 0 of 4 options); 4
+                // ArrowRights walk past the remaining 3 options to Continue.
+                await page.keyboard.press('ArrowRight');
+                await page.keyboard.press('ArrowRight');
+                await page.keyboard.press('ArrowRight');
+                await page.keyboard.press('ArrowRight');
+                const cls = await focusedClass(page);
+                assert.ok(cls.includes('onboarding-language-continue'), `focus should have moved to Continue, was "${cls}"`);
+
+                const selected = page.locator('.onboarding-language-option[aria-pressed="true"]');
+                assert.equal(await selected.locator('.onboarding-language-label').textContent(), 'English', 'English should still be the selected option');
+                const others = page.locator('.onboarding-language-option[aria-pressed="false"]');
+
+                const selectedCheckVisibility = await selected.locator('.onboarding-language-check').evaluate(el => window.getComputedStyle(el).visibility);
+                assert.equal(selectedCheckVisibility, 'visible', 'selected option marker must be visible under forced-colors, focus elsewhere');
+
+                const otherCount = await others.count();
+                assert.ok(otherCount > 0, 'expected unselected language options to exist');
+                for (let i = 0; i < otherCount; i++) {
+                    const vis = await others.nth(i).locator('.onboarding-language-check').evaluate(el => window.getComputedStyle(el).visibility);
+                    assert.equal(vis, 'hidden', `unselected option ${i} must not show the marker`);
+                }
+            } finally { await page.close(); }
+        });
+
+        // 8. Screenshots.
         for (const theme of ['light', 'dark']) {
             const page = await openOnboarding(browser, { navLang: 'en-US', theme, viewport: { width: 1280, height: 800 } });
             await page.waitForTimeout(150);

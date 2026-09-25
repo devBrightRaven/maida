@@ -321,6 +321,127 @@ try {
         pass('R2: failed save shows inline status + Retry instead of success; a successful retry clears it');
         await page.close();
     }
+
+    // 11. Review 2026-09-26 R1: bridge.getMaida2LargeMotion must resolve to
+    // null (unknown), never fall back to true, on a getter failure. Bloom
+    // must not play while the preference is genuinely unknown.
+    {
+        function installBloomCounter() {
+            window.__bloom = { created: 0, maxAlive: 0, faces: [] };
+            new window.MutationObserver((mutations) => {
+                for (const m of mutations) {
+                    for (const n of m.addedNodes) {
+                        if (n.classList?.contains('mode-bloom-ghost')) {
+                            window.__bloom.created += 1;
+                            window.__bloom.faces.push(n.dataset.bloomFace);
+                        }
+                    }
+                }
+                const alive = document.querySelectorAll('.mode-bloom-ghost').length;
+                window.__bloom.maxAlive = Math.max(window.__bloom.maxAlive, alive);
+            }).observe(document, { childList: true, subtree: true });
+        }
+        async function checkNoBloom(mode, label) {
+            const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
+            await page.addInitScript(() => {
+                Object.defineProperty(navigator, 'getGamepads', { configurable: true, value: () => [] });
+            });
+            await page.addInitScript(installHistoryFixture, { locale: 'en' });
+            await page.addInitScript(installBloomCounter);
+            await page.addInitScript((getterMode) => {
+                const inner = window.__TAURI_INTERNALS__.invoke;
+                window.__TAURI_INTERNALS__.invoke = async (cmd, args = {}) => {
+                    if (cmd === 'get_maida2_large_motion') {
+                        if (getterMode === 'reject') throw new Error('fixture read error');
+                        return null;
+                    }
+                    if (cmd === 'set_maida2_large_motion') return { success: true, enabled: args.enabled };
+                    return inner(cmd, args);
+                };
+            }, mode);
+            await page.goto(BASE);
+            await page.locator('.mode-navigation [data-face="rin"]').waitFor();
+            await page.waitForTimeout(700);
+            await page.hover('.mode-navigation [data-face="kamae"]');
+            await page.locator('.mode-navigation [data-face="rin"]').focus();
+            await page.waitForTimeout(900);
+            assert.equal((await bloomStats(page)).created, 0, `${label}: no bloom`);
+            pass(`R1: ${label} resolves unknown, no bloom`);
+            await page.close();
+        }
+        await checkNoBloom('reject', 'getter rejection');
+        await checkNoBloom('null', 'getter null');
+    }
+
+    // 12. Review 2026-09-26 R2: SettingsPanel no longer keeps its own copy or
+    // does its own read (single source of truth is App's session state), so
+    // a late-arriving read can no longer overwrite the player's choice, and
+    // Retry always resends the last chosen value. The failed-save banner and
+    // the session choice both survive closing and reopening Settings.
+    {
+        const READ_DELAY_MS = 2500;
+        const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
+        await page.addInitScript(() => {
+            Object.defineProperty(navigator, 'getGamepads', { configurable: true, value: () => [] });
+        });
+        await page.addInitScript(installHistoryFixture, { locale: 'en' });
+        await page.addInitScript((delayMs) => {
+            window.__e2eLargeMotionCalls = [];
+            window.__e2eSetLargeMotionFails = true;
+            const inner = window.__TAURI_INTERNALS__.invoke;
+            window.__TAURI_INTERNALS__.invoke = async (cmd, args = {}) => {
+                if (cmd === 'get_maida2_large_motion') {
+                    await new Promise(r => setTimeout(r, delayMs));
+                    return true; // late-arriving read, conflicts with the Off chosen below
+                }
+                if (cmd === 'set_maida2_large_motion') {
+                    window.__e2eLargeMotionCalls.push(args.enabled);
+                    return window.__e2eSetLargeMotionFails
+                        ? { success: false, error: 'fixture disk full' }
+                        : { success: true, enabled: args.enabled };
+                }
+                return inner(cmd, args);
+            };
+        }, READ_DELAY_MS);
+        await page.goto(BASE);
+        await page.locator('.mode-navigation [data-face="rin"]').waitFor();
+        await page.keyboard.press('F10');
+        await page.locator('.kamae-settings').waitFor();
+        await page.locator('.kamae-settings-disclosure[aria-controls="a11y-options"]').click();
+
+        const off = page.locator('[data-large-motion="false"]');
+        const retryBtn = page.locator('[data-large-motion-retry]');
+
+        // First choice, made before the late getter resolves: save fails.
+        await off.click();
+        assert.equal(await off.getAttribute('aria-checked'), 'true', 'session choice applied even though the save will fail');
+        await retryBtn.waitFor({ state: 'visible', timeout: 1000 });
+
+        // Let the delayed read (ON) resolve after the user's OFF choice.
+        await page.waitForTimeout(READ_DELAY_MS);
+        assert.equal(await off.getAttribute('aria-checked'), 'true', 'late read (ON) did not overwrite the session Off choice');
+        assert.equal(await page.locator('[data-large-motion-retry]').isVisible(), true, 'failure banner survives the late read');
+
+        // Close Settings and reopen: a fresh SettingsPanel mount must not
+        // lose the session choice or its failure state.
+        await page.locator('.kamae-settings-back-btn').click();
+        await page.locator('.mode-navigation [data-face="kamae"]').waitFor();
+        await page.keyboard.press('F10');
+        await page.locator('.kamae-settings').waitFor();
+        await page.locator('.kamae-settings-disclosure[aria-controls="a11y-options"]').click();
+        assert.equal(await page.locator('[data-large-motion="false"]').getAttribute('aria-checked'), 'true', 'Off choice survives close/reopen of Settings');
+        assert.equal(await page.locator('[data-large-motion-retry]').isVisible(), true, 'failure banner survives close/reopen of Settings');
+
+        // Retry must resend the last chosen value (false), never the
+        // late-read true.
+        await page.evaluate(() => { window.__e2eSetLargeMotionFails = false; });
+        await page.locator('[data-large-motion-retry]').click();
+        await page.locator('[data-large-motion-retry]').waitFor({ state: 'hidden', timeout: 1000 });
+        const calls = await page.evaluate(() => window.__e2eLargeMotionCalls);
+        assert.deepEqual(calls, [false, false], 'setter call sequence stayed [false, false], never the late-read true');
+        pass('R2: late getter + failed save + Retry keeps [false, false]; session choice and failure state survive close/reopen');
+        await page.close();
+    }
 } finally {
     await browser.close();
 }

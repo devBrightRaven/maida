@@ -3,7 +3,12 @@ import bridge from '../../../services/bridge';
 
 // One lookup per appId for the whole session: the kata strips and the game
 // list show the same capsules, so they share the promise instead of asking
-// the bridge twice. A failed invoke is not cached, so a later mount retries.
+// the bridge twice. bridge.getArt() itself never rejects — its call()
+// wrapper already turns a failed invoke into a resolved null, same as a
+// genuine "no art" result — so the rejection branch below is unreachable in
+// practice, and a failed read IS cached for the session same as a real
+// none/failed status; a later mount does not retry it (review 2026-09-26
+// C1: the previous comment claimed the opposite).
 const capsuleCache = new Map();
 
 function loadCapsule(appId) {
@@ -24,10 +29,11 @@ function loadCapsule(appId) {
 /**
  * CapsuleThumb
  * Decorative Steam capsule from the local art cache (bridge.getArt). The box
- * always reserves its 2:3 shape; missing or failed art leaves a quiet solid
- * surface, never a letter or fake art. The game name next to it is the
- * accessible label, so the thumb is hidden from assistive technology.
- * Rendered as <span> so it is valid inside a <button>.
+ * always reserves its 2:3 shape; missing or failed art gets the quiet empty-
+ * slot marker (KamaeView.css, kamae-capsule--none/--failed) instead of a
+ * letter or fake art. The game name next to it is the accessible label, so
+ * the thumb is hidden from assistive technology. Rendered as <span> so it is
+ * valid inside a <button>.
  */
 export default function CapsuleThumb({ appId, className = '' }) {
     const [art, setArt] = useState({ appId: null, url: null, status: 'loading' });

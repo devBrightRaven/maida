@@ -179,12 +179,19 @@ const bridge = {
 
     setMaida2PreviewAudio: (enabled) => call('set_maida2_preview_audio', { enabled: Boolean(enabled) }),
 
-    // Maida 2.0 large motion effects (sidebar symbol bloom). Boolean, default
-    // on. One-way opt-out: callers must still AND it with the OS
-    // prefers-reduced-motion check, which always wins.
+    // Maida 2.0 large motion effects (sidebar symbol bloom). Boolean when the
+    // read succeeds; null when it doesn't (IPC rejection or a dropped
+    // invoke, both already collapsed to null by call()). Callers must treat
+    // null as "unknown" and never fall back to true here — bloom must stay
+    // off until an actual boolean is confirmed (review 2026-09-26 R1: a
+    // legacy config missing this field defaults to true, but that default is
+    // the Rust getter's job on a successful read, not a mask over a
+    // transport failure). One-way opt-out: callers must still AND the
+    // resolved boolean with the OS prefers-reduced-motion check, which
+    // always wins.
     getMaida2LargeMotion: async () => {
         const result = await call('get_maida2_large_motion');
-        return typeof result === 'boolean' ? result : true;
+        return typeof result === 'boolean' ? result : null;
     },
 
     // Always resolves to an object with `.success` — call() turns both an

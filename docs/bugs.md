@@ -18,6 +18,7 @@ Status: 待重現, 已確認, 修復中, 待驗證, 已驗證修復, 受阻.
 | BUG-007 | Uninstalled game still listed in Maai (library not refreshed) | P1 | 待重現 |
 | BUG-008 | Maai card date/sub text low contrast on hover | P2 | 已確認，未修 |
 | BUG-009 | Simplified-script locales other than zh-CN resolve to Traditional Chinese | P2 | 待驗證 |
+| BUG-010 | Kamae remove hold is 2500ms, guardrail 7.4 says 3000ms | P2 | 已驗證修復（文字）|
 
 ---
 
@@ -112,3 +113,12 @@ Status: 待重現, 已確認, 修復中, 待驗證, 已驗證修復, 受阻.
 - Verified: unit tests only — `src/__tests__/i18n/locale-detection.test.js` now covers `zh-Hans`, `zh-Hans-CN`, `zh-CN`, `zh-SG`, `zh-MY`, `zh-Hant`, `zh-Hant-TW`, `zh-TW`, `zh-HK`, `zh-MO`, bare `zh`, `ja-JP`, `en-GB`, `fr`, and a `navigator.languages` case (`['fr', 'ja']` -> `ja`); 23/23 pass.
 - Not verified: real WebView2 (Windows) / WebKitGTK (Linux) reports on an actual Simplified-script OS — still unconfirmed what those runtimes actually emit.
 - Next: real-system check of what WebView2 / WebKitGTK report for `navigator.language(s)` under a Simplified-Chinese OS locale.
+
+## BUG-010 Kamae remove hold is 2500ms, guardrail 7.4 says 3000ms
+
+- Found: 2026-09-26 by Codex during P2 review (pre-existing baseline, already 2500ms at `6984e75`; not introduced by P1/P2).
+- Actual: `src/ui/features/Kamae/ShowcaseList.jsx` `TOTAL_HOLD = 2500` ("1.5s + 1s"). `AGENTS.md` 7.4 lists `anchorThreshold = 3000ms` for "TRY hold = anchor / Kamae remove commit".
+- Unknown: which one is intended. Either the code drifted or the guardrail text is inaccurate for Kamae remove.
+- Change: none. 7.4 forbids shortening and requires product discussion to lengthen, so this needs a user decision.
+- Next: ask the user which value is intended, then align code or guardrail text.
+- Resolution 2026-09-26: user confirmed 2500ms is intended. `AGENTS.md` 7.4 text corrected (TRY anchor stays 3000ms; Kamae remove commit listed separately at 2500ms). Code unchanged.

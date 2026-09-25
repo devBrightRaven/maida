@@ -156,6 +156,62 @@ main.kamae-view:has(> .mode-navigation) > .kamae-content {
     box-shadow: inset 0 0 0 1px var(--m2-border);
 }
 
+/* Empty/failed capsule slot marker (decorative). Ported from the CSS rules
+   delivered at C:/Code/maida/v2.0_UI/assets/2026-09-26/capsule-empty-slot.css
+   (Codex, 2026-09-26) into the project's own selectors instead of adding a
+   separate `.capsule-empty-slot` element: CapsuleThumb.jsx already carries a
+   `kamae-capsule--<status>` modifier class per art status, so the two quiet
+   opposing corner marks apply directly to the existing box. Scoped to
+   kamae-capsule--none / --failed only — loading stays a plain surface with
+   no marks, ready shows the real image over it.
+   --m2-surface (the box's existing background, set above) is byte-identical
+   to the delivered --slot-surface in both themes, so no separate surface
+   token was introduced. The delivered --slot-mark color has no exact
+   --m2-* equivalent, so it is kept as delivered per the work order. */
+.kamae-capsule--none,
+.kamae-capsule--failed {
+    position: relative;
+    --capsule-empty-mark: #a99a86;
+}
+
+[data-theme="dark"] .kamae-capsule--none,
+[data-theme="dark"] .kamae-capsule--failed {
+    --capsule-empty-mark: #796c59;
+}
+
+.kamae-capsule--none::before,
+.kamae-capsule--none::after,
+.kamae-capsule--failed::before,
+.kamae-capsule--failed::after {
+    content: "";
+    position: absolute;
+    width: 25%;
+    height: 17%;
+    border: 0 solid var(--capsule-empty-mark);
+    border-radius: 0;
+}
+
+.kamae-capsule--none::before,
+.kamae-capsule--failed::before {
+    inset: 25% auto auto 25%;
+    border-top-width: 1px;
+    border-left-width: 1px;
+}
+
+.kamae-capsule--none::after,
+.kamae-capsule--failed::after {
+    inset: auto 25% 25% auto;
+    border-bottom-width: 1px;
+    border-right-width: 1px;
+}
+
+@media (forced-colors: active) {
+    .kamae-capsule--none,
+    .kamae-capsule--failed {
+        --capsule-empty-mark: GrayText;
+    }
+}
+
 /* ── Search (existing add-to-kata combobox) ─────────── */
 
 .kamae-search {

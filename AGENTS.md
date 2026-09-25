@@ -106,7 +106,8 @@ If you need to describe Maida surfacing a game, use passive or user-centric phra
 ### 7.4 Long-press thresholds
 
 - `tapThreshold = 300ms` (short press)
-- `anchorThreshold = 3000ms` (TRY hold = anchor / Kamae remove commit)
+- `anchorThreshold = 3000ms` (TRY hold = anchor)
+- Kamae remove commit hold = 2500ms (`ShowcaseList` `TOTAL_HOLD`, 1.5s + 1s). Confirmed as intended by the user 2026-09-26; this line previously grouped it under 3000ms.
 - Undo decision window: same tapThreshold
 
 These are the friction layer that protects the user from accidental state changes. Don't shorten to "improve UX." Lengthening requires product discussion.

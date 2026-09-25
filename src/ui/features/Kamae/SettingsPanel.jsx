@@ -18,7 +18,7 @@ const CARD_OPACITY_DEBOUNCE_MS = 300;
  * SettingsPanel — inline panel for IGDB credential management.
  * Renders inside KamaeView when settings is toggled open.
  */
-export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleChange, onTourStart, onNavigateLegal, replayTourBtnRef, updateCheck, updateAlertShown, onFrozenGuardChange, onMaida2PlayDelayChange, onMaida2PreviewAudioChange, onMaida2LargeMotionChange, onMaida2CardOpacityChange, navigationLayout = 'tabs', onNavigationLayoutChange }) {
+export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleChange, onTourStart, onNavigateLegal, replayTourBtnRef, updateCheck, updateAlertShown, onFrozenGuardChange, onMaida2PlayDelayChange, onMaida2PreviewAudioChange, largeMotion, largeMotionSaveFailed, largeMotionAnnounce, onMaida2LargeMotionChange, onMaida2LargeMotionRetry, onMaida2CardOpacityChange, navigationLayout = 'tabs', onNavigationLayoutChange }) {
     const [clientId, setClientId] = useState('');
     const [clientSecret, setClientSecret] = useState('');
     const [hasExisting, setHasExisting] = useState(false);
@@ -51,12 +51,12 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
 
     // Maida 2.0 large motion effects (default on, user ruling 2026-09-25).
     // One-way opt-out; the OS reduce-motion preference still always wins.
-    const [largeMotion, setLargeMotion] = useState(true);
-    const [largeMotionAnnounce, setLargeMotionAnnounce] = useState('');
-    // Set when the last save attempt did not persist (review 2026-09-25 R2):
-    // the session choice above still applies to this run, but it reverts on
-    // restart unless the user retries and the retry succeeds.
-    const [largeMotionSaveFailed, setLargeMotionSaveFailed] = useState(false);
+    // Value, failure state and announce text are all owned by App and passed
+    // down as props (review 2026-09-26 R2): this panel no longer keeps its
+    // own copy or does its own read, so a late async read here can no longer
+    // overwrite the player's just-made choice, and closing/reopening
+    // Settings (which remounts this component) can no longer lose the
+    // session choice or its failure state.
 
     // Maida 2.0 card opacity (percent, 40..100, default 70)
     const [cardOpacity, setCardOpacity] = useState(70);
@@ -92,8 +92,6 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
             if (typeof playDelay === 'number') setPlayDelaySeconds(playDelay);
             const audioEnabled = await bridge.getMaida2PreviewAudio();
             if (typeof audioEnabled === 'boolean') setPreviewAudio(audioEnabled);
-            const largeMotionEnabled = await bridge.getMaida2LargeMotion();
-            if (typeof largeMotionEnabled === 'boolean') setLargeMotion(largeMotionEnabled);
             const opacity = await bridge.getMaida2CardOpacity();
             if (typeof opacity === 'number') setCardOpacity(opacity);
         })();
@@ -166,40 +164,6 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
             })
         );
     }, [onMaida2PreviewAudioChange]);
-
-    // Shared by the toggle and the Retry control below. Only ever announces
-    // success once bridge.setMaida2LargeMotion actually confirms it (it now
-    // always resolves an object with `.success` — never throws), so a
-    // dropped save can no longer be announced as saved (review 2026-09-25 R2).
-    const persistLargeMotion = useCallback((enabled) => {
-        return bridge.setMaida2LargeMotion(enabled).then((result) => {
-            if (result && result.success) {
-                setLargeMotionSaveFailed(false);
-                setLargeMotionAnnounce(
-                    t('ui.settings.maida2_large_motion_announce', {
-                        state: enabled ? t('ui.settings.maida2_large_motion_on') : t('ui.settings.maida2_large_motion_off'),
-                    })
-                );
-            } else {
-                console.warn('[Settings] failed to persist maida2 large motion:', result?.error);
-                setLargeMotionSaveFailed(true);
-                setLargeMotionAnnounce(t('ui.settings.maida2_large_motion_save_failed'));
-            }
-        });
-    }, []);
-
-    const handleLargeMotionChange = useCallback((enabled) => {
-        // The session choice takes effect immediately regardless of whether
-        // the save below succeeds — only the failure banner + live region
-        // distinguish "applied this run" from "persisted to disk".
-        setLargeMotion(enabled);
-        if (onMaida2LargeMotionChange) onMaida2LargeMotionChange(enabled);
-        persistLargeMotion(enabled);
-    }, [onMaida2LargeMotionChange, persistLargeMotion]);
-
-    const handleLargeMotionRetry = useCallback(() => {
-        persistLargeMotion(largeMotion);
-    }, [largeMotion, persistLargeMotion]);
 
     const handleTest = useCallback(async () => {
         setTesting(true);
@@ -528,7 +492,7 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
                                         data-large-motion={String(enabled)}
                                         aria-checked={largeMotion === enabled}
                                         className={`kamae-haptic-seg ${enabled === largeMotion ? 'kamae-haptic-seg--filled' : ''}`}
-                                        onClick={() => handleLargeMotionChange(enabled)}
+                                        onClick={() => onMaida2LargeMotionChange?.(enabled)}
                                     >
                                         {enabled ? t('ui.settings.maida2_large_motion_on') : t('ui.settings.maida2_large_motion_off')}
                                     </button>
@@ -541,7 +505,7 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
                                         type="button"
                                         className="kamae-settings-btn kamae-settings-retry-btn"
                                         data-large-motion-retry=""
-                                        onClick={handleLargeMotionRetry}
+                                        onClick={onMaida2LargeMotionRetry}
                                     >
                                         {t('ui.settings.maida2_large_motion_retry')}
                                     </button>

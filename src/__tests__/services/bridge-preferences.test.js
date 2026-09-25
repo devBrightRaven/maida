@@ -167,14 +167,14 @@ describe('bridge.getMaida2LargeMotion', () => {
         expect(invokeMock).toHaveBeenCalledWith('get_maida2_large_motion', {});
     });
 
-    it('falls back to true when the invoke result is not a boolean', async () => {
+    it('resolves to null (unknown) when the invoke result is not a boolean', async () => {
         invokeMock.mockResolvedValue(null);
-        await expect(bridge.getMaida2LargeMotion()).resolves.toBe(true);
+        await expect(bridge.getMaida2LargeMotion()).resolves.toBe(null);
     });
 
-    it('falls back to true when invoke throws (graceful degrade)', async () => {
+    it('resolves to null (unknown), never true, when invoke throws (review 2026-09-26 R1: a transport failure must not be read as consent to play bloom)', async () => {
         invokeMock.mockRejectedValue(new Error('no tauri runtime'));
-        await expect(bridge.getMaida2LargeMotion()).resolves.toBe(true);
+        await expect(bridge.getMaida2LargeMotion()).resolves.toBe(null);
     });
 });
 

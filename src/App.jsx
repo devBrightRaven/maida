@@ -417,10 +417,40 @@ function App() {
         });
         return () => { cancelled = true; };
     }, []);
+    // Single source of truth for both the bloom gate above and
+    // SettingsPanel's toggle (review 2026-09-26 R2): SettingsPanel used to
+    // keep its own copy plus its own late async read, so that read could
+    // silently revert the player's just-made choice before Retry resent it.
+    // Persist status lives here too so it survives SettingsPanel closing and
+    // reopening (a fresh mount no longer re-reads from disk).
+    const [maida2LargeMotionSaveFailed, setMaida2LargeMotionSaveFailed] = useState(false);
+    const [maida2LargeMotionAnnounce, setMaida2LargeMotionAnnounce] = useState('');
+    const persistMaida2LargeMotion = useCallback((enabled) => {
+        return bridge.setMaida2LargeMotion(enabled).then((result) => {
+            if (result && result.success) {
+                setMaida2LargeMotionSaveFailed(false);
+                setMaida2LargeMotionAnnounce(
+                    t('ui.settings.maida2_large_motion_announce', {
+                        state: enabled ? t('ui.settings.maida2_large_motion_on') : t('ui.settings.maida2_large_motion_off'),
+                    })
+                );
+            } else {
+                console.warn('[App] failed to persist maida2 large motion:', result?.error);
+                setMaida2LargeMotionSaveFailed(true);
+                setMaida2LargeMotionAnnounce(t('ui.settings.maida2_large_motion_save_failed'));
+            }
+        });
+    }, []);
     const handleMaida2LargeMotionChange = useCallback((enabled) => {
         maida2LargeMotionUserSetRef.current = true;
         setMaida2LargeMotion(enabled);
-    }, []);
+        persistMaida2LargeMotion(enabled);
+    }, [persistMaida2LargeMotion]);
+    // Retry always resends the current session value (this state), never a
+    // value re-read from disk.
+    const handleMaida2LargeMotionRetry = useCallback(() => {
+        persistMaida2LargeMotion(maida2LargeMotion);
+    }, [maida2LargeMotion, persistMaida2LargeMotion]);
 
     // Maida 2.0 card opacity (percent, 40..=100, default 70)
     const [maida2CardOpacity, setMaida2CardOpacity] = useState(70);
@@ -796,7 +826,11 @@ function App() {
                     onFrozenGuardChange={handleFrozenGuardChange}
                     onMaida2PlayDelayChange={handleMaida2PlayDelayChange}
                     onMaida2PreviewAudioChange={handleMaida2PreviewAudioChange}
+                    maida2LargeMotion={maida2LargeMotion}
+                    maida2LargeMotionSaveFailed={maida2LargeMotionSaveFailed}
+                    maida2LargeMotionAnnounce={maida2LargeMotionAnnounce}
                     onMaida2LargeMotionChange={handleMaida2LargeMotionChange}
+                    onMaida2LargeMotionRetry={handleMaida2LargeMotionRetry}
                     onMaida2CardOpacityChange={handleMaida2CardOpacityChange}
                     updateCheck={updateCheck} updateAlertShown={updateAlertShown} />
                 {import.meta.env.DEV && import.meta.env.VITE_AGENTATION && <div aria-hidden="true"><Agentation endpoint="http://localhost:4747" /></div>}

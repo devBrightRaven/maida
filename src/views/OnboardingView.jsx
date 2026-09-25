@@ -192,7 +192,13 @@ export default function OnboardingView({ onComplete, themeToggle, onLocaleChange
                                     aria-pressed={getLocale() === option.value}
                                     onClick={() => handleSelectLocale(option.value)}
                                 >
-                                    {option.label}
+                                    {/* Non-color selected marker (review 2026-09-26 P3 R1): forced-colors
+                                        strips the box-shadow/tint below, and this glyph stays visible once
+                                        focus moves away, unlike the focus outline. Space is reserved on
+                                        every option (visibility, not display) so selecting a different
+                                        language never shifts the layout. */}
+                                    <span className="onboarding-language-check" aria-hidden="true">&#10003;</span>
+                                    <span className="onboarding-language-label">{option.label}</span>
                                 </button>
                             ))}
                         </div>

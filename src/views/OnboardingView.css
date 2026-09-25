@@ -127,6 +127,10 @@
 }
 
 .onboarding-language-option {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
     min-width: 0;
     padding: 0.6rem 1.1rem;
     border: 1px solid var(--m2-border);
@@ -149,6 +153,22 @@
     color: var(--m2-accent);
     border-color: var(--m2-accent);
     box-shadow: inset 0 0 0 1px var(--m2-accent);
+}
+
+/* Review 2026-09-26 P3 R1: forced-colors strips the box-shadow/tint above,
+ * leaving only color to tell selected apart from unselected. This checkmark
+ * is a non-color marker that survives forced-colors and stays visible once
+ * focus moves elsewhere (unlike the focus outline below). `visibility`, not
+ * `display`, so every option reserves the same space and selecting a
+ * different language never shifts the grid. */
+.onboarding-language-check {
+    display: inline-block;
+    width: 1em;
+    visibility: hidden;
+}
+
+.onboarding-language-option[aria-pressed='true'] .onboarding-language-check {
+    visibility: visible;
 }
 
 /* Gamepad-driven programmatic .focus() is not classified as keyboard-sourced
