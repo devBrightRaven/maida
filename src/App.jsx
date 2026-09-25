@@ -15,6 +15,8 @@ import { calculateTraceWeights, updateDebugTrace } from './core/engine';
 import { createHook, retractHook, setGameState, EMPTY_HOOKS_STATE } from './core/hooks';
 import { buildTraceEvent, getWriterIdentity } from './core/trace';
 import { bucketGames } from './core/zones';
+import { resolveSettingsReturnFace } from './core/settingsReturn';
+import { buildPlaytimeSnapshotPayload } from './core/lastPlayed';
 import { pickPostLaunch } from './core/prescriptionPicker';
 import { loadData, saveData } from './services/persistence';
 import { useMaidaSession } from './hooks/useMaidaSession';
@@ -278,9 +280,11 @@ function App() {
         }
     }, [face, switchToKamae]);
     const handleSettingsClosed = useCallback(() => {
-        if (settingsReturnFaceRef.current === 'maida2') switchToMaida2();
+        const returnFace = resolveSettingsReturnFace(settingsReturnFaceRef.current);
         settingsReturnFaceRef.current = null;
-    }, [switchToMaida2]);
+        if (returnFace === 'maida2') switchToMaida2();
+        else if (returnFace === 'rin') switchToRin();
+    }, [switchToMaida2, switchToRin]);
 
     // Legal pages and the settings panel are modals owned by RinView /
     // KamaeView. While either is open, face-switching would abandon the
@@ -509,9 +513,7 @@ function App() {
                 subjectId: 'library',
                 namespace: 'maida',
                 writer: getWriterIdentity(),
-                payload: {
-                    games: games.filter(g => g.installed).map(g => ({ id: String(g.id), steamLastPlayed: g.steamLastPlayed || 0 })),
-                },
+                payload: buildPlaytimeSnapshotPayload(games),
             }),
         ]);
     }, [data.games, hooksState]);

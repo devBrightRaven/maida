@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { bucketGames } from '../core/zones';
+import { lastPlayedState, formatLastPlayed } from '../core/lastPlayed';
 import { useGameInput } from '../hooks/useGameInput';
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
 import { vibrate, vibrateProgress } from '../services/haptics';
@@ -50,15 +51,15 @@ const HERO_DWELL_MS = 400;
 // chain unchanged — no separate hover-only behavior to maintain.
 const HOVER_FOCUS_MS = 1000;
 
-// steamLastPlayed is a Steam epoch (seconds); tolerate ms just in case.
-function formatLastPlayed(epoch) {
-    const ms = epoch > 1e12 ? epoch : epoch * 1000;
-    return new Date(ms).toLocaleDateString(getLocale());
-}
-
-// "All installed" mixes played and never-played games, unlike a single zone.
+// "All installed" mixes recorded, zero, and unknown games, unlike a single
+// zone. Routes through lastPlayedState (core/lastPlayed.js) so missing /
+// invalid / legacy games are never shown as "never played" — see the
+// LastPlayed data contract (P0-1).
 function lastPlayedSubline(game) {
-    return game.steamLastPlayed > 0 ? formatLastPlayed(game.steamLastPlayed) : t('ui.maida2.card_never_played');
+    const state = lastPlayedState(game);
+    if (state.kind === 'recorded') return formatLastPlayed(state.epoch, getLocale());
+    if (state.kind === 'zero') return t('ui.maida2.card_no_play_record');
+    return t('ui.maida2.card_play_record_unavailable');
 }
 
 /**
@@ -94,8 +95,13 @@ export default function Maida2View({ navigation, games, hooksState, onHookAction
     const allInstalled = useMemo(
         () => (games || [])
             .filter(g => g && g.installed)
-            .sort((a, b) => (b.steamLastPlayed || 0) - (a.steamLastPlayed || 0)
-                || String(a.title || '').localeCompare(String(b.title || ''))),
+            .sort((a, b) => {
+                const aState = lastPlayedState(a);
+                const bState = lastPlayedState(b);
+                const aEpoch = aState.kind === 'recorded' ? aState.epoch : 0;
+                const bEpoch = bState.kind === 'recorded' ? bState.epoch : 0;
+                return (bEpoch - aEpoch) || String(a.title || '').localeCompare(String(b.title || ''));
+            }),
         [games]
     );
 
@@ -700,7 +706,7 @@ export default function Maida2View({ navigation, games, hooksState, onHookAction
                     ) : (
                         <ul role="list" className="m2-list">
                             {zones.now.map(game =>
-                                renderHoldCard(game, formatLastPlayed(game.steamLastPlayed)))}
+                                renderHoldCard(game, lastPlayedSubline(game)))}
                         </ul>
                     )}
                 </section>
@@ -815,7 +821,7 @@ export default function Maida2View({ navigation, games, hooksState, onHookAction
                     ) : (
                         <ul role="list" className="m2-list">
                             {zones.recentlyArrived.map(game =>
-                                renderHoldCard(game, t('ui.maida2.card_never_played')))}
+                                renderHoldCard(game, lastPlayedSubline(game)))}
                         </ul>
                     )}
                 </section>

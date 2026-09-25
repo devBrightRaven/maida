@@ -308,7 +308,8 @@
             "state_released": "放下",
             "state_set_status": "已設為「{state}」",
             "launch_hint": "按 Enter 開始",
-            "card_never_played": "尚未開啟",
+            "card_no_play_record": "Steam 沒有遊玩紀錄",
+            "card_play_record_unavailable": "無法取得遊玩紀錄",
             "card_hooked_badge": "已留住"
         },
         "history": {

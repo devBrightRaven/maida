@@ -19,6 +19,30 @@ const NON_GAME_PATTERNS: &[&str] = &[
 
 const ALWAYS_EXCLUDE_APPIDS: &[&str] = &["228980"];
 
+/// R1 fix: shared bound with `src/core/lastPlayed.js`'s `MAX_EPOCH_SECONDS`.
+/// 253402300799 = 9999-12-31T23:59:59Z, the conventional "last representable
+/// 4-digit-year" bound. A positive value past this bound (e.g. i64::MAX =
+/// 9223372036854775807) parses fine as an `i64` but is not a usable epoch:
+/// `new Date(n*1000)` on the JS side renders "Invalid Date", so it must not
+/// be treated as a recorded timestamp.
+const MAX_EPOCH_SECONDS: i64 = 253402300799;
+
+/// LastPlayed data contract (P0-1): compute (steamLastPlayed, status) from
+/// raw ACF content. status is one of "recorded" | "zero" | "missing" |
+/// "invalid" — never collapsed into a single 0/absent signal, so a caller
+/// can distinguish "Steam recorded no play" from "we don't know".
+fn compute_last_played(content: &str) -> (i64, &'static str) {
+    match vdf::extract_field(content, "LastPlayed") {
+        None => (0, "missing"),
+        Some(raw) => match raw.parse::<i64>() {
+            Ok(n) if n > 0 && n <= MAX_EPOCH_SECONDS => (n, "recorded"),
+            Ok(0) => (0, "zero"),
+            Ok(_) => (0, "invalid"), // negative, or positive but out of range
+            Err(_) => (0, "invalid"),
+        },
+    }
+}
+
 /// Detect Steam installation path (cross-platform).
 pub fn get_steam_path() -> Option<PathBuf> {
     // 1. Environment override
@@ -162,9 +186,9 @@ pub fn scan_steam_library() -> Result<Vec<Value>, String> {
             let appid = vdf::extract_field(&content, "appid");
             let name = vdf::extract_field(&content, "name");
             // Steam-recorded last-play epoch; missing or unparseable = 0.
-            let steam_last_played: i64 = vdf::extract_field(&content, "LastPlayed")
-                .and_then(|v| v.parse().ok())
-                .unwrap_or(0);
+            // steam_last_played_status distinguishes WHY it's 0 (see
+            // compute_last_played) so callers never fabricate "never played".
+            let (steam_last_played, steam_last_played_status) = compute_last_played(&content);
 
             let (appid, name) = match (appid, name) {
                 (Some(a), Some(n)) => (a, n),
@@ -201,6 +225,7 @@ pub fn scan_steam_library() -> Result<Vec<Value>, String> {
                 "steamAppId": appid,
                 "steamUrl": format!("steam://rungameid/{}", appid),
                 "steamLastPlayed": steam_last_played,
+                "steamLastPlayedStatus": steam_last_played_status,
                 "importedAt": now
             }));
         }
@@ -243,5 +268,62 @@ mod tests {
         let set: HashSet<&str> = ALWAYS_EXCLUDE_APPIDS.iter().copied().collect();
         assert!(set.contains("228980"));
         assert!(!set.contains("730"));
+    }
+
+    // LastPlayed data contract (P0-1) — four statuses at scan level.
+    #[test]
+    fn test_compute_last_played_recorded() {
+        let acf = "\"appid\"\t\"570\"\n\"LastPlayed\"\t\"1724800000\"";
+        assert_eq!(compute_last_played(acf), (1724800000, "recorded"));
+    }
+
+    #[test]
+    fn test_compute_last_played_zero() {
+        let acf = "\"appid\"\t\"570\"\n\"LastPlayed\"\t\"0\"";
+        assert_eq!(compute_last_played(acf), (0, "zero"));
+    }
+
+    #[test]
+    fn test_compute_last_played_missing() {
+        let acf = "\"appid\"\t\"570\"";
+        assert_eq!(compute_last_played(acf), (0, "missing"));
+    }
+
+    #[test]
+    fn test_compute_last_played_invalid_non_numeric() {
+        let acf = "\"appid\"\t\"570\"\n\"LastPlayed\"\t\"not-a-number\"";
+        assert_eq!(compute_last_played(acf), (0, "invalid"));
+    }
+
+    #[test]
+    fn test_compute_last_played_invalid_negative() {
+        let acf = "\"appid\"\t\"570\"\n\"LastPlayed\"\t\"-5\"";
+        assert_eq!(compute_last_played(acf), (0, "invalid"));
+    }
+
+    // R1: a positive but unusable value (out of the sane epoch range) must
+    // not be treated as a recorded timestamp.
+    #[test]
+    fn test_compute_last_played_invalid_i64_max() {
+        let acf = "\"appid\"\t\"570\"\n\"LastPlayed\"\t\"9223372036854775807\"";
+        assert_eq!(compute_last_played(acf), (0, "invalid"));
+    }
+
+    #[test]
+    fn test_compute_last_played_invalid_bound_plus_one() {
+        let acf = "\"appid\"\t\"570\"\n\"LastPlayed\"\t\"253402300800\"";
+        assert_eq!(compute_last_played(acf), (0, "invalid"));
+    }
+
+    #[test]
+    fn test_compute_last_played_recorded_at_bound() {
+        let acf = "\"appid\"\t\"570\"\n\"LastPlayed\"\t\"253402300799\"";
+        assert_eq!(compute_last_played(acf), (253402300799, "recorded"));
+    }
+
+    #[test]
+    fn test_compute_last_played_recorded_minimum() {
+        let acf = "\"appid\"\t\"570\"\n\"LastPlayed\"\t\"1\"";
+        assert_eq!(compute_last_played(acf), (1, "recorded"));
     }
 }

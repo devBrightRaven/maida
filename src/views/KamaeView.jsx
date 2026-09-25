@@ -83,6 +83,9 @@ export default function KamaeView({ navigation, navigationLayout = 'tabs', onNav
     // Auto-open settings when requested via F10/Menu button
     useEffect(() => {
         if (settingsRequested && !loading) {
+            // Remember what had focus right before Settings opened, so
+            // closing it can return focus there (see returnFocusFromSettings).
+            settingsOpenerRef.current = document.activeElement;
             setShowSettings(true);
             onSettingsOpened?.();
         }
@@ -141,6 +144,10 @@ export default function KamaeView({ navigation, navigationLayout = 'tabs', onNav
     const showcaseListRef = useRef(null);
     const faceSwitchRef = useRef(null);
     const replayTourBtnRef = useRef(null);
+    // Element focused right before Settings opened (see auto-open effect
+    // below). Used to restore focus on close when Settings was opened
+    // directly from Kamae, no face borrow — see returnFocusFromSettings.
+    const settingsOpenerRef = useRef(null);
     const showTour = tourStep !== null && tourStep >= STEP.KAMAE_KATA && tourStep <= STEP.KAMAE_SWITCH_RIN;
 
     // Tour step KAMAE_SETTINGS_REPLAY highlights the Replay-tour button inside
@@ -244,6 +251,27 @@ export default function KamaeView({ navigation, navigationLayout = 'tabs', onNav
         }
     }, []);
 
+    // Focus restoration after Settings closes while Kamae stays mounted
+    // (opened directly from Kamae, no face borrow — see settingsReturn.js
+    // RETURNABLE_FACES, which never includes 'kamae'). Borrowed-open cases
+    // switch face away in the same commit that closes Settings, unmounting
+    // KamaeView before this rAF fires, so it is a no-op for them.
+    // Prefers the element that had focus before Settings opened (mirrors the
+    // legalReturnRef capture/restore pattern above); falls back to Kamae's
+    // primary focus target, the same selector the mount-focus effect and
+    // the generic "back to main list" branch below already use.
+    const returnFocusFromSettings = useCallback(() => {
+        requestAnimationFrame(() => {
+            const opener = settingsOpenerRef.current;
+            const openerUsable = opener && opener !== document.body && opener.isConnected
+                && containerRef.current?.contains(opener);
+            const target = openerUsable
+                ? opener
+                : containerRef.current?.querySelector('.kata-group--active .kata-select-btn, [aria-pressed="true"]');
+            target?.focus();
+        });
+    }, []);
+
     const handleBack = useCallback(() => {
         if (legalPage) {
             // B/Escape on a legal page: scroll back into view, focus it,
@@ -273,6 +301,7 @@ export default function KamaeView({ navigation, navigationLayout = 'tabs', onNav
             setBackEscapeHint('');
             setShowSettings(false);
             onSettingsClosed?.();
+            returnFocusFromSettings();
         } else if (exploring) {
             setExploring(false);
         } else if (expandedKataId) {
@@ -285,7 +314,7 @@ export default function KamaeView({ navigation, navigationLayout = 'tabs', onNav
                 if (active) active.focus();
             }
         }
-    }, [legalPage, showSettings, exploring, expandedKataId, onSettingsClosed]);
+    }, [legalPage, showSettings, exploring, expandedKataId, onSettingsClosed, returnFocusFromSettings]);
 
     // F1 opens Kamae tour
     useEffect(() => {
@@ -326,7 +355,7 @@ export default function KamaeView({ navigation, navigationLayout = 'tabs', onNav
                 <p className="sr-only" role="status" aria-live="polite">{backEscapeHint}</p>
                 <div className="kamae-content">
                     <SettingsPanel
-                        onClose={() => { setShowSettings(false); onSettingsClosed?.(); }}
+                        onClose={() => { setShowSettings(false); onSettingsClosed?.(); returnFocusFromSettings(); }}
                         theme={theme}
                         toggleTheme={toggleTheme}
                         onLocaleChange={onLocaleChange}

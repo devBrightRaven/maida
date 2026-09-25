@@ -38,6 +38,15 @@ describe('bucketGames NOW', () => {
         const { now } = bucketGames({ games, hooksState: { hooks: [], gameStates: { kept: 'keep' } } });
         expect(now.map(g => g.id)).toEqual(['kept']);
     });
+
+    // LastPlayed data contract (P0-1): an explicit 'invalid' status is not a
+    // recorded timestamp, even though a stray positive-looking raw field
+    // would have passed the old `> 0` check.
+    it('excludes a game whose status is invalid even if steamLastPlayed looks nonzero', () => {
+        const games = [makeGame({ id: 'bad', steamLastPlayed: 500, steamLastPlayedStatus: 'invalid' })];
+        const { now } = bucketGames({ games, hooksState: null });
+        expect(now).toEqual([]);
+    });
 });
 
 describe('bucketGames STILL_HERE', () => {
@@ -77,10 +86,15 @@ describe('bucketGames STILL_HERE', () => {
 });
 
 describe('bucketGames RECENTLY_ARRIVED', () => {
-    it('contains never-played installed games sorted by importedAt desc, capped at 5', () => {
+    // Contract change (P0-1): RECENTLY_ARRIVED now requires a PROVEN zero
+    // (lastPlayedState kind 'zero' — the ACF field was present and read 0),
+    // not "anything not > 0". A fresh scan sets steamLastPlayedStatus
+    // explicitly, so these games carry it.
+    it('contains zero-status installed games sorted by importedAt desc, capped at 5', () => {
         const games = [1, 2, 3, 4, 5, 6].map(n => makeGame({
             id: `g-${n}`,
             steamLastPlayed: 0,
+            steamLastPlayedStatus: 'zero',
             importedAt: `2026-08-0${n}T00:00:00.000Z`,
         }));
         const { recentlyArrived } = bucketGames({ games, hooksState: null });
@@ -88,19 +102,28 @@ describe('bucketGames RECENTLY_ARRIVED', () => {
         expect(recentlyArrived.map(g => g.id)).toEqual(['g-6', 'g-5', 'g-4', 'g-3', 'g-2']);
     });
 
-    it('treats a missing steamLastPlayed as never played', () => {
-        const games = [makeGame({ id: 'g-1', steamLastPlayed: undefined })];
+    // Changed from "treats a missing steamLastPlayed as never played" to the
+    // opposite assertion: missing/invalid/legacy-0 games are UNKNOWN, not
+    // proven unplayed, so the contract forbids claiming them as never played.
+    // Only an explicit 'zero' status qualifies.
+    it('excludes games whose lastPlayed status is unknown (missing, invalid, or legacy-0) — unknown is not proven unplayed', () => {
+        const games = [
+            makeGame({ id: 'no-status', steamLastPlayed: 0 }), // legacy, no explicit status
+            makeGame({ id: 'missing-status', steamLastPlayed: 0, steamLastPlayedStatus: 'missing' }),
+            makeGame({ id: 'invalid-status', steamLastPlayed: 0, steamLastPlayedStatus: 'invalid' }),
+            makeGame({ id: 'zero-status', steamLastPlayed: 0, steamLastPlayedStatus: 'zero' }),
+        ];
         const { recentlyArrived } = bucketGames({ games, hooksState: null });
-        expect(recentlyArrived.map(g => g.id)).toEqual(['g-1']);
+        expect(recentlyArrived.map(g => g.id)).toEqual(['zero-status']);
     });
 
     it('excludes played, uninstalled, resting, and released games', () => {
         const games = [
             makeGame({ id: 'played', steamLastPlayed: 100 }),
-            makeGame({ id: 'not-installed', installed: false }),
-            makeGame({ id: 'resting' }),
-            makeGame({ id: 'gone' }),
-            makeGame({ id: 'fresh' }),
+            makeGame({ id: 'not-installed', installed: false, steamLastPlayedStatus: 'zero' }),
+            makeGame({ id: 'resting', steamLastPlayedStatus: 'zero' }),
+            makeGame({ id: 'gone', steamLastPlayedStatus: 'zero' }),
+            makeGame({ id: 'fresh', steamLastPlayedStatus: 'zero' }),
         ];
         const hooksState = { hooks: [], gameStates: { resting: 'rest', gone: 'released' } };
         const { recentlyArrived } = bucketGames({ games, hooksState });
@@ -109,8 +132,8 @@ describe('bucketGames RECENTLY_ARRIVED', () => {
 
     it('tolerates missing importedAt', () => {
         const games = [
-            makeGame({ id: 'dated' }),
-            makeGame({ id: 'undated', importedAt: undefined }),
+            makeGame({ id: 'dated', steamLastPlayedStatus: 'zero' }),
+            makeGame({ id: 'undated', steamLastPlayedStatus: 'zero', importedAt: undefined }),
         ];
         const { recentlyArrived } = bucketGames({ games, hooksState: null });
         expect(recentlyArrived.map(g => g.id)).toEqual(['dated', 'undated']);

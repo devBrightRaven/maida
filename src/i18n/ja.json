@@ -308,7 +308,8 @@
             "state_released": "手放す",
             "state_set_status": "「{state}」にしました",
             "launch_hint": "Enter で始める",
-            "card_never_played": "まだ開いていません",
+            "card_no_play_record": "Steam にプレイ記録なし",
+            "card_play_record_unavailable": "プレイ記録を取得できません",
             "card_hooked_badge": "留めてある"
         },
         "history": {

@@ -308,7 +308,8 @@
             "state_released": "放下",
             "state_set_status": "已设为「{state}」",
             "launch_hint": "按 Enter 开始",
-            "card_never_played": "尚未打开",
+            "card_no_play_record": "Steam 没有游玩记录",
+            "card_play_record_unavailable": "无法获取游玩记录",
             "card_hooked_badge": "已留住"
         },
         "history": {

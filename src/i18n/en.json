@@ -308,7 +308,8 @@
             "state_released": "Release",
             "state_set_status": "Set to {state}",
             "launch_hint": "Enter to begin",
-            "card_never_played": "Not yet opened",
+            "card_no_play_record": "No play recorded by Steam",
+            "card_play_record_unavailable": "Play record unavailable",
             "card_hooked_badge": "Kept"
         },
         "history": {
