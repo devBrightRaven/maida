@@ -19,6 +19,7 @@ Status: 待重現, 已確認, 修復中, 待驗證, 已驗證修復, 受阻.
 | BUG-008 | Maai card date/sub text low contrast on hover | P2 | 已確認，未修 |
 | BUG-009 | Simplified-script locales other than zh-CN resolve to Traditional Chinese | P2 | 待驗證 |
 | BUG-010 | Kamae remove hold is 2500ms, guardrail 7.4 says 3000ms | P2 | 已驗證修復（文字）|
+| BUG-011 | AGENTS.md 7.11 describes a version-tag mechanism the code no longer uses | P2 | 已確認，未修 |
 
 ---
 
@@ -122,3 +123,11 @@ Status: 待重現, 已確認, 修復中, 待驗證, 已驗證修復, 受阻.
 - Change: none. 7.4 forbids shortening and requires product discussion to lengthen, so this needs a user decision.
 - Next: ask the user which value is intended, then align code or guardrail text.
 - Resolution 2026-09-26: user confirmed 2500ms is intended. `AGENTS.md` 7.4 text corrected (TRY anchor stays 3000ms; Kamae remove commit listed separately at 2500ms). Code unchanged.
+
+## BUG-011 AGENTS.md 7.11 describes a version-tag mechanism the code no longer uses
+
+- Found: 2026-09-26 by the P4 acceptance run (`design/maida2-review/p4/acceptance.md`, row 41).
+- Actual: 7.11 says the update/version button is an app-root sibling `.global-version-tag` that KamaeView/RinView must concatenate into their focus cycle. The code now renders one `VersionTag className="footer-version-tag"` inside the shared `Footer` (`App.jsx` `footerVersion`, `ui/Footer.jsx`), inside each view's container, reached by the generic `.app-footer button` selector. `Maida2View.jsx` still queries `.global-version-tag` (dead: no such element is rendered).
+- Behaviour: the requirement still holds. `e2e/closeout-check.mjs` proves gamepad reaches the update button in all three views and both navigation layouts. Documentation drift, not a functional regression.
+- Change: none. 7.11 is a red line; rewording it needs the user's consent. Dead query in `Maida2View.jsx` left in place with it.
+- Next: user decides whether to reword 7.11 to the Footer-based mechanism (keeping the rule: any new app-root sibling with interactive content must be reachable) and remove the dead query.
