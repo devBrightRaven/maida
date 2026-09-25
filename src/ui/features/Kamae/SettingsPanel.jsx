@@ -5,6 +5,7 @@ import { getIntensity, setIntensity, vibrate } from '../../../services/haptics';
 import { validateKeyFormat, formatLicenseKey } from '../../../core/license';
 import bridge from '../../../services/bridge';
 import VersionTag from '../../VersionTag';
+import { LARGE_MOTION_SETTING_ENABLED } from '../../modeBloom';
 
 const FROZEN_GUARD_MIN = 5;
 const FROZEN_GUARD_MAX = 30;
@@ -478,6 +479,7 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
                             </div>
                         </div>
 
+                        {LARGE_MOTION_SETTING_ENABLED && (
                         <div className="kamae-settings-a11y-item">
                             <h3 id="a11y-large-motion-heading" className="kamae-settings-a11y-heading">
                                 {t('ui.settings.maida2_large_motion_title')}
@@ -520,6 +522,7 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
                                 {largeMotionAnnounce}
                             </div>
                         </div>
+                        )}
 
                         <div className="kamae-settings-a11y-item">
                             <h3 id="a11y-card-opacity-heading" className="kamae-settings-a11y-heading">

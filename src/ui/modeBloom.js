@@ -8,6 +8,12 @@
 // Decorative only: aria-hidden + inert layer, pointer-events none, never
 // focusable. Animates transform / opacity / filter only.
 
+// The "Large motion effects" toggle is a debug control (user ruling
+// 2026-09-26): shown and honoured only in dev builds. Production has no
+// app-level motion toggle, so bloom follows the OS reduce-motion setting
+// alone and AGENTS.md red line 7.6 stays intact.
+export const LARGE_MOTION_SETTING_ENABLED = import.meta.env.DEV;
+
 export const BLOOM_DEBOUNCE_MS = 250;
 export const BLOOM_DURATION_MS = 900;
 // Lowered 0.35 -> 0.22 and the reach capped below after user review

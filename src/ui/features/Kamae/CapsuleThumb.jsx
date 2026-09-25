@@ -35,12 +35,24 @@ function loadCapsule(appId) {
  * the thumb is hidden from assistive technology. Rendered as <span> so it is
  * valid inside a <button>.
  */
+// Dev-only preview switch: set localStorage `maida_dev_force_no_capsule` to
+// "1" to show the empty-slot marker on every other game (odd appIds), so it
+// can be seen next to real capsules. Stripped from production builds.
+function devForceNoCapsule(appId) {
+    if (!import.meta.env.DEV) return false;
+    try {
+        return localStorage.getItem('maida_dev_force_no_capsule') === '1' && Number(appId) % 2 === 1;
+    } catch {
+        return false;
+    }
+}
+
 export default function CapsuleThumb({ appId, className = '' }) {
     const [art, setArt] = useState({ appId: null, url: null, status: 'loading' });
 
     useEffect(() => {
         let cancelled = false;
-        if (!appId) {
+        if (!appId || devForceNoCapsule(appId)) {
             setArt({ appId, url: null, status: 'none' });
             return undefined;
         }

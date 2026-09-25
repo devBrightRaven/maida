@@ -33,6 +33,7 @@ import { t, getLocale } from './i18n';
 import { loadPrescriptionTranslations, localizePrescription } from './i18n/prescriptions';
 import { secondsToWord } from './i18n/numbers';
 import './App.css';
+import { LARGE_MOTION_SETTING_ENABLED } from './ui/modeBloom';
 
 // Load prescription translations for detected locale (fire-and-forget)
 loadPrescriptionTranslations();
@@ -406,9 +407,12 @@ function App() {
     // once while startup is still confirming that). If the user flips the
     // toggle before the read resolves, maida2LargeMotionUserSetRef marks
     // their choice authoritative so the late read cannot overwrite it.
-    const [maida2LargeMotion, setMaida2LargeMotion] = useState(null);
+    // Production: the toggle does not exist (debug-only, see modeBloom.js),
+    // so the preference is simply on and only the OS setting gates bloom.
+    const [maida2LargeMotion, setMaida2LargeMotion] = useState(LARGE_MOTION_SETTING_ENABLED ? null : true);
     const maida2LargeMotionUserSetRef = useRef(false);
     useEffect(() => {
+        if (!LARGE_MOTION_SETTING_ENABLED) return undefined;
         let cancelled = false;
         bridge.getMaida2LargeMotion().then((enabled) => {
             if (!cancelled && !maida2LargeMotionUserSetRef.current && typeof enabled === 'boolean') {
