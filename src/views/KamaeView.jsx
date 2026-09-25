@@ -6,13 +6,13 @@ import ExploreView from '../ui/features/Kamae/ExploreView';
 import SettingsPanel from '../ui/features/Kamae/SettingsPanel';
 import { resolveScrollTarget } from '../utils/scroll';
 import KataPanel from '../ui/features/Kamae/KataPanel';
+import { CapsuleStrip } from '../ui/features/Kamae/CapsuleThumb';
 import GuidedTour from '../ui/features/GuidedTour/GuidedTour';
 import { STEP } from '../tourSteps';
 import { useGameInput } from '../hooks/useGameInput';
 import { addGameToKata, removeGameFromKata } from '../core/katas';
 import { t } from '../i18n';
 import bridge from '../services/bridge';
-import CalligraphyBg from '../ui/CalligraphyBg';
 import Footer from '../ui/Footer';
 import AccessibilityPage from '../ui/pages/AccessibilityPage';
 import PrivacyPage from '../ui/pages/PrivacyPage';
@@ -273,6 +273,20 @@ export default function KamaeView({ navigation, navigationLayout = 'tabs', onNav
     }, []);
 
     const handleBack = useCallback(() => {
+        // A "confirm remove" row is armed: Esc/B disarms it and keeps focus
+        // on that button, before any of the branches below run. DOM query
+        // instead of lifting ShowcaseList's local `confirming` state up here
+        // (7.9 posture — mirrors the onYButton F2 dispatch below). Redundant
+        // for keyboard Escape (the button's own onKeyDown already disarms
+        // and stops propagation before this ever runs) but is the only path
+        // gamepad B has: B calls onBack directly and never touches the
+        // button's own handler.
+        const armedBtn = containerRef.current?.querySelector('.showcase-hold-btn--confirm');
+        if (armedBtn) {
+            armedBtn.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+            armedBtn.focus();
+            return;
+        }
         if (legalPage) {
             // B/Escape on a legal page: scroll back into view, focus it,
             // and pulse it so users see the input was received even when
@@ -425,51 +439,67 @@ export default function KamaeView({ navigation, navigationLayout = 'tabs', onNav
             {showSrGuide && (
                 <p className="sr-only" role="status" aria-live="polite">{t('ui.kamae.sr_guide')}</p>
             )}
-            <CalligraphyBg char="構" className="kamae-calligraphy-bg" />
-            <div className="kamae-title-block" aria-hidden="true">
-                <p className="kamae-title-reading">{t('ui.kamae.reading')}</p>
-                <p className="kamae-title-desc">{t('ui.kamae.desc')}</p>
-            </div>
             {!showTour && navigation}
             <div className="kamae-content">
                 <h1 className="sr-only">{t('ui.kamae.mode_prefix')}構 Kamae</h1>
-                <button
-                    type="button"
-                    className={`kata-item ${activeKataId === null ? 'kata-item--active' : ''}`}
-                    aria-pressed={activeKataId === null}
-                    onClick={() => handleKataUpdate({ katas: showcaseState.katas || [], activeKataId: null })}
-                >
-                    <span className="kata-item-name">
-                        {t('ui.katas.all_games')}
-                        <span className="kata-item-count" aria-hidden="true">({allInstalledGames.length})</span>
-                        <span className="sr-only">, {t('ui.katas.game_count_aria', { count: allInstalledGames.length })}</span>
-                    </span>
-                    <span className={`kata-item-badge ${activeKataId === null ? '' : 'kata-item-badge--hidden'}`}>{t('ui.katas.active')}</span>
-                    <span className="kata-item-actions kata-item-actions--placeholder" />
-                </button>
-                <div ref={kataPanelRef}>
-                    <KataPanel
-                        katas={showcaseState.katas || []}
-                        activeKataId={activeKataId}
-                        showcaseGames={allInstalledGames}
-                        onUpdate={handleKataUpdate}
-                        expandedId={expandedKataId}
-                        onExpandToggle={setExpandedKataId}
-                    />
+                {/* Mode heading: existing Kamae name + one-line function text,
+                    as on the Rin stage. aria-hidden as before (the h1 above
+                    carries the SR mode name). The 1.x 構 watermark is gone. */}
+                <div className="kamae-title-block" aria-hidden="true">
+                    <p className="kamae-title-reading">{t('ui.kamae.reading')}</p>
+                    <p className="kamae-title-desc">{t('ui.kamae.desc')}</p>
                 </div>
-                <div ref={searchRef}>
-                    <KamaeSearch
-                        activeKataGameIds={activeKataGameIds}
-                        activeKataName={activeKata ? activeKata.name : null}
-                        onAdd={handleAdd}
-                    />
-                </div>
-                <div ref={showcaseListRef}>
-                    <ShowcaseList
-                        games={displayedGames}
-                        onRemove={handleRemove}
-                        isKataMode={activeKata !== null}
-                    />
+                {/* Katas first, then the selected kata's games. Two columns
+                    only when both keep their width floor (container query in
+                    KamaeView.css); otherwise stacked in this same DOM order,
+                    so focus order and handleNav order never change. */}
+                <div className="kamae-columns">
+                    <div className="kamae-col kamae-col--katas">
+                        <div ref={kataPanelRef}>
+                            <KataPanel
+                                katas={showcaseState.katas || []}
+                                activeKataId={activeKataId}
+                                showcaseGames={allInstalledGames}
+                                onUpdate={handleKataUpdate}
+                                expandedId={expandedKataId}
+                                onExpandToggle={setExpandedKataId}
+                            >
+                                <button
+                                    type="button"
+                                    className={`kata-item ${activeKataId === null ? 'kata-item--active' : ''}`}
+                                    aria-pressed={activeKataId === null}
+                                    onClick={() => handleKataUpdate({ katas: showcaseState.katas || [], activeKataId: null })}
+                                >
+                                    <span className="kata-item-name">
+                                        <span className="kata-item-title">{t('ui.katas.all_games')}</span>
+                                        <span className="kata-item-count" aria-hidden="true">{t('ui.katas.game_count_aria', { count: allInstalledGames.length })}</span>
+                                        <span className="sr-only">, {t('ui.katas.game_count_aria', { count: allInstalledGames.length })}</span>
+                                    </span>
+                                    <span className={`kata-item-badge ${activeKataId === null ? '' : 'kata-item-badge--hidden'}`}>{t('ui.katas.active')}</span>
+                                    {allInstalledGames.length > 0 && (
+                                        <CapsuleStrip games={allInstalledGames.slice(0, 4)} total={allInstalledGames.length} />
+                                    )}
+                                </button>
+                            </KataPanel>
+                        </div>
+                    </div>
+                    <div className="kamae-col kamae-col--games">
+                        <div ref={searchRef}>
+                            <KamaeSearch
+                                activeKataGameIds={activeKataGameIds}
+                                activeKataName={activeKata ? activeKata.name : null}
+                                onAdd={handleAdd}
+                            />
+                        </div>
+                        <div ref={showcaseListRef}>
+                            <ShowcaseList
+                                games={displayedGames}
+                                onRemove={handleRemove}
+                                isKataMode={activeKata !== null}
+                                contextName={activeKata ? activeKata.name : t('ui.katas.all_games')}
+                            />
+                        </div>
+                    </div>
                 </div>
                 {/* Explore hidden for v0.1.0 — kata search replaces it */}
                 {false && activeKataId && (

@@ -107,8 +107,9 @@
             "remove_aria": "Remove {title}",
             "remove_help": "Requires two Enter presses. Press Escape to cancel.",
             "remove_too_fast": "Too fast. Press Enter again to confirm.",
-            "remove_confirm": "Confirm?",
+            "remove_confirm": "Confirm remove?",
             "remove_confirm_aria": "Press again to confirm removal. Press Escape to cancel.",
+            "remove_armed_hint": "Press again to remove · Esc or B to cancel",
             "remove_progress_aria": "Hold to remove. Release to cancel.",
             "explore_more": "explore more",
             "sr_guide": "Organize which games appear. Ctrl+Tab to switch to Rin mode and pick a game to play."
@@ -159,10 +160,12 @@
             "maida2_preview_audio_off": "Off",
             "maida2_preview_audio_announce": "Preview sound turned {state}",
             "maida2_large_motion_title": "Large motion effects",
-            "maida2_large_motion_desc": "Turns off big animations such as the sidebar symbol bloom. If your system's reduce-motion setting is on, they stay off.",
+            "maida2_large_motion_desc": "Turns off the sidebar symbol bloom animation. If your system's reduce-motion setting is on, it stays off.",
             "maida2_large_motion_on": "On",
             "maida2_large_motion_off": "Off",
             "maida2_large_motion_announce": "Large motion effects turned {state}",
+            "maida2_large_motion_save_failed": "Couldn't save this setting. It applies until you close Maida.",
+            "maida2_large_motion_retry": "Retry",
             "maida2_card_opacity_title": "Card opacity",
             "maida2_card_opacity_desc": "How see-through the game cards are against the background.",
             "maida2_card_opacity_value": "{percent}%",
@@ -218,9 +221,18 @@
             "delete_confirm": "remove this kata?",
             "locked_title": "Kata",
             "locked_desc": "Available with Maida Plus. Enter your key in settings.",
-            "select_aria": "Kata {name}, {count} games",
-            "select_aria_active": "Kata {name}, {count} games, active",
-            "game_count_aria": "{count} games",
+            "select_aria": {
+                "one": "Kata {name}, {count} game",
+                "other": "Kata {name}, {count} games"
+            },
+            "select_aria_active": {
+                "one": "Kata {name}, {count} game, active",
+                "other": "Kata {name}, {count} games, active"
+            },
+            "game_count_aria": {
+                "one": "{count} game",
+                "other": "{count} games"
+            },
             "counter_aria": "{count} of {max} games",
             "counter_full": "Kata is full",
             "edit_games_aria": "Edit {name} games",

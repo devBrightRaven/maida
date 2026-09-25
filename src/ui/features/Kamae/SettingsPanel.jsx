@@ -53,6 +53,10 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
     // One-way opt-out; the OS reduce-motion preference still always wins.
     const [largeMotion, setLargeMotion] = useState(true);
     const [largeMotionAnnounce, setLargeMotionAnnounce] = useState('');
+    // Set when the last save attempt did not persist (review 2026-09-25 R2):
+    // the session choice above still applies to this run, but it reverts on
+    // restart unless the user retries and the retry succeeds.
+    const [largeMotionSaveFailed, setLargeMotionSaveFailed] = useState(false);
 
     // Maida 2.0 card opacity (percent, 40..100, default 70)
     const [cardOpacity, setCardOpacity] = useState(70);
@@ -163,18 +167,39 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
         );
     }, [onMaida2PreviewAudioChange]);
 
+    // Shared by the toggle and the Retry control below. Only ever announces
+    // success once bridge.setMaida2LargeMotion actually confirms it (it now
+    // always resolves an object with `.success` — never throws), so a
+    // dropped save can no longer be announced as saved (review 2026-09-25 R2).
+    const persistLargeMotion = useCallback((enabled) => {
+        return bridge.setMaida2LargeMotion(enabled).then((result) => {
+            if (result && result.success) {
+                setLargeMotionSaveFailed(false);
+                setLargeMotionAnnounce(
+                    t('ui.settings.maida2_large_motion_announce', {
+                        state: enabled ? t('ui.settings.maida2_large_motion_on') : t('ui.settings.maida2_large_motion_off'),
+                    })
+                );
+            } else {
+                console.warn('[Settings] failed to persist maida2 large motion:', result?.error);
+                setLargeMotionSaveFailed(true);
+                setLargeMotionAnnounce(t('ui.settings.maida2_large_motion_save_failed'));
+            }
+        });
+    }, []);
+
     const handleLargeMotionChange = useCallback((enabled) => {
+        // The session choice takes effect immediately regardless of whether
+        // the save below succeeds — only the failure banner + live region
+        // distinguish "applied this run" from "persisted to disk".
         setLargeMotion(enabled);
         if (onMaida2LargeMotionChange) onMaida2LargeMotionChange(enabled);
-        bridge.setMaida2LargeMotion(enabled).catch((err) => {
-            console.warn('[Settings] failed to persist maida2 large motion:', err);
-        });
-        setLargeMotionAnnounce(
-            t('ui.settings.maida2_large_motion_announce', {
-                state: enabled ? t('ui.settings.maida2_large_motion_on') : t('ui.settings.maida2_large_motion_off'),
-            })
-        );
-    }, [onMaida2LargeMotionChange]);
+        persistLargeMotion(enabled);
+    }, [onMaida2LargeMotionChange, persistLargeMotion]);
+
+    const handleLargeMotionRetry = useCallback(() => {
+        persistLargeMotion(largeMotion);
+    }, [largeMotion, persistLargeMotion]);
 
     const handleTest = useCallback(async () => {
         setTesting(true);
@@ -509,6 +534,19 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
                                     </button>
                                 ))}
                             </div>
+                            {largeMotionSaveFailed && (
+                                <div className="kamae-settings-status kamae-settings-status--error kamae-settings-status--retry">
+                                    <span>{t('ui.settings.maida2_large_motion_save_failed')}</span>
+                                    <button
+                                        type="button"
+                                        className="kamae-settings-btn kamae-settings-retry-btn"
+                                        data-large-motion-retry=""
+                                        onClick={handleLargeMotionRetry}
+                                    >
+                                        {t('ui.settings.maida2_large_motion_retry')}
+                                    </button>
+                                </div>
+                            )}
                             <div
                                 className="sr-only"
                                 role="status"

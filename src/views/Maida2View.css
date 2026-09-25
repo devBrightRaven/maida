@@ -3,8 +3,8 @@
 
 .maida2-view {
     min-height: 100vh;
-    background: var(--t-bg);
-    color: var(--t-text);
+    background: var(--m2-bg);
+    color: var(--m2-text);
     overflow-y: auto;
     position: relative;
     /* Effective glass values for the cards. --m2-card-alpha (40..100) is the
@@ -95,8 +95,8 @@
     font-size: 0.875rem;
     font-weight: 600;
     letter-spacing: 0.2em;
-    color: var(--t-dim);
-    border-bottom: 1px solid var(--t-border-subtle);
+    color: var(--m2-text-muted);
+    border-bottom: 1px solid var(--m2-border);
     padding-bottom: 0.375rem;
     margin: 0 0 0.75rem;
 }
@@ -105,11 +105,11 @@
    sit on moving imagery — a bg-colored glow keeps them legible without
    giving them a card of their own. */
 .maida2-view--playing .m2-zone-title {
-    text-shadow: 0 1px 4px var(--t-bg), 0 0 12px var(--t-bg);
+    text-shadow: 0 1px 4px var(--m2-bg), 0 0 12px var(--m2-bg);
 }
 
 .m2-zone-empty {
-    color: var(--t-text-faint);
+    color: var(--m2-text-muted);
     font-size: 0.9375rem;
     margin: 0;
 }
@@ -134,9 +134,9 @@
 .m2-all-toggle:focus,
 .m2-all-toggle:focus-visible {
     outline: none;
-    color: var(--t-text);
+    color: var(--m2-text);
     border-radius: 0;
-    box-shadow: 0 0 0 2px var(--t-bg), 0 0 0 4px var(--t-focus-border);
+    box-shadow: 0 0 0 2px var(--m2-bg), 0 0 0 4px var(--m2-focus-ring);
 }
 
 .m2-list {
@@ -162,11 +162,11 @@
        cards themselves, while the blur keeps text contrast intact.
        --m2-card-alpha is set inline on .maida2-view from the user's card
        opacity preference (40..100, default 70). */
-    background: color-mix(in srgb, var(--t-surface) var(--m2-alpha-eff, 70%), transparent);
+    background: color-mix(in srgb, var(--m2-surface) var(--m2-alpha-eff, 70%), transparent);
     -webkit-backdrop-filter: blur(var(--m2-card-blur, 10px));
     backdrop-filter: blur(var(--m2-card-blur, 10px));
-    color: var(--t-text);
-    border: 1px solid var(--t-border);
+    color: var(--m2-text);
+    border: 1px solid var(--m2-text-muted);
     border-radius: 0;
     text-align: left;
     cursor: pointer;
@@ -219,8 +219,8 @@
 .m2-card:focus,
 .m2-card:focus-visible {
     outline: none;
-    border-color: var(--t-focus-border);
-    box-shadow: 0 0 0 2px var(--t-bg), 0 0 0 4px var(--t-focus-border);
+    border-color: var(--m2-focus-ring);
+    box-shadow: 0 0 0 2px var(--m2-bg), 0 0 0 4px var(--m2-focus-ring);
 }
 
 /* Decorative imagery yields entirely under a high-contrast preference, and
@@ -234,7 +234,7 @@
     }
     .m2-card,
     .m2-card:hover {
-        background: var(--t-surface);
+        background: var(--m2-surface);
         -webkit-backdrop-filter: none;
         backdrop-filter: none;
     }
@@ -250,13 +250,13 @@
 
 .m2-card-sub {
     font-size: 0.8125rem;
-    color: var(--t-text-soft);
+    color: var(--m2-text-muted);
 }
 
 .m2-card-badge {
     font-size: 0.6875rem;
-    color: var(--t-accent);
-    border: 1px solid var(--t-accent-border);
+    color: var(--m2-accent);
+    border: 1px solid var(--m2-accent);
     border-radius: 0;
     padding: 0.0625rem 0.5rem;
 }
@@ -278,7 +278,7 @@
     opacity: 0;
     /* Solid backing so the translucent card underneath never bleeds
        through while the image/video loads. */
-    background-color: var(--t-bg);
+    background-color: var(--m2-bg);
     background-size: cover;
     background-position: center;
     border-radius: 0;
@@ -344,10 +344,10 @@
     left: 0;
     bottom: 0;
     height: 5px;
-    background: var(--t-accent);
+    background: var(--m2-accent);
     /* A bg-colored hairline above the fill separates it from the card's
        own accent-colored focus border, which it otherwise blended into. */
-    box-shadow: 0 -1px 0 var(--t-bg);
+    box-shadow: 0 -1px 0 var(--m2-bg);
     pointer-events: none;
 }
 
@@ -372,8 +372,8 @@
     min-height: 44px;
     padding: 0.5rem 0.875rem;
     background: transparent;
-    color: var(--t-text-soft);
-    border: 1px solid var(--t-border);
+    color: var(--m2-text);
+    border: 1px solid var(--m2-text-muted);
     border-radius: 0;
     font: inherit;
     font-size: 0.8125rem;
@@ -384,8 +384,9 @@
 .m2-hook-retract:hover,
 .m2-state-btn:hover,
 .m2-note-confirm:hover {
-    color: var(--t-hover-text);
-    border-color: var(--t-accent-border);
+    color: var(--m2-text);
+    background: var(--m2-surface);
+    border-color: var(--m2-text);
 }
 
 .m2-hook-retract:focus,
@@ -395,14 +396,15 @@
 .m2-note-confirm:focus,
 .m2-note-confirm:focus-visible {
     outline: none;
-    color: var(--t-text);
-    border-color: var(--t-focus-border);
-    box-shadow: 0 0 0 2px var(--t-bg), 0 0 0 4px var(--t-focus-border);
+    color: var(--m2-text);
+    border-color: var(--m2-focus-ring);
+    box-shadow: 0 0 0 2px var(--m2-bg), 0 0 0 4px var(--m2-focus-ring);
 }
 
 .m2-state-btn[aria-pressed="true"] {
-    color: var(--t-accent);
-    border-color: var(--t-accent-border);
+    color: var(--m2-accent);
+    background: var(--m2-accent-tint);
+    border-color: var(--m2-accent);
 }
 
 /* ── Note editor ───────────────────── */
@@ -418,7 +420,7 @@
 .m2-note-label {
     flex-basis: 100%;
     font-size: 0.8125rem;
-    color: var(--t-text-soft);
+    color: var(--m2-text-muted);
 }
 
 .m2-note-input {
@@ -426,9 +428,9 @@
     min-width: 0;
     min-height: 44px;
     padding: 0.5rem 0.75rem;
-    background: var(--t-bg);
-    color: var(--t-text);
-    border: 1px solid var(--t-border);
+    background: var(--m2-bg);
+    color: var(--m2-text);
+    border: 1px solid var(--m2-text-muted);
     border-radius: 0;
     font: inherit;
     font-size: 1rem;
@@ -437,8 +439,8 @@
 .m2-note-input:focus,
 .m2-note-input:focus-visible {
     outline: none;
-    border-color: var(--t-focus-border);
-    box-shadow: 0 0 0 2px var(--t-bg), 0 0 0 4px var(--t-focus-border);
+    border-color: var(--m2-focus-ring);
+    box-shadow: 0 0 0 2px var(--m2-bg), 0 0 0 4px var(--m2-focus-ring);
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,0 +1,85 @@
+import { useEffect, useState } from 'react';
+import bridge from '../../../services/bridge';
+
+// One lookup per appId for the whole session: the kata strips and the game
+// list show the same capsules, so they share the promise instead of asking
+// the bridge twice. A failed invoke is not cached, so a later mount retries.
+const capsuleCache = new Map();
+
+function loadCapsule(appId) {
+    const key = String(appId);
+    if (!capsuleCache.has(key)) {
+        const promise = Promise.resolve(bridge.getArt(appId, 'capsule')).then(
+            (url) => (typeof url === 'string' && url.length > 0 ? url : null),
+            () => {
+                capsuleCache.delete(key);
+                return null;
+            },
+        );
+        capsuleCache.set(key, promise);
+    }
+    return capsuleCache.get(key);
+}
+
+/**
+ * CapsuleThumb
+ * Decorative Steam capsule from the local art cache (bridge.getArt). The box
+ * always reserves its 2:3 shape; missing or failed art leaves a quiet solid
+ * surface, never a letter or fake art. The game name next to it is the
+ * accessible label, so the thumb is hidden from assistive technology.
+ * Rendered as <span> so it is valid inside a <button>.
+ */
+export default function CapsuleThumb({ appId, className = '' }) {
+    const [art, setArt] = useState({ appId: null, url: null, status: 'loading' });
+
+    useEffect(() => {
+        let cancelled = false;
+        if (!appId) {
+            setArt({ appId, url: null, status: 'none' });
+            return undefined;
+        }
+        loadCapsule(appId).then((url) => {
+            if (!cancelled) setArt({ appId, url, status: url ? 'ready' : 'none' });
+        });
+        return () => { cancelled = true; };
+    }, [appId]);
+
+    const current = art.appId === appId ? art : { url: null, status: appId ? 'loading' : 'none' };
+
+    return (
+        <span
+            className={`kamae-capsule kamae-capsule--${current.status} ${className}`.trim()}
+            data-art-status={current.status}
+            aria-hidden="true"
+        >
+            {current.url && (
+                <img
+                    className="kamae-capsule__img"
+                    src={current.url}
+                    alt=""
+                    draggable="false"
+                    onError={() => setArt({ appId, url: null, status: 'failed' })}
+                />
+            )}
+        </span>
+    );
+}
+
+/**
+ * CapsuleStrip
+ * Up to four capsules for a kata, then a quiet "+N" cell for the rest.
+ * `games` holds the resolved game (or null) for each of the kata's first
+ * gameIds; `total` is the kata's full game count.
+ */
+export function CapsuleStrip({ games, total }) {
+    const shown = games.slice(0, 4);
+    const extra = total - shown.length;
+    return (
+        <span className="kamae-strip" aria-hidden="true">
+            {shown.map((game, index) => (
+                <CapsuleThumb key={game ? (game.id || game.steamAppId) : `missing-${index}`} appId={game?.steamAppId} className="kamae-strip__cell" />
+            ))}
+            {extra > 0 && <span className="kamae-strip__cell kamae-strip__more">+{extra}</span>}
+        </span>
+    );
+}

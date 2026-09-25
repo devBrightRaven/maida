@@ -107,8 +107,9 @@
             "remove_aria": "{title} を外す",
             "remove_help": "Enter を二回押して完了、Escape でキャンセル。",
             "remove_too_fast": "速すぎます。もう一度 Enter を押して確定。",
-            "remove_confirm": "確認？",
+            "remove_confirm": "削除しますか？",
             "remove_confirm_aria": "もう一度押すと削除を確定、Escape でキャンセル。",
+            "remove_armed_hint": "もう一度押すと削除 · Esc または B で取消",
             "remove_progress_aria": "長押しで削除、離すとキャンセル。",
             "explore_more": "もっと見る",
             "sr_guide": "表示するゲームを整理。Ctrl+Tab で臨モードに切り替えてゲームを選ぶ。"
@@ -159,10 +160,12 @@
             "maida2_preview_audio_off": "オフ",
             "maida2_preview_audio_announce": "プレビュー音声を{state}にしました",
             "maida2_large_motion_title": "大きな動きのアニメーション",
-            "maida2_large_motion_desc": "サイドバーの記号が広がる演出などの大きなアニメーションをオフにします。システムで視差効果を減らす設定がオンの場合は常にオフです。",
+            "maida2_large_motion_desc": "サイドバーの記号が広がる演出をオフにします。システムで視差効果を減らす設定がオンの場合は常にオフです。",
             "maida2_large_motion_on": "オン",
             "maida2_large_motion_off": "オフ",
             "maida2_large_motion_announce": "大きな動きのアニメーションを{state}にしました",
+            "maida2_large_motion_save_failed": "この設定を保存できませんでした。Maidaを閉じるまで適用されます。",
+            "maida2_large_motion_retry": "再試行",
             "maida2_card_opacity_title": "カードの不透明度",
             "maida2_card_opacity_desc": "背景に対してゲームカードがどれくらい透けて見えるかです。",
             "maida2_card_opacity_value": "{percent}%",
@@ -218,9 +221,18 @@
             "delete_confirm": "この型を削除しますか？",
             "locked_title": "型（カタ）",
             "locked_desc": "Maida Plusで利用可能です。設定でキーを入力してください。",
-            "select_aria": "型 {name}, ゲーム{count}本",
-            "select_aria_active": "型 {name}, ゲーム{count}本, 有効",
-            "game_count_aria": "ゲーム{count}本",
+            "select_aria": {
+                "one": "型 {name}, ゲーム{count}本",
+                "other": "型 {name}, ゲーム{count}本"
+            },
+            "select_aria_active": {
+                "one": "型 {name}, ゲーム{count}本, 有効",
+                "other": "型 {name}, ゲーム{count}本, 有効"
+            },
+            "game_count_aria": {
+                "one": "ゲーム{count}本",
+                "other": "ゲーム{count}本"
+            },
             "counter_aria": "{max}本中{count}本",
             "counter_full": "型が満杯です",
             "edit_games_aria": "{name} のゲームを編集",

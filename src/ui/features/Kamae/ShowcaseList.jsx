@@ -2,35 +2,7 @@ import { useState, useRef, useCallback, useEffect, useId } from 'react';
 import { t } from '../../../i18n';
 import { MAX_KATA_GAMES } from '../../../core/katas';
 import { vibrate, vibrateProgress } from '../../../services/haptics';
-
-function getSteamHeaderUrl(steamAppId) {
-    if (!steamAppId) return null;
-    return `https://cdn.akamai.steamstatic.com/steam/apps/${steamAppId}/header.jpg`;
-}
-
-function GameCover({ steamAppId, title }) {
-    const [failed, setFailed] = useState(false);
-    const url = getSteamHeaderUrl(steamAppId);
-    const initial = (title || '?')[0].toUpperCase();
-
-    if (!url || failed) {
-        return (
-            <div className="showcase-item-img showcase-item-img--fallback">
-                <span>{initial}</span>
-            </div>
-        );
-    }
-
-    return (
-        <img
-            src={url}
-            alt=""
-            className="showcase-item-img"
-            loading="lazy"
-            onError={() => setFailed(true)}
-        />
-    );
-}
+import CapsuleThumb from './CapsuleThumb';
 
 /**
  * Eased progress: 0→75% fast (1.5s), 75→100% slow (1s).
@@ -50,6 +22,7 @@ const TOTAL_HOLD = 2500; // 1.5s + 1s
 
 function HoldButton({ onConfirm, label, ariaLabel }) {
     const helpId = useId();
+    const armedHintId = useId();
     const [progress, setProgress] = useState(0);
     const [confirming, setConfirming] = useState(false);
     const [tooFast, setTooFast] = useState(false);
@@ -59,6 +32,7 @@ function HoldButton({ onConfirm, label, ariaLabel }) {
     const frameRef = useRef(null);
     const triggeredRef = useRef(false);
     const lastHapticRef = useRef(0);
+    const btnRef = useRef(null);
 
     const reset = useCallback(() => {
         startRef.current = null;
@@ -113,6 +87,16 @@ function HoldButton({ onConfirm, label, ariaLabel }) {
                     frameRef.current = null;
                 }
                 setProgress(0);
+                // Only one row armed at a time: disarm any other armed row
+                // first. Dispatches the same Escape keydown its own handler
+                // below responds to (DOM signal, no lifted state — mirrors
+                // KamaeView's onYButton F2 dispatch and its own Esc/B
+                // handling for this same class further down).
+                document.querySelectorAll('.showcase-hold-btn--confirm').forEach(el => {
+                    if (el !== btnRef.current) {
+                        el.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+                    }
+                });
                 setConfirming(true);
                 confirmStartRef.current = Date.now();
                 vibrate('confirm');
@@ -138,7 +122,6 @@ function HoldButton({ onConfirm, label, ariaLabel }) {
     }, [confirming, onConfirm, reset]);
 
     // Keyboard hold: Enter down = start, up = end (focus mode / non-NVDA)
-    const btnRef = useRef(null);
     useEffect(() => {
         const el = btnRef.current;
         if (!el) return;
@@ -175,6 +158,27 @@ function HoldButton({ onConfirm, label, ariaLabel }) {
         const timer = setTimeout(() => setConfirming(false), 5000);
         return () => clearTimeout(timer);
     }, [confirming]);
+
+    // Disarm on pointer down anywhere outside this row.
+    useEffect(() => {
+        if (!confirming) return;
+        const handlePointerDownOutside = (e) => {
+            const row = btnRef.current?.closest('.showcase-item');
+            if (row && !row.contains(e.target)) reset();
+        };
+        document.addEventListener('pointerdown', handlePointerDownOutside);
+        return () => document.removeEventListener('pointerdown', handlePointerDownOutside);
+    }, [confirming, reset]);
+
+    // Disarm when focus leaves this button (Tab away, D-pad nav elsewhere).
+    useEffect(() => {
+        if (!confirming) return;
+        const el = btnRef.current;
+        if (!el) return;
+        const handleBlur = () => reset();
+        el.addEventListener('blur', handleBlur);
+        return () => el.removeEventListener('blur', handleBlur);
+    }, [confirming, reset]);
 
     // Clear too-fast warning after 2 seconds so SR doesn't keep repeating
     useEffect(() => {
@@ -216,6 +220,7 @@ function HoldButton({ onConfirm, label, ariaLabel }) {
             : '';
 
     return (
+        <>
         <button
             ref={btnRef}
             type="button"
@@ -236,7 +241,7 @@ function HoldButton({ onConfirm, label, ariaLabel }) {
                 }
             }}
             aria-label={ariaLabel}
-            aria-describedby={helpId}
+            aria-describedby={confirming ? armedHintId : helpId}
             onKeyDown={(e) => {
                 if (e.key === 'Escape' && confirming) {
                     e.stopPropagation();
@@ -253,6 +258,12 @@ function HoldButton({ onConfirm, label, ariaLabel }) {
                 {stateAnnouncement}
             </span>
         </button>
+        {confirming && (
+            <span id={armedHintId} className="showcase-hold-hint">
+                {t('ui.kamae.remove_armed_hint')}
+            </span>
+        )}
+        </>
     );
 }
 
@@ -260,24 +271,28 @@ function HoldButton({ onConfirm, label, ariaLabel }) {
  * ShowcaseList — displays curated games with cover images.
  * "put back to the shelf" requires holding for 3 seconds.
  */
-export default function ShowcaseList({ games, onRemove, isKataMode }) {
+export default function ShowcaseList({ games, onRemove, isKataMode, contextName }) {
     return (
         <section className="showcase-section" aria-labelledby="showcase-heading">
-            <h3 id="showcase-heading" className="showcase-heading">{t('ui.kamae.games_heading')}</h3>
-            {isKataMode && (
-                <div className="showcase-counter" aria-live="polite">
-                    <span aria-hidden="true">{games.length} / {MAX_KATA_GAMES}</span>
-                    <span className="sr-only">
-                        {games.length >= MAX_KATA_GAMES
-                            ? t('ui.katas.counter_full')
-                            : t('ui.katas.counter_aria', { count: games.length, max: MAX_KATA_GAMES })}
-                    </span>
+            <header className="showcase-header">
+                <div className="showcase-header-text">
+                    <h3 id="showcase-heading" className="showcase-heading">{t('ui.kamae.games_heading')}</h3>
+                    {contextName && <p className="showcase-context">{contextName}</p>}
                 </div>
-            )}
+                {isKataMode && (
+                    <div className="showcase-counter" aria-live="polite">
+                        <span aria-hidden="true">{games.length} / {MAX_KATA_GAMES}</span>
+                        <span className="sr-only">
+                            {games.length >= MAX_KATA_GAMES
+                                ? t('ui.katas.counter_full')
+                                : t('ui.katas.counter_aria', { count: games.length, max: MAX_KATA_GAMES })}
+                        </span>
+                    </div>
+                )}
+            </header>
             <ul className="showcase-list">
             {games.map(game => {
                 const id = game.id || game.steamAppId;
-                const headerUrl = getSteamHeaderUrl(game.steamAppId);
                 return (
                     <li
                         key={id}
@@ -285,7 +300,7 @@ export default function ShowcaseList({ games, onRemove, isKataMode }) {
                         tabIndex={-1}
                         aria-label={game.title}
                     >
-                        <GameCover steamAppId={game.steamAppId} title={game.title} />
+                        <CapsuleThumb appId={game.steamAppId} className="showcase-item-img" />
                         <div className="showcase-item-info">
                             <span className="showcase-item-title">{game.title}</span>
                             {!game.installed && <span className="showcase-item-uninstalled">{t('ui.kamae.not_installed')}</span>}

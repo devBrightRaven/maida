@@ -251,9 +251,8 @@
 }
 
 [data-theme='light'] .mode-navigation,[data-theme='light'] .navigation-layout-options { --t-accent:#75501f; }
-[data-theme='light'] main:has(> .mode-navigation) .m2-card-sub { color: #626262; }
-[data-theme='light'] main:has(> .mode-navigation) :is(.m2-card-badge, .kata-item-badge) { color: #75501f; }
-[data-theme='light'] main:has(> .mode-navigation) .kata-item:is(:focus, :focus-visible, :hover) .kata-item-badge { color: inherit; }
+[data-theme='light'] main:has(> .mode-navigation) .m2-card-sub { color: var(--m2-text-muted); }
+[data-theme='light'] main:has(> .mode-navigation) .m2-card-badge { color: var(--m2-accent); }
 
 /* One navigation rail, owned by each view's existing gamepad focus scope. */
 main:has(> .mode-navigation) {

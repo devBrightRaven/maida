@@ -18,6 +18,14 @@ describe('shouldPlayBloom (one-way opt-out)', () => {
     it('treats a non-boolean setting as off', () => {
         expect(shouldPlayBloom({ osReducedMotion: false, largeMotion: undefined })).toBe(false);
     });
+
+    it('never plays while the preference is still unresolved (null sentinel)', () => {
+        // App.jsx seeds state with null until bridge.getMaida2LargeMotion()
+        // resolves (review 2026-09-25 R1) — "not yet read" must gate the
+        // same as "off", not fall through to the legacy default-on behavior.
+        expect(shouldPlayBloom({ osReducedMotion: false, largeMotion: null })).toBe(false);
+        expect(shouldPlayBloom({ osReducedMotion: true, largeMotion: null })).toBe(false);
+    });
 });
 
 describe('bloomEndScale', () => {

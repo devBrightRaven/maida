@@ -1,9 +1,17 @@
+/* ------------------------------------------------------------------
+ * Kamae, Maida 2.0 P2 (2026-09-25). Same visual language as the P1 Rin
+ * stage: --m2-* tokens (index.css), square containers, accent only on the
+ * current mode, the active kata and focus. Focus = offset outline in
+ * --m2-focus-ring; active kata = accent border + tint + ACTIVE badge, so the
+ * two never look alike. :focus is paired with :focus-visible (red line 7.10).
+ * ------------------------------------------------------------------ */
 .kamae-view {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background: var(--t-bg);
-    color: var(--t-text);
+    background: var(--m2-bg);
+    color: var(--m2-text);
+    font-family: var(--m2-font);
     position: relative;
     overflow-y: auto;
 }
@@ -23,70 +31,132 @@
     margin: 0 auto;
     padding: 10rem 1.5rem 5rem;
     gap: 1.5rem;
-}
-
-/* Background calligraphy watermark — right side */
-.kamae-calligraphy-bg {
-    position: fixed;
-    top: 58%;
-    right: -5%;
-    transform: translateY(-50%);
-    height: 90vh;
-    width: 90vh;
-    color: var(--t-dim);
-    opacity: 0.15;
-    pointer-events: none;
-    user-select: none;
-    z-index: 0;
-}
-
-.kamae-calligraphy-bg svg {
-    width: 100%;
-    height: 100%;
-}
-
-/* Corner label — top-right, below theme toggle */
-.kamae-title-block {
-    position: fixed;
-    top: 1rem;
-    right: 1.5rem;
-    text-align: right;
-    user-select: none;
-    -webkit-user-select: none;
-    pointer-events: none;
-    z-index: 1;
-}
-
-.kamae-title-reading {
-    font-size: var(--label-reading-size, 14px);
-    color: var(--t-dim);
-    letter-spacing: 0.08em;
-    margin: 0;
-}
-
-.kamae-title-desc {
-    font-size: var(--label-desc-size, 12px);
-    color: var(--t-dim);
-    opacity: 0.7;
-    margin-top: 0.125rem;
-    line-height: 1.4;
-    margin-left: auto;
-    text-align: right;
-    white-space: nowrap;
+    /* The two-column switch below measures this box, not the viewport, so
+       the decision already accounts for the sidebar, scrollbar and zoom. */
+    container-type: inline-size;
+    container-name: kamae;
 }
 
 @media (max-height: 800px) {
     .kamae-content { padding-top: 5rem; }
 }
 
+/* With the shared rail, the content column may grow past the 48rem the
+   other faces use: two columns need 26rem + 22rem + 2rem gap. */
+main.kamae-view:has(> .mode-navigation) > .kamae-content {
+    max-width: 72rem;
+    gap: 1.75rem;
+}
+
+/* Mode heading: existing Kamae name + function text (as the Rin stage).
+   Overrides the 1.x hide rule for .kamae-title-block in ModeNavigation.css. */
+.kamae-content > .kamae-title-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin: 0;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.kamae-title-reading {
+    margin: 0;
+    color: var(--m2-text);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+}
+
+.kamae-title-desc {
+    margin: 0;
+    max-width: 32rem;
+    color: var(--m2-text-muted);
+    font-size: 0.875rem;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
 .kamae-loading {
-    color: var(--t-text);
+    color: var(--m2-text);
     font-size: 0.8rem;
     text-align: center;
     padding-top: 40vh;
 }
 
-/* ── Search ────────────────────────────── */
+/* ── Layout: katas, then the selected kata's games ─────────── */
+
+.kamae-columns {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    min-width: 0;
+}
+
+.kamae-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    min-width: 0;
+}
+
+/* Width floors: kata column >= 26rem, game column >= 22rem. Below that
+   the columns stack in DOM order (katas, then games). */
+@container kamae (min-width: 50rem) {
+    .kamae-columns {
+        display: grid;
+        grid-template-columns: minmax(26rem, 1.1fr) minmax(22rem, 1fr);
+        align-items: start;
+        gap: 2rem;
+    }
+}
+
+/* ── Capsule art (decorative) ─────────── */
+
+.kamae-capsule {
+    display: block;
+    aspect-ratio: 2 / 3;
+    overflow: hidden;
+    background: var(--m2-surface);
+    border-radius: 0;
+}
+
+.kamae-capsule__img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.kamae-strip {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 3.5rem));
+    gap: 0.375rem;
+    width: 100%;
+    margin-top: 0.25rem;
+}
+
+/* Strip cells sit on the card surface, so they take the page ground to
+   stay visible as quiet boxes when art is missing. */
+.kamae-strip .kamae-capsule {
+    background: var(--m2-bg);
+    box-shadow: inset 0 0 0 1px var(--m2-border);
+}
+
+.kamae-strip__more {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 2 / 3;
+    color: var(--m2-text-muted);
+    font-size: 0.875rem;
+    font-variant-numeric: tabular-nums;
+    box-shadow: inset 0 0 0 1px var(--m2-border);
+}
+
+/* ── Search (existing add-to-kata combobox) ─────────── */
 
 .kamae-search {
     position: relative;
@@ -94,25 +164,30 @@
 
 .kamae-search-input {
     width: 100%;
-    padding: 0.75rem 1rem;
+    min-height: 44px;
+    padding: 0.625rem 0.875rem;
     font-size: 1rem;
     font-family: inherit;
-    letter-spacing: 0.02em;
-    color: var(--t-text);
-    background: var(--t-surface);
-    border: 1px solid var(--t-dim);
+    letter-spacing: 0.01em;
+    color: var(--m2-text);
+    background: var(--m2-bg);
+    border: 1px solid var(--m2-text-muted);
     border-radius: 0;
     outline: none;
     transition: border-color 0.15s ease;
+    box-sizing: border-box;
 }
 
-.kamae-search-input:focus {
-    border-color: var(--t-focus-border);
-    box-shadow: 0 0 0 3px var(--t-focus-border);
+.kamae-search-input:focus,
+.kamae-search-input:focus-visible {
+    border-color: var(--m2-text);
+    outline: 3px solid var(--m2-focus-ring);
+    outline-offset: 2px;
 }
 
 .kamae-search-input::placeholder {
-    color: var(--t-dim);
+    color: var(--m2-text-muted);
+    opacity: 1;
 }
 
 .kamae-search-results {
@@ -120,8 +195,8 @@
     top: 100%;
     left: 0;
     right: 0;
-    background: var(--t-surface);
-    border: 1px solid var(--t-dim);
+    background: var(--m2-bg);
+    border: 1px solid var(--m2-text-muted);
     border-top: none;
     border-radius: 0;
     max-height: 240px;
@@ -133,170 +208,43 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    min-height: 44px;
     padding: 0.5rem 0.875rem;
     gap: 0.5rem;
+    cursor: pointer;
 }
 
 .kamae-search-result + .kamae-search-result {
-    border-top: 1px solid var(--t-border-subtle);
+    border-top: 1px solid var(--m2-border);
 }
 
-.kamae-search-result--active {
-    background: var(--t-focus-soft);
-    box-shadow: inset 3px 0 0 var(--t-focus-border);
-}
-
-.kamae-search-result {
-    cursor: pointer;
+.kamae-search-result--active,
+.kamae-search-result:focus,
+.kamae-search-result:focus-visible {
+    background: var(--m2-surface);
+    outline: 3px solid var(--m2-focus-ring);
+    outline-offset: -3px;
 }
 
 .kamae-search-added {
     font-size: 0.75rem;
-    color: var(--t-dim);
+    color: var(--m2-text-muted);
     margin-left: 0.5rem;
 }
 
 .kamae-search-result-title {
     font-size: 1rem;
-    color: var(--t-text);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    flex: 1;
-}
-
-.kamae-search-add-btn {
-    padding: 0.375rem 0.75rem;
-    font-size: 0.875rem;
-    font-family: inherit;
-    letter-spacing: 0.05em;
-    color: var(--t-text);
-    background: transparent;
-    border: 1px solid var(--t-dim);
-    border-radius: 0;
-    cursor: pointer;
-    transition: color 0.15s ease, border-color 0.15s ease;
-    flex-shrink: 0;
-}
-
-.kamae-search-add-btn:hover:not(:disabled) {
-    color: var(--t-text);
-    border-color: var(--t-dim);
-}
-
-.kamae-search-add-btn:disabled {
-    opacity: 0.5;
-    cursor: default;
-}
-
-.kamae-search-add-btn:focus {
-    outline: 2px solid var(--t-focus-border);
-    outline-offset: 2px;
-}
-
-.kamae-search-status {
-    display: block;
-    font-size: 0.6875rem;
-    color: var(--t-dim);
-    padding-top: 0.25rem;
-}
-
-.kamae-h1 {
-    font-size: 0.8rem;
-    font-weight: 500;
-    color: var(--t-dim);
-    letter-spacing: 0.04em;
-    margin: 0;
-}
-
-
-/* ── Showcase List ─────────────────────── */
-
-.showcase-heading {
-    font-size: 1rem;
-    font-weight: 500;
-    color: var(--t-dim);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    margin: 0;
-}
-
-.showcase-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.625rem;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.showcase-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.5rem 0.75rem;
-    background: var(--t-surface);
-    border: 1px solid var(--t-dim);
-    border-radius: 0;
-    gap: 0.75rem;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
-}
-
-.showcase-item:hover {
-    border-color: var(--t-text);
-    box-shadow: 0 0 8px var(--t-hover-glow);
-}
-
-.showcase-item:focus-within {
-    border-color: var(--t-focus-border);
-    box-shadow: 0 0 0 3px var(--t-focus-border);
-}
-
-.showcase-item-img {
-    width: 90px;
-    height: 42px;
-    object-fit: cover;
-    border-radius: 0;
-    flex-shrink: 0;
-}
-
-.showcase-item-img--fallback {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--t-surface);
-    color: var(--t-dim);
-    font-size: 1.25rem;
-    font-weight: 500;
-}
-
-.showcase-item-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
+    color: var(--m2-text);
+    overflow-wrap: anywhere;
     flex: 1;
     min-width: 0;
 }
 
-.showcase-item-title {
-    font-size: 1rem;
-    color: var(--t-text);
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-}
-
-.showcase-item--dimmed {
-    opacity: 0.45;
-}
-
-.showcase-item--dimmed .showcase-item-img {
-    filter: grayscale(0.6);
-}
-
-.showcase-item-uninstalled {
+.kamae-search-status {
+    display: block;
     font-size: 0.75rem;
-    color: var(--t-dim);
-    font-style: italic;
+    color: var(--m2-text-muted);
+    padding-top: 0.25rem;
 }
 
 .kamae-search-uninstalled {
@@ -305,61 +253,177 @@
     font-style: italic;
 }
 
+/* ── Game list for the selected kata ─────────── */
+
+.showcase-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    min-width: 0;
+}
+
+.showcase-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0.25rem 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--m2-border);
+}
+
+.showcase-header-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    min-width: 0;
+}
+
+.showcase-heading {
+    margin: 0;
+    color: var(--m2-text-muted);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+.showcase-context {
+    margin: 0;
+    color: var(--m2-text);
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+}
+
 .showcase-counter {
-    text-align: right;
+    color: var(--m2-text-muted);
     font-size: 0.875rem;
-    color: var(--t-dim);
-    padding: 0 0.25rem;
+    font-variant-numeric: tabular-nums;
     letter-spacing: 0.04em;
 }
 
+.showcase-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.showcase-item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.875rem;
+    padding: 0.625rem 0.5rem;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--m2-border);
+    border-radius: 0;
+    transition: background-color 0.15s ease;
+}
+
+.showcase-item:hover {
+    background: var(--m2-surface);
+}
+
+/* Gamepad nav focuses the row itself (tabindex -1); keyboard reaches the
+   Remove button inside it. Either way the row shows the P1 ring. */
+.showcase-item:focus,
+.showcase-item:focus-visible {
+    outline: 3px solid var(--m2-focus-ring);
+    outline-offset: -3px;
+}
+
+.showcase-item-img {
+    flex: 0 0 3rem;
+    width: 3rem;
+}
+
+.showcase-item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex: 1 1 8rem;
+    min-width: 0;
+}
+
+.showcase-item-title {
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.35;
+    color: var(--m2-text);
+    overflow-wrap: anywhere;
+}
+
+.showcase-item--dimmed .showcase-item-img {
+    filter: grayscale(0.6);
+    opacity: 0.6;
+}
+
+.showcase-item-uninstalled {
+    font-size: 0.8125rem;
+    color: var(--m2-text-muted);
+    font-style: italic;
+}
+
 .showcase-item-actions {
-    flex-shrink: 0;
+    flex: 0 0 auto;
+    margin-left: auto;
+    max-width: 100%;
 }
 
 .showcase-hold-btn {
     position: relative;
+    min-height: 44px;
+    min-width: min(100%, 10rem);
+    max-width: 100%;
     padding: 0.5rem 1rem;
     font-size: 0.875rem;
     font-family: inherit;
     letter-spacing: 0.04em;
-    color: var(--t-dim);
+    color: var(--m2-text);
     background: transparent;
-    border: 1.5px solid var(--t-dim);
+    border: 1px solid var(--m2-text-muted);
     border-radius: 0;
     cursor: pointer;
     overflow: hidden;
+    overflow-wrap: anywhere;
     user-select: none;
     -webkit-user-select: none;
-    min-width: 160px;
-    transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
 }
 
 .showcase-hold-btn:hover {
-    color: var(--t-hover-text);
-    background: var(--t-hover-bg);
-    border-color: var(--t-hover-bg);
+    background: var(--m2-surface);
+    border-color: var(--m2-text);
 }
 
-.showcase-hold-btn:focus {
-    color: var(--t-hover-text);
-    background: var(--t-hover-bg);
-    border-color: var(--t-hover-bg);
-    outline: none;
+.showcase-hold-btn:focus,
+.showcase-hold-btn:focus-visible {
+    border-color: var(--m2-text);
+    outline: 3px solid var(--m2-focus-ring);
+    outline-offset: 2px;
 }
 
 .showcase-hold-btn--confirm {
-    border-color: var(--t-accent);
-    color: var(--t-accent);
+    border-color: var(--m2-accent);
+    color: var(--m2-text);
+    box-shadow: inset 0 0 0 1px var(--m2-accent);
 }
 
+/* Hold progress: the accent at low strength behind the label, so the
+   label keeps full text contrast while it fills. */
 .showcase-hold-bg {
     position: absolute;
     top: 0;
     left: 0;
     height: 100%;
-    background: #ffaa00;
-    opacity: 0.6;
+    background: var(--m2-accent);
+    opacity: 0.3;
     pointer-events: none;
     transition: none;
 }
@@ -367,6 +431,18 @@
 .showcase-hold-label {
     position: relative;
     z-index: 1;
+}
+
+/* Armed-row hint — visible sibling of the button (not sr-only), tied to it
+   via aria-describedby. Shares the button's max width so it wraps instead
+   of forcing the row wider. */
+.showcase-hold-hint {
+    display: block;
+    max-width: min(100%, 10rem);
+    margin-top: 0.375rem;
+    font-size: 0.75rem;
+    color: var(--m2-text-muted);
+    overflow-wrap: anywhere;
 }
 
 /* ── Empty State ───────────────────────── */
@@ -383,12 +459,12 @@
 
 .showcase-empty-text {
     font-size: 1.125rem;
-    color: var(--t-text);
+    color: var(--m2-text);
 }
 
 .showcase-empty-hint {
     font-size: 1rem;
-    color: var(--t-dim);
+    color: var(--m2-text-muted);
     max-width: 280px;
     line-height: 1.5;
 }
@@ -399,25 +475,20 @@
     font-size: 1rem;
     font-family: inherit;
     letter-spacing: 0.06em;
-    color: var(--t-text);
+    color: var(--m2-text);
     background: transparent;
-    border: 1px solid var(--t-dim);
+    border: 1px solid var(--m2-text-muted);
     border-radius: 0;
     cursor: pointer;
-    transition: color 0.15s ease, border-color 0.15s ease;
 }
 
-.showcase-empty-explore-btn:hover {
-    color: var(--t-text);
-    border-color: var(--t-dim);
-}
-
-.showcase-empty-explore-btn:focus {
-    outline: 2px solid var(--t-focus-border);
+.showcase-empty-explore-btn:focus,
+.showcase-empty-explore-btn:focus-visible {
+    outline: 3px solid var(--m2-focus-ring);
     outline-offset: 2px;
 }
 
-/* ── Explore Button ────────────────────── */
+/* ── Explore Button (hidden since v0.1.0) ─────────── */
 
 .kamae-explore-btn {
     align-self: center;
@@ -425,264 +496,316 @@
     font-size: 1rem;
     font-family: inherit;
     letter-spacing: 0.06em;
-    color: var(--t-dim);
+    color: var(--m2-text);
     background: transparent;
-    border: 1px solid var(--t-dim);
+    border: 1px solid var(--m2-text-muted);
     border-radius: 0;
     cursor: pointer;
-    transition: color 0.15s ease, border-color 0.15s ease;
 }
 
-.kamae-explore-btn:hover {
-    color: var(--t-text);
-    border-color: var(--t-dim);
-}
-
-.kamae-explore-btn:focus {
-    outline: 2px solid var(--t-focus-border);
+.kamae-explore-btn:focus,
+.kamae-explore-btn:focus-visible {
+    outline: 3px solid var(--m2-focus-ring);
     outline-offset: 2px;
 }
 
 /* ── Kata Panel ──────────────────────── */
 
 .kata-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
     width: 100%;
-}
-
-.kata-panel--locked {
-    opacity: 0.5;
-    text-align: center;
-    padding: 1.5rem 1rem;
-}
-
-.kata-panel-locked-desc {
-    font-size: 0.875rem;
-    color: var(--t-dim);
-    margin: 0.5rem 0 0;
+    min-width: 0;
 }
 
 .kata-panel-header {
     display: flex;
-    align-items: center;
+    flex-wrap: wrap;
+    align-items: flex-end;
     justify-content: space-between;
-    margin-bottom: 0.75rem;
+    gap: 0.75rem 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--m2-border);
+}
+
+.kata-panel-header > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex: 1 1 14rem;
+    min-width: 0;
 }
 
 .kata-panel-title {
-    font-size: 1rem;
-    font-weight: 500;
-    color: var(--t-dim);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
     margin: 0;
+    color: var(--m2-text-muted);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
 }
 
-.kata-create-btn {
-    font-size: 0.8rem;
-    color: var(--t-dim);
-    background: transparent;
-    border: 1px solid var(--t-dim);
-    border-radius: 0;
-    padding: 0.25rem 0.75rem;
-    cursor: pointer;
+.kata-panel-hint {
+    margin: 0;
+    color: var(--m2-text-muted);
+    font-size: 0.875rem;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+/* Shared outline button: new kata, create confirm/cancel. */
+.kata-create-btn,
+.kata-create-confirm,
+.kata-create-cancel {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
     font-family: inherit;
+    color: var(--m2-text);
+    background: transparent;
+    border: 1px solid var(--m2-text-muted);
+    border-radius: 0;
+    cursor: pointer;
+    overflow-wrap: anywhere;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
 }
 
-.kata-create-btn:hover {
-    color: var(--t-text);
-    border-color: var(--t-text);
+.kata-create-confirm,
+.kata-create-cancel {
+    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
+}
+
+.kata-create-btn:hover,
+.kata-create-confirm:hover,
+.kata-create-cancel:hover {
+    background: var(--m2-surface);
+    border-color: var(--m2-text);
+}
+
+.kata-create-btn:focus,
+.kata-create-btn:focus-visible,
+.kata-create-confirm:focus,
+.kata-create-confirm:focus-visible,
+.kata-create-cancel:focus,
+.kata-create-cancel:focus-visible {
+    border-color: var(--m2-text);
+    outline: 3px solid var(--m2-focus-ring);
+    outline-offset: 2px;
 }
 
 .kata-create-form {
     display: flex;
     gap: 0.5rem;
-    margin-bottom: 0.75rem;
+    min-width: 0;
 }
 
 .kata-create-input {
     flex: 1;
-    padding: 0.375rem 0.75rem;
-    font-size: 0.875rem;
+    min-width: 0;
+    min-height: 44px;
+    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
     font-family: inherit;
-    color: var(--t-text);
-    background: var(--t-surface);
-    border: 1px solid var(--t-dim);
+    color: var(--m2-text);
+    background: var(--m2-bg);
+    border: 1px solid var(--m2-text-muted);
     border-radius: 0;
     outline: none;
+    box-sizing: border-box;
 }
 
-.kata-create-input:focus {
-    border-color: var(--t-text);
+.kata-create-input:focus,
+.kata-create-input:focus-visible {
+    border-color: var(--m2-text);
+    outline: 3px solid var(--m2-focus-ring);
+    outline-offset: 2px;
 }
 
-.kata-create-confirm,
-.kata-create-cancel {
-    padding: 0.375rem 0.625rem;
-    font-size: 1rem;
-    background: transparent;
-    border: 1px solid var(--t-dim);
-    border-radius: 0;
-    color: var(--t-dim);
-    cursor: pointer;
-    font-family: inherit;
+.kata-create-input::placeholder {
+    color: var(--m2-text-muted);
+    opacity: 1;
 }
 
-/* Kata items — shared base for "all games" and kata rows */
-.kata-item {
-    display: flex;
+/* Kata cards: "All installed" (button) and each kata (group). Name row,
+   then the capsule strip, then the membership editor when open. */
+.kata-item,
+.kata-group {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto auto;
     align-items: center;
-    justify-content: space-between;
+    gap: 0.25rem 0.5rem;
     width: 100%;
-    padding: 0.5rem 0.75rem;
-    min-height: 3.5rem;
-    font-size: 1rem;
+    min-width: 0;
+    padding: 0.75rem 0.875rem 0.875rem;
     font-family: inherit;
-    color: var(--t-dim);
-    background: transparent;
-    border: 2px solid var(--t-dim);
+    font-size: 1rem;
+    color: var(--m2-text);
+    text-align: left;
+    background: var(--m2-surface);
+    border: 1px solid var(--m2-border);
     border-radius: 0;
     cursor: pointer;
-    text-align: left;
-    transition: background 0.15s ease, border-color 0.15s ease;
+    box-sizing: border-box;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
-.kata-item:hover {
-    border-color: var(--t-text);
-    color: var(--t-text);
-    box-shadow: 0 0 8px var(--t-hover-glow);
+.kata-item {
+    grid-template-columns: minmax(0, 1fr) auto;
 }
 
-.kata-item:focus {
-    border-color: var(--t-focus-border);
-    background: var(--t-focus-soft);
-    box-shadow: 0 0 0 3px var(--t-focus-border);
+.kata-item:hover,
+.kata-group:hover {
+    border-color: var(--m2-text-muted);
 }
 
-.kata-item--active {
-    color: var(--t-text);
-    background: var(--t-accent-soft);
-    border-color: var(--t-accent-border);
+/* Active kata: accent border (drawn 2px via inset shadow so nothing
+   shifts) + tint; the ACTIVE badge is the non-colour cue. */
+.kata-item--active,
+.kata-group--active,
+.kata-item--active:hover,
+.kata-group--active:hover {
+    background: var(--m2-accent-tint);
+    border-color: var(--m2-accent);
+    box-shadow: inset 0 0 0 1px var(--m2-accent);
+}
+
+.kata-item:focus,
+.kata-item:focus-visible,
+.kata-group:focus,
+.kata-group:focus-visible {
+    outline: 3px solid var(--m2-focus-ring);
+    outline-offset: 3px;
 }
 
 .kata-item-name {
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    flex: 1;
+    flex-direction: column;
+    gap: 0.125rem;
+    min-width: 0;
+}
+
+.kata-item-title {
+    color: var(--m2-text);
+    font-size: 1.0625rem;
+    font-weight: 600;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
 }
 
 .kata-item-count {
-    font-size: 1rem;
-    color: var(--t-dim);
+    color: var(--m2-text-muted);
+    font-size: 0.8125rem;
+    font-weight: 400;
 }
 
 .kata-item-badge {
-    font-size: 1rem;
+    align-self: start;
+    padding: 0.125rem 0;
+    color: var(--m2-accent);
+    font-size: 0.75rem;
     font-weight: 700;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--t-accent);
-    margin-left: auto;
-    margin-right: 0.5rem;
-    flex-shrink: 0;
+    white-space: nowrap;
 }
 
 .kata-item-badge--hidden {
     visibility: hidden;
 }
 
-/* Kata row — visual container, not focusable */
-.kata-group {
+.kata-select-btn {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
-    width: 100%;
-    padding: 0.5rem 0.75rem;
-    min-height: 3.5rem;
-    border: 2px solid var(--t-dim);
+    min-width: 0;
+    min-height: 44px;
+    /* Right side: no hit-target padding/negative-margin cancel trick (unlike
+       top/bottom/left) — this button spans the header's left area up to the
+       ACTIVE badge, and a real margin-right holds its focus ring (3px width
+       + 2px offset = 5px reach) clear of the badge with room to spare. */
+    padding: 0.125rem 0 0.125rem 0.25rem;
+    margin: -0.125rem 0.75rem -0.125rem -0.25rem;
+    font-size: 1rem;
+    font-family: inherit;
+    color: var(--m2-text);
+    text-align: left;
+    background: transparent;
+    border: 0;
     border-radius: 0;
     cursor: pointer;
-    transition: background 0.15s ease, border-color 0.15s ease;
 }
 
-.kata-group:hover {
-    border-color: var(--t-text);
-    box-shadow: 0 0 8px var(--t-hover-glow);
+.kata-select-btn:focus,
+.kata-select-btn:focus-visible {
+    outline: 3px solid var(--m2-focus-ring);
+    outline-offset: 2px;
 }
 
-.kata-group:focus-within {
-    border-color: var(--t-focus-border);
-    background: var(--t-focus-soft);
-    box-shadow: 0 0 0 3px var(--t-focus-border);
-}
-
-.kata-group--active {
-    background: var(--t-accent-soft);
-    border-color: var(--t-accent-border);
+/* Empty kata: cannot be selected (existing rule), shown with its existing
+   "no games" text instead of dimming the whole card. */
+.kata-card-empty {
+    grid-column: 1 / -1;
+    margin: 0.25rem 0 0;
+    color: var(--m2-text-muted);
+    font-size: 0.875rem;
+    font-style: italic;
 }
 
 .kata-group--empty {
-    opacity: 0.5;
-}
-
-.kata-select-btn {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    font-size: 1rem;
-    font-family: inherit;
-    color: var(--t-dim);
-    text-align: left;
-    padding: 0;
-    cursor: pointer;
-}
-
-.kata-group--active .kata-select-btn {
-    color: var(--t-text);
-}
-
-.kata-item-actions {
-    display: flex;
-    gap: 0.25rem;
-    flex-shrink: 0;
-}
-
-.kata-item-actions--placeholder {
-    width: 3.75rem;
+    cursor: default;
 }
 
 .kata-rename-input {
-    font-size: 0.875rem;
-    font-family: inherit;
-    color: var(--t-text);
-    background: var(--t-bg);
-    border: 1px solid var(--t-accent-border);
-    border-radius: 0;
-    padding: 0.125rem 0.375rem;
-    outline: none;
     flex: 1;
     min-width: 0;
+    min-height: 36px;
+    padding: 0.25rem 0.5rem;
+    font-size: 1rem;
+    font-family: inherit;
+    color: var(--m2-text);
+    background: var(--m2-bg);
+    border: 1px solid var(--m2-accent);
+    border-radius: 0;
+    outline: none;
+}
+
+.kata-rename-input:focus,
+.kata-rename-input:focus-visible {
+    outline: 3px solid var(--m2-focus-ring);
+    outline-offset: 2px;
 }
 
 .kata-expand-btn,
 .kata-delete-btn {
-    width: 2rem;
-    height: 2rem;
-    font-size: 1.5rem;
+    width: 44px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--t-dim);
+    font-size: 1.375rem;
+    font-family: inherit;
+    color: var(--m2-text-muted);
     background: transparent;
     border: 1px solid transparent;
     border-radius: 0;
     cursor: pointer;
-    font-family: inherit;
 }
 
 .kata-expand-btn:hover,
 .kata-delete-btn:hover {
-    border-color: var(--t-dim);
+    color: var(--m2-text);
+    border-color: var(--m2-text-muted);
+}
+
+.kata-expand-btn:focus,
+.kata-expand-btn:focus-visible,
+.kata-delete-btn:focus,
+.kata-delete-btn:focus-visible {
+    color: var(--m2-text);
+    outline: 3px solid var(--m2-focus-ring);
+    outline-offset: 2px;
 }
 
 .kata-delete-btn--confirm {
@@ -691,31 +814,42 @@
     font-weight: 700;
 }
 
+/* Membership editor (existing checkbox list), full card width. */
 .kata-game-list {
-    width: 100%;
-    padding: 0.5rem 0 0.5rem 1rem;
+    grid-column: 1 / -1;
     display: flex;
     flex-direction: column;
-    gap: 0.375rem;
+    gap: 0.125rem;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--m2-border);
+    cursor: default;
 }
 
 .kata-game-toggle {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    font-size: 0.8125rem;
-    color: var(--t-text);
+    gap: 0.625rem;
+    min-height: 40px;
+    font-size: 0.9375rem;
+    color: var(--m2-text);
     cursor: pointer;
+    overflow-wrap: anywhere;
 }
 
-.kata-game-toggle input[type="checkbox"] {
-    accent-color: var(--t-accent);
-    width: 1rem;
-    height: 1rem;
+.kata-game-toggle input[type="checkbox"],
+.kamae-settings-toggle input[type="checkbox"] {
+    flex: none;
+    accent-color: var(--m2-accent);
+    width: 1.125rem;
+    height: 1.125rem;
 }
 
-.kata-game-toggle input[type="checkbox"]:focus {
-    outline: 2px solid var(--t-focus-border);
+.kata-game-toggle input[type="checkbox"]:focus,
+.kata-game-toggle input[type="checkbox"]:focus-visible,
+.kamae-settings-toggle input[type="checkbox"]:focus,
+.kamae-settings-toggle input[type="checkbox"]:focus-visible {
+    outline: 3px solid var(--m2-focus-ring);
     outline-offset: 2px;
 }
 
@@ -725,20 +859,9 @@
     gap: 0.5rem;
 }
 
-.kamae-settings-toggle input[type="checkbox"] {
-    accent-color: var(--t-accent);
-    width: 1rem;
-    height: 1rem;
-}
-
-.kamae-settings-toggle input[type="checkbox"]:focus {
-    outline: 2px solid var(--t-focus-border);
-    outline-offset: 2px;
-}
-
 .kata-empty {
-    font-size: 0.8125rem;
-    color: var(--t-dim);
+    font-size: 0.875rem;
+    color: var(--m2-text-muted);
     margin: 0;
 }
 
@@ -950,31 +1073,32 @@
     font-family: inherit;
     font-weight: 700;
     letter-spacing: 0.04em;
-    color: var(--t-dim);
+    color: var(--m2-text-muted);
     background: transparent;
-    border: 2px solid var(--t-dim);
+    border: 2px solid var(--m2-text-muted);
     border-radius: 0;
     cursor: pointer;
     transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
 }
 
 .kamae-settings-link:hover {
-    color: var(--t-hover-text);
-    background: var(--t-hover-bg);
-    border-color: var(--t-hover-bg);
+    color: var(--m2-text);
+    background: var(--m2-surface);
+    border-color: var(--m2-text);
 }
 
 .kamae-settings-link:focus {
-    color: var(--t-hover-text);
-    background: var(--t-hover-bg);
-    border-color: var(--t-hover-bg);
-    outline: none;
+    color: var(--m2-text);
+    background: transparent;
+    border-color: var(--m2-text);
+    outline: 3px solid var(--m2-focus-ring);
+    outline-offset: 2px;
 }
 
 .kamae-settings-shortcut {
     font-size: 0.6875rem;
     font-weight: 600;
-    color: var(--t-text-faint);
+    color: var(--m2-text-muted);
     margin-left: 0.5rem;
 }
 
@@ -983,8 +1107,8 @@
 .kamae-settings-link:hover .kamae-settings-shortcut,
 .kamae-settings-link:focus .kamae-settings-shortcut,
 .kamae-settings-link:focus-visible .kamae-settings-shortcut {
-    color: var(--t-hover-text);
-    opacity: 0.7;
+    color: var(--m2-text-muted);
+    opacity: 1;
 }
 
 
@@ -1010,7 +1134,7 @@
      * already announces the position. Chromium 120+ supports the
      * `content: <generated> / <alt>` syntax. */
     content: counter(settings-section) ". " / "";
-    color: var(--t-text-faint);
+    color: var(--m2-text-muted);
     font-weight: 600;
     margin-right: 0.25em;
 }
@@ -1024,8 +1148,15 @@
 .kamae-settings-title {
     font-size: 1.5rem;
     font-weight: 500;
-    color: var(--t-text);
+    color: var(--m2-text);
     margin: 0;
+}
+
+/* Title takes programmatic focus on open (tabIndex -1): the P1 ring
+   instead of the UA default when it shows. */
+.kamae-settings-title:focus-visible {
+    outline: 3px solid var(--m2-focus-ring);
+    outline-offset: 4px;
 }
 
 .kamae-settings-back-btn {
@@ -1033,24 +1164,25 @@
     font-size: 1rem;
     font-family: inherit;
     letter-spacing: 0.04em;
-    color: var(--t-dim);
+    color: var(--m2-text-muted);
     background: transparent;
-    border: 1.5px solid var(--t-dim);
+    border: 1.5px solid var(--m2-text-muted);
     border-radius: 0;
     cursor: pointer;
 }
 
 .kamae-settings-back-btn:hover {
-    color: var(--t-hover-text);
-    background: var(--t-hover-bg);
-    border-color: var(--t-hover-bg);
+    color: var(--m2-text);
+    background: var(--m2-surface);
+    border-color: var(--m2-text);
 }
 
 .kamae-settings-back-btn:focus {
-    color: var(--t-hover-text);
-    background: var(--t-hover-bg);
-    border-color: var(--t-hover-bg);
-    outline: none;
+    color: var(--m2-text);
+    background: transparent;
+    border-color: var(--m2-text);
+    outline: 3px solid var(--m2-focus-ring);
+    outline-offset: 2px;
 }
 
 .kamae-settings-section {
@@ -1064,9 +1196,9 @@
     padding: 0.75rem 1rem;
     font-size: 0.875rem;
     font-family: inherit;
-    color: var(--t-text);
-    background: var(--t-surface);
-    border: 1px solid var(--t-border-subtle);
+    color: var(--m2-text);
+    background: var(--m2-surface);
+    border: 1px solid var(--m2-border);
     border-radius: 0;
     cursor: pointer;
     text-align: left;
@@ -1074,24 +1206,25 @@
 }
 
 .kamae-settings-tour-btn:hover {
-    background: var(--t-accent-soft);
+    background: var(--m2-accent-tint);
 }
 
+.kamae-settings-tour-btn:focus,
 .kamae-settings-tour-btn:focus-visible {
-    outline: 2px solid var(--t-accent);
+    outline: 3px solid var(--m2-focus-ring);
     outline-offset: 2px;
 }
 
 .kamae-settings-section-title {
     font-size: 1.125rem;
     font-weight: 500;
-    color: var(--t-text);
+    color: var(--m2-text);
     margin: 0;
 }
 
 .kamae-settings-section-desc {
     font-size: 1rem;
-    color: var(--t-dim);
+    color: var(--m2-text-muted);
     margin: 0;
     line-height: 1.5;
 }
@@ -1118,8 +1251,9 @@
     font-size: 0.75rem;
 }
 
+.kamae-settings-disclosure:focus,
 .kamae-settings-disclosure:focus-visible {
-    outline: 2px solid var(--t-accent, #c8a84e);
+    outline: 3px solid var(--m2-focus-ring);
     outline-offset: 2px;
 }
 
@@ -1132,23 +1266,23 @@
 .kamae-settings-lang-btn {
     text-align: left;
     padding: 0.5rem 0.75rem;
-    border: 1px solid var(--t-dim);
+    border: 1px solid var(--m2-text-muted);
     border-radius: 0;
     background: none;
-    color: var(--t-primary);
+    color: var(--m2-text);
     font-size: 1rem;
     cursor: pointer;
 }
 
 .kamae-settings-lang-btn--current {
-    border-color: var(--t-accent, #c8a84e);
-    color: var(--t-accent, #c8a84e);
+    border-color: var(--m2-accent);
+    color: var(--m2-accent);
 }
 
 .kamae-settings-lang-btn--pending {
-    border-color: var(--t-accent, #c8a84e);
-    background: var(--t-accent, #c8a84e);
-    color: var(--t-bg, #1a1a2e);
+    border-color: var(--m2-accent);
+    background: var(--m2-accent);
+    color: var(--m2-accent-contrast-text);
 }
 
 .kamae-settings-lang-confirm {
@@ -1158,8 +1292,9 @@
     margin-top: 0.125rem;
 }
 
+.kamae-settings-lang-btn:focus,
 .kamae-settings-lang-btn:focus-visible {
-    outline: 2px solid var(--t-accent, #c8a84e);
+    outline: 3px solid var(--m2-focus-ring);
     outline-offset: 2px;
 }
 
@@ -1169,7 +1304,7 @@
 
 .kamae-settings-controls h3 {
     font-size: 0.875rem;
-    color: var(--t-dim);
+    color: var(--m2-text-muted);
     margin: 0.75rem 0 0.25rem;
 }
 
@@ -1182,14 +1317,14 @@
 .kamae-controls-table th {
     text-align: left;
     padding: 0.25rem 0.5rem;
-    color: var(--t-dim);
+    color: var(--m2-text-muted);
     font-weight: 500;
-    border-bottom: 1px solid var(--t-dim);
+    border-bottom: 1px solid var(--m2-text-muted);
 }
 
 .kamae-controls-table td {
     padding: 0.25rem 0.5rem;
-    color: var(--t-primary);
+    color: var(--m2-text);
 }
 
 .kamae-settings-haptic-bar {
@@ -1202,9 +1337,9 @@
 .kamae-haptic-seg {
     flex: 1;
     padding: 0.5rem 0;
-    border: 1px solid var(--t-dim);
+    border: 1px solid var(--m2-text-muted);
     background: none;
-    color: var(--t-primary);
+    color: var(--m2-text);
     font-size: 0.875rem;
     cursor: pointer;
     text-align: center;
@@ -1223,33 +1358,34 @@
 }
 
 .kamae-haptic-seg--filled {
-    background: var(--t-accent, #c8a84e);
-    color: var(--t-bg, #1a1a2e);
-    border-color: var(--t-accent, #c8a84e);
+    background: var(--m2-accent);
+    color: var(--m2-accent-contrast-text);
+    border-color: var(--m2-accent);
 }
 
+.kamae-haptic-seg:focus,
 .kamae-haptic-seg:focus-visible {
-    outline: 2px solid var(--t-accent, #c8a84e);
+    outline: 3px solid var(--m2-focus-ring);
     outline-offset: 2px;
     z-index: 1;
 }
 
 .kamae-settings-guard-value {
     margin-left: 0.5rem;
-    color: var(--t-accent, #c8a84e);
+    color: var(--m2-accent);
     font-variant-numeric: tabular-nums;
 }
 
 .kamae-settings-guard-desc {
     margin: 0.25rem 0 0.75rem;
-    color: var(--t-dim);
+    color: var(--m2-text-muted);
     font-size: 0.875rem;
     line-height: 1.4;
 }
 
 .kamae-settings-guard-slider {
     width: 100%;
-    accent-color: var(--t-accent, #c8a84e);
+    accent-color: var(--m2-accent);
 }
 
 /* Both :focus and :focus-visible. Gamepad polling moves focus via
@@ -1257,8 +1393,9 @@
    as keyboard-sourced, so :focus-visible alone may never light up for
    gamepad users. :focus fallback is visually identical. */
 .kamae-settings-guard-slider:focus,
+.kamae-settings-guard-slider:focus,
 .kamae-settings-guard-slider:focus-visible {
-    outline: 2px solid var(--t-accent, #c8a84e);
+    outline: 3px solid var(--m2-focus-ring);
     outline-offset: 4px;
     border-radius: 0;
 }
@@ -1279,7 +1416,7 @@
     margin: 0 0 0.25rem;
     font-size: 1rem;
     font-weight: 600;
-    color: var(--t-primary);
+    color: var(--m2-text);
 }
 
 .kamae-settings-a11y-link {
@@ -1307,7 +1444,7 @@
     gap: 0.375rem;
     cursor: pointer;
     font-size: 1rem;
-    color: var(--t-primary);
+    color: var(--m2-text);
 }
 
 .kamae-settings-radio input[type="radio"] {
@@ -1315,14 +1452,15 @@
     cursor: pointer;
 }
 
+.kamae-settings-radio input[type="radio"]:focus,
 .kamae-settings-radio input[type="radio"]:focus-visible {
-    outline: 2px solid var(--t-accent, #c8a84e);
+    outline: 3px solid var(--m2-focus-ring);
     outline-offset: 2px;
 }
 
 .kamae-settings-label {
     font-size: 1rem;
-    color: var(--t-dim);
+    color: var(--m2-text-muted);
     letter-spacing: 0.04em;
 }
 
@@ -1332,9 +1470,9 @@
     font-size: 1rem;
     font-family: inherit;
     letter-spacing: 0.02em;
-    color: var(--t-text);
-    background: var(--t-surface);
-    border: 1px solid var(--t-dim);
+    color: var(--m2-text);
+    background: var(--m2-surface);
+    border: 1px solid var(--m2-text-muted);
     border-radius: 0;
     outline: none;
     transition: border-color 0.15s ease;
@@ -1342,8 +1480,9 @@
 }
 
 .kamae-settings-input:focus {
-    border-color: var(--t-focus-border);
-    box-shadow: 0 0 0 3px var(--t-focus-border);
+    border-color: var(--m2-text);
+    outline: 3px solid var(--m2-focus-ring);
+    outline-offset: 2px;
 }
 
 .kamae-settings-masked {
@@ -1351,14 +1490,14 @@
     align-items: center;
     gap: 0.75rem;
     padding: 0.75rem 1rem;
-    background: var(--t-surface);
-    border: 1px solid var(--t-dim);
+    background: var(--m2-surface);
+    border: 1px solid var(--m2-text-muted);
     border-radius: 0;
 }
 
 .kamae-settings-masked-text {
     font-size: 1rem;
-    color: var(--t-dim);
+    color: var(--m2-text-muted);
     letter-spacing: 0.15em;
     flex: 1;
 }
@@ -1367,20 +1506,20 @@
     padding: 0.25rem 0.5rem;
     font-size: 0.75rem;
     font-family: inherit;
-    color: var(--t-dim);
+    color: var(--m2-text-muted);
     background: transparent;
-    border: 1px solid var(--t-dim);
+    border: 1px solid var(--m2-text-muted);
     border-radius: 0;
     cursor: pointer;
 }
 
 .kamae-settings-change-btn:hover {
-    color: var(--t-text);
-    border-color: var(--t-text);
+    color: var(--m2-text);
+    border-color: var(--m2-text);
 }
 
 .kamae-settings-change-btn:focus {
-    outline: 2px solid var(--t-focus-border);
+    outline: 3px solid var(--m2-focus-ring);
     outline-offset: 2px;
 }
 
@@ -1394,25 +1533,26 @@
     font-size: 1rem;
     font-family: inherit;
     letter-spacing: 0.04em;
-    color: var(--t-dim);
+    color: var(--m2-text-muted);
     background: transparent;
-    border: 1.5px solid var(--t-dim);
+    border: 1.5px solid var(--m2-text-muted);
     border-radius: 0;
     cursor: pointer;
     transition: color 0.15s ease, border-color 0.15s ease;
 }
 
 .kamae-settings-btn:hover:not(:disabled) {
-    color: var(--t-hover-text);
-    background: var(--t-hover-bg);
-    border-color: var(--t-hover-bg);
+    color: var(--m2-text);
+    background: var(--m2-surface);
+    border-color: var(--m2-text);
 }
 
 .kamae-settings-btn:focus:not(:disabled) {
-    color: var(--t-hover-text);
-    background: var(--t-hover-bg);
-    border-color: var(--t-hover-bg);
-    outline: none;
+    color: var(--m2-text);
+    background: transparent;
+    border-color: var(--m2-text);
+    outline: 3px solid var(--m2-focus-ring);
+    outline-offset: 2px;
 }
 
 .kamae-settings-btn:disabled {
@@ -1432,11 +1572,56 @@
 }
 
 .kamae-settings-status--success {
-    color: var(--t-accent);
+    color: var(--m2-accent);
 }
 
 .kamae-settings-status--error {
     color: var(--t-error);
+}
+
+/* Save-failure + Retry row (review 2026-09-25 R2: a failed setting save must
+   stay visibly unsaved, not read as success). */
+.kamae-settings-status--retry {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 0.4rem;
+}
+
+/* Gamepad-driven programmatic .focus() is not classified as keyboard-sourced
+   (red line 7.10), so :focus-visible alone would miss it here too. */
+.kamae-settings-retry-btn:focus,
+.kamae-settings-retry-btn:focus-visible {
+    outline: 3px solid var(--m2-focus-ring);
+    outline-offset: 2px;
+}
+
+/* Navigation-layout choice inside Settings: shared class from
+   ModeNavigation.css, restyled here with the same tokens as the panel. */
+.kamae-settings .navigation-layout-option {
+    background: transparent;
+    color: var(--m2-text);
+    border-color: var(--m2-text-muted);
+}
+
+.kamae-settings .navigation-layout-option:hover {
+    background: var(--m2-surface);
+    color: var(--m2-text);
+    border-color: var(--m2-text);
+}
+
+.kamae-settings .navigation-layout-option[aria-pressed='true'] {
+    background: var(--m2-accent-tint);
+    color: var(--m2-accent);
+    border-color: var(--m2-accent);
+    box-shadow: inset 0 0 0 1px var(--m2-accent);
+}
+
+.kamae-settings .navigation-layout-option:focus,
+.kamae-settings .navigation-layout-option:focus-visible {
+    outline: 3px solid var(--m2-focus-ring);
+    outline-offset: 2px;
 }
 
 /* ── Reduced motion ────────────────────── */
@@ -1448,7 +1633,14 @@
     .showcase-empty-explore-btn,
     .kamae-settings-link,
     .kamae-settings-input,
-    .kamae-settings-btn {
+    .kamae-settings-btn,
+    .kata-item,
+    .kata-group,
+    .kata-create-btn,
+    .kata-create-confirm,
+    .kata-create-cancel,
+    .showcase-item,
+    .showcase-hold-btn {
         transition: none;
     }
 }

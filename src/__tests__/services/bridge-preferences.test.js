@@ -181,14 +181,33 @@ describe('bridge.getMaida2LargeMotion', () => {
 describe('bridge.setMaida2LargeMotion', () => {
     it('passes false through to invoke', async () => {
         invokeMock.mockResolvedValue({ success: true, enabled: false });
-        await bridge.setMaida2LargeMotion(false);
+        const result = await bridge.setMaida2LargeMotion(false);
         expect(invokeMock).toHaveBeenCalledWith('set_maida2_large_motion', { enabled: false });
+        expect(result).toEqual({ success: true, enabled: false });
     });
 
     it('coerces a non-boolean to a real boolean', async () => {
         invokeMock.mockResolvedValue({ success: true });
         await bridge.setMaida2LargeMotion(0);
         expect(invokeMock).toHaveBeenCalledWith('set_maida2_large_motion', { enabled: false });
+    });
+
+    it('resolves the Rust-reported failure shape (disk write failed)', async () => {
+        invokeMock.mockResolvedValue({ success: false, error: 'disk full' });
+        const result = await bridge.setMaida2LargeMotion(false);
+        expect(result).toEqual({ success: false, error: 'disk full' });
+    });
+
+    it('normalizes a null invoke result (unregistered command) to a failure shape', async () => {
+        invokeMock.mockResolvedValue(null);
+        const result = await bridge.setMaida2LargeMotion(false);
+        expect(result).toEqual({ success: false, error: 'not implemented' });
+    });
+
+    it('normalizes an IPC rejection to a failure shape instead of throwing', async () => {
+        invokeMock.mockRejectedValue(new Error('no tauri runtime'));
+        const result = await bridge.setMaida2LargeMotion(false);
+        expect(result).toEqual({ success: false, error: 'not implemented' });
     });
 });
 

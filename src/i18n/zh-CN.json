@@ -107,8 +107,9 @@
             "remove_aria": "移除 {title}",
             "remove_help": "需按 Enter 两次完成,按 Escape 取消。",
             "remove_too_fast": "按得太快,请再按一次 Enter 确认。",
-            "remove_confirm": "确定？",
+            "remove_confirm": "确定移除？",
             "remove_confirm_aria": "再按一次确认移除,按 Escape 取消。",
+            "remove_armed_hint": "再按一次移除 · Esc 或 B 取消",
             "remove_progress_aria": "按住以移除,松开取消。",
             "explore_more": "探索",
             "sr_guide": "整理你想让哪些游戏出现。Ctrl+Tab 切换到临模式，选择游戏游玩。"
@@ -159,10 +160,12 @@
             "maida2_preview_audio_off": "关闭",
             "maida2_preview_audio_announce": "预览声音已设为{state}",
             "maida2_large_motion_title": "大幅动态效果",
-            "maida2_large_motion_desc": "关闭侧栏符号扩散等大型动画。系统开启减少动态效果时，一律不播放。",
+            "maida2_large_motion_desc": "关闭侧栏符号扩散动画。系统开启减少动态效果时，一律不播放。",
             "maida2_large_motion_on": "开启",
             "maida2_large_motion_off": "关闭",
             "maida2_large_motion_announce": "大幅动态效果已设为{state}",
+            "maida2_large_motion_save_failed": "无法保存此设置，仅在你关闭 Maida 前生效。",
+            "maida2_large_motion_retry": "重试",
             "maida2_card_opacity_title": "卡片不透明度",
             "maida2_card_opacity_desc": "游戏卡片相对于背景的透视程度。",
             "maida2_card_opacity_value": "{percent}%",
@@ -218,9 +221,18 @@
             "delete_confirm": "移除这个型？",
             "locked_title": "型（Kata）",
             "locked_desc": "Maida Plus 功能。在设置中输入授权码。",
-            "select_aria": "型 {name}, {count} 个游戏",
-            "select_aria_active": "型 {name}, {count} 个游戏, 启用中",
-            "game_count_aria": "{count} 个游戏",
+            "select_aria": {
+                "one": "型 {name}, {count} 个游戏",
+                "other": "型 {name}, {count} 个游戏"
+            },
+            "select_aria_active": {
+                "one": "型 {name}, {count} 个游戏, 启用中",
+                "other": "型 {name}, {count} 个游戏, 启用中"
+            },
+            "game_count_aria": {
+                "one": "{count} 个游戏",
+                "other": "{count} 个游戏"
+            },
             "counter_aria": "{max} 个游戏中已有 {count} 个",
             "counter_full": "型已满",
             "edit_games_aria": "编辑 {name} 的游戏",

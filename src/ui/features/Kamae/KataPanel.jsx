@@ -1,5 +1,6 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useMemo } from 'react';
 import { t } from '../../../i18n';
+import { CapsuleStrip } from './CapsuleThumb';
 import {
     createKata,
     deleteKata,
@@ -20,6 +21,7 @@ export default function KataPanel({
     onUpdate,
     expandedId,
     onExpandToggle,
+    children,
 }) {
     const [creating, setCreating] = useState(false);
     const [newName, setNewName] = useState('');
@@ -27,6 +29,17 @@ export default function KataPanel({
     const [editName, setEditName] = useState('');
     const [confirmDeleteId, setConfirmDeleteId] = useState(null);
     const renameCancelledRef = useRef(false);
+
+    // Resolve kata gameIds (game id or Steam appId) to installed games for
+    // the decorative capsule strip. Unresolved ids stay null (quiet cell).
+    const gameLookup = useMemo(() => {
+        const map = new Map();
+        showcaseGames.forEach(g => {
+            map.set(g.id, g);
+            if (g.steamAppId) map.set(g.steamAppId, g);
+        });
+        return map;
+    }, [showcaseGames]);
 
     const handleCreate = useCallback(() => {
         const ch = createKata(newName);
@@ -140,6 +153,9 @@ export default function KataPanel({
                 </div>
             )}
 
+            {/* "All installed" card, owned by KamaeView (same handlers). */}
+            {children}
+
             {katas.map(ch => {
                 const isEditing = editingId === ch.id;
                 const isActive = activeKataId === ch.id;
@@ -200,8 +216,8 @@ export default function KataPanel({
                                 />
                             ) : (
                                 <span className="kata-item-name">
-                                    {ch.name}
-                                    <span className="kata-item-count">({ch.gameIds.length})</span>
+                                    <span className="kata-item-title">{ch.name}</span>
+                                    <span className="kata-item-count">{t('ui.katas.game_count_aria', { count: ch.gameIds.length })}</span>
                                 </span>
                             )}
                         </button>
@@ -231,6 +247,15 @@ export default function KataPanel({
                         >
                             {confirmDeleteId === ch.id ? '?' : '×'}
                         </button>
+
+                        {ch.gameIds.length > 0 ? (
+                            <CapsuleStrip
+                                games={ch.gameIds.slice(0, 4).map(id => gameLookup.get(id) || null)}
+                                total={ch.gameIds.length}
+                            />
+                        ) : (
+                            <p className="kata-card-empty" aria-hidden="true">{t('ui.katas.empty')}</p>
+                        )}
 
                         {expandedId === ch.id && (
                             <div className="kata-game-list">

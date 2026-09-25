@@ -400,15 +400,25 @@ function App() {
     // Maida 2.0 large motion effects (default on, user ruling 2026-09-25).
     // One-way opt-out: ModeNavigation ANDs it with the OS reduce-motion
     // preference, which always wins.
-    const [maida2LargeMotion, setMaida2LargeMotion] = useState(true);
+    // null = not yet resolved from the getter. shouldPlayBloom only plays on
+    // a strict `=== true`, so null (and legacy undefined) never bloom before
+    // the read completes (review 2026-09-25 R1: "already off" must not play
+    // once while startup is still confirming that). If the user flips the
+    // toggle before the read resolves, maida2LargeMotionUserSetRef marks
+    // their choice authoritative so the late read cannot overwrite it.
+    const [maida2LargeMotion, setMaida2LargeMotion] = useState(null);
+    const maida2LargeMotionUserSetRef = useRef(false);
     useEffect(() => {
         let cancelled = false;
         bridge.getMaida2LargeMotion().then((enabled) => {
-            if (!cancelled && typeof enabled === 'boolean') setMaida2LargeMotion(enabled);
+            if (!cancelled && !maida2LargeMotionUserSetRef.current && typeof enabled === 'boolean') {
+                setMaida2LargeMotion(enabled);
+            }
         });
         return () => { cancelled = true; };
     }, []);
     const handleMaida2LargeMotionChange = useCallback((enabled) => {
+        maida2LargeMotionUserSetRef.current = true;
         setMaida2LargeMotion(enabled);
     }, []);
 

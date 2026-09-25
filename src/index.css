@@ -35,7 +35,10 @@
     --m2-accent-tint: #1e1a13;
     --m2-accent-contrast-text: #17110a;
     --m2-focus-ring: #f0c888;
-    --m2-border: #3d362c;
+    /* Raised from #3d362c (1.66:1 vs bg / 1.46:1 vs surface) to >= 3:1
+     * against both --m2-bg and --m2-surface — dividers and inactive
+     * card/list borders were failing WCAG 1.4.11 non-text contrast. */
+    --m2-border: #726552;
 }
 
 [data-theme="light"] {
@@ -70,7 +73,9 @@
     --m2-accent-tint: #f1ebe2;
     --m2-accent-contrast-text: #ffffff;
     --m2-focus-ring: #6a4516;
-    --m2-border: #d6cdbf;
+    /* Raised from #d6cdbf (1.52:1 vs bg / 1.34:1 vs surface) to >= 3:1
+     * against both --m2-bg and --m2-surface — see dark-theme note above. */
+    --m2-border: #9a8462;
 }
 
 @media (prefers-reduced-transparency: reduce) {
@@ -89,6 +94,83 @@
         --t-border-subtle: rgba(44, 44, 44, 0.25);
         --t-accent-soft: rgba(150, 101, 45, 0.2);
         --t-focus-soft: rgba(44, 44, 44, 0.2);
+    }
+}
+
+/* OS-level "more contrast" preference — no in-app setting, same posture as
+ * prefers-reduced-motion (red line 7.6: the OS setting is the source of
+ * truth). Pushes the already-AA --m2-text-muted and the >= 3:1 --m2-border
+ * above one step further, and thickens every focus ring app-wide.
+ *
+ * outline-width (the longhand, not the `outline` shorthand) + !important is
+ * deliberate: dozens of components declare their own
+ * `outline: <width> solid var(--m2-focus-ring | --t-focus-border)`. This
+ * reaches every one of them from a single place instead of editing each
+ * declaration, and only takes effect while the OS preference is active.
+ * Targets :focus too, not only :focus-visible — red line 7.10: Chromium
+ * does not classify a gamepad-driven programmatic .focus() as
+ * keyboard-sourced, so :focus-visible alone misses gamepad focus rings. */
+@media (prefers-contrast: more) {
+    [data-theme="dark"] {
+        --m2-border: #93826a;
+        --m2-text-muted: #cbc6bc;
+    }
+    [data-theme="light"] {
+        --m2-border: #77674c;
+        --m2-text-muted: #413c36;
+    }
+    :focus,
+    :focus-visible {
+        outline-width: 4px !important;
+    }
+}
+
+/* Windows High Contrast Mode / forced-colors. The UA already force-maps
+ * most author colors (border/outline/text) onto the user's system palette;
+ * this block only repairs the places where state is communicated purely
+ * through background-color or box-shadow, neither of which forced-colors
+ * mode renders, so those indicators would otherwise disappear entirely —
+ * "nothing relies on background color alone" (WCAG 1.4.1 / SC 1.4.11).
+ *
+ * Re-pointing the shared --m2-border / --m2-focus-ring / --m2-accent tokens
+ * at system colors means every existing consumer (dividers, card borders,
+ * focus outlines, the active-kata ring, buttons) inherits an OS-guaranteed
+ * visible color through the same indirection already used for theming,
+ * instead of needing a forced-colors override at every call site. */
+@media (forced-colors: active) {
+    [data-theme="dark"],
+    [data-theme="light"] {
+        --m2-border: CanvasText;
+        --m2-focus-ring: Highlight;
+        --m2-accent: Highlight;
+    }
+
+    /* box-shadow does not render in forced-colors mode — the active-kata
+     * ring and the armed "confirm remove" ring rely on it, so give both an
+     * explicit border instead of only the (also forced) box-shadow. */
+    .kata-item--active,
+    .kata-group--active,
+    .kata-item--active:hover,
+    .kata-group--active:hover,
+    .showcase-hold-btn--confirm {
+        border-width: 2px;
+        border-style: solid;
+        border-color: Highlight;
+        box-shadow: none;
+    }
+
+    /* The selected mode tab is background-tint only (border-color:
+     * transparent by design) — give it an explicit border + text color so
+     * "which face is active" survives forced colors. */
+    .mode-navigation__tab[aria-current='page'],
+    .navigation-layout-option[aria-pressed='true'],
+    .mode-navigation .mode-navigation__tab[aria-current='page'] {
+        border-color: Highlight;
+        color: Highlight;
+    }
+    .mode-navigation__tab[aria-current='page'] .mode-navigation__glyph,
+    .mode-navigation .mode-navigation__tab[aria-current='page'] .mode-navigation__glyph {
+        color: Highlight;
     }
 }
 

@@ -215,6 +215,112 @@ try {
         pass('NOT NOW text-decoration-line', `focused=${focused.line}, outline=${focused.outline}, hover=none`);
         await page.close();
     }
+
+    // 9. Review 2026-09-25 R1: the preference read can be slow. No bloom
+    // while it is still unresolved (not "assume default on"), and a user
+    // toggle mid-load beats a later conflicting read.
+    {
+        const READ_DELAY_MS = 1800;
+        const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
+        // A physical DualShock 4 is attached to this dev machine; never let
+        // a real pad drive a headless page.
+        await page.addInitScript(() => {
+            Object.defineProperty(navigator, 'getGamepads', { configurable: true, value: () => [] });
+        });
+        await page.addInitScript(installHistoryFixture, { locale: 'en' });
+        await page.addInitScript((delayMs) => {
+            const inner = window.__TAURI_INTERNALS__.invoke;
+            window.__TAURI_INTERNALS__.invoke = async (cmd, args = {}) => {
+                if (cmd === 'get_maida2_large_motion') {
+                    await new Promise(r => setTimeout(r, delayMs));
+                    return true; // resolves ON, conflicting with the OFF toggle below
+                }
+                if (cmd === 'set_maida2_large_motion') return { success: true, enabled: args.enabled };
+                return inner(cmd, args);
+            };
+        }, READ_DELAY_MS);
+        await page.goto(BASE);
+        await page.locator('.mode-navigation [data-face="rin"]').waitFor();
+
+        // Still unresolved: hovering must not bloom.
+        await page.hover('.mode-navigation [data-face="kamae"]');
+        await page.waitForTimeout(400);
+        assert.equal(await ghost(page).count(), 0, 'no bloom while the preference read is unresolved');
+
+        // User turns it OFF from Settings well before READ_DELAY_MS elapses.
+        await page.keyboard.press('F10');
+        await page.locator('.kamae-settings').waitFor();
+        await page.locator('.kamae-settings-disclosure[aria-controls="a11y-options"]').click();
+        const off = page.locator('[data-large-motion="false"]');
+        await off.click();
+        assert.equal(await off.getAttribute('aria-checked'), 'true', 'session choice applied immediately');
+
+        // Let the delayed read resolve (ON) after the user's OFF choice.
+        await page.waitForTimeout(READ_DELAY_MS);
+        await page.locator('.kamae-settings-back-btn').click();
+        await page.locator('.mode-navigation [data-face="kamae"]').waitFor();
+        await parkMouse(page);
+        await page.hover('.mode-navigation [data-face="kamae"]');
+        await page.waitForTimeout(400);
+        assert.equal(await ghost(page).count(), 0, 'late read (ON) did not overwrite the user\'s OFF choice made during load');
+        pass('R1: no bloom while preference unresolved; user toggle during load beats a late conflicting read');
+        await page.close();
+    }
+
+    // 10. Review 2026-09-25 R2: a failed save must not read as success. The
+    // session choice still applies; the UI must show it was not persisted
+    // and offer a keyboard/gamepad-reachable Retry, and the live region must
+    // announce the failure, not the success text.
+    {
+        const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
+        await page.addInitScript(() => {
+            Object.defineProperty(navigator, 'getGamepads', { configurable: true, value: () => [] });
+        });
+        await page.addInitScript(installHistoryFixture, { locale: 'en' });
+        await page.addInitScript(() => {
+            window.__e2eSetLargeMotionFails = true;
+            const inner = window.__TAURI_INTERNALS__.invoke;
+            window.__TAURI_INTERNALS__.invoke = async (cmd, args = {}) => {
+                if (cmd === 'get_maida2_large_motion') return true;
+                if (cmd === 'set_maida2_large_motion') {
+                    return window.__e2eSetLargeMotionFails
+                        ? { success: false, error: 'fixture disk full' }
+                        : { success: true, enabled: args.enabled };
+                }
+                return inner(cmd, args);
+            };
+        });
+        await page.goto(BASE);
+        await page.locator('.mode-navigation [data-face="rin"]').waitFor();
+        await page.keyboard.press('F10');
+        await page.locator('.kamae-settings').waitFor();
+        await page.locator('.kamae-settings-disclosure[aria-controls="a11y-options"]').click();
+
+        const off = page.locator('[data-large-motion="false"]');
+        const liveRegionText = () => page.locator('#a11y-large-motion-heading')
+            .evaluate(el => el.closest('.kamae-settings-a11y-item').querySelector('[role="status"]').textContent);
+        const retryBtn = page.locator('[data-large-motion-retry]');
+
+        await off.click();
+        assert.equal(await off.getAttribute('aria-checked'), 'true', 'session choice applies even though the save will fail');
+        await retryBtn.waitFor({ state: 'visible', timeout: 1000 });
+        assert.match(await liveRegionText(), /save/i, 'live region announces the failure, not the success message');
+        assert.doesNotMatch(await liveRegionText(), /turned Off/, 'failure text replaces the success announce, not alongside it');
+        assert.equal(await off.getAttribute('aria-checked'), 'true', 'session choice unchanged by the failed save');
+
+        await retryBtn.focus();
+        const outline = await retryBtn.evaluate(el => window.getComputedStyle(el).outlineStyle);
+        assert.notEqual(outline, 'none', 'Retry is focus-visible (keyboard/gamepad reachable)');
+        await page.screenshot({ path: `${SHOTS}/settings-motion-save-failed.png` });
+
+        // Retry now succeeds: failure UI clears, success is announced.
+        await page.evaluate(() => { window.__e2eSetLargeMotionFails = false; });
+        await retryBtn.click();
+        await page.locator('[data-large-motion-retry]').waitFor({ state: 'hidden', timeout: 1000 });
+        assert.match(await liveRegionText(), /turned Off/, 'live region announces success once the retry persists');
+        pass('R2: failed save shows inline status + Retry instead of success; a successful retry clears it');
+        await page.close();
+    }
 } finally {
     await browser.close();
 }

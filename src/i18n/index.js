@@ -53,6 +53,11 @@ if (typeof document !== 'undefined') {
  * t(key, params)
  * Minimal translation helper.
  * Supports nested keys (e.g., 'ui.button.visit') and variable interpolation {name}.
+ * A leaf may also be a plural object `{ one, other }`; pass `count` in params
+ * to pick between them (count === 1 -> one, otherwise -> other). Locales with
+ * no plural distinction (ja/zh) just repeat the same string in both slots —
+ * this keeps every locale file key-identical (enforced by
+ * __tests__/i18n/translations.test.js's flattened-key comparison).
  * Falls back to English if key not found in current locale.
  */
 export function t(key, params = {}) {
@@ -68,8 +73,12 @@ export function t(key, params = {}) {
         return key;
     }
 
+    // Plural object -> pick the branch, then interpolate as usual.
+    let template = typeof result === 'string'
+        ? result
+        : (params.count === 1 ? result.one : result.other);
+
     // Interpolation
-    let template = result;
     Object.keys(params).forEach(param => {
         template = template.replace(new RegExp(`{${param}}`, 'g'), params[param]);
     });
@@ -86,7 +95,12 @@ function resolve(keys, obj) {
             return null;
         }
     }
-    return typeof result === 'string' ? result : null;
+    if (typeof result === 'string') return result;
+    if (result && typeof result === 'object' && !Array.isArray(result)
+        && typeof result.one === 'string' && typeof result.other === 'string') {
+        return result;
+    }
+    return null;
 }
 
 export function setLocale(locale) {

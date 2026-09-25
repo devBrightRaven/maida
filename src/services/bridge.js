@@ -187,7 +187,13 @@ const bridge = {
         return typeof result === 'boolean' ? result : true;
     },
 
-    setMaida2LargeMotion: (enabled) => call('set_maida2_large_motion', { enabled: Boolean(enabled) }),
+    // Always resolves to an object with `.success` — call() turns both an
+    // IPC rejection and a dropped invoke into null, which would otherwise
+    // read as neither success nor a reported error (review 2026-09-25 R2).
+    setMaida2LargeMotion: async (enabled) => {
+        const result = await call('set_maida2_large_motion', { enabled: Boolean(enabled) });
+        return result ?? { success: false, error: 'not implemented' };
+    },
 
     // Maida 2.0 card opacity (percent, 40..=100, default 70) — continuous
     // range like the frozen guard above, not a discrete either/or.
