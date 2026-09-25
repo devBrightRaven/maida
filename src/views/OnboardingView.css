@@ -89,6 +89,99 @@
 }
 
 
+/* ── First-run language choice (BUG-009 follow-up) ────────────
+ * Maida 2.0 semantic tokens (--m2-*), not the legacy --t-* tokens the rest
+ * of this file uses — this step is new UI, styled against the current
+ * design system rather than matched to the surrounding legacy screen. */
+
+.onboarding-language-fieldset {
+    border: none;
+    margin: 0 0 2rem;
+    padding: 0;
+}
+
+.onboarding-language-title {
+    display: block;
+    font-size: 1.25rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.5rem;
+    padding: 0;
+    color: var(--m2-text);
+}
+
+.onboarding-language-detail {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+    color: var(--m2-text-muted);
+}
+
+/* 2x2 grid: four options never wrap into an unbalanced 3 + 1 row. */
+.onboarding-language-options {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+    width: min(100%, 19rem);
+    margin-inline: auto;
+}
+
+.onboarding-language-option {
+    min-width: 0;
+    padding: 0.6rem 1.1rem;
+    border: 1px solid var(--m2-border);
+    border-radius: 0;
+    background: transparent;
+    color: var(--m2-text);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.onboarding-language-option:hover {
+    border-color: var(--m2-accent);
+}
+
+/* Selected state is conveyed by more than color: accent border + inset
+ * box-shadow (shape), not background alone (WCAG 1.4.1). */
+.onboarding-language-option[aria-pressed='true'] {
+    background: var(--m2-accent-tint);
+    color: var(--m2-accent);
+    border-color: var(--m2-accent);
+    box-shadow: inset 0 0 0 1px var(--m2-accent);
+}
+
+/* Gamepad-driven programmatic .focus() is not classified as keyboard-sourced
+ * (red line 7.10), so :focus-visible alone would miss it — pair both. */
+.onboarding-language-option:focus,
+.onboarding-language-option:focus-visible {
+    outline: 3px solid var(--m2-focus-ring);
+    outline-offset: 3px;
+}
+
+.onboarding-language-continue {
+    background: transparent;
+    border: 1px solid var(--m2-border);
+    color: var(--m2-text);
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 0.6rem 1.5rem;
+    border-radius: 0;
+    transition: all 0.2s ease;
+}
+
+.onboarding-language-continue:hover {
+    background: var(--m2-accent-tint);
+    border-color: var(--m2-accent);
+    color: var(--m2-accent);
+}
+
+.onboarding-language-continue:focus,
+.onboarding-language-continue:focus-visible {
+    outline: 3px solid var(--m2-focus-ring);
+    outline-offset: 3px;
+}
+
 .listening-indicator {
     display: flex;
     flex-direction: column;

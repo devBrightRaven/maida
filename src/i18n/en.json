@@ -13,6 +13,7 @@
             "clear_aria": "Unlock {game}",
             "back": "Undo\n(One Time Only)",
             "acknowledge": "Acknowledge",
+            "continue": "Continue",
             "sync": "Scan my game library",
             "restart_selection": "Restart Selection",
             "im_back": "I'M BACK",
@@ -385,6 +386,8 @@
     "voice": {
         "onboarding": {
             "aria_label": "Welcome to Maida",
+            "language_title": "Choose your language",
+            "language_detail": "You can change this later in Settings.",
             "permission_intro": "Too many games, can't pick one? Maida shows you one game at a time.",
             "permission_detail": "Press the button below to scan your installed games. Nothing will be launched."
         },

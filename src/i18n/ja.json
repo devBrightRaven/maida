@@ -13,6 +13,7 @@
             "clear_aria": "{game} のロック解除",
             "back": "元に戻す\n（一回限り）",
             "acknowledge": "了解",
+            "continue": "続ける",
             "sync": "ライブラリをスキャン",
             "restart_selection": "再開",
             "im_back": "再開",
@@ -385,6 +386,8 @@
     "voice": {
         "onboarding": {
             "aria_label": "Maidaへようこそ",
+            "language_title": "言語を選んでください",
+            "language_detail": "後で設定から変更できます。",
             "permission_intro": "ゲームが多すぎて選べない？Maidaは一度に一つだけ表示します。",
             "permission_detail": "下のボタンを押すと、インストール済みのゲームをスキャンします。ゲームは起動しません。"
         },

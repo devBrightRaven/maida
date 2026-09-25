@@ -1,15 +1,29 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { t } from '../i18n';
+import { t, getLocale, setLocale } from '../i18n';
 import { useGameInput } from '../hooks/useGameInput';
 import { createKata, addGameToKata } from '../core/katas';
 import bridge from '../services/bridge';
 import './OnboardingView.css';
 
-export default function OnboardingView({ onComplete, themeToggle }) {
+// First-run language choice. Each label is the language's own name, in its
+// own script — not translated — so a user can recognize their language even
+// when the UI is currently showing a different one.
+const LANGUAGES = [
+    { value: 'en', label: 'English', htmlLang: 'en' },
+    { value: 'ja', label: '日本語', htmlLang: 'ja' },
+    { value: 'zh-CN', label: '简体中文', htmlLang: 'zh-CN' },
+    { value: 'zh-TW', label: '繁體中文', htmlLang: 'zh-TW' },
+];
+
+export default function OnboardingView({ onComplete, themeToggle, onLocaleChange }) {
+    // 'language' (first-run language choice) -> 'sync' (existing scan flow)
+    const [step, setStep] = useState('language');
     const [state, setState] = useState('idle'); // 'idle' | 'scanning' | 'error'
     const [isFocused, setIsFocused] = useState(false);
     const btnRef = useRef(null);
     const titleRef = useRef(null);
+    const langButtonRefs = useRef([]);
+    const continueRef = useRef(null);
 
     // Helper to focus button and update state
     const focusButton = () => {
@@ -19,23 +33,58 @@ export default function OnboardingView({ onComplete, themeToggle }) {
         }
     };
 
-    // On mount: focus h1 so SR reads title + description first.
-    // On error / window re-focus: focus the action button.
+    const focusLanguageStep = () => {
+        const idx = Math.max(LANGUAGES.findIndex(l => l.value === getLocale()), 0);
+        langButtonRefs.current[idx]?.focus();
+    };
+
+    const handleSelectLocale = (value) => {
+        if (value === getLocale()) return;
+        setLocale(value);
+        onLocaleChange?.();
+    };
+
+    // Arrow keys / D-pad move focus linearly across the four language
+    // options then the Continue button; they do not change the selection by
+    // themselves (selection happens on click / Enter / gamepad A, same as
+    // every other button in this app).
+    const moveLanguageFocus = (dir) => {
+        const items = [...langButtonRefs.current, continueRef.current].filter(Boolean);
+        const activeIdx = items.indexOf(document.activeElement);
+        if (activeIdx === -1) {
+            items[0]?.focus();
+            return;
+        }
+        let nextIdx = activeIdx;
+        if (dir === 'right' || dir === 'down') nextIdx = Math.min(activeIdx + 1, items.length - 1);
+        if (dir === 'left' || dir === 'up') nextIdx = Math.max(activeIdx - 1, 0);
+        items[nextIdx]?.focus();
+    };
+
+    // On mount / re-mount (including the remount App.jsx forces on locale
+    // change): focus the language step's current selection, or on the sync
+    // step focus h1 so SR reads title + description first (error / window
+    // re-focus: focus the action button).
     useEffect(() => {
         const timer = setTimeout(() => {
-            if (state === 'idle' && titleRef.current) {
+            if (step === 'language') {
+                focusLanguageStep();
+            } else if (state === 'idle' && titleRef.current) {
                 titleRef.current.focus();
             } else {
                 focusButton();
             }
         }, 0);
-        const handleWindowFocus = () => focusButton();
+        const handleWindowFocus = () => {
+            if (step === 'language') focusLanguageStep();
+            else focusButton();
+        };
         window.addEventListener('focus', handleWindowFocus);
         return () => {
             clearTimeout(timer);
             window.removeEventListener('focus', handleWindowFocus);
         };
-    }, [state]);
+    }, [state, step]);
 
     // Track focus changes via document-level listeners
     useEffect(() => {
@@ -63,12 +112,17 @@ export default function OnboardingView({ onComplete, themeToggle }) {
 
     // Gamepad support
     useGameInput({
-        onMainAction: () => btnRef.current?.click(),
-        onBack: () => {
-            if (state === 'error') setState('idle');
+        onMainAction: () => {
+            if (step === 'sync') btnRef.current?.click();
         },
-        onNav: () => focusButton(),
-        disabled: state === 'scanning'
+        onBack: () => {
+            if (step === 'sync' && state === 'error') setState('idle');
+        },
+        onNav: (dir) => {
+            if (step === 'language') moveLanguageFocus(dir);
+            else focusButton();
+        },
+        disabled: step === 'sync' && state === 'scanning'
     });
 
     const handleSync = async () => {
@@ -110,6 +164,56 @@ export default function OnboardingView({ onComplete, themeToggle }) {
             setState('error');
         }
     };
+
+    if (step === 'language') {
+        return (
+            <main
+                className="onboarding-container"
+                aria-labelledby="onboarding-language-title"
+                aria-describedby="onboarding-language-detail"
+            >
+                <section className="onboarding-content">
+                    <h1 className="onboarding-title">Maida</h1>
+                    <fieldset className="onboarding-language-fieldset">
+                        <legend id="onboarding-language-title" className="onboarding-language-title">
+                            {t('voice.onboarding.language_title')}
+                        </legend>
+                        <p id="onboarding-language-detail" className="onboarding-language-detail">
+                            {t('voice.onboarding.language_detail')}
+                        </p>
+                        <div className="onboarding-language-options">
+                            {LANGUAGES.map((option, i) => (
+                                <button
+                                    key={option.value}
+                                    type="button"
+                                    ref={(el) => { langButtonRefs.current[i] = el; }}
+                                    lang={option.htmlLang}
+                                    className="onboarding-language-option"
+                                    aria-pressed={getLocale() === option.value}
+                                    onClick={() => handleSelectLocale(option.value)}
+                                >
+                                    {option.label}
+                                </button>
+                            ))}
+                        </div>
+                    </fieldset>
+                    <div className="onboarding-actions">
+                        <button
+                            ref={continueRef}
+                            type="button"
+                            className="onboarding-language-continue"
+                            onClick={() => setStep('sync')}
+                        >
+                            {t('ui.button.continue')}
+                        </button>
+                    </div>
+                </section>
+                <div className="bg-glow"></div>
+                {themeToggle}
+                <div className="app-version-tag">v{__APP_VERSION__}</div>
+            </main>
+        );
+    }
 
     return (
         <main

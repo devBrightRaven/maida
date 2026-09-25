@@ -15,8 +15,65 @@ const DEFAULT_LOCALE = 'en';
 
 const LOCALE_STORAGE_KEY = 'maida_locale';
 
+// BUG-009: script/region-aware Chinese mapping. Simplified script or a
+// Simplified-majority region resolves to zh-CN; Traditional script or a
+// Traditional-majority region resolves to zh-TW. Script subtag wins over
+// region when both are present (e.g. zh-Hans-TW -> zh-CN, script overrides
+// the unusual region pairing).
+const ZH_SIMPLIFIED_REGIONS = new Set(['cn', 'sg', 'my']);
+const ZH_TRADITIONAL_REGIONS = new Set(['tw', 'hk', 'mo']);
+
 /**
- * Detect locale: manual override (localStorage) > browser/OS language > default.
+ * Resolve a `zh*` BCP-47 tag to zh-CN / zh-TW using script and region
+ * subtags. Returns null for non-Chinese tags.
+ *
+ * Bare `zh` (no script, no region) has no Simplified/Traditional signal in
+ * the tag itself, so it keeps the pre-BUG-009 default of zh-TW rather than
+ * guessing — no evidence was found that WebView2 or WebKitGTK ever emit a
+ * bare `zh` for a Simplified-script OS; both observed real-world cases
+ * (BUG-009 report) were fuller tags (zh-Hans-CN style).
+ */
+function resolveChineseTag(lang) {
+    const lower = lang.toLowerCase();
+    if (lower !== 'zh' && !lower.startsWith('zh-')) return null;
+
+    const parts = lower.split('-');
+    if (parts.length === 1) return 'zh-TW';
+
+    if (parts.includes('hans')) return 'zh-CN';
+    if (parts.includes('hant')) return 'zh-TW';
+
+    const region = parts[1];
+    if (ZH_SIMPLIFIED_REGIONS.has(region)) return 'zh-CN';
+    if (ZH_TRADITIONAL_REGIONS.has(region)) return 'zh-TW';
+
+    return null;
+}
+
+/**
+ * Resolve a single BCP-47 tag against SUPPORTED_LOCALES: exact match, then
+ * script/region-aware Chinese mapping, then bare base-language match.
+ * Returns null when nothing matches.
+ */
+function resolveTag(lang) {
+    if (!lang) return null;
+
+    // Exact match first (e.g. 'zh-TW')
+    if (SUPPORTED_LOCALES.includes(lang)) return lang;
+
+    const zhMatch = resolveChineseTag(lang);
+    if (zhMatch) return zhMatch;
+
+    // Base language match (e.g. 'ja-JP' -> 'ja')
+    const base = lang.split('-')[0];
+    const match = SUPPORTED_LOCALES.find(l => l.split('-')[0] === base);
+    if (match) return match;
+
+    return null;
+}
+
+/**
+ * Detect locale: manual override (localStorage) > browser/OS language(s) > default.
  */
 export function detectLocale() {
     // 1. Manual override from Debug panel
@@ -25,17 +82,17 @@ export function detectLocale() {
         if (stored && SUPPORTED_LOCALES.includes(stored)) return stored;
     }
 
-    // 2. Browser/OS language
+    // 2. Browser/OS language(s). Prefer navigator.languages (full ordered
+    // preference list) when present; fall back to the single navigator.language.
     if (typeof navigator === 'undefined') return DEFAULT_LOCALE;
-    const lang = navigator.language || '';
+    const candidates = Array.isArray(navigator.languages) && navigator.languages.length > 0
+        ? navigator.languages
+        : [navigator.language || ''];
 
-    // Exact match first (e.g. 'zh-TW')
-    if (SUPPORTED_LOCALES.includes(lang)) return lang;
-
-    // Base language match (e.g. 'zh' -> 'zh-TW')
-    const base = lang.split('-')[0];
-    const match = SUPPORTED_LOCALES.find(l => l.split('-')[0] === base);
-    if (match) return match;
+    for (const lang of candidates) {
+        const resolved = resolveTag(lang);
+        if (resolved) return resolved;
+    }
 
     return DEFAULT_LOCALE;
 }

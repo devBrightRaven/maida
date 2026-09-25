@@ -4,6 +4,12 @@ import { MAX_KATA_GAMES } from '../../../core/katas';
 import { vibrate, vibrateProgress } from '../../../services/haptics';
 import CapsuleThumb from './CapsuleThumb';
 
+// Silent auto-cancel of the armed "Confirm remove?" state, in ms.
+// Disabled 2026-09-25 (user decision): the countdown was invisible, and the
+// row now disarms explicitly via Esc / B, an outside pointer, focus leaving
+// the button, or another row arming. Set back to 5000 to restore.
+const CONFIRM_AUTO_CANCEL_MS = null;
+
 /**
  * Eased progress: 0→75% fast (1.5s), 75→100% slow (1s).
  * Fast feedback, then deliberate final confirmation.
@@ -152,10 +158,10 @@ function HoldButton({ onConfirm, label, ariaLabel }) {
         };
     }, [handleStart, handleEnd, confirming, onConfirm, reset]);
 
-    // Auto-cancel confirm state after 5 seconds
+    // Auto-cancel confirm state (off while CONFIRM_AUTO_CANCEL_MS is null)
     useEffect(() => {
-        if (!confirming) return;
-        const timer = setTimeout(() => setConfirming(false), 5000);
+        if (!confirming || !CONFIRM_AUTO_CANCEL_MS) return;
+        const timer = setTimeout(() => setConfirming(false), CONFIRM_AUTO_CANCEL_MS);
         return () => clearTimeout(timer);
     }, [confirming]);
 

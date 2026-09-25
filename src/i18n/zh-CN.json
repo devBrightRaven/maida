@@ -13,6 +13,7 @@
             "clear_aria": "解除锁定 {game}",
             "back": "撤销\n（仅限一次）",
             "acknowledge": "知道了",
+            "continue": "继续",
             "sync": "扫描游戏库",
             "restart_selection": "再来一次",
             "im_back": "再来一次",
@@ -385,6 +386,8 @@
     "voice": {
         "onboarding": {
             "aria_label": "欢迎使用 Maida",
+            "language_title": "选择你的语言",
+            "language_detail": "之后可以在设置中更改。",
             "permission_intro": "游戏太多，不知道玩哪个？Maida 一次只给你看一款。",
             "permission_detail": "按下方按钮扫描已安装的游戏。不会启动任何游戏。"
         },

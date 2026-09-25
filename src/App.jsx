@@ -719,7 +719,7 @@ function App() {
 
     if (status === 'onboarding') return (
         <React.Fragment key={localeVersion}>
-            <OnboardingView onComplete={init} themeToggle={themeToggle} />
+            <OnboardingView onComplete={init} themeToggle={themeToggle} onLocaleChange={handleLocaleChange} />
         </React.Fragment>
     );
 

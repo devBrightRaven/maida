@@ -420,6 +420,27 @@ main.mvp-container:has(> .mode-navigation) > .rin-stage,
     object-fit: cover;
 }
 
+/* No-art fallback: geometric Rin mark (RinFacingMark). Accent stroke kept
+ * quiet so it reads as "no art for this game", never as game art. */
+.mvp-container .rin-stage .rin-art__mark {
+    display: block;
+    width: 100%;
+    height: 100%;
+    color: var(--m2-accent);
+    opacity: 0.8;
+}
+
+[data-theme="dark"] .mvp-container .rin-stage .rin-art__mark {
+    opacity: 0.7;
+}
+
+@media (forced-colors: active) {
+    .mvp-container .rin-stage .rin-art__mark {
+        color: CanvasText;
+        opacity: 1;
+    }
+}
+
 /* Game name: wraps, never truncated. */
 .mvp-container .rin-stage .mvp-header {
     width: 100%;

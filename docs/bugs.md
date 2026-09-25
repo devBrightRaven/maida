@@ -17,7 +17,7 @@ Status: 待重現, 已確認, 修復中, 待驗證, 已驗證修復, 受阻.
 | BUG-006 | Playnite `lastPlayed` pipeline collapses missing / Never / unparseable | P2 | 已確認，未修 |
 | BUG-007 | Uninstalled game still listed in Maai (library not refreshed) | P1 | 待重現 |
 | BUG-008 | Maai card date/sub text low contrast on hover | P2 | 已確認，未修 |
-| BUG-009 | Simplified-script locales other than zh-CN resolve to Traditional Chinese | P2 | 已確認，未修 |
+| BUG-009 | Simplified-script locales other than zh-CN resolve to Traditional Chinese | P2 | 待驗證 |
 
 ---
 
@@ -105,9 +105,10 @@ Status: 待重現, 已確認, 修復中, 待驗證, 已驗證修復, 受阻.
 ## BUG-009 Simplified-script locales other than zh-CN resolve to Traditional Chinese
 
 - Found: 2026-09-25 during the language audit (code reading, not reproduced on a real OS).
-- Actual: `src/i18n/index.js` `detectLocale()` matches exact tags, then only the primary subtag. `zh-Hans`, `zh-Hans-CN`, `zh-SG`, `zh-Hans-SG` all fall to base `zh` and the first `zh-*` in `SUPPORTED_LOCALES`, which is `zh-TW`.
+- Actual (before fix): `src/i18n/index.js` `detectLocale()` matched exact tags, then only the primary subtag. `zh-Hans`, `zh-Hans-CN`, `zh-SG`, `zh-Hans-SG` all fell to base `zh` and the first `zh-*` in `SUPPORTED_LOCALES`, which is `zh-TW`.
 - Expected: simplified-script and Singapore/Malaysia tags resolve to `zh-CN`; `zh-HK`, `zh-MO`, `zh-Hant*` resolve to `zh-TW`.
 - Impact: a Simplified Chinese user whose WebView reports anything other than exactly `zh-CN` gets Traditional Chinese UI until they change it in Settings.
-- Tests: `src/__tests__/i18n/locale-detection.test.js` has no `zh-Hans*` / `zh-SG` case.
-- Change: none yet.
-- Next: script-aware mapping + tests; check what WebView2 / WebKitGTK actually report on real systems.
+- Change (2026-09-26): `src/i18n/index.js` `detectLocale()` now checks Hans/Hant script subtags and region subtags (`cn`/`sg`/`my` -> `zh-CN`, `tw`/`hk`/`mo` -> `zh-TW`) before falling back to bare base-language match; also now scans `navigator.languages` (first supported entry wins) when present, falling back to `navigator.language`. `localStorage` override still checked first, `en` still the final fallback. Bare `zh` (no script, no region) kept as `zh-TW`, the pre-fix default — no evidence found of a real WebView reporting a bare `zh` for a Simplified-script OS; both cases in this bug's original report were fuller tags.
+- Verified: unit tests only — `src/__tests__/i18n/locale-detection.test.js` now covers `zh-Hans`, `zh-Hans-CN`, `zh-CN`, `zh-SG`, `zh-MY`, `zh-Hant`, `zh-Hant-TW`, `zh-TW`, `zh-HK`, `zh-MO`, bare `zh`, `ja-JP`, `en-GB`, `fr`, and a `navigator.languages` case (`['fr', 'ja']` -> `ja`); 23/23 pass.
+- Not verified: real WebView2 (Windows) / WebKitGTK (Linux) reports on an actual Simplified-script OS — still unconfirmed what those runtimes actually emit.
+- Next: real-system check of what WebView2 / WebKitGTK report for `navigator.language(s)` under a Simplified-Chinese OS locale.

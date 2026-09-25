@@ -13,6 +13,7 @@
             "clear_aria": "解除鎖定 {game}",
             "back": "復原\n（僅限一次）",
             "acknowledge": "知道了",
+            "continue": "繼續",
             "sync": "掃描遊戲庫",
             "restart_selection": "再來一次",
             "im_back": "再來一次",
@@ -385,6 +386,8 @@
     "voice": {
         "onboarding": {
             "aria_label": "歡迎使用 Maida",
+            "language_title": "選擇你的語言",
+            "language_detail": "之後可以在設定中變更。",
             "permission_intro": "遊戲太多，不知道玩哪個？Maida 一次只給你看一款。",
             "permission_detail": "按下方按鈕掃描已安裝的遊戲。不會啟動任何遊戲。"
         },
