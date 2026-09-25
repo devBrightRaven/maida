@@ -179,6 +179,16 @@ const bridge = {
 
     setMaida2PreviewAudio: (enabled) => call('set_maida2_preview_audio', { enabled: Boolean(enabled) }),
 
+    // Maida 2.0 large motion effects (sidebar symbol bloom). Boolean, default
+    // on. One-way opt-out: callers must still AND it with the OS
+    // prefers-reduced-motion check, which always wins.
+    getMaida2LargeMotion: async () => {
+        const result = await call('get_maida2_large_motion');
+        return typeof result === 'boolean' ? result : true;
+    },
+
+    setMaida2LargeMotion: (enabled) => call('set_maida2_large_motion', { enabled: Boolean(enabled) }),
+
     // Maida 2.0 card opacity (percent, 40..=100, default 70) — continuous
     // range like the frozen guard above, not a discrete either/or.
     getMaida2CardOpacity: async () => {

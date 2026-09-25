@@ -24,6 +24,18 @@
     --t-focus-border: var(--t-accent);
     --t-hover-glow: rgba(255, 255, 255, 0.15);
     --t-debug-text: #ffd480;
+
+    /* Maida 2.0 semantic tokens (P1 Rin + shared mode rail). Ratios measured
+     * in design/maida2-review/p1/report.md; keep them >= WCAG AA on change. */
+    --m2-bg: #0a0a0a;
+    --m2-surface: #1a1a1a;
+    --m2-text: #ece6dc;
+    --m2-text-muted: #b5ad9f;
+    --m2-accent: #d6a660;
+    --m2-accent-tint: #1e1a13;
+    --m2-accent-contrast-text: #17110a;
+    --m2-focus-ring: #f0c888;
+    --m2-border: #3d362c;
 }
 
 [data-theme="light"] {
@@ -49,6 +61,16 @@
     --t-focus-border: var(--t-accent);
     --t-hover-glow: rgba(44, 44, 44, 0.12);
     --t-debug-text: #96652d;
+
+    --m2-bg: #fdfbf7;
+    --m2-surface: #f0ece6;
+    --m2-text: #26221d;
+    --m2-text-muted: #5d564d;
+    --m2-accent: #835a26;
+    --m2-accent-tint: #f1ebe2;
+    --m2-accent-contrast-text: #ffffff;
+    --m2-focus-ring: #6a4516;
+    --m2-border: #d6cdbf;
 }
 
 @media (prefers-reduced-transparency: reduce) {
@@ -77,6 +99,10 @@
 /* Global Defaults */
 :root {
     --font-sans: 'Inter', Arial, 'Noto Sans TC', 'Microsoft JhengHei', 'Noto Sans JP', 'Yu Gothic UI', sans-serif;
+    /* Maida 2.0 type: Inter, then explicit CJK sans per script, never a
+     * serif fallback (PMingLiU/MingLiU unreachable). :lang() below moves the
+     * active locale's family first so kanji/hanzi get the right glyph set. */
+    --m2-font: 'Inter', 'Noto Sans TC', 'Microsoft JhengHei', 'Noto Sans SC', 'Microsoft YaHei', 'Yu Gothic UI', Meiryo, sans-serif;
 
     /* Tunable font sizes — adjustable via Debug Trace panel */
     --prescription-size: 22px;
@@ -86,6 +112,14 @@
     --undo-size: 14px;
     --label-reading-size: 22px;
     --label-desc-size: 14px;
+}
+
+:root:lang(zh-CN) {
+    --m2-font: 'Inter', 'Noto Sans SC', 'Microsoft YaHei', 'Noto Sans TC', 'Microsoft JhengHei', 'Yu Gothic UI', Meiryo, sans-serif;
+}
+
+:root:lang(ja) {
+    --m2-font: 'Inter', 'Yu Gothic UI', Meiryo, 'Noto Sans TC', 'Microsoft JhengHei', 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
 }
 
 body {

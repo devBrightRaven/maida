@@ -6,7 +6,7 @@
     align-items: center;
     gap: 0.75rem 1rem;
     color: var(--t-text);
-    font-family: 'Inter', Arial, 'Noto Sans TC', 'Microsoft JhengHei', 'Noto Sans JP', 'Yu Gothic UI', sans-serif;
+    font-family: var(--m2-font);
     overflow-wrap: anywhere;
     position: relative;
     z-index: 20;
@@ -46,7 +46,7 @@
     border-radius: 0;
     background: color-mix(in srgb, var(--t-surface) 78%, transparent);
     color: var(--t-text);
-    font-family: 'Inter', Arial, 'Noto Sans TC', 'Microsoft JhengHei', 'Noto Sans JP', 'Yu Gothic UI', sans-serif;
+    font-family: var(--m2-font);
     font-size: 0.8125rem;
     line-height: 1.25;
     cursor: pointer;
@@ -196,7 +196,7 @@
     border-radius: 0;
     background: var(--t-surface);
     color: var(--t-error);
-    font-family: 'Inter', Arial, 'Noto Sans TC', 'Microsoft JhengHei', 'Noto Sans JP', 'Yu Gothic UI', sans-serif;
+    font-family: var(--m2-font);
     font-size: 0.875rem;
     line-height: 1.4;
     overflow-wrap: anywhere;
@@ -315,14 +315,15 @@ main:has(> .mode-navigation) > .mode-navigation {
 .mode-navigation__tab {
     position: relative;
     flex-direction: row;
-    gap: .625rem;
+    gap: .75rem;
     min-height: 64px;
     padding: .75rem;
     transition: background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
 }
 .mode-navigation__copy { display: flex; flex-direction: column; gap: .25rem; min-width: 0; }
 .mode-navigation__glyph { font-size: .6875rem; line-height: 1.4; }
-.mode-navigation__symbol { width: 1.75rem; flex-shrink: 0; font-size: 1.5rem; text-align: center; }
+.mode-navigation__symbol { width: 1.75rem; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; transform-origin: center; }
+.mode-navigation__symbol svg { width: 1.375rem; height: 1.375rem; display: block; }
 .mode-navigation__tab::before {
     content: ''; position: absolute; inset: .75rem auto .75rem 0;
     width: 3px; border-radius: 0; background: var(--t-accent);
@@ -332,6 +333,23 @@ main:has(> .mode-navigation) > .mode-navigation {
 .mode-navigation__tab:focus, .mode-navigation__tab:focus-visible { box-shadow: 0 0 0 4px var(--t-accent-soft); }
 .mode-navigation__tab:active .mode-navigation__symbol { transform: scale(.85); }
 .mode-navigation__tab .mode-navigation__symbol { transition: transform 140ms ease; }
+/* Breathing symbol (2026-09-25 P1, enlarged same day): one-shot inhale on
+   hover/focus, holds while hovered/focused, eases back to 1x on leave/blur.
+   :not(:active) keeps the CSS-animation cascade (which otherwise outranks a
+   plain :active rule regardless of specificity) from swallowing the existing
+   press feedback. Tab gap bumped .625rem -> .75rem alongside the larger peak
+   so the settled symbol (scale 1.3) stays clear of the mode label and inside
+   the tab's own padding; transform-only, so no layout ever shifts. */
+.mode-navigation__tab:hover:not(:active) .mode-navigation__symbol,
+.mode-navigation__tab:focus:not(:active) .mode-navigation__symbol,
+.mode-navigation__tab:focus-visible:not(:active) .mode-navigation__symbol {
+    animation: mode-symbol-breathe 660ms cubic-bezier(.16, 1, .3, 1) forwards;
+}
+@keyframes mode-symbol-breathe {
+    0% { transform: scale(1); }
+    62% { transform: scale(1.45); }
+    100% { transform: scale(1.3); }
+}
 .mode-navigation__tab[data-face='maida2'][aria-current='page'] .mode-navigation__symbol { animation: mode-open 380ms ease both; }
 .mode-navigation__tab[data-face='rin'][aria-current='page'] .mode-navigation__symbol { animation: mode-mark 300ms ease both; }
 .mode-navigation__tab[data-face='kamae'][aria-current='page'] .mode-navigation__symbol { animation: mode-settle 340ms ease both; }
@@ -349,7 +367,7 @@ main:has(> .mode-navigation) > :is(.maida2-content, .kamae-content, .rin-stage) 
 .rin-stage .mvp-btn { min-height: 64px; padding: .75rem 1rem; letter-spacing: .02em; }
 .rin-stage .visit-btn-title { font-size: 1.125rem; }
 .rin-stage .visit-btn-subtitle { font-size: .75rem; }
-main:has(> .mode-navigation) :not(code, pre) { font-family: 'Inter', Arial, 'Noto Sans TC', 'Microsoft JhengHei', 'Noto Sans JP', 'Yu Gothic UI', sans-serif; }
+main:has(> .mode-navigation) :not(code, pre) { font-family: var(--m2-font); }
 main:has(> .mode-navigation) > .app-footer { grid-column: 1 / -1; padding-top: 1rem; }
 main:has(> .mode-navigation) .app-footer-copyright { overflow-wrap: anywhere; }
 main:has(> .mode-navigation) .rin-calligraphy-bg { opacity: .045; }
@@ -454,4 +472,109 @@ main:has(> .mode-navigation) > .rin-calligraphy-bg { top: 50%; }
         grid-template-rows: auto minmax(min-content, 1fr) auto auto;
     }
     main:has(> .mode-navigation) > .app-footer { grid-row: 4; left: 1rem; right: 1rem; }
+}
+
+
+/* ------------------------------------------------------------------
+ * Maida 2.0 P1 rail (2026-09-25): shared by Maai, Rin and Kamae.
+ * Brand, three modes (symbol + name + existing function text), then
+ * History and Settings. Selected = gold text + gold left bar + subtle
+ * tint, no box. Focus = offset outline in --m2-focus-ring, so focus and
+ * selected never look alike. :focus paired with :focus-visible (7.10).
+ * ------------------------------------------------------------------ */
+.mode-navigation__brand {
+    margin: 0 0 .25rem;
+    padding: 0 .75rem;
+    color: var(--m2-text);
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: .22em;
+    user-select: none;
+}
+main:has(> .mode-navigation) > .mode-navigation {
+    color: var(--m2-text);
+    /* Chromium resolves the sticky inset from main's padding edge, so the
+       earlier top: 4rem parked the rail 4rem lower than the content column
+       (128px vs 64px at 1280x800). 0 keeps it level and still pinned. */
+    top: 0;
+}
+.mode-navigation .mode-navigation__tab,
+.mode-navigation .mode-navigation__utility {
+    border-color: transparent;
+    background: transparent;
+    color: var(--m2-text);
+    box-shadow: none;
+}
+.mode-navigation .mode-navigation__tab .mode-navigation__glyph {
+    color: var(--m2-text-muted);
+}
+.mode-navigation .mode-navigation__utility {
+    color: var(--m2-text-muted);
+    font-size: .8125rem;
+}
+.mode-navigation .mode-navigation__tab:hover,
+.mode-navigation .mode-navigation__utility:hover {
+    background: var(--m2-surface);
+    border-color: transparent;
+    color: var(--m2-text);
+}
+.mode-navigation .mode-navigation__tab[aria-current='page'] {
+    background: var(--m2-accent-tint);
+    border-color: transparent;
+    color: var(--m2-accent);
+}
+.mode-navigation .mode-navigation__tab[aria-current='page'] .mode-navigation__glyph {
+    color: var(--m2-accent);
+}
+.mode-navigation .mode-navigation__tab::before {
+    background: var(--m2-accent);
+}
+.mode-navigation .mode-navigation__tab:active {
+    background: var(--m2-surface);
+}
+.mode-navigation .mode-navigation__button:focus,
+.mode-navigation .mode-navigation__button:focus-visible {
+    outline: 3px solid var(--m2-focus-ring);
+    outline-offset: 2px;
+    box-shadow: none;
+}
+/* Pressed reads apart from focus: inset edge on top of the focus ring. */
+.mode-navigation .mode-navigation__button:active {
+    background: var(--m2-surface);
+    box-shadow: inset 0 0 0 2px var(--m2-text-muted);
+}
+.mode-navigation__utilities {
+    border-top-color: var(--m2-border);
+}
+.mode-navigation .mode-navigation__current {
+    border-left-color: var(--m2-accent);
+    background: var(--m2-accent-tint);
+}
+.mode-navigation .mode-navigation__direction {
+    color: var(--m2-accent);
+}
+
+/* Sidebar symbol bloom (2026-09-25 P1). Ghost nodes are created by
+   src/ui/modeBloom.js inside one fixed, inert, aria-hidden layer on <body>.
+   z-index 15: above the content column (1), under the rail itself (20) so
+   the rail's text stays on top, and far under the tour / trace / legal
+   overlays. The effective gate (OS reduce-motion AND the Large motion
+   effects setting) lives in JS; the media query below is a second guard. */
+.mode-bloom-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 15;
+    pointer-events: none;
+    overflow: hidden;
+}
+.mode-bloom-ghost {
+    position: absolute;
+    color: var(--m2-accent);
+    transform-origin: center;
+    will-change: transform, opacity, filter;
+    pointer-events: none;
+}
+.mode-bloom-ghost svg { width: 100%; height: 100%; display: block; }
+@media (prefers-reduced-motion: reduce) {
+    .mode-bloom-layer { display: none; }
 }

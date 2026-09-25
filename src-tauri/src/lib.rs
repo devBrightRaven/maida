@@ -111,6 +111,8 @@ pub fn run() {
             preferences::set_maida2_play_delay_seconds,
             preferences::get_maida2_preview_audio,
             preferences::set_maida2_preview_audio,
+            preferences::get_maida2_large_motion,
+            preferences::set_maida2_large_motion,
             preferences::get_maida2_card_opacity,
             preferences::set_maida2_card_opacity,
         ])

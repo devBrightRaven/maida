@@ -94,6 +94,40 @@ pub fn set_maida2_preview_audio(app: AppHandle, enabled: bool) -> serde_json::Va
     }
 }
 
+/// Maida 2.0 large motion effects (user ruling 2026-09-25, P1). A one-way
+/// opt-out on top of the OS reduce-motion setting: when false the frontend
+/// skips large decorative animations (the sidebar symbol bloom). It can never
+/// enable motion the OS has asked to reduce; the frontend gates on both.
+const MAIDA2_LARGE_MOTION_DEFAULT: bool = true;
+
+#[tauri::command]
+pub fn get_maida2_large_motion(app: AppHandle) -> bool {
+    let base = persistence::app_data_dir(&app);
+    let config_path = persistence::data_path(&base, "config");
+    persistence::read_json(&config_path)
+        .and_then(|c| c.get("preferences")?.get("maida2LargeMotion")?.as_bool())
+        .unwrap_or(MAIDA2_LARGE_MOTION_DEFAULT)
+}
+
+#[tauri::command]
+pub fn set_maida2_large_motion(app: AppHandle, enabled: bool) -> serde_json::Value {
+    let base = persistence::app_data_dir(&app);
+    let config_path = persistence::data_path(&base, "config");
+    let mut config = persistence::read_json(&config_path)
+        .unwrap_or_else(|| persistence::user_data_default("config"));
+
+    if let Some(p) = config.get_mut("preferences") {
+        p["maida2LargeMotion"] = json!(enabled);
+    } else {
+        config["preferences"] = json!({ "maida2LargeMotion": enabled });
+    }
+
+    match persistence::write_json(&config_path, &config) {
+        Ok(_) => json!({ "success": true, "enabled": enabled }),
+        Err(e) => json!({ "success": false, "error": e }),
+    }
+}
+
 /// Maida 2.0 card opacity (percent). Cards must always read as translucent
 /// (frosted glass), so the floor stops short of fully opaque; the ceiling
 /// stops short of fully transparent so text never loses contrast.

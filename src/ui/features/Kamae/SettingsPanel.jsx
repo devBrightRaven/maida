@@ -18,7 +18,7 @@ const CARD_OPACITY_DEBOUNCE_MS = 300;
  * SettingsPanel — inline panel for IGDB credential management.
  * Renders inside KamaeView when settings is toggled open.
  */
-export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleChange, onTourStart, onNavigateLegal, replayTourBtnRef, updateCheck, updateAlertShown, onFrozenGuardChange, onMaida2PlayDelayChange, onMaida2PreviewAudioChange, onMaida2CardOpacityChange, navigationLayout = 'tabs', onNavigationLayoutChange }) {
+export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleChange, onTourStart, onNavigateLegal, replayTourBtnRef, updateCheck, updateAlertShown, onFrozenGuardChange, onMaida2PlayDelayChange, onMaida2PreviewAudioChange, onMaida2LargeMotionChange, onMaida2CardOpacityChange, navigationLayout = 'tabs', onNavigationLayoutChange }) {
     const [clientId, setClientId] = useState('');
     const [clientSecret, setClientSecret] = useState('');
     const [hasExisting, setHasExisting] = useState(false);
@@ -48,6 +48,11 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
     // Maida 2.0 dwell-to-play preview audio (default on, user ruling 2026-08-31)
     const [previewAudio, setPreviewAudio] = useState(true);
     const [previewAudioAnnounce, setPreviewAudioAnnounce] = useState('');
+
+    // Maida 2.0 large motion effects (default on, user ruling 2026-09-25).
+    // One-way opt-out; the OS reduce-motion preference still always wins.
+    const [largeMotion, setLargeMotion] = useState(true);
+    const [largeMotionAnnounce, setLargeMotionAnnounce] = useState('');
 
     // Maida 2.0 card opacity (percent, 40..100, default 70)
     const [cardOpacity, setCardOpacity] = useState(70);
@@ -83,6 +88,8 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
             if (typeof playDelay === 'number') setPlayDelaySeconds(playDelay);
             const audioEnabled = await bridge.getMaida2PreviewAudio();
             if (typeof audioEnabled === 'boolean') setPreviewAudio(audioEnabled);
+            const largeMotionEnabled = await bridge.getMaida2LargeMotion();
+            if (typeof largeMotionEnabled === 'boolean') setLargeMotion(largeMotionEnabled);
             const opacity = await bridge.getMaida2CardOpacity();
             if (typeof opacity === 'number') setCardOpacity(opacity);
         })();
@@ -155,6 +162,19 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
             })
         );
     }, [onMaida2PreviewAudioChange]);
+
+    const handleLargeMotionChange = useCallback((enabled) => {
+        setLargeMotion(enabled);
+        if (onMaida2LargeMotionChange) onMaida2LargeMotionChange(enabled);
+        bridge.setMaida2LargeMotion(enabled).catch((err) => {
+            console.warn('[Settings] failed to persist maida2 large motion:', err);
+        });
+        setLargeMotionAnnounce(
+            t('ui.settings.maida2_large_motion_announce', {
+                state: enabled ? t('ui.settings.maida2_large_motion_on') : t('ui.settings.maida2_large_motion_off'),
+            })
+        );
+    }, [onMaida2LargeMotionChange]);
 
     const handleTest = useCallback(async () => {
         setTesting(true);
@@ -466,6 +486,36 @@ export default function SettingsPanel({ onClose, theme, toggleTheme, onLocaleCha
                                 aria-atomic="true"
                             >
                                 {previewAudioAnnounce}
+                            </div>
+                        </div>
+
+                        <div className="kamae-settings-a11y-item">
+                            <h3 id="a11y-large-motion-heading" className="kamae-settings-a11y-heading">
+                                {t('ui.settings.maida2_large_motion_title')}
+                            </h3>
+                            <p className="kamae-settings-guard-desc">{t('ui.settings.maida2_large_motion_desc')}</p>
+                            <div className="kamae-settings-haptic-bar" role="radiogroup" aria-labelledby="a11y-large-motion-heading">
+                                {[true, false].map((enabled) => (
+                                    <button
+                                        key={String(enabled)}
+                                        type="button"
+                                        role="radio"
+                                        data-large-motion={String(enabled)}
+                                        aria-checked={largeMotion === enabled}
+                                        className={`kamae-haptic-seg ${enabled === largeMotion ? 'kamae-haptic-seg--filled' : ''}`}
+                                        onClick={() => handleLargeMotionChange(enabled)}
+                                    >
+                                        {enabled ? t('ui.settings.maida2_large_motion_on') : t('ui.settings.maida2_large_motion_off')}
+                                    </button>
+                                ))}
+                            </div>
+                            <div
+                                className="sr-only"
+                                role="status"
+                                aria-live="polite"
+                                aria-atomic="true"
+                            >
+                                {largeMotionAnnounce}
                             </div>
                         </div>
 

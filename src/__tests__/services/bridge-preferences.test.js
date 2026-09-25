@@ -160,6 +160,38 @@ describe('bridge.setMaida2PreviewAudio', () => {
     });
 });
 
+describe('bridge.getMaida2LargeMotion', () => {
+    it('returns the boolean returned by Rust', async () => {
+        invokeMock.mockResolvedValue(false);
+        await expect(bridge.getMaida2LargeMotion()).resolves.toBe(false);
+        expect(invokeMock).toHaveBeenCalledWith('get_maida2_large_motion', {});
+    });
+
+    it('falls back to true when the invoke result is not a boolean', async () => {
+        invokeMock.mockResolvedValue(null);
+        await expect(bridge.getMaida2LargeMotion()).resolves.toBe(true);
+    });
+
+    it('falls back to true when invoke throws (graceful degrade)', async () => {
+        invokeMock.mockRejectedValue(new Error('no tauri runtime'));
+        await expect(bridge.getMaida2LargeMotion()).resolves.toBe(true);
+    });
+});
+
+describe('bridge.setMaida2LargeMotion', () => {
+    it('passes false through to invoke', async () => {
+        invokeMock.mockResolvedValue({ success: true, enabled: false });
+        await bridge.setMaida2LargeMotion(false);
+        expect(invokeMock).toHaveBeenCalledWith('set_maida2_large_motion', { enabled: false });
+    });
+
+    it('coerces a non-boolean to a real boolean', async () => {
+        invokeMock.mockResolvedValue({ success: true });
+        await bridge.setMaida2LargeMotion(0);
+        expect(invokeMock).toHaveBeenCalledWith('set_maida2_large_motion', { enabled: false });
+    });
+});
+
 describe('bridge.getMaida2CardOpacity', () => {
     it('returns the number returned by Rust', async () => {
         invokeMock.mockResolvedValue(85);

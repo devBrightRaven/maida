@@ -238,8 +238,8 @@
     background: transparent;
     box-shadow: inset 0 0 0 4px var(--t-border);
     /* Thick inner border */
-    text-decoration: line-through;
-    /* Semantic "Cancel" */
+    /* No strike-through (2026-09-25 P1): the label stays readable. */
+    text-decoration: none;
     color: var(--t-border);
     border-color: transparent;
     /* Hide original border */
@@ -252,7 +252,7 @@
     color: var(--t-focus-border);
     outline: none;
     box-shadow: inset 0 0 0 4px var(--t-focus-border), 0 0 30px var(--t-text-ghost);
-    text-decoration: line-through;
+    text-decoration: none;
     border-color: transparent;
 }
 
@@ -348,4 +348,277 @@
     background: radial-gradient(circle, var(--t-glow) 0%, transparent 70%);
     pointer-events: none;
     z-index: 1;
+}
+
+/* ------------------------------------------------------------------
+ * Maida 2.0 P1: Rin stage (2026-09-25)
+ * One game at a time, art leading. Order: mode heading, art, name,
+ * existing description, actions. Semantic tokens: --m2-* (index.css).
+ * Prefixed with .mvp-container so these win over the older .rin-stage
+ * rules in ModeNavigation.css regardless of stylesheet load order.
+ * Containers stay square; accent only on current mode, TRY, and focus.
+ * ------------------------------------------------------------------ */
+.mvp-container:has(> .rin-stage) {
+    background: var(--m2-bg);
+    color: var(--m2-text);
+}
+
+main.mvp-container:has(> .mode-navigation) > .rin-stage,
+.mvp-container > .rin-stage {
+    max-width: 56rem;
+    align-items: center;
+    gap: clamp(0.75rem, 2.2vh, 1.25rem);
+    text-align: center;
+    font-family: var(--m2-font);
+}
+
+/* Mode heading: existing Rin name + one-line function text. */
+.mvp-container .rin-stage .rin-title-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    position: static;
+    width: 100%;
+    pointer-events: none;
+    user-select: none;
+}
+.mvp-container .rin-stage .rin-title-reading {
+    margin: 0;
+    color: var(--m2-text);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+}
+.mvp-container .rin-stage .rin-title-desc {
+    margin: 0;
+    max-width: 32rem;
+    color: var(--m2-text-muted);
+    font-size: 0.875rem;
+    line-height: 1.5;
+    opacity: 1;
+}
+
+/* Art box: fixed aspect (Steam hero 1920x620) reserved before load so the
+ * actions below never move. Width is also capped by viewport height so
+ * TRY and NOT NOW stay above the fold at 1280x720. */
+.mvp-container .rin-stage .rin-art {
+    width: min(100%, 56rem, calc((100dvh - 30rem) * 1920 / 620));
+    min-width: min(100%, 16rem);
+    aspect-ratio: 1920 / 620;
+    flex: none;
+    position: relative;
+    overflow: hidden;
+    border-radius: 0;
+    background: var(--m2-surface);
+}
+.mvp-container .rin-stage .rin-art__img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Game name: wraps, never truncated. */
+.mvp-container .rin-stage .mvp-header {
+    width: 100%;
+    max-width: 44rem;
+    text-align: center;
+}
+.mvp-container .rin-stage .mvp-header:hover {
+    color: inherit;
+    text-shadow: none;
+    transform: none;
+}
+.mvp-container .rin-stage .game-label {
+    margin: 0;
+    color: var(--m2-text);
+    font-size: clamp(1.5rem, 2.5vw, 2.25rem);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: 0.01em;
+    text-transform: none;
+    overflow-wrap: anywhere;
+    text-shadow: none;
+}
+.mvp-container .rin-stage .game-hltb-time {
+    color: var(--m2-text-muted);
+    font-size: 0.8125rem;
+    letter-spacing: 0.08em;
+    font-weight: 400;
+}
+
+/* Existing description (prescription) text. */
+.mvp-container .rin-stage .rin-main-content,
+.mvp-container .rin-stage .rin-prescription,
+.mvp-container .rin-stage .mvp-content {
+    width: 100%;
+    min-width: min(100%, 16rem);
+    max-width: 40rem;
+    justify-content: center;
+}
+.mvp-container .rin-stage .permission-wrapper .permission-text {
+    margin: 0;
+    color: var(--m2-text-muted);
+    font-family: var(--m2-font);
+    font-size: 1.0625rem;
+    font-weight: 400;
+    line-height: 1.6;
+    text-shadow: none;
+    overflow-wrap: anywhere;
+}
+
+/* Actions */
+.mvp-container .rin-stage .mvp-footer {
+    padding-bottom: 0;
+}
+.mvp-container .rin-stage .action-row {
+    gap: 0.75rem;
+}
+.mvp-container .rin-stage .primary-actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
+    gap: 1rem;
+}
+.mvp-container .rin-stage .primary-actions .mvp-btn {
+    width: auto;
+    flex: 0 1 15rem;
+    min-width: min(100%, 11rem);
+}
+.mvp-container .rin-stage .mvp-btn {
+    min-height: 60px;
+    padding: 0.625rem 1.25rem;
+    border-radius: 0;
+    font-family: var(--m2-font);
+    font-size: 1rem;
+    letter-spacing: 0.08em;
+    transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease;
+    box-shadow: none;
+    text-decoration: none;
+}
+
+/* TRY: the one filled, gold-brown action. */
+.mvp-container .rin-stage .mvp-btn.visit {
+    position: relative;
+    overflow: hidden;
+    background: var(--m2-accent);
+    border: 2px solid var(--m2-accent);
+    color: var(--m2-accent-contrast-text);
+}
+.mvp-container .rin-stage .visit-btn-title {
+    font-size: 1.125rem;
+    font-weight: 700;
+}
+.mvp-container .rin-stage .mvp-btn.visit .visit-btn-subtitle {
+    color: var(--m2-accent-contrast-text);
+    opacity: 1;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-transform: none;
+}
+.mvp-container .rin-stage .mvp-btn.visit:hover {
+    background: var(--m2-accent);
+    color: var(--m2-accent-contrast-text);
+    box-shadow: inset 0 0 0 2px var(--m2-accent-contrast-text);
+}
+/* Pressed / holding: the existing progress bar, in the contrast colour,
+ * is the only cue, so nothing competes with it. */
+.mvp-container .rin-stage .mvp-btn.visit .btn-progress {
+    height: 6px;
+    background-color: var(--m2-accent-contrast-text);
+    box-shadow: none;
+}
+
+/* NOT NOW: quiet outline, no strike-through in any state (2026-09-25). */
+.mvp-container .rin-stage .mvp-btn.not-today {
+    background: transparent;
+    border: 1px solid var(--m2-text-muted);
+    color: var(--m2-text);
+    font-weight: 500;
+}
+.mvp-container .rin-stage .mvp-btn.not-today:hover {
+    background: var(--m2-surface);
+    border-color: var(--m2-text);
+    color: var(--m2-text);
+    box-shadow: none;
+    text-decoration: none;
+}
+.mvp-container .rin-stage .mvp-btn.not-today:active {
+    background: var(--m2-surface);
+    box-shadow: inset 0 0 0 2px var(--m2-text);
+}
+
+/* Undo (existing, one time only). */
+.mvp-container .rin-stage .back-link {
+    width: auto;
+    min-width: min(100%, 11rem);
+    min-height: 44px;
+    padding: 0.5rem 1.25rem;
+    border: 1px solid var(--m2-text-muted);
+    color: var(--m2-text-muted);
+    font-size: 0.8125rem;
+    opacity: 1;
+}
+.mvp-container .rin-stage .back-link:hover {
+    background: var(--m2-surface);
+    color: var(--m2-text);
+}
+
+/* Focus: always an offset outline in the focus-ring colour, so it reads
+ * differently from "selected" (bar + gold text). :focus paired with
+ * :focus-visible for gamepad-driven .focus() (red line 7.10). */
+.mvp-container .rin-stage .mvp-btn:focus,
+.mvp-container .rin-stage .mvp-btn:focus-visible,
+.mvp-container .rin-stage .mvp-btn.is-focused {
+    outline: 3px solid var(--m2-focus-ring);
+    outline-offset: 3px;
+    box-shadow: none;
+}
+.mvp-container .rin-stage .mvp-btn.visit:focus,
+.mvp-container .rin-stage .mvp-btn.visit:focus-visible,
+.mvp-container .rin-stage .mvp-btn.visit.is-focused {
+    background: var(--m2-accent);
+    color: var(--m2-accent-contrast-text);
+}
+.mvp-container .rin-stage .mvp-btn.visit:focus .visit-btn-subtitle,
+.mvp-container .rin-stage .mvp-btn.visit:focus-visible .visit-btn-subtitle,
+.mvp-container .rin-stage .mvp-btn.visit.is-focused .visit-btn-subtitle {
+    color: var(--m2-accent-contrast-text);
+    opacity: 1;
+}
+.mvp-container .rin-stage .mvp-btn.not-today:focus,
+.mvp-container .rin-stage .mvp-btn.not-today:focus-visible,
+.mvp-container .rin-stage .mvp-btn.not-today.is-focused {
+    background: transparent;
+    border-color: var(--m2-text);
+    color: var(--m2-text);
+    text-decoration: none;
+}
+.mvp-container .rin-stage .back-link:focus,
+.mvp-container .rin-stage .back-link:focus-visible,
+.mvp-container .rin-stage .back-link.is-focused {
+    background: transparent;
+    border-color: var(--m2-text);
+    color: var(--m2-text);
+}
+/* The title takes programmatic focus (tabIndex -1) so SR reads the game
+ * first; it is not an interactive control, so no ring. */
+.mvp-container .rin-stage .game-label:focus {
+    outline: none;
+}
+
+/* Quiet the 1.x decorations inside the 2.0 stage. */
+.mvp-container:has(> .rin-stage) > .rin-calligraphy-bg,
+.mvp-container:has(> .rin-stage) > .bg-glow {
+    display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .mvp-container .rin-stage .mvp-btn {
+        transition: none;
+    }
 }

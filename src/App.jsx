@@ -397,6 +397,21 @@ function App() {
         setMaida2PreviewAudio(enabled);
     }, []);
 
+    // Maida 2.0 large motion effects (default on, user ruling 2026-09-25).
+    // One-way opt-out: ModeNavigation ANDs it with the OS reduce-motion
+    // preference, which always wins.
+    const [maida2LargeMotion, setMaida2LargeMotion] = useState(true);
+    useEffect(() => {
+        let cancelled = false;
+        bridge.getMaida2LargeMotion().then((enabled) => {
+            if (!cancelled && typeof enabled === 'boolean') setMaida2LargeMotion(enabled);
+        });
+        return () => { cancelled = true; };
+    }, []);
+    const handleMaida2LargeMotionChange = useCallback((enabled) => {
+        setMaida2LargeMotion(enabled);
+    }, []);
+
     // Maida 2.0 card opacity (percent, 40..=100, default 70)
     const [maida2CardOpacity, setMaida2CardOpacity] = useState(70);
     useEffect(() => {
@@ -727,7 +742,7 @@ function App() {
     frozenSeed.current.active = false;
 
     if (historyGame !== undefined) return <><DecisionHistoryView warning={traceWarning} game={historyGame} games={data.games?.games || []} onClose={closeHistory} /></>;
-    const navigation = <>{traceWarning}<ModeNavigation face={face} layout={navigationLayout}
+    const navigation = <>{traceWarning}<ModeNavigation face={face} layout={navigationLayout} largeMotion={maida2LargeMotion}
         onSwitch={target => { if (!isModalOpen()) ({ maida2: switchToMaida2, rin: switchToRin, kamae: switchToKamae })[target]?.(); }}
         onHistory={() => { if (!isModalOpen()) openHistory(); }} onSettings={openSettings} /></>;
 
@@ -771,6 +786,7 @@ function App() {
                     onFrozenGuardChange={handleFrozenGuardChange}
                     onMaida2PlayDelayChange={handleMaida2PlayDelayChange}
                     onMaida2PreviewAudioChange={handleMaida2PreviewAudioChange}
+                    onMaida2LargeMotionChange={handleMaida2LargeMotionChange}
                     onMaida2CardOpacityChange={handleMaida2CardOpacityChange}
                     updateCheck={updateCheck} updateAlertShown={updateAlertShown} />
                 {import.meta.env.DEV && import.meta.env.VITE_AGENTATION && <div aria-hidden="true"><Agentation endpoint="http://localhost:4747" /></div>}

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { t } from '../i18n';
 import { formatPlaytime } from '../core/format';
 import GameDisplay from '../ui/features/Uncertainty/GameDisplay';
+import RinArt from '../ui/features/Uncertainty/RinArt';
 import TracePanel from '../ui/features/Trace/TracePanel';
 import GuidedTour from '../ui/features/GuidedTour/GuidedTour';
 import { STEP } from '../tourSteps';
@@ -344,10 +345,6 @@ export default function RinView({
 
     return (
         <>
-        <div className="rin-title-block" aria-hidden="true">
-            <p className="rin-title-reading">{t('ui.rin.reading')}</p>
-            <p className="rin-title-desc">{t('ui.rin.desc')}</p>
-        </div>
         <main
             ref={containerRef}
             className={`mvp-container ${!game ? 'is-idle' : ''} ${debugMode ? 'debug-mode' : ''} ${expanded ? 'is-expanded' : ''} ${isAnchored ? 'is-anchored' : ''}`}
@@ -366,6 +363,13 @@ export default function RinView({
             <CalligraphyBg char="臨" className="rin-calligraphy-bg" />
             {!showTour && navigation}
             <div className="rin-stage">
+            {/* Mode heading: existing Rin name + one-line function text.
+                aria-hidden as before (the h1 carries the SR mode prefix). */}
+            <div className="rin-title-block" aria-hidden="true">
+                <p className="rin-title-reading">{t('ui.rin.reading')}</p>
+                <p className="rin-title-desc">{t('ui.rin.desc')}</p>
+            </div>
+            {game && <RinArt appId={game.steamAppId} />}
             {game && (
                 <header className="mvp-header">
                     <div className="mvp-header-tap" onClick={onSecretTap} aria-hidden="true" />
