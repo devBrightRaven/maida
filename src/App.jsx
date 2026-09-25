@@ -729,15 +729,18 @@ function App() {
         onSwitch={target => { if (!isModalOpen()) ({ maida2: switchToMaida2, rin: switchToRin, kamae: switchToKamae })[target]?.(); }}
         onHistory={() => { if (!isModalOpen()) openHistory(); }} onSettings={openSettings} /></>;
 
+    const footerVersion = <VersionTag className="footer-version-tag" updateCheck={updateCheck} updateAlertShown={updateAlertShown} />;
+
     if (face === 'maida2') {
         if (m2LegalPage) {
             const pages = { accessibility: AccessibilityPage, privacy: PrivacyPage, terms: TermsPage };
             const Page = pages[m2LegalPage];
-            return Page ? <Page onClose={() => { setM2LegalPage(null); requestAnimationFrame(() => m2LegalReturnRef.current?.focus()); }} /> : null;
+            return Page ? <Page onClose={() => { setM2LegalPage(null); requestAnimationFrame(() => requestAnimationFrame(() => document.querySelector(`[data-legal-page="${m2LegalPage}"]`)?.focus())); }} /> : null;
         }
         return (
             <div className="app-root app-root--maida2" key={localeVersion}>
                 <Maida2View
+                    footerVersion={footerVersion}
                     navigation={navigation}
                     onHistory={openHistory}
                     games={data.games?.games || []}
@@ -750,7 +753,6 @@ function App() {
                     previewAudio={maida2PreviewAudio}
                     cardOpacity={maida2CardOpacity}
                 />
-                <VersionTag className="global-version-tag" updateCheck={updateCheck} updateAlertShown={updateAlertShown} />
                 {import.meta.env.DEV && import.meta.env.VITE_AGENTATION && <div aria-hidden="true"><Agentation endpoint="http://localhost:4747" /></div>}
             </div>
         );
@@ -760,6 +762,7 @@ function App() {
         return (
             <div className="app-root" key={localeVersion}>
                 <KamaeView navigation={navigation} navigationLayout={navigationLayout} onNavigationLayoutChange={handleNavigationLayoutChange} onSwitchToRin={switchToRin} theme={theme} toggleTheme={toggleTheme} onLocaleChange={handleLocaleChange}
+                    footerVersion={footerVersion}
                     tourStep={tourStep} tourTotal={TOUR_TOTAL} onTourStart={startKamaeTour} onTourReplay={startFullTour} onTourClose={closeTour} onTourAdvance={advanceTour} onTourPrev={prevTour}
                     settingsRequested={settingsRequested} onSettingsOpened={() => setSettingsRequested(false)} onSettingsClosed={handleSettingsClosed}
                     themeToggle={themeToggle}
@@ -768,7 +771,6 @@ function App() {
                     onMaida2PreviewAudioChange={handleMaida2PreviewAudioChange}
                     onMaida2CardOpacityChange={handleMaida2CardOpacityChange}
                     updateCheck={updateCheck} updateAlertShown={updateAlertShown} />
-                <VersionTag className="global-version-tag" updateCheck={updateCheck} updateAlertShown={updateAlertShown} />
                 {import.meta.env.DEV && import.meta.env.VITE_AGENTATION && <div aria-hidden="true"><Agentation endpoint="http://localhost:4747" /></div>}
             </div>
         );
@@ -777,6 +779,7 @@ function App() {
     return (
         <div className="app-root" key={localeVersion}>
             <RinView
+                footerVersion={footerVersion}
                 navigation={navigation}
                 game={session.game}
                 prescription={session.prescription}
@@ -799,10 +802,6 @@ function App() {
                 tourStep={tourStep} tourTotal={TOUR_TOTAL} onTourStart={startTour} onTourClose={closeTour} onTourAdvance={advanceTour} onTourPrev={prevTour} hasSeenTour={hasSeenTour}
                 themeToggle={themeToggle}
             />
-            {/* No landmark role here — the <footer> inside RinView/KamaeView
-                already carries role=contentinfo. Two contentinfo landmarks
-                would confuse SR landmark navigation. */}
-            <VersionTag className="global-version-tag" updateCheck={updateCheck} updateAlertShown={updateAlertShown} />
             {import.meta.env.DEV && import.meta.env.VITE_AGENTATION && <div aria-hidden="true"><Agentation endpoint="http://localhost:4747" /></div>}
         </div>
     );

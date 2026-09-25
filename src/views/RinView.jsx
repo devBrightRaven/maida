@@ -46,7 +46,8 @@ export default function RinView({
     onTourAdvance,
     onTourPrev,
     hasSeenTour,
-    themeToggle
+    themeToggle,
+    footerVersion
 }) {
     const [expanded, setExpanded] = useState(false);
     const [showTrace, setShowTrace] = useState(false);
@@ -286,12 +287,10 @@ export default function RinView({
             const footerSet = new Set(Array.from(container.querySelectorAll('.app-footer button')));
             const footerBtns = all.filter(el => footerSet.has(el));
             const rest = all.filter(el => el !== theme && el !== help && !footerSet.has(el));
-            const updateBtn = document.querySelector('.global-version-tag button:not(:disabled)');
             const focusable = [
                 ...(theme ? [theme] : []),
                 ...(help ? [help] : []),
                 ...rest,
-                ...(updateBtn ? [updateBtn] : []),
                 ...footerBtns,
             ];
             if (focusable.length === 0) return;
@@ -324,7 +323,7 @@ export default function RinView({
             terms: TermsPage,
         };
         const Page = pages[legalPage];
-        return Page ? <Page onClose={() => { setLegalPage(null); requestAnimationFrame(() => legalReturnRef.current?.focus()); }} /> : null;
+        return Page ? <Page onClose={() => { setLegalPage(null); requestAnimationFrame(() => document.querySelector(`[data-legal-page="${legalPage}"]`)?.focus()); }} /> : null;
     }
 
     const handleContainerClick = (e) => {
@@ -563,7 +562,7 @@ export default function RinView({
                 ...help → theme → footer. Frequency-driven order — help and
                 theme are both L4 rare-use, footer is L5. */}
             {themeToggle}
-            <Footer onNavigate={(page) => { legalReturnRef.current = document.activeElement; setLegalPage(page); }} />
+            <Footer version={footerVersion} onNavigate={(page) => { legalReturnRef.current = document.activeElement; setLegalPage(page); }} />
         </main>
         </>
     );

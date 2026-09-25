@@ -7,7 +7,7 @@
 }
 
 .permission-wrapper .permission-text {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-sans);
     font-size: var(--prescription-size, 18px);
     line-height: 1.35;
     font-weight: 300;
@@ -33,7 +33,7 @@
 .risk-dot {
     width: 8px;
     height: 8px;
-    border-radius: 50%;
+    border-radius: 0;
     background: var(--t-dim);
 }
 
@@ -59,7 +59,7 @@
     border: 1px solid var(--t-dim);
     padding: 1.5rem;
     width: 280px;
-    border-radius: 8px;
+    border-radius: 0;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
     opacity: 0;
     pointer-events: none;
@@ -92,7 +92,7 @@
 
 .inspector-id {
     color: var(--t-dim);
-    font-family: monospace;
+    font-family: 'Consolas', 'Noto Sans TC', 'Microsoft JhengHei', 'Noto Sans JP', 'Yu Gothic UI', monospace;
 }
 
 .inspector-row {
@@ -100,7 +100,7 @@
     justify-content: space-between;
     margin-bottom: 0.4rem;
     font-size: 0.75rem;
-    font-family: 'Consolas', monospace;
+    font-family: 'Consolas', 'Noto Sans TC', 'Microsoft JhengHei', 'Noto Sans JP', 'Yu Gothic UI', monospace;
 }
 
 .inspector-row label {
@@ -151,7 +151,7 @@
     background: var(--t-bg);
     border: 1px solid var(--t-accent-border);
     padding: 2.5rem;
-    border-radius: 12px;
+    border-radius: 0;
     box-shadow: 0 0 50px rgba(0, 0, 0, 0.9), inset 0 0 20px var(--t-accent-soft);
     z-index: 2000;
     text-align: left;
@@ -178,7 +178,7 @@
 
 .expanded-id {
     color: var(--t-dim);
-    font-family: monospace;
+    font-family: 'Consolas', 'Noto Sans TC', 'Microsoft JhengHei', 'Noto Sans JP', 'Yu Gothic UI', monospace;
     font-size: 0.7rem;
 }
 
@@ -199,7 +199,7 @@
     display: block;
     background: var(--t-bg);
     padding: 1rem;
-    border-radius: 4px;
+    border-radius: 0;
     border-left: 2px solid var(--t-accent);
     color: var(--t-debug-text);
     font-size: 0.8rem;
@@ -207,7 +207,7 @@
 }
 
 .interface-preview {
-    font-family: serif;
+    font-family: var(--font-sans);
     font-size: 1.2rem;
     color: var(--t-text);
     line-height: 1.5;

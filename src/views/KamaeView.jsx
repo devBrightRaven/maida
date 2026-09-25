@@ -24,7 +24,7 @@ import './KamaeView.css';
  * Kamae (構) — slow curation face.
  * Kata selector + game list + search + explore entry.
  */
-export default function KamaeView({ navigation, navigationLayout = 'tabs', onNavigationLayoutChange, onSwitchToRin, theme, toggleTheme, onLocaleChange, tourStep, tourTotal, onTourStart, onTourReplay, onTourClose, onTourAdvance, onTourPrev, settingsRequested, onSettingsOpened, onSettingsClosed, themeToggle, onFrozenGuardChange, onMaida2PlayDelayChange, onMaida2PreviewAudioChange, onMaida2CardOpacityChange, updateCheck, updateAlertShown }) {
+export default function KamaeView({ navigation, navigationLayout = 'tabs', onNavigationLayoutChange, onSwitchToRin, theme, toggleTheme, onLocaleChange, tourStep, tourTotal, onTourStart, onTourReplay, onTourClose, onTourAdvance, onTourPrev, settingsRequested, onSettingsOpened, onSettingsClosed, themeToggle, footerVersion, onFrozenGuardChange, onMaida2PlayDelayChange, onMaida2PreviewAudioChange, onMaida2CardOpacityChange, updateCheck, updateAlertShown }) {
     // SR guide announces once per install, gated by localStorage to avoid
     // re-announcement on every re-render / face switch. See RinView for same pattern.
     const [showSrGuide] = useState(() => localStorage.getItem('maida-hasHeardKamaeGuide') !== 'true');
@@ -199,13 +199,11 @@ export default function KamaeView({ navigation, navigationLayout = 'tabs', onNav
         const container = containerRef.current;
         if (!container) return;
         // Build the cycle in a deliberate order:
-        //   theme → help → (content in DOM order) → updateBtn (if present)
-        //   → footer → wrap to theme.
+        //   theme → help → (content in DOM order) → footer → wrap to theme.
         // Meta controls (theme, help) are pulled to the front so gamepad
         // traversal scans top-to-bottom visually instead of hitting them
-        // only after going through the whole kata list. The Update button
-        // (app-root sibling) is explicitly inserted before the footer
-        // strip because the container-scoped query would otherwise miss it.
+        // only after going through the whole kata list. The update button now
+        // lives inside the footer and participates in its container-scoped cycle.
         const all = Array.from(container.querySelectorAll(
             'button:not(:disabled), input:not(:disabled), [tabindex]:not([tabindex="-1"]), [role="button"], .showcase-item[tabindex]'
         ));
@@ -214,12 +212,10 @@ export default function KamaeView({ navigation, navigationLayout = 'tabs', onNav
         const footerSet = new Set(Array.from(container.querySelectorAll('.app-footer button')));
         const footerBtns = all.filter(el => footerSet.has(el));
         const rest = all.filter(el => el !== theme && el !== help && !footerSet.has(el));
-        const updateBtn = document.querySelector('.global-version-tag button:not(:disabled)');
         const focusable = [
             ...(theme ? [theme] : []),
             ...(help ? [help] : []),
             ...rest,
-            ...(updateBtn ? [updateBtn] : []),
             ...footerBtns
         ];
         if (focusable.length === 0) return;
@@ -372,7 +368,7 @@ export default function KamaeView({ navigation, navigationLayout = 'tabs', onNav
             terms: TermsPage,
         };
         const Page = pages[legalPage];
-        return Page ? <Page onClose={() => { setLegalPage(null); requestAnimationFrame(() => legalReturnRef.current?.focus()); }} /> : null;
+        return Page ? <Page onClose={() => { setLegalPage(null); requestAnimationFrame(() => (legalReturnRef.current?.isConnected ? legalReturnRef.current : document.querySelector(`[data-legal-page="${legalPage}"]`))?.focus()); }} /> : null;
     }
 
     if (exploring) {
@@ -469,8 +465,8 @@ export default function KamaeView({ navigation, navigationLayout = 'tabs', onNav
                     ?
                 </button>
                 {themeToggle}
-                <Footer onNavigate={(page) => { legalReturnRef.current = document.activeElement; setLegalPage(page); }} />
             </div>
+            <Footer version={footerVersion} onNavigate={(page) => { legalReturnRef.current = document.activeElement; setLegalPage(page); }} />
 
             {/* Tour main render covers steps 5,6,7,9. Step 8 (Settings replay)
                 is rendered in the showSettings branch above because Settings

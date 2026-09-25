@@ -101,7 +101,7 @@
     color: var(--t-text);
     background: var(--t-surface);
     border: 1px solid var(--t-dim);
-    border-radius: 6px;
+    border-radius: 0;
     outline: none;
     transition: border-color 0.15s ease;
 }
@@ -123,7 +123,7 @@
     background: var(--t-surface);
     border: 1px solid var(--t-dim);
     border-top: none;
-    border-radius: 0 0 6px 6px;
+    border-radius: 0;
     max-height: 240px;
     overflow-y: auto;
     z-index: 20;
@@ -173,7 +173,7 @@
     color: var(--t-text);
     background: transparent;
     border: 1px solid var(--t-dim);
-    border-radius: 4px;
+    border-radius: 0;
     cursor: pointer;
     transition: color 0.15s ease, border-color 0.15s ease;
     flex-shrink: 0;
@@ -237,7 +237,7 @@
     padding: 0.5rem 0.75rem;
     background: var(--t-surface);
     border: 1px solid var(--t-dim);
-    border-radius: 8px;
+    border-radius: 0;
     gap: 0.75rem;
     transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
@@ -256,7 +256,7 @@
     width: 90px;
     height: 42px;
     object-fit: cover;
-    border-radius: 4px;
+    border-radius: 0;
     flex-shrink: 0;
 }
 
@@ -326,7 +326,7 @@
     color: var(--t-dim);
     background: transparent;
     border: 1.5px solid var(--t-dim);
-    border-radius: 6px;
+    border-radius: 0;
     cursor: pointer;
     overflow: hidden;
     user-select: none;
@@ -402,7 +402,7 @@
     color: var(--t-text);
     background: transparent;
     border: 1px solid var(--t-dim);
-    border-radius: 4px;
+    border-radius: 0;
     cursor: pointer;
     transition: color 0.15s ease, border-color 0.15s ease;
 }
@@ -428,7 +428,7 @@
     color: var(--t-dim);
     background: transparent;
     border: 1px solid var(--t-dim);
-    border-radius: 4px;
+    border-radius: 0;
     cursor: pointer;
     transition: color 0.15s ease, border-color 0.15s ease;
 }
@@ -482,7 +482,7 @@
     color: var(--t-dim);
     background: transparent;
     border: 1px solid var(--t-dim);
-    border-radius: 4px;
+    border-radius: 0;
     padding: 0.25rem 0.75rem;
     cursor: pointer;
     font-family: inherit;
@@ -507,7 +507,7 @@
     color: var(--t-text);
     background: var(--t-surface);
     border: 1px solid var(--t-dim);
-    border-radius: 4px;
+    border-radius: 0;
     outline: none;
 }
 
@@ -521,7 +521,7 @@
     font-size: 1rem;
     background: transparent;
     border: 1px solid var(--t-dim);
-    border-radius: 4px;
+    border-radius: 0;
     color: var(--t-dim);
     cursor: pointer;
     font-family: inherit;
@@ -540,7 +540,7 @@
     color: var(--t-dim);
     background: transparent;
     border: 2px solid var(--t-dim);
-    border-radius: 6px;
+    border-radius: 0;
     cursor: pointer;
     text-align: left;
     transition: background 0.15s ease, border-color 0.15s ease;
@@ -600,7 +600,7 @@
     padding: 0.5rem 0.75rem;
     min-height: 3.5rem;
     border: 2px solid var(--t-dim);
-    border-radius: 6px;
+    border-radius: 0;
     cursor: pointer;
     transition: background 0.15s ease, border-color 0.15s ease;
 }
@@ -657,7 +657,7 @@
     color: var(--t-text);
     background: var(--t-bg);
     border: 1px solid var(--t-accent-border);
-    border-radius: 4px;
+    border-radius: 0;
     padding: 0.125rem 0.375rem;
     outline: none;
     flex: 1;
@@ -675,7 +675,7 @@
     color: var(--t-dim);
     background: transparent;
     border: 1px solid transparent;
-    border-radius: 4px;
+    border-radius: 0;
     cursor: pointer;
     font-family: inherit;
 }
@@ -772,7 +772,7 @@
     color: var(--t-dim);
     background: transparent;
     border: 1.5px solid var(--t-dim);
-    border-radius: 6px;
+    border-radius: 0;
     cursor: pointer;
 }
 
@@ -802,7 +802,7 @@
     min-height: 0;
     background: var(--t-surface);
     border: 1px solid var(--t-text-faint);
-    border-radius: 10px;
+    border-radius: 0;
     text-align: center;
     overflow: hidden;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
@@ -866,7 +866,7 @@
     white-space: nowrap;
     background: transparent;
     border: 1.5px solid var(--t-dim);
-    border-radius: 6px;
+    border-radius: 0;
     cursor: pointer;
     transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
 }
@@ -928,7 +928,7 @@
     color: var(--t-dim);
     background: transparent;
     border: 1px solid var(--t-dim);
-    border-radius: 4px;
+    border-radius: 0;
     cursor: pointer;
 }
 
@@ -953,7 +953,7 @@
     color: var(--t-dim);
     background: transparent;
     border: 2px solid var(--t-dim);
-    border-radius: 6px;
+    border-radius: 0;
     cursor: pointer;
     transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
 }
@@ -1036,7 +1036,7 @@
     color: var(--t-dim);
     background: transparent;
     border: 1.5px solid var(--t-dim);
-    border-radius: 6px;
+    border-radius: 0;
     cursor: pointer;
 }
 
@@ -1067,7 +1067,7 @@
     color: var(--t-text);
     background: var(--t-surface);
     border: 1px solid var(--t-border-subtle);
-    border-radius: 6px;
+    border-radius: 0;
     cursor: pointer;
     text-align: left;
     transition: background 0.15s ease;
@@ -1133,7 +1133,7 @@
     text-align: left;
     padding: 0.5rem 0.75rem;
     border: 1px solid var(--t-dim);
-    border-radius: 4px;
+    border-radius: 0;
     background: none;
     color: var(--t-primary);
     font-size: 1rem;
@@ -1211,11 +1211,11 @@
 }
 
 .kamae-haptic-seg:first-child {
-    border-radius: 4px 0 0 4px;
+    border-radius: 0;
 }
 
 .kamae-haptic-seg:last-child {
-    border-radius: 0 4px 4px 0;
+    border-radius: 0;
 }
 
 .kamae-haptic-seg + .kamae-haptic-seg {
@@ -1260,7 +1260,7 @@
 .kamae-settings-guard-slider:focus-visible {
     outline: 2px solid var(--t-accent, #c8a84e);
     outline-offset: 4px;
-    border-radius: 4px;
+    border-radius: 0;
 }
 
 .kamae-settings-a11y {
@@ -1335,7 +1335,7 @@
     color: var(--t-text);
     background: var(--t-surface);
     border: 1px solid var(--t-dim);
-    border-radius: 6px;
+    border-radius: 0;
     outline: none;
     transition: border-color 0.15s ease;
     box-sizing: border-box;
@@ -1353,7 +1353,7 @@
     padding: 0.75rem 1rem;
     background: var(--t-surface);
     border: 1px solid var(--t-dim);
-    border-radius: 6px;
+    border-radius: 0;
 }
 
 .kamae-settings-masked-text {
@@ -1370,7 +1370,7 @@
     color: var(--t-dim);
     background: transparent;
     border: 1px solid var(--t-dim);
-    border-radius: 4px;
+    border-radius: 0;
     cursor: pointer;
 }
 
@@ -1397,7 +1397,7 @@
     color: var(--t-dim);
     background: transparent;
     border: 1.5px solid var(--t-dim);
-    border-radius: 6px;
+    border-radius: 0;
     cursor: pointer;
     transition: color 0.15s ease, border-color 0.15s ease;
 }

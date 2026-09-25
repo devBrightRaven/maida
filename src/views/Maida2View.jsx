@@ -67,7 +67,7 @@ function lastPlayedSubline(game) {
  * Accessibility shell cloned from KamaeView; per-card hold cloned from
  * RinView's visit-button wiring (pointer events + Enter keydown/keyup).
  */
-export default function Maida2View({ navigation, games, hooksState, onHookAction, onLaunch, onHistory, themeToggle, onNavigateLegal, playDelaySeconds = 3, previewAudio = true, cardOpacity = 70 }) {
+export default function Maida2View({ navigation, games, hooksState, onHookAction, onLaunch, onHistory, themeToggle, footerVersion, onNavigateLegal, playDelaySeconds = 3, previewAudio = true, cardOpacity = 70 }) {
     const prefersReducedMotion = usePrefersReducedMotion();
     // SR guide announces once per install, gated by localStorage to avoid
     // re-announcement on every re-render / face switch. See KamaeView.
@@ -845,8 +845,8 @@ export default function Maida2View({ navigation, games, hooksState, onHookAction
                 </section>
 
                 {themeToggle}
-                <Footer onNavigate={onNavigateLegal} />
             </div>
+            <Footer version={footerVersion} onNavigate={onNavigateLegal} />
         </main>
     );
 }

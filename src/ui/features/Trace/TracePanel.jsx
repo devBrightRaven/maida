@@ -158,7 +158,7 @@ export default function TracePanel({ game, temperature, decayRate, silentMode, s
                                     border: '1px solid #333',
                                     padding: '2px 6px',
                                     fontSize: '0.75rem',
-                                    borderRadius: '4px'
+                                    borderRadius: 0
                                 }}
                             >
                                 {getSupportedLocales().map(l => (
@@ -238,7 +238,7 @@ export default function TracePanel({ game, temperature, decayRate, silentMode, s
                                         fontSize: '0.7rem',
                                         padding: '2px 8px',
                                         cursor: 'pointer',
-                                        borderRadius: '4px'
+                                        borderRadius: 0
                                     }}
                                 >
                                     Hide
@@ -303,7 +303,7 @@ export default function TracePanel({ game, temperature, decayRate, silentMode, s
                                 fontSize: '0.7rem',
                                 padding: '2px 8px',
                                 cursor: 'pointer',
-                                borderRadius: '4px'
+                                borderRadius: 0
                             }}
                         >
                             Clear

@@ -1,7 +1,8 @@
 import { chromium } from '@playwright/test';
 import { installHistoryFixture } from './history-fixture.js';
 import assert from 'node:assert/strict';
-import { writeFile } from 'node:fs/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
+await mkdir('design/history-review', { recursive: true });
 const browser = await chromium.launch();
 const page = await browser.newPage();
 await page.addInitScript(installHistoryFixture);

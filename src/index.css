@@ -76,7 +76,7 @@
 
 /* Global Defaults */
 :root {
-    --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    --font-sans: 'Inter', Arial, 'Noto Sans TC', 'Microsoft JhengHei', 'Noto Sans JP', 'Yu Gothic UI', sans-serif;
 
     /* Tunable font sizes — adjustable via Debug Trace panel */
     --prescription-size: 22px;
@@ -218,7 +218,7 @@ button {
 .legal-page-title:focus-visible {
     outline: 2px solid var(--t-focus-border);
     outline-offset: 4px;
-    border-radius: 2px;
+    border-radius: 0;
 }
 
 .legal-page-back {
@@ -229,7 +229,7 @@ button {
     color: var(--t-dim);
     background: transparent;
     border: 1.5px solid var(--t-dim);
-    border-radius: 6px;
+    border-radius: 0;
     cursor: pointer;
 }
 

@@ -31,7 +31,7 @@ const buttonStyle = {
     background: 'var(--t-surface, #1a1a1a)',
     color: 'var(--t-text, #e0e0e0)',
     border: '1px solid var(--t-border-subtle, #333)',
-    borderRadius: 4,
+    borderRadius: 0,
     fontSize: 14,
     fontFamily: 'inherit',
 };

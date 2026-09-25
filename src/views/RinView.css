@@ -161,7 +161,7 @@
     align-items: center;
     justify-content: center;
     outline: none;
-    border-radius: 6px;
+    border-radius: 0;
 }
 
 /* 1. Visit - Primary Action */
@@ -260,7 +260,7 @@
 .back-link {
     background: transparent;
     border: 1px solid var(--t-border);
-    border-radius: 999px;
+    border-radius: 0;
     color: var(--t-border);
     font-size: var(--undo-size, 0.75rem);
     text-decoration: none;
@@ -320,11 +320,11 @@
     background: var(--t-accent-soft);
     border: 1px solid var(--t-accent-border);
     color: var(--t-accent);
-    font-family: 'Courier New', monospace;
+    font-family: 'Courier New', 'Noto Sans TC', 'Microsoft JhengHei', 'Noto Sans JP', 'Yu Gothic UI', monospace;
     font-size: 0.65rem;
     font-weight: bold;
     padding: 4px 8px;
-    border-radius: 4px;
+    border-radius: 0;
     cursor: pointer;
     text-transform: uppercase;
     letter-spacing: 0.1em;

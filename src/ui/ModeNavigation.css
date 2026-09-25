@@ -43,7 +43,7 @@
     min-height: 44px;
     padding: 0.55rem 0.75rem;
     border: 1px solid var(--t-border-subtle);
-    border-radius: 6px;
+    border-radius: 0;
     background: color-mix(in srgb, var(--t-surface) 78%, transparent);
     color: var(--t-text);
     font-family: 'Inter', Arial, 'Noto Sans TC', 'Microsoft JhengHei', 'Noto Sans JP', 'Yu Gothic UI', sans-serif;
@@ -193,7 +193,7 @@
     margin: 1rem auto 0;
     padding: 0.75rem 1rem;
     border: 1px solid var(--t-error);
-    border-radius: 6px;
+    border-radius: 0;
     background: var(--t-surface);
     color: var(--t-error);
     font-family: 'Inter', Arial, 'Noto Sans TC', 'Microsoft JhengHei', 'Noto Sans JP', 'Yu Gothic UI', sans-serif;
@@ -325,7 +325,7 @@ main:has(> .mode-navigation) > .mode-navigation {
 .mode-navigation__symbol { width: 1.75rem; flex-shrink: 0; font-size: 1.5rem; text-align: center; }
 .mode-navigation__tab::before {
     content: ''; position: absolute; inset: .75rem auto .75rem 0;
-    width: 3px; border-radius: 3px; background: var(--t-accent);
+    width: 3px; border-radius: 0; background: var(--t-accent);
     transform: scaleY(0); transition: transform 220ms ease;
 }
 .mode-navigation__tab[aria-current='page']::before { transform: scaleY(1); animation: mode-mark 260ms ease both; }
@@ -378,4 +378,80 @@ main:has(> .mode-navigation) > .trace-save-warning { grid-column: 1 / -1; grid-r
 @media (prefers-reduced-motion: reduce) {
     .mode-navigation *, .mode-navigation *::before { animation: none !important; transition: none !important; }
     .mode-navigation__tab:active .mode-navigation__symbol { transform: none; }
+}
+
+
+/* Shared transparent footer stays in the view's focus scope. Its measured
+   height reserves a separate bottom strip so scrolling cards cannot cover it. */
+.app-root:has(main > .mode-navigation) {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: calc(var(--footer-height, 61px) + .5rem);
+    overflow: hidden;
+}
+.app-root > main:has(> .mode-navigation) {
+    flex: 1 1 auto;
+    min-height: 0;
+    grid-template-rows: minmax(min-content, 1fr) auto auto;
+    padding-bottom: .5rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+main:has(> .mode-navigation) > .app-footer {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    align-self: end;
+    justify-self: stretch;
+    width: auto;
+    min-width: 0;
+    position: fixed;
+    left: 1.5rem;
+    right: 1.5rem;
+    bottom: .5rem;
+    z-index: 5;
+    margin: 0;
+    padding: .5rem 0;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: .25rem 1.5rem;
+    border-top: 1px solid var(--t-border-subtle);
+    font-size: .875rem;
+    color: var(--t-dim);
+    text-align: center;
+    background: transparent;
+    backdrop-filter: none;
+    box-shadow: none;
+}
+main:has(> .mode-navigation) > .app-footer .app-footer-links {
+    width: auto;
+    justify-content: center;
+}
+main:has(> .mode-navigation) > .app-footer .app-footer-copyright {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+}
+main:has(> .mode-navigation) > .app-footer :is(button, .app-footer-copyright, .app-footer-links span, .version-name, .version-number) {
+    font-size: inherit;
+    line-height: 1.5;
+    letter-spacing: normal;
+}
+main:has(> .mode-navigation) > .app-footer button {
+    min-height: 44px;
+}
+.footer-version-tag {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+}
+main:has(> .mode-navigation) > .rin-calligraphy-bg { top: 50%; }
+@media (max-width: 40rem) {
+    .app-root > main:has(> .mode-navigation) {
+        grid-template-rows: auto minmax(min-content, 1fr) auto auto;
+    }
+    main:has(> .mode-navigation) > .app-footer { grid-row: 4; left: 1rem; right: 1rem; }
 }
