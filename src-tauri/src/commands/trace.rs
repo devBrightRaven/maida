@@ -637,7 +637,13 @@ mod tests {
         assert_eq!(page.skipped_lines, 0);
 
         let error = read_trace_page_from_path(dir.path(), None, None, None).unwrap_err();
-        assert!(error.contains("open trace"), "unexpected error: {error}");
+        // Opening a directory fails at open() on Windows but succeeds on Linux,
+        // where the read fails instead ("Is a directory"). Either way the error
+        // must surface rather than read as an empty trace.
+        assert!(
+            error.contains("open trace") || error.contains("read trace"),
+            "unexpected error: {error}"
+        );
     }
 
     #[test]
