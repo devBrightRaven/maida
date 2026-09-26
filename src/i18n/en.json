@@ -87,6 +87,7 @@
             "desc": "Meet what appears.",
             "empty_showcase": "Nothing on your shelf yet.",
             "empty_showcase_btn": "add a few games",
+            "empty_kata": "This kata has no games yet. Add games in Kamae, or choose another kata.",
             "sr_guide": "Try this game or skip to the next. Ctrl+Tab to switch to Kamae mode and manage your library."
         },
         "kamae": {

@@ -51,9 +51,6 @@ importers:
       '@vitest/coverage-v8':
         specifier: ^4.0.18
         version: 4.1.2(vitest@4.1.2(vite@7.3.1))
-      agentation:
-        specifier: ^2.3.3
-        version: 2.3.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       eslint:
         specifier: ^10.2.0
         version: 10.2.0
@@ -710,17 +707,6 @@ packages:
     resolution: {integrity: sha512-UVJyE9MttOsBQIDKw1skb9nAwQuR5wuGD3+82K6JgJlm/Y+KI92oNsMNGZCYdDsVtRHSak0pcV5Dno5+4jh9sw==}
     engines: {node: '>=0.4.0'}
     hasBin: true
-
-  agentation@2.3.3:
-    resolution: {integrity: sha512-AUZgFCdBQ/nAohlFsHByM9S2Dp7ECMNqVjlOke4hv/90v+wTiwrGladEkgWS60RDQp+CJ5p97meeCthYgTFlKQ==}
-    peerDependencies:
-      react: '>=18.0.0'
-      react-dom: '>=18.0.0'
-    peerDependenciesMeta:
-      react:
-        optional: true
-      react-dom:
-        optional: true
 
   ajv@6.14.0:
     resolution: {integrity: sha512-IWrosm/yrn43eiKqkfkHis7QioDleaXQHdDVPKg0FSwwd/DuvyX79TZnFOnYpB7dcsFAMmtFztZuXPDvSePkFw==}
@@ -1768,11 +1754,6 @@ snapshots:
       acorn: 8.16.0
 
   acorn@8.16.0: {}
-
-  agentation@2.3.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
-    optionalDependencies:
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
 
   ajv@6.14.0:
     dependencies:

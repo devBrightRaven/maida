@@ -26,8 +26,9 @@ For any suggestion, include a one-line "Philosophy impact" note:
 
 Reference documents (in vault, not in this repo):
 
-- Behavioral Constraints — The Five Immutable Rules (RED LINES)
-- Design Constitution — Design principles and forbidden interpretations
+- **Maida 2.0 Design Constitution** (`005_maida/02a_constitution-maida2.md`) — in force since 2026-08-30 (constitutional rewrite): five red lines, Steam/Maida/Neri boundary, engineering constraints
+- The 1.x "Five Immutable Rules" and 1.x Design Constitution are ARCHIVED (`02_constitution.md`) — do not enforce them against 2.0 work
+- Repo technical red lines 7.2–7.12 below remain in force (02a Part 6); 7.1 continues as red line one of the 2.0 constitution
 
 ---
 
@@ -207,7 +208,7 @@ Rules:
 - When asked to "support Epic / GOG / X", the default answer is: teach the user to add via Steam's "Add Non-Steam Game", not write a new parser
 - Quantitative validation (2026-05-10): GOG Galaxy 2.0 community plugins abandoned 2021, Heroic 30% Deck adoption already routes through shortcuts.vdf, 0 existing issues requesting non-Steam platform support
 
-See vault `Project/bright-raven/codex/005_maida/18_library-import-plan.md` for full research.
+See vault `7 Project/bright-raven/codex/005_maida/18_library-import-plan.md` for full research.
 
 ---
 

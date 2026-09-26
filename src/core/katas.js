@@ -45,3 +45,13 @@ export function getUncategorizedGames(allGames, katas) {
     (katas || []).forEach(k => k.gameIds.forEach(id => categorized.add(id)));
     return allGames.filter(g => g.installed && !categorized.has(g.id));
 }
+
+export function resolveActiveKataGameIds(showcaseData) {
+    const activeKataId = showcaseData?.activeKataId || null;
+    if (!activeKataId) return null;
+
+    const activeKata = (showcaseData?.katas || []).find(k => k.id === activeKataId);
+    if (!activeKata) return null;
+
+    return Array.isArray(activeKata.gameIds) ? activeKata.gameIds : [];
+}

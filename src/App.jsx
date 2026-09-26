@@ -28,7 +28,6 @@ import { useGameInput } from './hooks/useGameInput';
 import { useGamepadScroll } from './hooks/useGamepadScroll';
 import bridge from './services/bridge';
 
-import { Agentation } from 'agentation';
 import { t, getLocale } from './i18n';
 import { loadPrescriptionTranslations, localizePrescription } from './i18n/prescriptions';
 import { secondsToWord } from './i18n/numbers';
@@ -260,10 +259,6 @@ function App() {
     const switchToMaida2 = useCallback(() => {
         setFace(prev => { if (prev === 'maida2') return prev; focusMain(); return 'maida2'; });
     }, [focusMain]);
-    // Ctrl+Tab restored to the original 1.x pair: rin ↔ kamae (user ruling
-    // 2026-08-31). Maida2 has its own direct key (F9) and L1.
-    const toggleFace = useCallback(() => setFace(f => f === 'rin' ? 'kamae' : 'rin'), []);
-
     // Open settings: from Rin → switch to Kamae settings, from Kamae → open settings panel
     const [settingsRequested, setSettingsRequested] = useState(false);
     // Remembers which face F10/Menu was opened FROM, so closing settings can
@@ -320,7 +315,13 @@ function App() {
             if (e.ctrlKey && e.key === 'Tab') {
                 if (isModalOpen()) return;
                 e.preventDefault();
-                toggleFace();
+                // Ctrl+Tab restored to the original 1.x pair: rin ↔ kamae
+                // (user ruling 2026-08-31); from maida2 it lands on rin, same
+                // as before. Routed through switchToRin/switchToKamae (not a
+                // bare setFace) so reloadShowcase, focusMain and tour step
+                // progression still run.
+                if (face === 'rin') switchToKamae();
+                else switchToRin();
             }
             if (e.key === 'F8') {
                 e.preventDefault();
@@ -337,7 +338,7 @@ function App() {
         };
         window.addEventListener('keydown', handler);
         return () => window.removeEventListener('keydown', handler);
-    }, [toggleFace, openSettings, switchToMaida2, switchToRin]);
+    }, [face, switchToKamae, switchToRin, openSettings, switchToMaida2]);
 
     const [updateAlertShown, setUpdateAlertShown] = useState(false);
     useEffect(() => {
@@ -792,6 +793,12 @@ function App() {
 
     const footerVersion = <VersionTag className="footer-version-tag" updateCheck={updateCheck} updateAlertShown={updateAlertShown} />;
 
+    // An active kata with zero games resolves showcaseIds to [] (see
+    // resolveActiveKataGameIds) — distinct from null (no active kata / not
+    // loaded yet). Rin uses this to show the empty-kata message instead of
+    // the generic idle prescription.
+    const emptyKata = Array.isArray(showcaseIds) && showcaseIds.length === 0;
+
     if (face === 'maida2') {
         if (m2LegalPage) {
             const pages = { accessibility: AccessibilityPage, privacy: PrivacyPage, terms: TermsPage };
@@ -814,7 +821,6 @@ function App() {
                     previewAudio={maida2PreviewAudio}
                     cardOpacity={maida2CardOpacity}
                 />
-                {import.meta.env.DEV && import.meta.env.VITE_AGENTATION && <div aria-hidden="true"><Agentation endpoint="http://localhost:4747" /></div>}
             </div>
         );
     }
@@ -837,7 +843,6 @@ function App() {
                     onMaida2LargeMotionRetry={handleMaida2LargeMotionRetry}
                     onMaida2CardOpacityChange={handleMaida2CardOpacityChange}
                     updateCheck={updateCheck} updateAlertShown={updateAlertShown} />
-                {import.meta.env.DEV && import.meta.env.VITE_AGENTATION && <div aria-hidden="true"><Agentation endpoint="http://localhost:4747" /></div>}
             </div>
         );
     }
@@ -867,8 +872,8 @@ function App() {
                 onSwitchToKamae={switchToKamae}
                 tourStep={tourStep} tourTotal={TOUR_TOTAL} onTourStart={startTour} onTourClose={closeTour} onTourAdvance={advanceTour} onTourPrev={prevTour} hasSeenTour={hasSeenTour}
                 themeToggle={themeToggle}
+                emptyKata={emptyKata}
             />
-            {import.meta.env.DEV && import.meta.env.VITE_AGENTATION && <div aria-hidden="true"><Agentation endpoint="http://localhost:4747" /></div>}
         </div>
     );
 }

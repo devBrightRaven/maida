@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { getActiveGame, getPrescription } from '../core/engine';
 import { applyConstraints } from '../core/constraints';
 import { applyTryScore, applySkipScore, updateGameScore, mergePenalties, removeFromSkipSets, mergeExcludeAppId, isFirstRun, resetAllScores, showcasePoolChanged } from '../core/session-logic';
+import { resolveActiveKataGameIds } from '../core/katas';
 import { debugStore } from '../core/debugStore';
 import { loadData, saveData } from '../services/persistence';
 import bridge from '../services/bridge';
@@ -42,10 +43,7 @@ export function useMaidaSession() {
         if (constraintsData) setConstraints(constraintsData);
 
         // Load showcase IDs for candidatePool (kata-aware)
-        const activeKataId = showcaseData?.activeKataId || null;
-        const katas = showcaseData?.katas || [];
-        const activeKata = activeKataId ? katas.find(k => k.id === activeKataId) : null;
-        const kataPool = activeKata?.gameIds?.length > 0 ? activeKata.gameIds : null;
+        const kataPool = resolveActiveKataGameIds(showcaseData);
         setShowcaseIds(kataPool);
 
         const firstRun = isFirstRun(games);
@@ -95,7 +93,7 @@ export function useMaidaSession() {
         const game = getActiveGame(constrainedGames, {
             sessionSkippedSet: [],
             returnPenaltySet: returnPenalties || [],
-            candidatePool: kataPool || undefined
+            candidatePool: kataPool ?? undefined
         });
         const prescription = getPrescription(game, prescriptions);
 
@@ -131,7 +129,7 @@ export function useMaidaSession() {
         let nextGame = getActiveGame(constrainedGames, {
             sessionSkippedSet: currentSkipped,
             returnPenaltySet: currentPenalties,
-            candidatePool: showcaseIds || undefined
+            candidatePool: showcaseIds ?? undefined
         });
 
         // SOFT RESET (Exhausted pool fallback)
@@ -141,7 +139,7 @@ export function useMaidaSession() {
             nextGame = getActiveGame(constrainedGames, {
                 sessionSkippedSet: [],
                 returnPenaltySet: currentPenalties,
-                candidatePool: showcaseIds || undefined
+                candidatePool: showcaseIds ?? undefined
             });
         }
 
@@ -346,10 +344,7 @@ export function useMaidaSession() {
         if (isAnchored) return;
 
         const showcaseData = await loadShowcase();
-        const activeKataId = showcaseData?.activeKataId || null;
-        const katas = showcaseData?.katas || [];
-        const activeKata = activeKataId ? katas.find(k => k.id === activeKataId) : null;
-        const newIds = activeKata?.gameIds?.length > 0 ? activeKata.gameIds : null;
+        const newIds = resolveActiveKataGameIds(showcaseData);
         if (session.game && !showcasePoolChanged(showcaseIds, newIds)) return;
         setShowcaseIds(newIds);
         // Re-roll with updated pool
@@ -359,7 +354,7 @@ export function useMaidaSession() {
         const game = getActiveGame(constrainedGames, {
             sessionSkippedSet: [],
             returnPenaltySet,
-            candidatePool: newIds || undefined
+            candidatePool: newIds ?? undefined
         });
         const prescription = getPrescription(game, data.prescriptions);
         setSessionSkippedSet([]);

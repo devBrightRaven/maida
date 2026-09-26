@@ -48,7 +48,8 @@ export default function RinView({
     onTourPrev,
     hasSeenTour,
     themeToggle,
-    footerVersion
+    footerVersion,
+    emptyKata = false
 }) {
     const [expanded, setExpanded] = useState(false);
     const [showTrace, setShowTrace] = useState(false);
@@ -397,6 +398,7 @@ export default function RinView({
                         debugMode={debugMode}
                         isExpanded={expanded}
                         onSecretTap={onSecretTap}
+                        emptyKata={!game && emptyKata}
                     />
                 </div>
             </div>

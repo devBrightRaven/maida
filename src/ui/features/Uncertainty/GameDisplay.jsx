@@ -3,7 +3,21 @@ import { t } from '../../../i18n';
 import { localizePrescription } from '../../../i18n/prescriptions';
 import './GameDisplay.css';
 
-export default function GameDisplay({ game, prescription: rawPrescription, debugMode, isExpanded, onSecretTap }) {
+export default function GameDisplay({ game, prescription: rawPrescription, debugMode, isExpanded, onSecretTap, emptyKata = false }) {
+    // Active kata with zero games: calm, text-only message instead of the
+    // generic idle prescription. No suggestion the message is about picking
+    // for the user (red line 7.1) — it just states the pool is empty and
+    // where to change it.
+    if (emptyKata) {
+        return (
+            <section className="mvp-content" data-empty-kata="true">
+                <div className="permission-wrapper">
+                    <h2 className="permission-text">{t('ui.rin.empty_kata')}</h2>
+                </div>
+            </section>
+        );
+    }
+
     if (!rawPrescription) return null;
     const prescription = localizePrescription(rawPrescription);
 

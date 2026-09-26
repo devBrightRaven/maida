@@ -87,6 +87,7 @@
             "desc": "与眼前的，相遇。",
             "empty_showcase": "眼前还没有任何游戏。",
             "empty_showcase_btn": "摆几款上去",
+            "empty_kata": "这个型还没有游戏。到 Kamae 加入游戏，或选择其他型。",
             "sr_guide": "试试这款游戏，或跳到下一款。Ctrl+Tab 切换到构模式，整理游戏库。"
         },
         "kamae": {

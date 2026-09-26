@@ -9,6 +9,7 @@ import {
     renameKata,
     isKataFull,
     getUncategorizedGames,
+    resolveActiveKataGameIds,
 } from '../../core/katas.js';
 
 describe('createKata', () => {
@@ -196,5 +197,42 @@ describe('getUncategorizedGames', () => {
 describe('MAX_KATAS', () => {
     it('is 2', () => {
         expect(MAX_KATAS).toBe(2);
+    });
+});
+
+describe('resolveActiveKataGameIds', () => {
+    it('returns null when all installed games are active', () => {
+        const result = resolveActiveKataGameIds({ activeKataId: null, katas: [] });
+        expect(result).toBeNull();
+    });
+
+    it('returns the active kata game IDs', () => {
+        const result = resolveActiveKataGameIds({
+            activeKataId: 'k2',
+            katas: [
+                { id: 'k1', name: 'Short', gameIds: ['a'] },
+                { id: 'k2', name: 'Tonight', gameIds: ['b', 'c'] },
+            ],
+        });
+
+        expect(result).toEqual(['b', 'c']);
+    });
+
+    it('preserves an active empty kata as an empty pool', () => {
+        const result = resolveActiveKataGameIds({
+            activeKataId: 'k1',
+            katas: [{ id: 'k1', name: 'Empty', gameIds: [] }],
+        });
+
+        expect(result).toEqual([]);
+    });
+
+    it('returns null for a stale active kata ID', () => {
+        const result = resolveActiveKataGameIds({
+            activeKataId: 'missing',
+            katas: [{ id: 'k1', name: 'Existing', gameIds: ['a'] }],
+        });
+
+        expect(result).toBeNull();
     });
 });
