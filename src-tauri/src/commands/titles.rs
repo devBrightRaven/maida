@@ -54,7 +54,9 @@ fn cache_from_json(data: &Value, expected_mtime: u64) -> Option<LocalizedTitles>
     let apps = data.get("apps")?.as_object()?;
     let mut result = LocalizedTitles::new();
     for (appid, langs) in apps {
-        let Some(langs_obj) = langs.as_object() else { continue };
+        let Some(langs_obj) = langs.as_object() else {
+            continue;
+        };
         let mut lang_map = HashMap::new();
         for (lang, name) in langs_obj {
             if let Some(name) = name.as_str() {

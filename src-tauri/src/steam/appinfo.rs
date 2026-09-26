@@ -234,20 +234,18 @@ fn extract_common_fields(
             ("name", TYPE_STRING) => {
                 name = Some(read_cstr(cur)?);
             }
-            ("name_localized", TYPE_NODE) => {
-                loop {
-                    let ty2 = read_u8(cur)?;
-                    if ty2 == TYPE_END || ty2 == TYPE_END_ALT {
-                        break;
-                    }
-                    let lang = read_name(cur, table)?;
-                    if ty2 == TYPE_STRING {
-                        localized.insert(lang, read_cstr(cur)?);
-                    } else {
-                        skip_value(cur, ty2, table, 0)?;
-                    }
+            ("name_localized", TYPE_NODE) => loop {
+                let ty2 = read_u8(cur)?;
+                if ty2 == TYPE_END || ty2 == TYPE_END_ALT {
+                    break;
                 }
-            }
+                let lang = read_name(cur, table)?;
+                if ty2 == TYPE_STRING {
+                    localized.insert(lang, read_cstr(cur)?);
+                } else {
+                    skip_value(cur, ty2, table, 0)?;
+                }
+            },
             _ => skip_value(cur, ty, table, 0)?,
         }
     }
@@ -271,7 +269,12 @@ fn skip_object(cur: &mut Cursor<&[u8]>, table: Option<&[String]>, depth: u32) ->
     }
 }
 
-fn skip_value(cur: &mut Cursor<&[u8]>, ty: u8, table: Option<&[String]>, depth: u32) -> io::Result<()> {
+fn skip_value(
+    cur: &mut Cursor<&[u8]>,
+    ty: u8,
+    table: Option<&[String]>,
+    depth: u32,
+) -> io::Result<()> {
     match ty {
         TYPE_NODE => skip_object(cur, table, depth),
         TYPE_STRING => skip_cstr(cur),
@@ -293,7 +296,10 @@ fn read_name(cur: &mut Cursor<&[u8]>, table: Option<&[String]>) -> io::Result<St
         Some(t) => {
             let idx = read_u32_le(cur)? as usize;
             t.get(idx).cloned().ok_or_else(|| {
-                io::Error::new(io::ErrorKind::InvalidData, "string table index out of range")
+                io::Error::new(
+                    io::ErrorKind::InvalidData,
+                    "string table index out of range",
+                )
             })
         }
         None => read_cstr(cur),

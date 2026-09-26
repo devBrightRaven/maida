@@ -34,7 +34,11 @@ pub fn get_maida2_play_delay_seconds(app: AppHandle) -> u32 {
     let base = persistence::app_data_dir(&app);
     let config_path = persistence::data_path(&base, "config");
     let raw = persistence::read_json(&config_path)
-        .and_then(|c| c.get("preferences")?.get("maida2PlayDelaySeconds")?.as_u64())
+        .and_then(|c| {
+            c.get("preferences")?
+                .get("maida2PlayDelaySeconds")?
+                .as_u64()
+        })
         .map(|v| v as u32)
         .unwrap_or(MAIDA2_PLAY_DELAY_DEFAULT_SECONDS);
     clamp_play_delay(raw)

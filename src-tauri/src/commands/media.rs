@@ -102,8 +102,14 @@ fn extract_media(app_id: &str, body: &Value) -> Option<MediaInfo> {
                 .and_then(|v| v.get("max"))
                 .and_then(Value::as_str)
                 .map(str::to_string);
-            let hls_h264 = m.get("hls_h264").and_then(Value::as_str).map(str::to_string);
-            let dash_h264 = m.get("dash_h264").and_then(Value::as_str).map(str::to_string);
+            let hls_h264 = m
+                .get("hls_h264")
+                .and_then(Value::as_str)
+                .map(str::to_string);
+            let dash_h264 = m
+                .get("dash_h264")
+                .and_then(Value::as_str)
+                .map(str::to_string);
             if mp4_480.is_none() && mp4_max.is_none() && hls_h264.is_none() && dash_h264.is_none() {
                 return None;
             }
@@ -350,7 +356,10 @@ pub async fn get_screenshot(
     // Content-Length precheck: bail before reading the body when the server
     // announces an oversized response. The post-read len check below stays
     // as a backstop for chunked responses with no Content-Length header.
-    if resp.content_length().is_some_and(|len| len > MAX_MEDIA_BYTES) {
+    if resp
+        .content_length()
+        .is_some_and(|len| len > MAX_MEDIA_BYTES)
+    {
         return Ok(None);
     }
     let Ok(bytes) = resp.bytes().await else {
