@@ -19,7 +19,7 @@ Status: 待重現, 已確認, 修復中, 待驗證, 已驗證修復, 受阻.
 | BUG-008 | Maai card date/sub text low contrast on hover | P2 | 已確認，未修 |
 | BUG-009 | Simplified-script locales other than zh-CN resolve to Traditional Chinese | P2 | 待驗證 |
 | BUG-010 | Kamae remove hold is 2500ms, guardrail 7.4 says 3000ms | P2 | 已驗證修復（文字）|
-| BUG-011 | AGENTS.md 7.11 describes a version-tag mechanism the code no longer uses | P2 | 已確認，未修 |
+| BUG-011 | AGENTS.md 7.11 describes a version-tag mechanism the code no longer uses | P2 | 已驗證修復（文字）|
 
 ---
 
@@ -131,3 +131,4 @@ Status: 待重現, 已確認, 修復中, 待驗證, 已驗證修復, 受阻.
 - Behaviour: the requirement still holds. `e2e/closeout-check.mjs` proves gamepad reaches the update button in all three views and both navigation layouts. Documentation drift, not a functional regression.
 - Change: none. 7.11 is a red line; rewording it needs the user's consent. Dead query in `Maida2View.jsx` left in place with it.
 - Next: user decides whether to reword 7.11 to the Footer-based mechanism (keeping the rule: any new app-root sibling with interactive content must be reachable) and remove the dead query.
+- Resolution 2026-09-26: user approved rewording. `AGENTS.md` 7.11 (and the local `CLAUDE.md`) now describe the Footer-based layout; the rule itself (gamepad must reach any interactive element outside a view container) is unchanged. Dead `.global-version-tag` query removed from `Maida2View.jsx`. `e2e/closeout-check.mjs`: gamepad reaches the update button 6/6 (3 views x 2 layouts); `pnpm test` 467, lint 0. Leftover `.global-version-tag` CSS rules (App.css, index.css, ModeNavigation.css, DecisionHistoryView.css) are dead selectors, left in place.

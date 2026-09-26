@@ -527,12 +527,10 @@ export default function Maida2View({ navigation, games, hooksState, onHookAction
         const footerSet = new Set(Array.from(container.querySelectorAll('.app-footer button')));
         const footerBtns = all.filter(el => footerSet.has(el));
         const rest = all.filter(el => el !== theme && el !== help && !footerSet.has(el));
-        const updateBtn = document.querySelector('.global-version-tag button:not(:disabled)');
         const focusable = [
             ...(theme ? [theme] : []),
             ...(help ? [help] : []),
             ...rest,
-            ...(updateBtn ? [updateBtn] : []),
             ...footerBtns
         ];
         if (focusable.length === 0) return;

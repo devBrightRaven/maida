@@ -141,14 +141,15 @@ Mounted exactly once at app root. Module-level `activeInstance` counter guards a
 
 Chromium does not classify gamepad-driven programmatic `.focus()` as keyboard-sourced, so `:focus-visible` alone will fail to light up on elements the user navigates to via D-pad / L-stick. Always pair both pseudo-classes for focusable elements in the gamepad flow.
 
-### 7.11 App-root siblings must be explicitly added to view focus cycles
+### 7.11 Interactive elements outside a view's container must be reachable by gamepad
 
-`VersionTag.global-version-tag` and any other app-root sibling of the view's `<main>` lives **outside** the view's `containerRef`. D-pad / L-stick navigation in `KamaeView.handleNav` and `RinView.handleNav` is container-scoped, so siblings are unreachable unless explicitly added:
+D-pad / L-stick navigation in each view's `handleNav` is scoped to that view's `containerRef`. Anything interactive outside it is unreachable for gamepad users unless explicitly added.
 
-- KamaeView: the `focusable` array concatenates `document.querySelectorAll('.global-version-tag button:not(:disabled)')`
-- RinView: the named-button graph inserts `updateBtn` between theme-toggle and footer
+Current layout: the version / update button lives **inside** the shared `Footer` (`ui/Footer.jsx`, rendered inside each view's container), so every view reaches it through its `.app-footer button` selector. No per-view special case is needed.
 
-If you add a new app-root sibling with interactive content, extend both handlers. Otherwise gamepad users cannot reach it.
+If you add an interactive element outside the view container (an app-root sibling), extend every view's `handleNav` to include it, and add it to `e2e/closeout-check.mjs` reachability. Prefer placing new controls inside the container or the shared Footer instead.
+
+(Reworded 2026-09-26 with user consent: the earlier text described a `.global-version-tag` app-root sibling that the footer refactor removed. The rule itself is unchanged.)
 
 ### 7.12 Author
 
