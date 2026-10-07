@@ -570,3 +570,18 @@ describe('engine __internal helpers', () => {
         expect(__internal.matchEmotionalProxy('nonsense', {}, {})).toBe(false);
     });
 });
+
+describe('getActiveGame: no-candidate behavioral trace', () => {
+    it('replaces a previous round trace with an explicit empty result when the pool is empty', () => {
+        const data = makeGamesData([makeGame({ id: 'g1' })]);
+        getActiveGame(data, { candidatePool: ['g1'] });
+        expect(debugStore.getTrace().selected.id).toBe('g1');
+
+        const game = getActiveGame(data, { candidatePool: [] });
+        expect(game).toBeNull();
+        const trace = debugStore.getTrace();
+        expect(trace.selected).toBeNull();
+        expect(trace.candidates).toEqual([]);
+        expect(trace.totalGames).toBe(0);
+    });
+});

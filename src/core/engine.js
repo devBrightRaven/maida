@@ -87,7 +87,17 @@ export function calculateTraceWeights(gamesData, options = {}) {
 
 export function getActiveGame(gamesData, options = {}) {
     const calc = calculateTraceWeights(gamesData, options);
-    if (!calc) return null;
+    if (!calc) {
+        // No candidates at all (e.g. empty kata pool): record an explicit
+        // empty result so the behavioral trace never shows a stale prior round.
+        debugStore.setTrace({
+            temperature: options.temperature ?? 1.5,
+            totalGames: 0,
+            selected: null,
+            candidates: []
+        });
+        return null;
+    }
 
     // candidates here refers to the valid sampling pool
     const { candidates, traceCandidates, temperature } = calc;

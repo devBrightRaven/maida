@@ -285,6 +285,11 @@ export function useMaidaSession() {
 
                 setHistory(null);
 
+                // Pool guard: never restore a game outside the active kata
+                // pool (null pool = no restriction). The history entry is
+                // dropped and nothing is logged or recorded.
+                if (showcaseIds && !showcaseIds.includes(restoredId)) return;
+
                 // CRITICAL FIX: Update exclusion sets first
                 const { skippedSet: nextSkipped, skippedHistory: nextHistory } = removeFromSkipSets(sessionSkippedSet, sessionSkippedHistory, restoredId);
 
@@ -359,6 +364,8 @@ export function useMaidaSession() {
         const prescription = getPrescription(game, data.prescriptions);
         setSessionSkippedSet([]);
         setSessionSkippedHistory([]);
+        // The pool changed: an old Undo snapshot belongs to the previous pool.
+        setHistory(null);
         setSession({ game, prescription });
     };
 
