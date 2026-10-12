@@ -26,8 +26,8 @@ For any suggestion, include a one-line "Philosophy impact" note:
 
 Reference documents (in vault, not in this repo):
 
-- **Maida 2.0 Design Constitution** (`005_maida/02a_constitution-maida2.md`) — in force since 2026-08-30 (constitutional rewrite): five red lines, Steam/Maida/Neri boundary, engineering constraints
-- The 1.x "Five Immutable Rules" and 1.x Design Constitution are ARCHIVED (`02_constitution.md`) — do not enforce them against 2.0 work
+- **Maida 2.0 Design Constitution** (`7 Project/bright-raven/codex/005_maida/02a_constitution-maida2.md`) — in force since 2026-08-30 (constitutional rewrite): five red lines, Steam/Maida/Neri boundary, engineering constraints
+- The 1.x "Five Immutable Rules" and 1.x Design Constitution are ARCHIVED (`7 Project/bright-raven/codex/005_maida/02_constitution.md`) — do not enforce them against 2.0 work
 - Repo technical red lines 7.2–7.12 below remain in force (02a Part 6); 7.1 continues as red line one of the 2.0 constitution
 
 ---
@@ -48,7 +48,7 @@ If you realize an error:
 Pencil design file: `design/maida-ui.pen`
 
 - `.pen` files are encrypted — do NOT read them with any file-reading tool.
-  Editing requires Pencil's native tooling. Treat as opaque binary.
+  Editing requires Pencil's native tooling (e.g. the Pencil MCP tools). Treat as opaque binary.
 - Font family must be "Inter"
 - Always set `fill` on text nodes (no color = invisible)
 
