@@ -10,6 +10,28 @@ import Footer from '../ui/Footer';
 import CardMedia from '../ui/features/Maida2/CardMedia';
 import './Maida2View.css';
 
+// Disabled 2026-10-13 (user trial: rely on the full-window backdrop only,
+// card expansion covered the next card). Set true to restore.
+// Gates the in-card hero expansion on focus-dwell (PRD 8 item 8): the
+// expandedKey state and the .m2-card-expand overlay. The full-window backdrop
+// (hero / dwell-to-play video) is a separate path and is unaffected.
+const CARD_HERO_EXPANSION_ENABLED = false;
+
+// Current app theme ('light' | 'dark'), read from the attribute useTheme sets
+// on <html>. Lets the dark stage re-scope tokens only in light theme.
+const readDocumentTheme = () =>
+    document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+function useDocumentTheme() {
+    const [theme, setTheme] = useState(readDocumentTheme);
+    useEffect(() => {
+        const observer = new MutationObserver(() => setTheme(readDocumentTheme()));
+        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+        setTheme(readDocumentTheme());
+        return () => observer.disconnect();
+    }, []);
+    return theme;
+}
+
 // Red line 7.4 — friction thresholds, do not change.
 const TAP_THRESHOLD = 300;
 const HOLD_THRESHOLD = 3000;
@@ -70,6 +92,7 @@ function lastPlayedSubline(game) {
  */
 export default function Maida2View({ navigation, games, hooksState, onHookAction, onLaunch, onHistory, themeToggle, footerVersion, onNavigateLegal, playDelaySeconds = 3, previewAudio = true, cardOpacity = 70 }) {
     const prefersReducedMotion = usePrefersReducedMotion();
+    const documentTheme = useDocumentTheme();
     // SR guide announces once per install, gated by localStorage to avoid
     // re-announcement on every re-render / face switch. See KamaeView.
     const [showSrGuide] = useState(() => localStorage.getItem('maida-hasHeardMaida2Guide') !== 'true');
@@ -165,6 +188,9 @@ export default function Maida2View({ navigation, games, hooksState, onHookAction
     // kept until a different card actually dwells — no art for the newly
     // focused card is not a reason to clear what's already showing.
     const [heroUrl, setHeroUrl] = useState(null);
+    // heroVisible gates the fade: heroUrl is kept after focus leaves all cards
+    // so the image stays painted while opacity transitions to 0.
+    const [heroVisible, setHeroVisible] = useState(false);
     const dwellTimerRef = useRef(null);
     // Generation guard: bumped on every focus change. A dwell timer's async
     // fetch only applies its result if it's still the latest focus and the
@@ -204,7 +230,7 @@ export default function Maida2View({ navigation, games, hooksState, onHookAction
         if (!appId) return;
         dwellTimerRef.current = setTimeout(async () => {
             if (isMountedRef.current && focusGenRef.current === gen && focusedCardKeyRef.current === cardKey) {
-                setExpandedKey(cardKey);
+                if (CARD_HERO_EXPANSION_ENABLED) setExpandedKey(cardKey);
                 // Second, longer timer chained off the card actually being
                 // open — matches the design: dwell opens the card, THEN a
                 // further playDelaySeconds before a preview starts playing.
@@ -224,7 +250,10 @@ export default function Maida2View({ navigation, games, hooksState, onHookAction
             const dataUrl = await Promise.resolve(cached);
             if (dataUrl !== cached) cacheHero(appId, dataUrl);
             if (!isMountedRef.current || focusGenRef.current !== gen) return;
-            if (dataUrl) setHeroUrl(dataUrl);
+            if (dataUrl) {
+                setHeroUrl(dataUrl);
+                setHeroVisible(true);
+            }
         }, HERO_DWELL_MS);
     }, [playDelayMs]);
 
@@ -236,9 +265,12 @@ export default function Maida2View({ navigation, games, hooksState, onHookAction
         if (related && related.closest && related.closest('.m2-card')) return;
         if (dwellTimerRef.current) clearTimeout(dwellTimerRef.current);
         if (playTimerRef.current) clearTimeout(playTimerRef.current);
+        // Invalidate any in-flight hero fetch so it can't re-show the backdrop.
+        focusGenRef.current++;
         focusedCardKeyRef.current = null;
         setExpandedKey(null);
         setPlayFor(null);
+        setHeroVisible(false);
     }, []);
 
     // Keep the newly-grown card fully in view once its dwell timer opens it.
@@ -600,15 +632,21 @@ export default function Maida2View({ navigation, games, hooksState, onHookAction
     // NOW / RECENTLY ARRIVED card: tap <= 300ms launches, hold 3s opens the
     // hook-note editor. Wiring cloned from RinView's visit button; the
     // 'm2-hold' class routes gamepad A through PointerEvents (useGameInput).
+    // Dark stage: while a backdrop layer shows (hero image or playing media)
+    // the view re-scopes to the dark tokens in light theme, and the cards
+    // re-scope back to light. See Maida2View.css "Dark stage".
+    const stageActive = !!(playFor || heroVisible);
+    const stageLight = stageActive && documentTheme === 'light';
     const renderHoldCard = (game, subline, keyPrefix = 'zone') => {
         const cardKey = `${keyPrefix}:${game.id}`;
-        const expandArt = resolvedArt(heroCache, game.steamAppId) || resolvedArt(capsuleCache, game.steamAppId);
+        const expandArt = CARD_HERO_EXPANSION_ENABLED && (resolvedArt(heroCache, game.steamAppId) || resolvedArt(capsuleCache, game.steamAppId));
         return (
             <li key={game.id} className="m2-item">
                 <button
                     type="button"
                     className={`m2-card m2-hold${expandedKey === cardKey ? ' m2-card--expanded' : ''}`}
                     data-game-id={game.id}
+                    data-theme={stageLight ? 'light' : undefined}
                     disabled={hookBusy}
                     aria-describedby="m2-hold-hint"
                     onPointerDown={() => pressStart(game, cardKey)}
@@ -661,7 +699,8 @@ export default function Maida2View({ navigation, games, hooksState, onHookAction
 
     return (
         <main
-            className={`maida2-view${playFor ? ' maida2-view--playing' : ''}`}
+            className={`maida2-view${playFor ? ' maida2-view--playing' : ''}${stageActive ? ' maida2-view--stage' : ''}`}
+            data-theme={stageLight ? 'dark' : undefined}
             ref={containerRef}
             style={{ '--m2-card-alpha': cardOpacity }}
             aria-busy={hookBusy}
@@ -670,7 +709,7 @@ export default function Maida2View({ navigation, games, hooksState, onHookAction
                 the accessible name/description of anything. CSS background-
                 image (not <img>) so there's no alt text to get wrong. */}
             <div
-                className={`m2-hero-backdrop${heroUrl && !playFor ? ' m2-hero-backdrop--visible' : ''}`}
+                className={`m2-hero-backdrop${heroVisible && !playFor ?' m2-hero-backdrop--visible' : ''}`}
                 aria-hidden="true"
                 style={heroUrl ? { backgroundImage: `url(${heroUrl})` } : undefined}
             />
@@ -717,7 +756,7 @@ export default function Maida2View({ navigation, games, hooksState, onHookAction
                         <ul role="list" className="m2-list">
                             {zones.stillHere.map(({ hook, game }) => {
                                 const cardKey = `hook:${hook.id}`;
-                                const expandArt = resolvedArt(heroCache, game.steamAppId) || resolvedArt(capsuleCache, game.steamAppId);
+                                const expandArt = CARD_HERO_EXPANSION_ENABLED && (resolvedArt(heroCache, game.steamAppId) || resolvedArt(capsuleCache, game.steamAppId));
                                 return (
                                 <li key={hook.id} className="m2-item">
                                     {/* Same press engine as renderHoldCard — a bare
@@ -728,6 +767,7 @@ export default function Maida2View({ navigation, games, hooksState, onHookAction
                                         type="button"
                                         className={`m2-card m2-hold${expandedKey === cardKey ? ' m2-card--expanded' : ''}`}
                                         data-game-id={game.id}
+                                        data-theme={stageLight ? 'light' : undefined}
                                         disabled={hookBusy}
                                         aria-describedby="m2-hold-hint"
                                         onPointerDown={() => pressStart(game, cardKey)}

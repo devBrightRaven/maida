@@ -441,6 +441,14 @@ main.mvp-container:has(> .mode-navigation) > .rin-stage,
     }
 }
 
+/* Anchored badge: look is shared with .kata-item-badge (KamaeView.css);
+ * here only placement above the title. */
+.mvp-container .rin-stage .rin-anchored-badge {
+    display: block;
+    align-self: auto;
+    margin: 0 0 0.25rem;
+}
+
 /* Game name: wraps, never truncated. */
 .mvp-container .rin-stage .mvp-header {
     width: 100%;

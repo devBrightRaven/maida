@@ -306,8 +306,8 @@
         },
         "maida2": {
             "title": "Maida",
-            "sr_guide": "This screen has three zones: Recently played, Kept, and Just installed. Use the D-pad to move and Enter to open a game. Hold Enter for three seconds on a game to keep an intent.",
-            "zone_now": "Recently played",
+            "sr_guide": "This screen has three zones: Recently opened, Kept, and Just installed. Use the D-pad to move and Enter to open a game. Hold Enter for three seconds on a game to keep an intent.",
+            "zone_now": "Recently opened",
             "zone_still_here": "Kept",
             "zone_recently_arrived": "Just installed",
             "zone_now_empty": "Nothing here at the moment.",

@@ -1,4 +1,5 @@
 import { chromium } from '@playwright/test';
+import process from 'node:process';
 import { installHistoryFixture } from './history-fixture.js';
 import { mkdir, writeFile } from 'node:fs/promises';
 import assert from 'node:assert/strict';
@@ -12,7 +13,7 @@ try {
   for (const width of [320, 768, 1024, 1280, 1440, 1742, 1920]) {
    const page = await browser.newPage({ viewport: { width, height: 800 }, colorScheme: theme });
    await page.addInitScript(installHistoryFixture, { locale });
-   await page.goto('http://127.0.0.1:5197');
+   await page.goto(process.env.E2E_BASE_URL || 'http://127.0.0.1:5197');
    for (const face of ['maida2', 'rin', 'kamae']) {
     await page.locator(`[data-face="${face}"]`).click();
     await page.locator('main > .app-footer').waitFor();

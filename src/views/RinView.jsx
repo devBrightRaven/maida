@@ -374,9 +374,13 @@ export default function RinView({
             {game && (
                 <header className="mvp-header">
                     <div className="mvp-header-tap" onClick={onSecretTap} aria-hidden="true" />
+                    {isAnchored && (
+                        <span className="rin-anchored-badge" aria-hidden="true">{t('ui.game.anchored_prefix')}</span>
+                    )}
                     <h1 className="game-label" ref={titleRef} tabIndex={-1}>
                         <span className="sr-only">{t('ui.rin.mode_prefix')}</span>
-                        {isAnchored ? `(⚓${t('ui.game.anchored_prefix')}) ${game.title}` : game.title}
+                        {isAnchored && <span className="sr-only">{t('ui.game.anchored_prefix')} </span>}
+                        {game.title}
                     </h1>
                     {(() => {
                         const ttb = game.igdb?.timeToBeat?.normally ?? game.hltb?.mainStory ?? null;
@@ -409,7 +413,7 @@ export default function RinView({
                         <div className="primary-actions">
                             <button
                                 ref={btnRefs.visit}
-                                className={`mvp-btn visit ${isAnchored ? 'anchored-btn' : ''} ${focusedBtn === 'visit' ? 'is-focused' : ''}`}
+                                className={`mvp-btn visit ${focusedBtn === 'visit' ? 'is-focused' : ''}`}
                                 aria-label={isAnchored ? t('ui.button.play_aria', { game: game.title }) : t('ui.button.try_aria', { game: game.title })}
                                 aria-describedby={!isAnchored ? 'visit-hint' : undefined}
                                 onMouseEnter={() => focusBtn('visit')}

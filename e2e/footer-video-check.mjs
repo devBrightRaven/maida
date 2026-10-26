@@ -1,4 +1,5 @@
 import { chromium } from '@playwright/test';
+import process from 'node:process';
 import assert from 'node:assert/strict';
 import { writeFile } from 'node:fs/promises';
 import { installHistoryFixture } from './history-fixture.js';
@@ -41,7 +42,7 @@ try {
                 return invoke(cmd, args);
             };
         });
-        await page.goto('http://127.0.0.1:5197');
+        await page.goto(process.env.E2E_BASE_URL || 'http://127.0.0.1:5197');
         await page.locator('[data-face="maida2"]').click();
         await page.locator('.m2-card').first().focus();
         await page.waitForFunction(() => {

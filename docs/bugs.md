@@ -16,7 +16,7 @@ Status: 待重現, 已確認, 修復中, 待驗證, 已驗證修復, 受阻.
 | BUG-005 | `activity_weight` reads a field the Steam pipeline never writes | P2 | 已確認，未修 |
 | BUG-006 | Playnite `lastPlayed` pipeline collapses missing / Never / unparseable | P2 | 已確認，未修 |
 | BUG-007 | Uninstalled game still listed in Maai (library not refreshed) | P1 | 待重現 |
-| BUG-008 | Maai card date/sub text low contrast on hover | P2 | 已確認，未修 |
+| BUG-008 | Maai card date/sub text low contrast on hover | P2 | 待驗證 |
 | BUG-009 | Simplified-script locales other than zh-CN resolve to Traditional Chinese | P2 | 待驗證 |
 | BUG-010 | Kamae remove hold is 2500ms, guardrail 7.4 says 3000ms | P2 | 已驗證修復（文字）|
 | BUG-011 | AGENTS.md 7.11 describes a version-tag mechanism the code no longer uses | P2 | 已驗證修復（文字）|
@@ -99,10 +99,11 @@ Status: 待重現, 已確認, 修復中, 待驗證, 已驗證修復, 受阻.
 ## BUG-008 Maai card date/sub text low contrast on hover
 
 - Found: 2026-09-25 by the P2 agent while restyling Maai (pre-existing, not introduced by P2).
-- Actual: when a Maai card is hovered (inverted colours), the date / sub line has low contrast. Exact ratio not recorded.
+- Actual (before fix): when a Maai card is hovered (inverted colours), the date / sub line keeps the muted colour (`ModeNavigation.css` also forced it in light theme) on the inverted ground. Exact ratio was not recorded.
 - Impact: low-vision users cannot read the date while hovering.
-- Change: none. Maai hover is part of the deferred hover redesign.
-- Next: measure the ratio; fix together with the Maai hover redesign or on its own if that stays deferred.
+- Change (2026-10-13): `Maida2View.css` hover sub line takes `--t-hover-text`; the hover fill alpha has an 85% floor so the 40% glass preference cannot wash out the inverted ground; `:focus` is paired with `:focus-visible` (red line 7.10).
+- Measured by `e2e/maai-stage-check.mjs` on rendered pixels (text colour vs the box's actual background), sub line, 1280x800, default 70% card opacity: light theme hover 8.31:1, focus 6.54:1, hover+focus 8.31:1; dark theme hover 15.31:1, focus 8.28:1, hover+focus 15.31:1. Same states over the hero stage (dark ground behind cards): light 13.51 / 4.85 / 13.51 (before the 92% stage card-alpha floor), dark 16.52 / 6.98 / 16.52. All >= 4.5:1.
+- Status: 待驗證 (not yet confirmed on a real handheld / with the user's own card-opacity setting).
 
 ## BUG-009 Simplified-script locales other than zh-CN resolve to Traditional Chinese
 

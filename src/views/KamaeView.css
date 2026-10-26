@@ -757,7 +757,8 @@ main.kamae-view:has(> .mode-navigation) > .kamae-content {
     font-weight: 400;
 }
 
-.kata-item-badge {
+.kata-item-badge,
+.rin-anchored-badge {
     align-self: start;
     padding: 0.125rem 0;
     color: var(--m2-accent);

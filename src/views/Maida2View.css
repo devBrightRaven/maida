@@ -41,13 +41,10 @@
     transition: opacity 0.2s ease;
 }
 
-/* Dark theme: dark ground swallows low-opacity imagery — needs more presence. */
+/* One opacity for both themes: whenever this layer shows, the view is on the
+   dark stage (see "Dark stage" below), so the dark-ground value applies. */
 .m2-hero-backdrop--visible {
     opacity: 0.42;
-}
-
-[data-theme='light'] .m2-hero-backdrop--visible {
-    opacity: 0.3;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -66,18 +63,44 @@
     z-index: 0;
     pointer-events: none;
     /* Black backing: the layer's partial opacity composites against this
-       instead of the page bg. Over a light page bg the old bare layer
-       averaged the video toward white — a hazy, washed-out picture. */
+       instead of the page bg, so the picture is never averaged toward white. */
     background: #000;
     opacity: 0.55;
     -webkit-mask-image: linear-gradient(to bottom, black 0%, rgba(0, 0, 0, 0.5) 55%, transparent 94%);
     mask-image: linear-gradient(to bottom, black 0%, rgba(0, 0, 0, 0.5) 55%, transparent 94%);
 }
 
-/* Light theme still mixes (1 - opacity) of white into every pixel; a higher
-   opacity keeps the video legible instead of fog. */
-[data-theme='light'] .m2-backdrop-media {
-    opacity: 0.85;
+/* Dark stage (2026-10-13). While a backdrop layer shows (JSX adds
+   .maida2-view--stage), light theme re-scopes the VIEW to the dark tokens
+   (the JSX sets data-theme="dark" on <main>, which the token blocks in
+   index.css key on) so the ground, zone titles, nav, footer and hook
+   buttons are the dark-theme look and the media is never mixed toward
+   white. The CARDS get data-theme="light" back, so they keep light-theme
+   styling. Dark theme needs nothing: it is already the dark stage.
+   Skipped under prefers-contrast: more, where both layers are hidden. */
+@media not (prefers-contrast: more) {
+    /* Card ground stays mostly opaque on the stage: light text colours
+       (#26221d) on a translucent light card would otherwise read the dark
+       video through the card and lose contrast. Floor 92% (user preference
+       still applies above it). */
+    .m2-card[data-theme='light'] {
+        --m2-alpha-eff: max(calc(var(--m2-card-alpha, 70) * 1%), 92%);
+        /* The focus ring and its offset gap sit on the dark stage, so they
+           keep the dark-theme values rather than the card's light ones. */
+        --m2-bg: #0a0a0a;
+        --m2-focus-ring: #f0c888;
+    }
+    /* .app-root reserves a bottom strip for the footer outside <main>, so the
+       dark stage has to extend over it too (footer text is on dark tokens). */
+    .app-root:has(> main.maida2-view--stage[data-theme='dark']) {
+        background: #0a0a0a;
+    }
+    /* ModeNavigation.css re-colours --t-accent for light via an html
+       ancestor selector that still matches inside the dark-scoped view. */
+    main.maida2-view--stage[data-theme='dark'] .mode-navigation,
+    main.maida2-view--stage[data-theme='dark'] .navigation-layout-options {
+        --t-accent: #ffaa00;
+    }
 }
 
 .maida2-content {
@@ -104,6 +127,12 @@
 /* Zone titles sit on bare background; while the video backdrop plays they
    sit on moving imagery — a bg-colored glow keeps them legible without
    giving them a card of their own. */
+.maida2-view--stage .m2-zone-title {
+    /* Full text colour (not muted) over imagery: the muted grey measured
+       4.2:1 against a mid-tone video frame. */
+    color: var(--m2-text);
+}
+
 .maida2-view--playing .m2-zone-title {
     text-shadow: 0 1px 4px var(--m2-bg), 0 0 12px var(--m2-bg);
 }
@@ -210,7 +239,10 @@
    look translucent" bug: hover-dwell focus means the card being looked at
    is always hovered, so it was always painted solid. */
 .m2-card:hover {
-    background: color-mix(in srgb, var(--t-hover-bg) var(--m2-alpha-eff, 70%), transparent);
+    /* Hover fill is inverted, so its alpha has a floor: at the 40% glass
+       preference the inverted ground blended with the page and the card text
+       fell below 4.5:1 (BUG-008). */
+    background: color-mix(in srgb, var(--t-hover-bg) max(var(--m2-alpha-eff, 70%), 85%), transparent);
     color: var(--t-hover-text);
 }
 
@@ -251,6 +283,22 @@
 .m2-card-sub {
     font-size: 0.8125rem;
     color: var(--m2-text-muted);
+}
+
+/* BUG-008: hover inverts the card ground, so the muted sub line (made for
+   the normal ground) is nearly invisible on it; take the hover text colour.
+   Focus without hover keeps the normal ground, so it keeps the muted colour
+   (>= 4.5:1 there). Hover wins when both apply (source order). Selector is
+   prefixed with main.maida2-view to outrank ModeNavigation.css's
+   "[data-theme='light'] main:has(> .mode-navigation) .m2-card-sub". Red line
+   7.10: :focus is always paired with :focus-visible. */
+main.maida2-view .m2-card:focus .m2-card-sub,
+main.maida2-view .m2-card:focus-visible .m2-card-sub {
+    color: var(--m2-text-muted);
+}
+
+main.maida2-view .m2-card:hover .m2-card-sub {
+    color: var(--t-hover-text);
 }
 
 .m2-card-badge {

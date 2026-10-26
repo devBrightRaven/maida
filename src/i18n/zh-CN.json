@@ -306,8 +306,8 @@
         },
         "maida2": {
             "title": "Maida",
-            "sr_guide": "画面分为三个区域：最近在玩、留住的、刚安装。用方向键移动，按 Enter 打开游戏。在游戏上按住 Enter 三秒，可以留住一个心意。",
-            "zone_now": "最近在玩",
+            "sr_guide": "画面分为三个区域：最近开启、留住的、刚安装。用方向键移动，按 Enter 打开游戏。在游戏上按住 Enter 三秒，可以留住一个心意。",
+            "zone_now": "最近开启",
             "zone_still_here": "留住的",
             "zone_recently_arrived": "刚安装",
             "zone_now_empty": "这里目前是空的。",

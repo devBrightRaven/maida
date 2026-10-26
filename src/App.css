@@ -141,19 +141,6 @@
     font-size: 0.8em;
 }
 
-.anchored-btn {
-    border-color: var(--t-accent) !important;
-    color: var(--t-accent) !important;
-    background: var(--t-accent-soft) !important;
-}
-
-.anchored-btn:hover,
-.anchored-btn:focus-visible {
-    background: var(--t-accent) !important;
-    color: var(--t-hover-text) !important;
-    box-shadow: 0 0 30px var(--t-accent-glow) !important;
-}
-
 /* Long Press Progress Bar */
 .btn-progress {
     position: absolute;
