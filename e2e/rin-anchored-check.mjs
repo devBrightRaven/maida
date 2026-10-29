@@ -9,7 +9,7 @@ import process from 'node:process';
 import assert from 'node:assert/strict';
 
 const BASE = process.env.E2E_BASE_URL || 'http://127.0.0.1:5201';
-const SHOTS = 'design/maida2-review/p5/screens';
+const SHOTS = process.env.SHOTS_DIR || 'design/maida2-review/p5/screens';
 await mkdir(SHOTS, { recursive: true });
 const LIBRARY = process.env.STEAM_LIBRARYCACHE || 'C:/Program Files (x86)/Steam/appcache/librarycache';
 let heroUrl = null;
@@ -25,10 +25,10 @@ if (existsSync(dir)) {
 }
 console.log(heroUrl ? 'local hero art for 367520' : 'no local hero art: screenshots show the no-art state');
 
-function patch({ hero }) {
+function patch({ hero, anchored }) {
     navigator.getGamepads = () => [null, null, null, null];
     const f = window.__historyFixture;
-    f.data.anchor = { isAnchored: true, gameId: 'g1' };
+    if (anchored) f.data.anchor = { isAnchored: true, gameId: 'g1' };
     const inner = window.__TAURI_INTERNALS__.invoke;
     window.__TAURI_INTERNALS__.invoke = async (cmd, args = {}) => {
         if (cmd === 'get_art') return args.kind === 'hero' ? hero : null;
@@ -36,10 +36,36 @@ function patch({ hero }) {
     };
 }
 const browser = await chromium.launch();
+// Normal (not anchored) state: layout stays side by side, no frame.
+for (const theme of ['light', 'dark']) {
+    for (const h of [800, 720]) {
+        const page = await browser.newPage({ viewport: { width: 1280, height: h }, colorScheme: theme });
+        await page.addInitScript(installHistoryFixture, { locale: 'en' });
+        await page.addInitScript(patch, { hero: heroUrl, anchored: false });
+        await page.goto(BASE);
+        await page.locator('[data-face="rin"]').click();
+        await page.locator('.rin-stage .mvp-btn.visit').waitFor();
+        await page.evaluate(() => document.fonts.ready);
+        await page.waitForTimeout(400);
+        const n = await page.evaluate(() => {
+            const a = document.querySelector('.rin-stage .mvp-btn.visit').getBoundingClientRect();
+            const b = document.querySelector('.rin-stage .mvp-btn.not-today').getBoundingClientRect();
+            const art = document.querySelector('.rin-stage .rin-art');
+            const cs = window.getComputedStyle(art);
+            return { sideBySide: Math.abs(a.top - b.top) < 4, outline: cs.outlineStyle, overflow: cs.overflow, before: window.getComputedStyle(art, '::before').content };
+        });
+        assert.ok(n.sideBySide, 'normal: TRY and NOT NOW stay side by side');
+        assert.equal(n.outline, 'none', 'normal: art has no frame');
+        assert.equal(n.overflow, 'hidden', 'normal: art overflow unchanged');
+        assert.ok(n.before === 'none' || n.before === 'normal', 'normal: no corner marks');
+        await page.screenshot({ path: `${SHOTS}/rin-normal-${theme}-1280x${h}.png` });
+        await page.close();
+    }
+}
 for (const theme of ['light', 'dark']) {
     const page = await browser.newPage({ viewport: { width: 1280, height: 800 }, colorScheme: theme });
     await page.addInitScript(installHistoryFixture, { locale: 'en' });
-    await page.addInitScript(patch, { hero: heroUrl });
+    await page.addInitScript(patch, { hero: heroUrl, anchored: true });
     await page.goto(BASE);
     await page.locator('[data-face="rin"]').click();
     await page.locator('.rin-stage .mvp-btn.visit').waitFor();
@@ -76,7 +102,36 @@ for (const theme of ['light', 'dark']) {
     assert.deepEqual(r.glow, [], 'no 30px glow box-shadow in Rin');
     assert.match(r.play, /PLAY|Play/i);
 
+    // Layout A + B: PLAY centred and larger, CLEAR a smaller real button
+    // below it; art framed with corner marks.
+    const L = await page.evaluate(() => {
+        const rect = (s) => { const e = document.querySelector(s); const b = e.getBoundingClientRect(); return { top: b.top, bottom: b.bottom, cx: b.left + b.width / 2, w: b.width, h: b.height, tag: e.tagName, disabled: e.disabled, tab: e.tabIndex }; };
+        const art = document.querySelector('.rin-stage .rin-art');
+        const cs = window.getComputedStyle(art);
+        return {
+            play: rect('.rin-stage .mvp-btn.visit'), clear: rect('.rin-stage .mvp-btn.not-today'),
+            outline: cs.outlineStyle, before: window.getComputedStyle(art, '::before').content,
+        };
+    });
+    assert.equal(L.clear.tag, 'BUTTON', 'CLEAR is a real button');
+    assert.ok(!L.clear.disabled && L.clear.tab >= 0, 'CLEAR is keyboard reachable');
+    assert.ok(L.clear.top >= L.play.bottom - 1, 'CLEAR sits below PLAY');
+    assert.ok(Math.abs(L.play.cx - L.clear.cx) < 2, 'PLAY and CLEAR share a centre line');
+    assert.ok(L.play.w > 300 && L.play.h >= 70, 'PLAY is larger');
+    assert.ok(L.clear.h >= 24 && L.clear.h < L.play.h, 'CLEAR target >= 24px and smaller than PLAY');
+    assert.equal(L.outline, 'solid', 'art has accent frame');
+    assert.notEqual(L.before, 'none', 'art has corner marks');
+    await page.locator('.rin-stage .mvp-btn.not-today').focus();
+    const ring = await page.evaluate(() => window.getComputedStyle(document.querySelector('.rin-stage .mvp-btn.not-today')).outlineStyle);
+    assert.equal(ring, 'solid', 'CLEAR shows a focus ring');
+
     await page.screenshot({ path: `${SHOTS}/rin-anchored-${theme}-1280x800.png` });
+    await page.setViewportSize({ width: 1280, height: 720 });
+    await page.waitForTimeout(300);
+    const fold = await page.evaluate(() => document.querySelector('.rin-stage .mvp-btn.not-today').getBoundingClientRect().bottom);
+    assert.ok(fold <= 720, `720: CLEAR above the fold (bottom ${fold})`);
+    await page.screenshot({ path: `${SHOTS}/rin-anchored-${theme}-1280x720.png` });
+    await page.setViewportSize({ width: 1280, height: 800 });
     await page.locator('.rin-stage .mvp-btn.visit').focus();
     await page.waitForTimeout(300);
     await page.screenshot({ path: `${SHOTS}/rin-anchored-focus-${theme}.png` });

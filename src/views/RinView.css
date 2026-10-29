@@ -73,6 +73,12 @@
     box-shadow: inset 0 0 100px var(--t-accent-soft);
 }
 
+/* The debug inspector panel opens above the risk dot; let it leave the
+ * prescription box instead of being clipped by .mvp-content overflow. */
+.mvp-container.debug-mode .mvp-content {
+    overflow: visible;
+}
+
 /* Header & Idle */
 .mvp-header {
     position: relative;
@@ -649,5 +655,86 @@ main.mvp-container:has(> .mode-navigation) > .rin-stage,
 @media (prefers-reduced-motion: reduce) {
     .mvp-container .rin-stage .mvp-btn {
         transition: none;
+    }
+}
+
+/* ---- Anchored state (BUG-018 trial mock: A + B) ----
+ * A: one centred, larger PLAY with a smaller text-style CLEAR below.
+ * B: accent frame plus four corner marks on the art ("fixed in place").
+ * Both are scoped to .is-anchored; the normal state is untouched. The
+ * difference is structural (layout and frame), never colour alone. */
+.mvp-container.is-anchored .rin-stage .primary-actions {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 0.5rem;
+}
+.mvp-container.is-anchored .rin-stage .primary-actions .mvp-btn.visit {
+    flex: none;
+    width: min(100%, 22rem);
+    min-height: 72px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+}
+.mvp-container.is-anchored .rin-stage .primary-actions .mvp-btn.not-today {
+    flex: none;
+    width: auto;
+    min-width: 0;
+    min-height: 44px;
+    padding: 0.25rem 1rem;
+    border: 0;
+    border-bottom: 1px solid transparent;
+    font-size: 0.875rem;
+    color: var(--m2-text-muted);
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+}
+.mvp-container.is-anchored .rin-stage .primary-actions .mvp-btn.not-today:hover,
+.mvp-container.is-anchored .rin-stage .primary-actions .mvp-btn.not-today:focus,
+.mvp-container.is-anchored .rin-stage .primary-actions .mvp-btn.not-today:focus-visible,
+.mvp-container.is-anchored .rin-stage .primary-actions .mvp-btn.not-today.is-focused {
+    color: var(--m2-text);
+    text-decoration: underline;
+    border: 0;
+    border-bottom: 1px solid transparent;
+}
+.mvp-container.is-anchored .rin-stage .rin-art {
+    width: min(100%, 56rem, calc((100dvh - 34rem) * 1920 / 620));
+    overflow: visible;
+    outline: 2px solid var(--m2-accent);
+    outline-offset: 6px;
+    margin-block: 0.375rem;
+}
+.mvp-container.is-anchored .rin-stage .rin-art::before {
+    content: "";
+    position: absolute;
+    inset: -14px;
+    pointer-events: none;
+    --m2-mark: var(--m2-accent);
+    --m2-len: 18px;
+    --m2-w: 4px;
+    background:
+        linear-gradient(var(--m2-mark), var(--m2-mark)) top left / var(--m2-len) var(--m2-w),
+        linear-gradient(var(--m2-mark), var(--m2-mark)) top left / var(--m2-w) var(--m2-len),
+        linear-gradient(var(--m2-mark), var(--m2-mark)) top right / var(--m2-len) var(--m2-w),
+        linear-gradient(var(--m2-mark), var(--m2-mark)) top right / var(--m2-w) var(--m2-len),
+        linear-gradient(var(--m2-mark), var(--m2-mark)) bottom left / var(--m2-len) var(--m2-w),
+        linear-gradient(var(--m2-mark), var(--m2-mark)) bottom left / var(--m2-w) var(--m2-len),
+        linear-gradient(var(--m2-mark), var(--m2-mark)) bottom right / var(--m2-len) var(--m2-w),
+        linear-gradient(var(--m2-mark), var(--m2-mark)) bottom right / var(--m2-w) var(--m2-len);
+    background-repeat: no-repeat;
+}
+.mvp-container.is-anchored .rin-stage .rin-art__img,
+.mvp-container.is-anchored .rin-stage .rin-art__mark {
+    position: relative;
+}
+@media (forced-colors: active) {
+    .mvp-container.is-anchored .rin-stage .rin-art {
+        outline-color: CanvasText;
+    }
+    .mvp-container.is-anchored .rin-stage .rin-art::before {
+        --m2-mark: CanvasText;
+        forced-color-adjust: none;
     }
 }

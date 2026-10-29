@@ -18,6 +18,7 @@ import { bucketGames } from './core/zones';
 import { resolveSettingsReturnFace } from './core/settingsReturn';
 import { buildPlaytimeSnapshotPayload } from './core/lastPlayed';
 import { pickPostLaunch } from './core/prescriptionPicker';
+import { pickFrozenReadyKey } from './core/frozenReady';
 import { loadData, saveData } from './services/persistence';
 import { useMaidaSession } from './hooks/useMaidaSession';
 import { useUpdateCheck } from './hooks/useUpdateCheck';
@@ -50,6 +51,8 @@ function FrozenScreen({ onResume, guardMs = 5000, prescriptionLine = null, onCyc
     const [secondsLeft, setSecondsLeft] = useState(totalSeconds);
     const [initialAnnounced, setInitialAnnounced] = useState(false);
     const prefersReducedMotion = usePrefersReducedMotion();
+    // One ready line per mount: the visual line and the SR announcement share it.
+    const [readyKey] = useState(() => pickFrozenReadyKey());
 
     // Focus frozen message immediately so SR reads it (not theme toggle)
     useEffect(() => {
@@ -116,7 +119,7 @@ function FrozenScreen({ onResume, guardMs = 5000, prescriptionLine = null, onCyc
             <h1 className="frozen-message" tabIndex={-1} ref={msgRef}>{t('ui.status.frozen')}</h1>
             <p className="frozen-subtitle">
                 {ready
-                    ? t('ui.status.frozen_ready')
+                    ? t(readyKey)
                     : prefersReducedMotion
                         ? t('ui.status.frozen_wait_static', { seconds: totalSeconds })
                         : t('ui.status.frozen_wait', { seconds: secondsLeft })}
@@ -136,7 +139,7 @@ function FrozenScreen({ onResume, guardMs = 5000, prescriptionLine = null, onCyc
             </button>
             <p className="sr-only" role="status" aria-live={ready ? 'assertive' : 'polite'}>
                 {ready
-                    ? t('ui.status.frozen_ready')
+                    ? t(readyKey)
                     : (initialAnnounced && secondsLeft === totalSeconds
                         ? t('ui.status.frozen_wait_sr', { seconds: secondsToWord(totalSeconds, getLocale()) })
                         : '')}
