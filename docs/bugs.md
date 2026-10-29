@@ -23,7 +23,7 @@ Status: 待重現, 已確認, 修復中, 待驗證, 已驗證修復, 受阻.
 | BUG-012 | Maai hook and state labels reuse the same word (放下 / Release / 手放す) | P2 | 已確認，待使用者決定用詞 |
 | BUG-013 | Uninstalled game stays in the Kept zone with no notice | P1 | 已確認，未修 |
 | BUG-014 | Rin debug inspector panel clipped at the top | P2 | 待驗證 |
-| BUG-015 | Debug Trace panel: focus not moved/restored, light-theme colours, low-contrast buttons | P2 | 已確認，未修 |
+| BUG-015 | Debug Trace panel: focus not moved/restored, light-theme colours, low-contrast buttons | P2 | 已修，待實機驗證 |
 | BUG-016 | Frozen screen copy no longer fits Maida (no pause / 間) | P2 | 已修，待實機驗證 |
 | BUG-017 | Maai preview audio startles on loud trailers | P2 | 已確認，未修 |
 | BUG-018 | Rin anchored state not distinct enough at a glance | P2 | 試做（A+B），待實機驗證 |
@@ -174,7 +174,25 @@ Status: 待重現, 已確認, 修復中, 待驗證, 已驗證修復, 受阻.
   - `TracePanel.css` ~218 `accent-color: var(--amber)`; `--amber` is not defined, sliders render default blue.
   - Panel has no `role="dialog"`; `.debug-close` has no accessible name (~97).
 - Not reached by the audit: real window, gamepad, populated event log.
-- Change: none.
+- Change (2026-10-30): `TracePanel.jsx` is a `role="dialog"` `aria-modal="true"` named by its heading, focuses its close button (`aria-label="Close debug trace panel"`) on open and keeps Tab inside. `RinView.jsx` returns focus to the TRACE button when the panel closes (mount and game changes still default to NOT NOW). `App.jsx` `isModalOpen()` gains `.debug-panel[role="dialog"]` (red line 7.9), so F8/F9/Ctrl+Tab/L1/R1 no longer switch face under the panel. Inline hex colours replaced with theme tokens; `--amber` replaced by `--t-accent`; light theme scopes `--t-accent: #75501f` to the panel (same value as ModeNavigation); danger buttons use a transparent fill; h4 `opacity: 0.6` and the log change `opacity: 0.5` removed. Focus ring pairs `:focus` with `:focus-visible` (7.10).
+- Verified: `e2e/trace-panel-check.mjs` (both themes): focus in, Tab trap, F9 gate, Esc and close button restore to TRACE, every changed colour >= 4.5:1 text / 3:1 border (min light 5.26, dark 5.81). Fails before the fix. `pnpm test` and `pnpm lint` exit 0.
+- Not verified: real `tauri dev` window, gamepad B close path, NVDA announcement.
+- Contrast before -> after (dark / light). bg = panel `--t-bg` (#0a0a0a / #fdfbf7); fill = `--t-border-subtle` over bg (#232323 / #e8e6e3); surface = `--t-surface` (#1a1a1a / #f0ece6). Light "after" accent is the panel-scoped `#75501f`.
+
+  | Element (measured on) | Before dark | Before light | After dark | After light |
+  |---|---|---|---|---|
+  | Labels `#888` -> `--t-dim` (bg) | 5.58 | 3.43 | 9.13 | 7.50 |
+  | Locale select text `#ccc` on `#111` -> `--t-text` on bg | 11.76 | 11.76 (black box) | 15.00 | 13.51 |
+  | Locale select border `#333` -> `--t-dim` (bg) | 1.57 | 12.22 | 9.13 | 7.50 |
+  | Penalties `#ff8800` -> `--t-accent` (bg) | 8.27 | 2.32 | 10.37 | 6.95 |
+  | Reset / Clear `#ff4444` on fill -> `--t-error`, transparent (bg) | 4.61 | 2.74 | 5.81 | 5.26 |
+  | Reset Explore Limit `#ffaa00` -> `--t-accent` (fill) | 8.23 | 1.53 | 8.23 | 5.77 |
+  | Hide / Clear text `#666` -> `--t-dim` (bg) | 3.45 | 5.56 | 9.13 | 7.50 |
+  | Hide / Clear border `#333` -> `--t-dim` (bg) | 1.57 | 12.22 | 9.13 | 7.50 |
+  | Section h4 accent at opacity .6 -> opacity 1 (bg) | 4.24 | 2.36 | 10.37 | 6.95 |
+  | Log change `--t-dim` at opacity .5 -> 1 (surface) | 2.99 | 2.23 | 8.03 | 6.59 |
+  | Log event accent (surface) | 9.12 | 4.25 | 9.12 | 6.10 |
+  | Slider / checkbox `--amber` (undefined, UA blue) / `#ffaa00` -> `--t-accent` (bg) | n/a | n/a | 10.37 | 6.95 |
 
 ## BUG-016 Frozen screen copy no longer fits Maida
 

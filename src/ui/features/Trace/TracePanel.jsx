@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { t, getLocale, setLocale, getSupportedLocales } from '../../../i18n';
 import { loadPrescriptionTranslations } from '../../../i18n/prescriptions';
 import { debugStore } from '../../../core/debugStore';
@@ -17,6 +17,8 @@ const FONT_CONTROLS = [
 ];
 
 const FONT_STORAGE_KEY = 'maida-debug-font-sizes';
+
+const FOCUSABLE = 'button, input, select, textarea, a[href], [tabindex]:not([tabindex="-1"])';
 
 function FontSizeTuner() {
     const [sizes, setSizes] = useState(() => {
@@ -87,14 +89,50 @@ export default function TracePanel({ game, temperature, decayRate, silentMode, s
         disabled: false
     });
 
+    // BUG-015: move focus into the dialog on open. Restoring focus to the
+    // TRACE button on close is RinView's job (it owns the opener).
+    const panelRef = useRef(null);
+    const closeBtnRef = useRef(null);
+    useEffect(() => {
+        closeBtnRef.current?.focus();
+    }, []);
+
+    // aria-modal="true" promises the rest of the page is out of reach, so
+    // keep Tab / Shift+Tab inside the panel.
+    const handleKeyDown = (e) => {
+        if (e.key !== 'Tab' || !panelRef.current) return;
+        const focusables = Array.from(panelRef.current.querySelectorAll(FOCUSABLE))
+            .filter(el => !el.disabled && el.offsetParent !== null);
+        if (focusables.length === 0) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+        }
+    };
+
     const { trace, logs } = storeState;
 
     return (
         <div className="debug-overlay" onClick={onClose}>
-            <div className="debug-panel" onClick={(e) => e.stopPropagation()}>
+            <div
+                ref={panelRef}
+                className="debug-panel"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="debug-panel-title"
+                onClick={(e) => e.stopPropagation()}
+                onKeyDown={handleKeyDown}
+            >
                 <header className="debug-header">
-                    <h3>Maida Behavioral Trace</h3>
-                    <button className="debug-close" onClick={onClose}>×</button>
+                    <h3 id="debug-panel-title">Maida Behavioral Trace</h3>
+                    <button ref={closeBtnRef} className="debug-close" aria-label="Close debug trace panel" onClick={onClose}>
+                        <span aria-hidden="true">×</span>
+                    </button>
                 </header>
 
                 <div className="debug-section">
@@ -106,7 +144,7 @@ export default function TracePanel({ game, temperature, decayRate, silentMode, s
                     <div className="debug-grid simulation-grid">
                         <div className="sim-row">
                             <label>Temp: <span className="highlight">{temperature.toFixed(1)}</span>
-                                <span style={{ fontSize: '0.7em', marginLeft: '8px', color: '#888' }}>
+                                <span className="debug-muted" style={{ fontSize: '0.7em', marginLeft: '8px' }}>
                                     {temperature < 0.8 ? '(Strict)' :
                                         temperature > 1.2 ? '(Chaotic)' :
                                             '(Balanced)'}
@@ -133,32 +171,25 @@ export default function TracePanel({ game, temperature, decayRate, silentMode, s
                             />
                         </div>
                         <div className="sim-row" style={{ marginTop: '4px', fontSize: '0.75rem' }}>
-                            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', color: '#888' }}>
+                            <label className="debug-muted" style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
                                 <input
                                     type="checkbox"
                                     checked={silentMode}
                                     onChange={(e) => setSilentMode(e.target.checked)}
-                                    style={{ accentColor: '#ffaa00' }}
                                 />
                                 Silent Mode (No Launch)
                             </label>
                         </div>
                         <div className="sim-row" style={{ marginTop: '4px', fontSize: '0.75rem' }}>
-                            <label style={{ color: '#888' }}>Locale: </label>
+                            <label className="debug-muted" htmlFor="debug-locale-select">Locale: </label>
                             <select
+                                id="debug-locale-select"
+                                className="debug-select"
                                 value={getLocale()}
                                 onChange={async (e) => {
                                     setLocale(e.target.value);
                                     await loadPrescriptionTranslations();
                                     window.location.reload();
-                                }}
-                                style={{
-                                    background: '#111',
-                                    color: '#ccc',
-                                    border: '1px solid #333',
-                                    padding: '2px 6px',
-                                    fontSize: '0.75rem',
-                                    borderRadius: 0
                                 }}
                             >
                                 {getSupportedLocales().map(l => (
@@ -170,17 +201,17 @@ export default function TracePanel({ game, temperature, decayRate, silentMode, s
                             <button onClick={() => onSimulation('simPlay')}>+1 TRY</button>
                             <button onClick={() => onSimulation('simSkip')}>-2 NOT NOW</button>
                             <button onClick={() => onSimulation('simDecay')}>Day Pass (-{decayRate}%)</button>
-                            <button onClick={() => onSimulation('simReset')} style={{ color: '#ff4444', borderColor: '#ff4444' }}>Reset</button>
+                            <button className="debug-danger" onClick={() => onSimulation('simReset')}>Reset</button>
                             <button onClick={async () => {
                                 if (confirm('Clear all data and restart setup?')) {
                                     await bridge.resetGamesData();
                                     window.location.reload();
                                 }
-                            }} style={{ color: '#ff4444', borderColor: '#ff4444' }}>{t('ui.debug.clear_games_btn')}</button>
+                            }} className="debug-danger">{t('ui.debug.clear_games_btn')}</button>
                             <button onClick={async () => {
                                 await bridge.resetExploreLimit();
                                 alert('Explore limit reset');
-                            }} style={{ color: '#ffaa00', borderColor: '#ffaa00' }}>Reset Explore Limit</button>
+                            }} className="debug-warn">Reset Explore Limit</button>
                         </div>
                     </div>
 
@@ -230,16 +261,8 @@ export default function TracePanel({ game, temperature, decayRate, silentMode, s
                             <span>ID: {game?.id || 'none'}</span>
                             {game?.steamAppId && onHideGame && (
                                 <button
+                                    className="debug-mini-btn"
                                     onClick={() => onHideGame(game.steamAppId)}
-                                    style={{
-                                        background: 'transparent',
-                                        border: '1px solid #333',
-                                        color: '#666',
-                                        fontSize: '0.7rem',
-                                        padding: '2px 8px',
-                                        cursor: 'pointer',
-                                        borderRadius: 0
-                                    }}
                                 >
                                     Hide
                                 </button>
@@ -248,7 +271,7 @@ export default function TracePanel({ game, temperature, decayRate, silentMode, s
                         <div>Score: <span className="highlight">{(game?.score || 0).toFixed(2)}</span></div>
                         <div>Prob: {trace?.selected ? (parseFloat(trace.selected.weight) * 100).toFixed(2) + '%' : '-'}</div>
                         <div>Anchor: <span className="highlight">{isAnchored ? `⚓ ${game?.title || 'unknown'}` : 'none'}</span></div>
-                        <div>Penalties ({(returnPenaltySet || []).length}/5): <span style={{ color: '#ff8800' }}>{
+                        <div>Penalties ({(returnPenaltySet || []).length}/5): <span className="debug-warn-text">{
                             (returnPenaltySet || []).length === 0 ? 'none' :
                             (returnPenaltySet || []).map(id => {
                                 const c = trace?.candidates?.find(c => c.id === id);
@@ -295,16 +318,8 @@ export default function TracePanel({ game, temperature, decayRate, silentMode, s
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                         <h4 style={{ marginBottom: 0 }}>E) Event Log</h4>
                         <button
+                            className="debug-mini-btn"
                             onClick={() => debugStore.clearLogs()}
-                            style={{
-                                background: 'transparent',
-                                border: '1px solid #333',
-                                color: '#666',
-                                fontSize: '0.7rem',
-                                padding: '2px 8px',
-                                cursor: 'pointer',
-                                borderRadius: 0
-                            }}
                         >
                             Clear
                         </button>
@@ -316,7 +331,7 @@ export default function TracePanel({ game, temperature, decayRate, silentMode, s
                                 <span className="log-event" data-event={log.event}>{log.event}</span>
                                 <span className="log-details">
                                     {log.title ? `${log.title} ` : (log.gameId || '')}
-                                    <span style={{ opacity: 0.5 }}>{log.change || ''}</span>
+                                    <span className="log-change">{log.change || ''}</span>
                                 </span>
                             </div>
                         ))}

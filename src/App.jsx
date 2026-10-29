@@ -294,6 +294,7 @@ function App() {
         typeof document !== 'undefined' && (
             !!document.querySelector('main.legal-page') ||
             !!document.querySelector('.kamae-settings') ||
+            !!document.querySelector('.debug-panel[role="dialog"]') ||
             !!document.querySelector('.m2-note-input') ||
             !!document.querySelector('.decision-history') ||
             !!document.querySelector('.maida2-view[aria-busy="true"]')

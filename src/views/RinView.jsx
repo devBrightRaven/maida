@@ -127,12 +127,19 @@ export default function RinView({
         };
     }, [game]);
 
-    // Restore focus when TracePanel closes
+    // Restore focus when TracePanel closes. Closing returns focus to the
+    // TRACE button that opened it (BUG-015); mount and game changes keep
+    // the NOT NOW default.
+    const traceBtnRef = React.useRef(null);
+    const traceWasOpenRef = React.useRef(false);
     useEffect(() => {
+        const justClosed = traceWasOpenRef.current && !showTrace;
+        traceWasOpenRef.current = showTrace;
         if (!showTrace) {
             // Small delay to ensure panel is fully unmounted
             requestAnimationFrame(() => {
-                if (game) focusBtn('notToday');
+                if (justClosed && traceBtnRef.current) traceBtnRef.current.focus();
+                else if (game) focusBtn('notToday');
                 else containerRef.current?.querySelector('.mode-navigation button')?.focus();
             });
         }
@@ -482,7 +489,7 @@ export default function RinView({
 
             {debugMode && (
                 <div className="debug-controls">
-                    <button className="debug-trace-btn" aria-label="Open debug trace panel" onClick={(e) => { e.stopPropagation(); setShowTrace(true); }}>
+                    <button ref={traceBtnRef} className="debug-trace-btn" aria-label="Open debug trace panel" onClick={(e) => { e.stopPropagation(); setShowTrace(true); }}>
                         {t('ui.debug.trace_btn')}
                     </button>
                 </div>
