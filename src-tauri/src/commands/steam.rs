@@ -209,10 +209,63 @@ fn activity_weight(game: &Value) -> f64 {
         .and_then(|s| s.as_f64())
         .unwrap_or(0.0)
         .abs();
-    let played = game
-        .get("lastPlayed")
-        .and_then(|v| v.as_str())
-        .map(|s| if s != "Never" { 1.0 } else { 0.0 })
-        .unwrap_or(0.0);
+    let played = if has_played(game) { 1.0 } else { 0.0 };
     score + played
+}
+
+/// BUG-005: Steam records carry `steamLastPlayed` / `steamLastPlayedStatus`
+/// (LastPlayed contract, `src/core/lastPlayed.js`); only a "recorded" status
+/// with a usable epoch proves play. Zero / missing / invalid add nothing.
+/// Legacy Playnite-era records keep the old `lastPlayed != "Never"` rule.
+fn has_played(game: &Value) -> bool {
+    if let Some(status) = game.get("steamLastPlayedStatus").and_then(|v| v.as_str()) {
+        let epoch = game
+            .get("steamLastPlayed")
+            .and_then(|v| v.as_i64())
+            .unwrap_or(0);
+        return status == "recorded" && epoch > 0 && epoch <= steam::MAX_EPOCH_SECONDS;
+    }
+    game.get("lastPlayed")
+        .and_then(|v| v.as_str())
+        .map(|s| s != "Never")
+        .unwrap_or(false)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn steam_recorded_play_outweighs_unplayed_duplicate() {
+        // BUG-005: Steam records carry steamLastPlayed/Status, not lastPlayed.
+        let played = json!({
+            "steamAppId": "10", "score": 0.0,
+            "steamLastPlayed": 1724800000, "steamLastPlayedStatus": "recorded"
+        });
+        let unplayed = json!({
+            "steamAppId": "10", "score": 0.0,
+            "steamLastPlayed": 0, "steamLastPlayedStatus": "zero"
+        });
+        assert!(activity_weight(&played) > activity_weight(&unplayed));
+    }
+
+    #[test]
+    fn unknown_steam_play_state_adds_no_weight() {
+        for status in ["missing", "invalid", "zero"] {
+            let g = json!({ "score": 0.0, "steamLastPlayed": 0, "steamLastPlayedStatus": status });
+            assert_eq!(activity_weight(&g), 0.0, "status {status}");
+        }
+        // Inconsistent pairing: "recorded" without a usable epoch is not played.
+        let bad =
+            json!({ "score": 0.0, "steamLastPlayed": 0, "steamLastPlayedStatus": "recorded" });
+        assert_eq!(activity_weight(&bad), 0.0);
+    }
+
+    #[test]
+    fn legacy_last_played_string_still_counts() {
+        let legacy = json!({ "score": 0.0, "lastPlayed": "2024-05-11" });
+        let never = json!({ "score": 0.0, "lastPlayed": "Never" });
+        assert_eq!(activity_weight(&legacy), 1.0);
+        assert_eq!(activity_weight(&never), 0.0);
+    }
 }

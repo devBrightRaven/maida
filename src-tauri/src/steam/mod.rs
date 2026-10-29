@@ -25,7 +25,7 @@ const ALWAYS_EXCLUDE_APPIDS: &[&str] = &["228980"];
 /// 9223372036854775807) parses fine as an `i64` but is not a usable epoch:
 /// `new Date(n*1000)` on the JS side renders "Invalid Date", so it must not
 /// be treated as a recorded timestamp.
-const MAX_EPOCH_SECONDS: i64 = 253402300799;
+pub(crate) const MAX_EPOCH_SECONDS: i64 = 253402300799;
 
 /// LastPlayed data contract (P0-1): compute (steamLastPlayed, status) from
 /// raw ACF content. status is one of "recorded" | "zero" | "missing" |
