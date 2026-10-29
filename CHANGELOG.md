@@ -4,6 +4,85 @@ All notable changes to Maida, combining public-facing updates and technical deta
 
 ---
 
+## [v0.5.0] - Unreleased (draft)
+
+The largest change since launch. Maida now opens on a new page called Maai, where your games sit in three short zones and you can keep a few words about the ones that matter to you. Rin and Kamae are still here, reachable from a new sidebar. The after-launch screen, first run, and Settings have all been reworked.
+
+### Maai: a new home page
+
+- **Three zones instead of a dice roll on launch.** Maida now opens on Maai (My games): **Recently opened** (games Steam has a play record for, up to 5), **Kept** (games you kept an intent for), and **Just installed** (installed games with no play record yet, up to 5). **All installed** is a collapsed list below them.
+- **Ordered by facts only.** Zones are sorted by Steam's play record, install date, and when you kept an intent. No weights, no inference. If Steam has no play record for a game, the card says so instead of claiming you never played it.
+- **Open a game with a tap.** A short press (click, Enter, or A) launches the game through Steam.
+- **Keep an intent.** Hold a card for 3 seconds to write a short note ("What do you want to remember?"). The game moves to Kept with your note. Kept cards can be released, marked Keep / Rest / Release, or opened in Decision history. Rest and Release keep a game out of Recently opened and Just installed.
+- **Previews.** When a card keeps focus for a moment, its trailer or screenshots play as the page background. Delay (1 / 3 / 6 seconds) and sound are adjustable in Settings. With the OS "increase contrast" setting on, backdrops are hidden and cards are fully opaque.
+- **Mouse parity.** Resting the pointer on a card for about a second moves focus there without launching.
+- **Localized titles** where the publisher provides one.
+
+### Sidebar and moving between modes
+
+- **A sidebar on every mode page**, with the three modes (My games, One at a time, Collections), **Decision history**, and **Settings**. It stays in place while the page scrolls.
+- **Two layouts**: the full side navigation, or a compact **C · Previous / next** pager. Choose in Settings → Mode navigation.
+- **LB / RB cycle all three modes** (Maai → Rin → Kamae). Ctrl+Tab still switches Rin ↔ Kamae. New keyboard shortcuts: **F9** for Maai, **F8** for Rin.
+- **F10 / Menu opens Settings from any mode**, and closing Settings now returns you to the mode you came from (previously you were left on Kamae).
+
+### Decision history
+
+- New **Decision history** page: your notes and recorded actions, newest first, with paging. Open it from the sidebar, or for a single game from its Kept card.
+- Only existing records appear. Maida does not fill in past choices or guess reasons. Edits and releases never overwrite the original record.
+
+### Rin
+
+- **"Not Now" is now "Not This One"** (これじゃない / 不是这个 / 不是這個). Behavior is unchanged.
+- **Art-first layout**, with a quiet geometric mark when a game has no art.
+- **Anchored games** show an **Anchored** badge, a wide PLAY button, and a lighter Clear button.
+- **Empty kata**: if the active kata has no games, Rin says so and TRY / Not This One are inactive.
+- **Rin keeps the game on screen** when you switch modes and come back, unless the kata's games changed.
+- **Fix**: after Not This One, switching to a different kata could let Undo bring back a game from outside that kata. Switching kata now ends the chance to undo.
+
+### Kamae
+
+- **Kata cards** with a strip of game capsules, and a two-column game list on wide windows. Games without art get a simple placeholder.
+- **Clearer remove confirmation**: "Remove" changes to "Confirm remove?" with a hint, and Esc / B cancels. The confirmation no longer silently cancels itself after 5 seconds.
+- Kata counts read correctly for one game ("1 game") in screen reader labels.
+
+### After you launch a game
+
+- The screen now reads **"In the game now"** with a plain countdown, and the button reads **"Back to Maida"** (previously "MAIDA is paused" and "I'M BACK").
+- When the countdown ends, one of five short lines appears ("Take your time.", "No rush.", ...).
+- A short message appears below the title. Press left / right to see another.
+
+### First run and languages
+
+- **Language comes first.** First run now opens with a language choice, each option in its own script, with your system language already highlighted.
+- **Better Chinese detection**: script- and region-aware (Hans / Singapore / Malaysia → Simplified; Hant / Hong Kong / Macau → Traditional), and all preferred system languages are checked.
+- **The Windows installer** now ships in English, Japanese, Simplified Chinese, and Traditional Chinese and follows the OS language.
+
+### Settings
+
+- New: **Mode navigation** layout, **Preview delay**, **Preview sound**, **Card opacity** (40-100%).
+- Cool-down description reworded: "How long to wait after starting a game before you can come back to Maida."
+- The Settings back button now reads **Close**.
+
+### Accessibility and contrast
+
+- Dividers and borders meet 3:1 contrast. **Increase contrast** (`prefers-contrast: more`) and Windows **forced colors** are respected, driven by the OS with no app setting.
+- The sidebar's symbol animation follows the OS reduced-motion setting. There is still no app-level motion toggle.
+- Focus, hold progress, and status announcements on Maai follow the same patterns as Rin and Kamae (paired focus rings, a single polite status region, screen reader milestones while holding).
+- Fixed: mouse wheel, Page Down, and right-stick scrolling had stopped working on long pages in all three modes and in Decision history.
+
+### New app icon
+
+- A new icon for 2.0: two soft dark boundaries with a lit path between them.
+
+### Under the hood
+
+- Steam library reading hardened: the binary app-info parser can no longer abort on malformed data, and media downloads are restricted to Steam's CDN hosts.
+- Tauri 2.11; Rust dependencies pinned with a committed `Cargo.lock` so Windows release builds stay reproducible.
+- Local decision trace (append-only, on-device) underpins Decision history. Nothing in it is uploaded.
+- Repo: README split into four localized versions; multilingual release-note template.
+
+---
+
 ## [v0.4.3] - 2026-04-20
 
 A round of accessibility and transparency polish across the legal pages, plus a Linux updater fix that lets existing installs auto-relaunch after an update, and a Windows gamepad reconnect fix.

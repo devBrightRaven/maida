@@ -7,25 +7,26 @@ status: published
 source: claude-code
 project: maida
 created: 2025-01-01
-updated: 2026-04-20
-description: "Maida v0.4.3 User Manual (English): covers Rin (fast decision), Kamae (curation), Kata (grouping), guided tour, anchoring, freeze state, keyboard and gamepad controls, settings."
+updated: 2026-10-30
+description: "Maida v0.5.0 User Manual (English): covers the three modes (Maai, Rin, Kamae), the sidebar, kept intents, katas, decision history, the after-launch screen, keyboard and gamepad controls, settings."
 ---
 
 # Maida User Manual
 
-**Version: v0.4.3**
+**Version: v0.5.0**
 
 ---
 
 ## What is this?
 
-Maida shows you **one game** from your Steam library at a time.
+Maida is a quiet place between you and your Steam library.
 
-You decide: play it now, or see something else.
+What to play, and whether to play at all, is up to you.
 
-Maida has two faces:
-- **Rin**: Fast decision. A dice roll shows one game; you choose TRY or Not Now.
-- **Kamae**: Curation. Manage your showcase and decide which games enter the dice pool.
+Maida has three modes, listed in the sidebar on the left:
+- **Maai (My games)**: Your games on one page, in three short zones. Maida opens here.
+- **Rin (One at a time)**: One game from your library appears at a time. You decide: TRY it, or Not This One.
+- **Kamae (Collections)**: Organize katas, the small groups of games that Rin draws from.
 
 ---
 
@@ -33,13 +34,13 @@ Maida has two faces:
 
 ### Windows: SmartScreen warning
 
-The first time you run Maida, Windows will show **"Windows protected your PC"**. This happens because Maida isn't code-signed — those certificates cost $300+/year, which doesn't make sense for free software made by one person.
+The first time you run Maida, Windows will show **"Windows protected your PC"**. This happens because Maida isn't code-signed. Those certificates cost $300+/year, which doesn't make sense for free software made by one person.
 
 To proceed: click **More info** → **Run anyway**. The warning will stop appearing after Windows learns the file (SmartScreen reputation builds with download count, no action needed from you).
 
 If you'd rather verify before trusting:
 - Source code: [github.com/devBrightRaven/maida](https://github.com/devBrightRaven/maida) (MIT licensed, you can read every line)
-- No telemetry by default; opt-in only sends an anonymous version ping
+- The anonymous usage ping can be turned off at any time in Settings
 - Built and contactable: bertram@brightraven.world
 
 ### ROG Ally: gamepad mode
@@ -50,36 +51,73 @@ If you're on a ROG Ally and the buttons don't work in Maida, set **Armoury Crate
 
 ## First Time Setup
 
-1. Make sure **Steam is running**
-2. Open Maida
-3. Click **"Scan my Steam library"**
-4. Wait for the scan to complete (no data leaves your device)
-5. Done — Maida creates a "Demo Kata" with 3 random games to get you started
+1. Open Maida
+2. **Choose your language.** The four options (English, 日本語, 简体中文, 繁體中文) are written in their own script, and your system language is already highlighted. You can change this later in Settings.
+3. Press **"Scan my game library"**. Nothing is launched, and no data leaves your device.
+4. Wait for the scan to finish
+5. Done. Maida creates a "Demo Kata" with 3 random installed games so Rin has something to start with.
 
-Maida automatically detects your system language (English, Japanese, Simplified Chinese, Traditional Chinese). You can change it later in Settings.
-
----
-
-## Guided Tour
-
-When you first enter Rin, look for the **?** button in the top-right corner. Press it (or press **F1**) to start a guided tour that walks you through:
-
-- What the game title and prescription mean
-- How TRY and Not Now work
-- How to switch to Kamae mode
-- How to manage katas and games in Kamae
-- How to switch back to Rin
-
-The tour is available any time — press ? or F1 whenever you need a refresher.
+Steam does not need to be running for the scan. Maida reads your library from disk.
 
 ---
 
-## Rin: Fast Decision
+## Getting Around
+
+The sidebar on the left stays in place while the page scrolls. It has:
+
+- The three modes: **My games** (Maai, circle), **One at a time** (Rin, triangle), **Collections** (Kamae, square)
+- **Decision history**
+- **Settings**
+
+Switch modes from the sidebar, or with **LB / RB** on a gamepad (Maai → Rin → Kamae, and around). On a keyboard, **Ctrl+Tab** switches between Rin and Kamae, **F9** goes to Maai, **F8** goes to Rin.
+
+**F10** or the gamepad **Menu** button opens Settings from any mode. When you close Settings, you return to the mode you came from.
+
+Prefer a compact sidebar? In Settings → **Mode navigation**, choose **C · Previous / next**. The sidebar then shows only the previous and next mode, with your position (for example 1 / 3).
+
+---
+
+## Maai: My Games
+
+### Zones
+
+Maai shows your games in three zones, plus a full list:
+
+- **Recently opened**: Games Steam has a play record for, most recent first (up to 5).
+- **Kept**: Games you kept an intent for (see below), newest first.
+- **Just installed**: Installed games with no play record in Steam, newest first (up to 5).
+- **All installed**: Every installed game. Collapsed by default; press it to expand.
+
+Each card shows what Steam knows about it. If Steam has no play record, the card says so. Maida never guesses what you played.
+
+### Opening a game
+
+Press a card (quick tap, Enter, or A) to launch the game through Steam. Maida then moves to the after-launch screen (see **After You Launch a Game**).
+
+With a mouse, resting the pointer on a card for about a second moves focus there without launching.
+
+When a card keeps focus for a moment (3 seconds by default), a trailer or screenshots of the game play as the background. You can change the delay, or turn the sound off, in Settings → Accessibility.
+
+### Keeping an intent
+
+Sometimes a game matters to you, even when you are not playing it right now.
+
+**Hold a card for 3 seconds** (mouse, Enter, or A). A note field opens: "What do you want to remember?" Write a few words and press **Save** (or Enter). Escape cancels.
+
+The game now appears under **Kept**, with your note. A kept card has a few extra buttons:
+
+- **Release this intent**: Removes it from Kept. The original note stays in Decision history.
+- **Keep / Rest / Release**: Marks how you hold this game right now. A game set to Rest or Release no longer appears under Recently opened or Just installed.
+- **Decision history**: Shows the records for this game only.
+
+---
+
+## Rin: One at a Time
 
 You'll see:
-- A game title
-- A short reflection (called a "prescription")
-- Two buttons: **TRY** and **Not Now**
+- A game title, with its art when available
+- A short message (called a "prescription")
+- Two buttons: **TRY** and **Not This One**
 
 ### TRY
 
@@ -87,36 +125,40 @@ If you're willing to play this game right now, **tap TRY**.
 
 What happens:
 - The game launches immediately
-- Maida remembers you picked this (weight +1)
-- The screen enters freeze state
+- Your choice is recorded (weight +1)
+- Maida moves to the after-launch screen
 
-### Not Now
+### Not This One
 
-If you don't want this game right now, **tap Not Now**.
+If you don't want this game right now, **tap Not This One**.
 
 What happens:
 - A different game appears
 - This game won't appear again in the current session
-- Games you repeatedly refuse appear much less often
+- Games you repeatedly turn down appear much less often
+
+### Empty kata
+
+If the active kata has no games yet, Rin says so and TRY / Not This One stay inactive. Add games in Kamae, or switch to another kata.
 
 ---
 
-## Kamae: Curation
+## Kamae: Collections
 
-Press the switch button on the right edge of Rin, or press **Ctrl+Tab** / **RB** to enter Kamae.
+Open Kamae from the sidebar (Collections), or press **Ctrl+Tab** / **RB** from Rin.
 
 In Kamae you can:
-- Browse games in your showcase
-- Search installed games and add them to your showcase
-- Create and manage Katas
+- See your katas, each as a card with a strip of game capsules
+- Search installed games and add them to the active kata
+- Create, rename, and delete katas
 
 ### Katas
 
-Katas are named sub-groups within your showcase. Create them by mood or theme.
+Katas are named groups of games. Create them by mood or theme.
 
 - Up to 2 katas (each holds up to 15 games)
-- In Rin, the dice only rolls from the active kata
-- Select "All Games" to roll from the entire showcase
+- In Rin, games only come from the active kata
+- Choose "All installed games" to let Rin draw from everything installed
 - Press F2 or controller Y to rename a kata
 
 #### Operations
@@ -124,10 +166,10 @@ Katas are named sub-groups within your showcase. Create them by mood or theme.
 | Action | Method |
 |--------|--------|
 | Create kata | Press the "new kata" button |
-| Delete kata | Tap "x" button (confirm twice) |
+| Delete kata | Press "×"; it turns into "?". Press again to delete. |
 | Rename | Press F2 or controller Y |
-| Add game | Click "+" and tick games to add, or search by name in the bar below |
-| Remove game | Press "Remove"; the button changes to "Confirm?", press again to confirm. Or hold Enter/A for 2.5 seconds. |
+| Add game | Press "+" on a kata card and tick games, or search by name in the search bar |
+| Remove game | Press "Remove"; the button changes to "Confirm remove?". Press again to confirm, or Esc / B to cancel. Or hold Enter / A for 2.5 seconds. |
 
 ---
 
@@ -141,13 +183,13 @@ You don't need to know anything else to use Maida. Everything below is optional.
 
 Sometimes you want to decide now but play later.
 
-**Hold the TRY button for 3 seconds.**
+**In Rin, hold the TRY button for 3 seconds.**
 
 What happens:
-- The game gets "anchored" to the screen
+- The game gets "anchored" to the screen, marked with an **Anchored** badge
 - TRY becomes **PLAY**
-- Not Now becomes **Clear**
-- Next time you open Maida, this game is still here
+- Not This One becomes **Clear**
+- Next time you open Rin, this game is still here
 
 **Changed your mind?** Tap **Clear**.
 
@@ -155,45 +197,68 @@ What happens:
 
 ## Optional: Undo
 
-Made a mistake?
+Made a mistake in Rin?
 
 Tap the **Undo (One Time Only)** button at the bottom.
 
-Goes back one step. Works once per decision.
+Goes back one step. Works once per decision. Switching to a different kata ends the chance to undo.
 
 Note: Undo brings the game back on screen, but the -2 weight penalty is not reversed. The score recovers naturally via daily decay (~1 week).
 
 ---
 
-## Freeze State
+## Optional: Decision History
 
-### What is freeze?
+Press **Decision history** in the sidebar to see your notes and recorded actions, newest first: intents you kept, edited, or released, states you set, games you launched, and TRY / Not This One / PLAY / Undo / anchor actions in Rin.
 
-After you tap TRY or PLAY to launch a game, Maida enters **freeze state**.
+Only existing records appear. Maida does not fill in past choices or guess your reasons.
 
-Freeze means:
-- You've made a commitment
-- The system stops showing new options
-- Your decision is protected from interference
-
-**This isn't pause -- it's protecting your focus.**
-
-### How to unfreeze?
-
-After playing, return to Maida and tap **I'M BACK**.
-
-Note: The button activates after the cool-down period (default 15 seconds, adjustable in Settings → Accessibility → Cool-down duration, 5-30 seconds). This prevents accidental double-tap.
+Press **Back** (or Escape / B) to return.
 
 ---
 
-## How Maida Picks Games
+## Guided Tour
 
-Maida watches your choices:
+The guided tour covers Rin and Kamae. The first time you open Rin, the **?** button in the top-right corner is highlighted. Press it (or **F1**) to start a tour that walks you through:
+
+- What the game title and prescription mean
+- How TRY and Not This One work
+- How to switch to Kamae
+- How to manage katas and games in Kamae
+- How to switch back to Rin
+
+Replay it any time: press ? or F1 in Rin or Kamae, or go to Settings → Guided Tour → **Replay**.
+
+---
+
+## After You Launch a Game
+
+### What happens after launch?
+
+After you launch a game (from a Maai card, TRY, or PLAY), Maida steps aside. The screen reads **"In the game now"**, with a short countdown.
+
+While you're away:
+- No new options appear
+- A short message appears below the title. Press left / right to see another one.
+
+### Coming back
+
+When you're done, return to Maida and press **Back to Maida**.
+
+The button becomes available after the cool-down (default 15 seconds, adjustable in Settings → Accessibility → Cool-down after each try, 5-30 seconds). This prevents an accidental double press from skipping the screen.
+
+---
+
+## What Decides Which Game Appears in Rin
+
+Your own choices:
 - Games you TRY appear more often
-- Games you say Not Now to appear less often
+- Games you turn down with Not This One appear less often
 - All weights decay daily (trend toward neutral)
 
-It's not recommending. It honestly reflects where your intention is leaning.
+Maida does not rank your games for you. The weights only reflect where your own choices have been leaning.
+
+Maai does not use weights at all. Its zones are ordered only by facts: Steam's play record, install date, and when you kept an intent.
 
 ---
 
@@ -205,16 +270,28 @@ It's not recommending. It honestly reflects where your intention is leaning.
 |--------|----------|---------|
 | Move focus | Arrow keys or Tab | D-pad, or left stick |
 | Scroll long pages | Page Up/Down | Right stick, or D-pad up/down on legal pages |
+| Previous / next mode | — | LB / RB |
+| Rin ↔ Kamae | Ctrl+Tab | — |
+| Go to Maai / Rin | F9 / F8 | — |
+| Settings | F10 | Menu |
+
+### Maai
+
+| Action | Keyboard | Gamepad |
+|--------|----------|---------|
+| Open a game | Enter | A |
+| Keep an intent | Hold Enter 3 seconds | Hold A 3 seconds |
+| Save note | Enter | A on Save |
+| Cancel note | Escape | B |
 
 ### Rin Mode
 
 | Action | Keyboard | Gamepad |
 |--------|----------|---------|
 | TRY | Enter | A |
-| Not Now | Enter | A |
+| Not This One | Enter | A |
 | Anchor | Hold Enter 3 seconds | Hold A 3 seconds |
 | Undo | Enter | A |
-| Switch to Kamae | Ctrl+Tab | RB |
 
 ### Kamae Mode
 
@@ -222,18 +299,17 @@ It's not recommending. It honestly reflects where your intention is leaning.
 |--------|----------|---------|
 | Select kata | Enter | A |
 | Rename kata | F2 | Y |
-| Delete kata | x button (twice) | A on x (twice) |
+| Delete kata | × button (twice) | A on × (twice) |
 | Remove game | Hold Enter 2.5s, or press twice | Hold A 2.5s, or press twice |
-| Switch to Rin | Ctrl+Tab | LB |
-| Settings | Enter | A |
+| Cancel remove | Escape | B |
 
 ### General
 
 | Action | Keyboard | Gamepad |
 |--------|----------|---------|
-| Switch light/dark | Click top-right button | D-pad + A |
-| Help / Tour | F1 or click ? button | — |
-| Back | Escape | B |
+| Switch light/dark | Top-right button | D-pad + A |
+| Help / Tour (Rin, Kamae) | F1 or ? button | — |
+| Back / Close | Escape | B |
 
 NVDA screen reader supported (Windows). On Linux, Orca support is limited due to WebKitGTK constraints.
 
@@ -241,33 +317,40 @@ NVDA screen reader supported (Windows). On Linux, Orca support is limited due to
 
 ## Settings
 
-In Kamae, tap "Settings". Each section can be expanded by tapping its title.
+Open Settings from the sidebar, or press F10 / Menu. Press **Close** (or Escape / B, twice) to leave. Some sections expand when you press their title.
 
-- **Language**: Choose from English, Japanese, Simplified Chinese, or Traditional Chinese. Select a language, then press again to confirm.
-- **Accessibility**: Expanded section with three preferences:
-  - **Haptic feedback**: Off / Low / Medium / High. Changes apply immediately. (Gamepad only)
-  - **Cool-down duration**: How long the post-TRY rest screen stays before "I'M BACK" activates. Slide between 5 and 30 seconds (default 15s). The value persists across launches.
-  - **View full Accessibility statement**: Opens the accessibility policy page.
-- **Controls**: Full list of keyboard and gamepad shortcuts.
-- **Theme**: Toggle light/dark mode.
-- **IGDB Game Duration**: Optional. Enter Twitch Developer credentials to show estimated play time below game titles.
+- **Guided Tour**: **Replay** starts the tour again.
+- **Mode navigation**: **Side navigation** (all three modes listed) or **C · Previous / next** (compact).
+- **Language**: English, Japanese, Simplified Chinese, or Traditional Chinese. Select a language, then press again to apply.
+- **Accessibility**:
+  - **Vibration**: Off / Low / Medium / High. Changes apply immediately. (Gamepad only)
+  - **Cool-down after each try**: How long to wait after starting a game before you can come back to Maida. 5 to 30 seconds (default 15s).
+  - **Preview delay**: How long a focused card in Maai waits before its preview plays: 1, 3, or 6 seconds (default 3s).
+  - **Preview sound**: On / Off (default On).
+  - **Card opacity**: How see-through the Maai cards are against the background, 40% to 100% (default 70%).
+  - **View full accessibility statement**: Opens the accessibility policy page.
+- **Controls**: Keyboard and gamepad shortcuts for Rin, Kamae, and general use.
+- **Appearance**: Toggle light/dark mode.
+- **IGDB (Game Duration Data)**: Optional. Enter Twitch Developer credentials to show estimated play time.
 - **Anonymous Usage Data**: Each launch sends a small anonymous signal (random ID + install day count + version). Toggle off anytime.
+
+All values persist across launches.
 
 ---
 
 ## Common Questions
 
-**Q: Why do I keep seeing the same game?**
-You've chosen TRY multiple times before. Maida doesn't track playtime -- only your choices. Tap Not Now if you're done with it.
+**Q: Why do I keep seeing the same game in Rin?**
+You've pressed TRY on it several times. Maida doesn't track playtime, only your choices. Tap Not This One if you're done with it.
 
 **Q: Can I search for a specific game?**
-In Kamae, yes -- search and add to your showcase. In Rin, no -- that's the dice's job.
+In Kamae, yes: search and add it to a kata. In Maai, open **All installed**. In Rin, no. Rin is for meeting one game at a time.
 
 **Q: Does it track how long I play?**
-No. It only knows whether you chose TRY or Not Now.
+No. Maai shows Steam's own play record (whether and when a game was last played). Maida does not measure playtime itself.
 
 **Q: Is my data uploaded anywhere?**
-No. All data stays on your device.
+No. Your games, notes, and history stay on your device. The only thing sent is the anonymous launch ping, which you can turn off.
 
 ---
 
@@ -278,7 +361,7 @@ No. All data stays on your device.
 Maida couldn't find your Steam installation on disk. It looks for the file `steamapps/libraryfolders.vdf` in standard locations:
 
 - Windows: `C:\Program Files (x86)\Steam`, `C:\Steam`, `D:\Steam`, `E:\Steam`
-- Linux: `~/.steam/steam`, `~/.local/share/Steam`, and Flatpak paths
+- Linux: `~/.steam/steam`, `~/.local/share/Steam`, and Flatpak locations
 - (Windows also checks the registry for a custom install path)
 
 Common causes:
@@ -290,9 +373,9 @@ Steam does not need to be running. Maida reads your library directly from disk a
 
 ### Button doesn't respond
 
-Most buttons (TRY, Not Now, PLAY, Clear, I'm Back) react to a quick tap. Anchor needs a 3-second hold on TRY. This is deliberate, to prevent accidental launches from shaky fingers or bumped gamepads.
+Most buttons (TRY, Not This One, PLAY, Clear, Back to Maida, Maai cards) react to a quick tap. Anchoring in Rin and keeping an intent in Maai need a 3-second hold. This is deliberate, to prevent accidental launches from shaky fingers or bumped gamepads.
 
-If a button isn't reacting, you're probably mid-way: too long for a tap, too short for the 3-second anchor hold. Try a faster tap, or commit to a full 3-second hold.
+If a button isn't reacting, you're probably mid-way: too long for a tap, too short for the 3-second hold. Try a faster tap, or commit to a full 3-second hold.
 
 ### Windows says "This app might be unsafe"
 This is the SmartScreen warning. See the **Before You Install** section above for the full explanation and how to proceed.
@@ -306,7 +389,7 @@ Check if Steam can launch the game normally. Some games need manual setup before
 
 Most game launchers help you browse. Browsing your library creates decision fatigue.
 
-Maida removes browsing entirely. One game. One choice. Move on.
+Maida keeps browsing small. A few games you recently opened, the ones you kept, the ones that just arrived. Or one game at a time, in Rin. The decision stays yours.
 
 > maida is the space you pass through before you begin.
 
@@ -314,5 +397,5 @@ Maida removes browsing entirely. One game. One choice. Move on.
 
 Contact: bertram@brightraven.world
 
-App Version: v0.4.3 | Manual Version: v0.4.3
-Last updated: 2026-04-26
+App Version: v0.5.0 | Manual Version: v0.5.0
+Last updated: 2026-10-30
