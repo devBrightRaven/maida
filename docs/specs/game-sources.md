@@ -195,6 +195,14 @@ Order follows the author's ruling: the no-frontend path first.
 - Hide for non-Steam games (the exclusion list is keyed on appid).
 - Playnite. It has no official list interface, so reading it by a supported route means shipping a Playnite extension. Its library files are LiteDB, and its developer discourages reading them directly. **[unverified]**
 - ES-DE reader, Steam non-Steam shortcuts, Xbox, Battle.net, Ubisoft, Heroic on Steam Deck.
+- Controller support for non-Steam games through Steam (idea from the author, 2026-11-12). Steam Input and the Steam overlay apply to games started through Steam, and in Steam Deck gaming mode that is close to the only way a non-Steam game gets good controller support. Two routes, to be tried in this order:
+  1. **Start Maida itself from Steam.** The player adds Maida to Steam once, and games started by Maida inherit that entry's controller configuration. Nothing is written to Steam's data. ES-DE and Heroic work this way on Steam Deck **[unverified]**. Limits: every game shares one controller configuration, and whether this is reliable on Windows desktop is not known. Test this first.
+  2. **Write Steam shortcuts.** Only if per-game controller configuration turns out to be needed. **[proposal]** One switch in the "Game sources" settings section, off by default, never a per-game question (constitution Part 4). Known costs:
+     - It writes into another program's data, which Maida does not do today. It must be opt-in, and turning it off must remove what Maida added.
+     - Steam appears to read `shortcuts.vdf` at start and write it back on exit, so a new shortcut needs a Steam restart and a write while Steam is running may be lost **[unverified]**.
+     - `shortcuts.vdf` is also a read source (`AGENTS.md` section 9). Shortcuts written by Maida must be marked so the same game is not read back as a second entry.
+     - A shortcut's appid changes when its executable or name changes **[unverified]**, so it is a launch path only and never a trace subject (section 4).
+  - Neither route replaces W1 to W4. A shortcut needs an executable and arguments, so Maida still has to find the game and know how to start it. This is one more launch kind after W2.
 
 ## 9. Out of scope
 
