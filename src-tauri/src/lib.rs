@@ -4,6 +4,8 @@ mod commands;
 mod credentials;
 mod decay;
 mod enrichment;
+mod games_store;
+mod library;
 mod persistence;
 mod preferences;
 mod steam;

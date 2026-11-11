@@ -14,6 +14,7 @@ import TermsPage from './ui/pages/TermsPage';
 import { calculateTraceWeights, updateDebugTrace } from './core/engine';
 import { createHook, retractHook, setGameState, EMPTY_HOOKS_STATE } from './core/hooks';
 import { buildTraceEvent, getWriterIdentity } from './core/trace';
+import { traceSubjectOf } from './core/traceSubject';
 import { bucketGames } from './core/zones';
 import { resolveSettingsReturnFace } from './core/settingsReturn';
 import { buildPlaytimeSnapshotPayload } from './core/lastPlayed';
@@ -496,9 +497,10 @@ function App() {
     // resolve against the loaded library here.
     const buildHookTraceEvent = useCallback((input) => {
         const g = (data.games?.games || []).find(x => x.id === input.subjectId);
+        const subject = traceSubjectOf(g);
         return buildTraceEvent(
-            g?.steamAppId != null
-                ? { ...input, subjectId: String(g.steamAppId), namespace: 'steam', writer: getWriterIdentity() }
+            subject
+                ? { ...input, subjectId: subject.id, namespace: subject.namespace, writer: getWriterIdentity() }
                 : { ...input, namespace: 'maida', writer: getWriterIdentity() }
         );
     }, [data.games]);
@@ -535,10 +537,11 @@ function App() {
     const handleMaida2Launch = useCallback((game) => {
         if (!game) return;
         lastLaunchedRef.current = game.id;
+        const subject = traceSubjectOf(game);
         appendTraceEvents([buildTraceEvent({
             eventType: 'maida.launch.initiated',
-            subjectId: game.steamAppId != null ? String(game.steamAppId) : game.id,
-            namespace: game.steamAppId != null ? 'steam' : 'maida',
+            subjectId: subject.id,
+            namespace: subject.namespace,
             displayTitle: game.title,
             writer: getWriterIdentity(),
             payload: { steamUrl: game.steamUrl },
