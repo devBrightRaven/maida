@@ -197,18 +197,30 @@ If you catch yourself writing a single-line v0.5.0 release note, the version is 
 
 ---
 
-## 9) Multi-platform game library strategy
+## 9) Game sources beyond Steam
 
-Maida is positioned as a Steam Deck-first daily focus tool, not a universal game aggregator.
+Maida is a Steam Deck-first daily focus tool, not a universal game aggregator. Reading more sources does not change that: Maida may see every installed game and still present only a few.
 
-**The only approved path for non-Steam games:** `shortcuts.vdf` — Steam's own file listing non-Steam shortcuts. Users who install games via Heroic, Lutris, EmuDeck, or manually add Battle.net titles add them to Steam, and Maida reads that file.
+Putting games into Maida is Maida's job, not the player's. Maida does not replace the player's existing habits; it adds to them. A player may use a library frontend or none, and both are supported. (User ruling 2026-11-11, replacing the earlier rule that `shortcuts.vdf` was the only approved path.)
 
 Rules:
-- Do NOT add platform-specific library readers (Epic manifest, GOG registry, Battle.net product.db, Heroic JSON, itch.io butler.db, etc.) without explicit user demand evidence — a GitHub issue filed by a real user
-- When asked to "support Epic / GOG / X", the default answer is: teach the user to add via Steam's "Add Non-Steam Game", not write a new parser
-- Quantitative validation (2026-05-10): GOG Galaxy 2.0 community plugins abandoned 2021, Heroic 30% Deck adoption already routes through shortcuts.vdf, 0 existing issues requesting non-Steam platform support
 
-See vault `7 Project/bright-raven/codex/005_maida/18_library-import-plan.md` for full research.
+- **Installed only.** Maida reads what is installed on this machine: local install records and game files on disk. It never signs in to an account, calls a store API, or reads an owned-but-not-installed library. The ownership ledger belongs to Neri (constitution Part 1, rule 2).
+- **Point once, then automatic.** Without a frontend, the player names a folder. From there Maida identifies the systems, games, and emulators on its own. The player does not configure games one by one.
+- **Read an existing frontend directly.** When the player already has a library frontend installed (for example ES-DE or Playnite), Maida reads its library and hands launching back to it, instead of asking for a folder or maintaining its own launch rules. Prefer the frontend's supported interface over parsing its private files.
+- **Player-initiated, skippable.** Source setup lives in onboarding and settings. It is never a prerequisite, and Maida never raises it outside those places (red line four).
+- **Cheap at launch.** Scans are cached. Summon must not wait on a rescan (constitution Part 3).
+- **Reuse launch rules.** Prefer an existing, maintained rule set for emulator launch commands over hand-written per-emulator parsers.
+- `shortcuts.vdf` remains a supported source.
+- Red line 7.1 is unchanged: Maida presents, the player decides.
+
+Build order (user ruling 2026-11-11): the no-frontend path first, frontend readers after.
+
+Part 4 test ruling (user, 2026-11-11): this is infrastructure. It does not ask the player to make another choice.
+
+Evidence: the author's own library spans Steam, Epic, GOG, and emulators (2026-11-11). No external user has requested this yet.
+
+History: until 2026-11-11 this section allowed only `shortcuts.vdf` and required a GitHub issue from a real user before any platform reader. That rule rested on research dated 2026-05-10 (vault `7 Project/bright-raven/codex/005_maida/18_library-import-plan.md`), which covered store launchers on Deck and did not cover emulator games on desktop.
 
 ---
 
