@@ -97,10 +97,12 @@ This is the one decision that cannot be undone cheaply. Ids are written into the
 
 ROM id **[proposal, needs a test before it is fixed]**: system plus file size plus a hash of the first and last mebibyte. A full hash of a 24 GB image is too slow for a scan. Multi-file games (cue plus bin, PS3 folder format) need a rule for which file is the primary one.
 
-### Decisions for the author before any id is written
+### Identity decisions
 
-1. **Trace namespace for new sources.** Today anything without a Steam id is `maida`. Options: keep `maida` with a prefixed id, or add one namespace per source. Adding namespaces changes the vocabulary shared with Neri and needs a version bump. Draft default: keep `maida`, prefixed id, because it changes no shared vocabulary.
-2. **A game seen first on Epic and later installed on Steam.** Today the Steam scan would add a second record (`src-tauri/src/commands/steam.rs:145-157`). Draft default: the Steam install is attached to the existing game, and the game keeps its original trace subject, so history is not split.
+Decisions 1 and 2 are settled and unblock W1. Decisions 3 and 4 are open and block W5 only.
+
+1. **Trace namespace for new sources.** **[ruling 2026-11-12]** Keep `maida`, with a `<source>:<sourceId>` id. Today anything without a Steam id is already `maida`, so this changes no vocabulary shared with Neri. The alternative, one namespace per source, was not taken because it needs a version bump of that vocabulary.
+2. **A game seen first on Epic and later installed on Steam.** **[ruling 2026-11-12]** The Steam install is attached to the existing game, and the game keeps its original trace subject, so history is not split. Today the Steam scan would add a second record (`src-tauri/src/commands/steam.rs:145-157`); W1 changes that.
 3. **A wrong automatic match.** Two different games can share a title (a remake and its original). The player needs a way to split and to join. Where that control lives is a design decision (section 2).
 4. **The trace subject on a manual join or split.** The trace is append-only, so past events cannot be moved. Draft default: a join keeps the subject of the game that is joined into, and the other game's earlier events stay under their old subject; a split gives the separated game a new subject from that point on. Either way some history sits under a subject that is no longer shown, and the author should decide whether that is acceptable or whether a declared link event is needed (rule 6 requires a new event type to be declared first).
 
@@ -146,7 +148,7 @@ Order follows the author's ruling: the no-frontend path first.
 
 ### W0. Decisions (author)
 
-- The four identity decisions in section 4
+- Identity decisions 3 and 4 in section 4 (1 and 2 were ruled on 2026-11-12)
 - Whether a whole ROM folder counts as "installed" (see section 10)
 - Whether the first version is Windows only (see section 10)
 - Whether sources are shown on cards (section 2)
