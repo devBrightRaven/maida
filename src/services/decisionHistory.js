@@ -1,5 +1,6 @@
 import bridge from './bridge';
 import { buildTraceEvent, getWriterIdentity } from '../core/trace';
+import { traceSubjectOf } from '../core/traceSubject';
 
 // Serialize writes across all views. Failed writes stay ahead of later events.
 // The warning remains visible until a retry succeeds; it is not a saved receipt.
@@ -34,10 +35,11 @@ export function appendTraceEvents(events = []) {
 
 export function recordMicroChoice(game, action, extra = {}) {
     if (!game) return null;
+    const subject = traceSubjectOf(game);
     const event = buildTraceEvent({
         eventType: 'maida.choice.recorded',
-        subjectId: game.steamAppId != null ? String(game.steamAppId) : game.id,
-        namespace: game.steamAppId != null ? 'steam' : 'maida',
+        subjectId: subject.id,
+        namespace: subject.namespace,
         displayTitle: game.title,
         writer: getWriterIdentity(),
         payload: { action, ...extra },
@@ -47,8 +49,5 @@ export function recordMicroChoice(game, action, extra = {}) {
 }
 
 export function historySubject(game) {
-    return game ? {
-        namespace: game.steamAppId != null ? 'steam' : 'maida',
-        id: String(game.steamAppId != null ? game.steamAppId : game.id),
-    } : null;
+    return game ? traceSubjectOf(game) : null;
 }
